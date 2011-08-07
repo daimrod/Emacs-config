@@ -3,5 +3,5 @@
 save-wg
 tramp
 
-url/*
-auto-save-list/*
+url/
+auto-save-list/
