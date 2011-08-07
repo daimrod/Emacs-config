@@ -1,0 +1,7 @@
+*.elc
+
+save-wg
+tramp
+
+url/*
+auto-save-list/*
