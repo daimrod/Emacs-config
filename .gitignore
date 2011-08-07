@@ -1,6 +1,7 @@
 *.elc
 
-save-wg
+places
+saved-wg
 tramp
 
 url/
