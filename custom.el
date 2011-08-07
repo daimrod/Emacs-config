@@ -3,9 +3,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(c-default-style (quote ((c-mode . "k&r") (java-mode . "java") (awk-mode . "awk") (other . "gnu"))))
- '(safe-local-variable-values (quote ((Mode . Emacs-Lisp))))
- '(w3m-antenna-sites nil))
+ '(custom-safe-themes (quote ("c00ae283980ab93afb798ae9e7a6d184c431f8c0" default))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

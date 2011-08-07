@@ -33,6 +33,7 @@
 (require 'config-bindings)
 (require 'config-theme)
 (require 'config-lisp)
+(require 'config-cc-mode)
 (require 'config-ediff)
 (require 'config-slime)
 (require 'config-yasnippet)
