@@ -71,16 +71,16 @@ which defaults to 'utf-8"
 response and response headers.
 FIELDS is an alist, as for `http-post-simple', FILES is an a list of
 \(fieldname \"filename\" \"file MIME type\" \"file data\")*"
-(let ((boundary (http-post-multipart-boundary)))
-  (http-post-simple-internal
-   url
-   (http-post-encode-multipart-data fields files charset)
-   charset
-   `(("Content-Type"
-      .
-      ,(http-post-content-type
-        (format "multipart/form-data; boundary=%S" boundary)
-        charset))))))
+  (let ((boundary (http-post-multipart-boundary)))
+    (http-post-simple-internal
+     url
+     (http-post-encode-multipart-data fields files charset)
+     charset
+     `(("Content-Type"
+        .
+        ,(http-post-content-type
+          (format "multipart/form-data; boundary=%S" boundary)
+          charset))))))
 
 
 (defun http-post-content-type (content-type &optional charset)
@@ -117,16 +117,16 @@ FIELDS is an alist of \(
 CHARSET defaults to 'utf-8"
   (let ((charset (or charset 'utf-8)))
     (mapconcat #'identity
-	       (mapcar '(lambda (field)
-			 (concat (symbol-name (car field))
-			  "="
-			  (http-post-encode-string (cdr field) charset)))
-		       (mapcan '(lambda (field)
-				 (if (atom (cdr field)) (list field)
-				     ;; unpack the list
-				     (mapcar '(lambda (value)
-					       `(,(car field) . ,value))
-					     (cdr field))))
+	       (mapcar #'(lambda (field)
+                           (concat (symbol-name (car field))
+                                   "="
+                                   (http-post-encode-string (cdr field) charset)))
+		       (mapcan #'(lambda (field)
+                                   (if (atom (cdr field)) (list field)
+                                       ;; unpack the list
+                                       (mapcar #'(lambda (value)
+                                                   `(,(car field) . ,value))
+                                               (cdr field))))
 			       fields))
 	       "&")))
 
@@ -165,19 +165,19 @@ CHARSET defaults to 'utf-8"
 (defun http-post-encode-multipart-data (fields files charset)
   "Return FIELDS and FILES encoded for use as the data for a multipart HTTP POST request"
   (http-post-join-lines
-   (mapcar '(lambda (field)
-	     (http-post-bound-field
-	      (format "Content-Disposition: form-data; name=%S" (symbol-name (car field)))
-	      ""
-	      (cdr field)))
+   (mapcar #'(lambda (field)
+               (http-post-bound-field
+                (format "Content-Disposition: form-data; name=%S" (symbol-name (car field)))
+                ""
+                (cdr field)))
 	   fields)
-   (mapcan '(lambda (file)
-	     (destructuring-bind (fieldname filename mime-type data) file
-	       (http-post-bound-field
-		(format "Content-Disposition: form-data; name=%S; filename=%S" fieldname filename)
-		(format "Content-type: %s" (http-post-content-type mime-type charset))
-		""
-		data)))
+   (mapcan #'(lambda (file)
+               (destructuring-bind (fieldname filename mime-type data) file
+                 (http-post-bound-field
+                  (format "Content-Disposition: form-data; name=%S; filename=%S" fieldname filename)
+                  (format "Content-type: %s" (http-post-content-type mime-type charset))
+                  ""
+                  data)))
 	   files)
    (format "--%s--" (http-post-multipart-boundary))))
 
