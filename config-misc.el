@@ -56,4 +56,8 @@
 (setq auto-mode-alist
    (cons '("\\.md" . markdown-mode) auto-mode-alist))
 
+;; TRAMP configuration
+(setq tramp-default-proxies-alist
+      '(("\\.\\(org\\|fr\\|com\\|net\\)\\'" "root" "/ssh:daimrod@%h:")))
+
 (provide 'config-misc)
