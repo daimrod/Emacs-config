@@ -27,6 +27,7 @@
 (require 'w3m-load)
 (require 'mime-w3m)
 (require 'workgroups)
+(require 'scratch)
 
 ;; Load my configuration
 (require 'config-defuns)
