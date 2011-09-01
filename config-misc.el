@@ -46,7 +46,6 @@
 ;; workgroups configuration
 (workgroups-mode)
 (setq wg-morph-on nil)
-(wg-load (concat dotfiles-dir "saved-wg"))
 
 (setq browse-url-browser-function 'w3m-browse-url)
 (global-set-key "\C-xm" 'browse-url-at-point)
