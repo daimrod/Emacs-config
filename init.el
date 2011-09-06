@@ -39,6 +39,7 @@
 (require 'config-slime)
 (require 'config-yasnippet)
 (require 'config-misc)
+(require 'config-bbdb)
 
 (load custom-file 'noerror)
 
