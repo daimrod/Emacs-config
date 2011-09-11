@@ -1,8 +1,10 @@
 ;;;; config-slime.el --- SLIME configuration
 
+(load (expand-file-name "~/quicklisp/slime-helper.el")) 
 (require 'slime-autoloads)
 (require 'slime)
 (slime-setup '(slime-repl
+               inferior-slime
 	       slime-asdf
 	       slime-banner
 	       slime-autodoc
@@ -12,7 +14,6 @@
 	       slime-fontifying-fu
 	       slime-fuzzy
 	       slime-indentation
-	       slime-mdot-fu
 	       slime-package-fu
 	       slime-references
 	       slime-scratch
