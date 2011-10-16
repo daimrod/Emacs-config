@@ -40,6 +40,7 @@
 (require 'config-yasnippet)
 (require 'config-misc)
 (require 'config-bbdb)
+(require 'config-git)
 
 (load custom-file 'noerror)
 
