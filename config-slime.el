@@ -45,4 +45,8 @@
 	(kill-buffer)
 	(slime-net-close (slime-connection))))
 
+;; Store fasls here
+(make-directory "/tmp/slime-fasls/" t) ;; be sure the directory exists
+(setq slime-compile-file-options '(:fasl-directory "/tmp/slime-fasls/"))
+
 (provide 'config-slime)
