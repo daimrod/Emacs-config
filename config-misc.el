@@ -61,4 +61,13 @@
 (setq tramp-default-proxies-alist
       '(("\\.\\(org\\|fr\\|com\\|net\\)\\'" "root" "/ssh:daimrod@%h:")))
 
+;; ispell configuration
+(setq ispell-program-name "aspell"
+      ispell-extra-args '("--sug-mode=ultra"))
+
+;; enable flyspell
+(add-hook 'text-mode-hook
+  (lambda()
+    (flyspell-mode t)))
+
 (provide 'config-misc)
