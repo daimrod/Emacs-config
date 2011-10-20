@@ -70,4 +70,7 @@
   (lambda()
     (flyspell-mode t)))
 
+;; waf config
+(setq auto-mode-alist (cons '("wscript" . python-mode) auto-mode-alist))
+
 (provide 'config-misc)
