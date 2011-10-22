@@ -28,6 +28,7 @@
 (require 'mime-w3m)
 (require 'workgroups)
 (require 'scratch)
+(require 'verbiste)
 
 ;; Load my configuration
 (require 'config-defuns)
