@@ -73,4 +73,6 @@
 ;; waf config
 (setq auto-mode-alist (cons '("wscript" . python-mode) auto-mode-alist))
 
+;; nuke whitespaces when writing to a file
+(add-hook 'before-save-hook 'whitespace-cleanup)
 (provide 'config-misc)
