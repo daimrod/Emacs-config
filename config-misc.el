@@ -53,9 +53,9 @@
 
 ;; markdown configuration
 (autoload 'markdown-mode "markdown-mode"
-   "Major mode for editing Markdown files" t)
+          "Major mode for editing Markdown files" t)
 (setq auto-mode-alist
-   (cons '("\\.md" . markdown-mode) auto-mode-alist))
+      (cons '("\\.md" . markdown-mode) auto-mode-alist))
 
 ;; TRAMP configuration
 (setq tramp-default-proxies-alist
@@ -67,8 +67,8 @@
 
 ;; enable flyspell
 (add-hook 'text-mode-hook
-  (lambda()
-    (flyspell-mode t)))
+          (lambda()
+            (flyspell-mode t)))
 
 ;; waf config
 (setq auto-mode-alist (cons '("wscript" . python-mode) auto-mode-alist))
