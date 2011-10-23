@@ -43,4 +43,8 @@
 (global-set-key (kbd "C-<") 'move-to-window-line-top)
 (global-set-key (kbd "C->") 'move-to-window-line-bottom)
 
+;; quickmove between mark without disturbing transient-mark-mode
+(global-set-key (kbd "C-`") 'push-mark-no-activate)
+(global-set-key (kbd "M-`") 'jump-to-mark)
+
 (provide 'config-bindings)
