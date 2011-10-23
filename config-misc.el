@@ -75,6 +75,13 @@
 
 ;; nuke whitespaces when writing to a file
 (add-hook 'before-save-hook 'whitespace-cleanup)
+
+;; do not ask confirmation to open a file or a buffer
+(setq confirm-nonexistent-file-or-buffer nil)
+
+;; never ask confirmation to create a new buffer
+(setq ido-create-new-buffer 'always)
+
 ;; undo-tree everywhere
 (global-undo-tree-mode)
 
