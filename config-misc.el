@@ -75,4 +75,7 @@
 
 ;; nuke whitespaces when writing to a file
 (add-hook 'before-save-hook 'whitespace-cleanup)
+;; undo-tree everywhere
+(global-undo-tree-mode)
+
 (provide 'config-misc)

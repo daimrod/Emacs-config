@@ -29,6 +29,7 @@
 (require 'workgroups)
 (require 'scratch)
 (require 'verbiste)
+(require 'undo-tree)
 
 ;; Load my configuration
 (require 'config-defuns)
