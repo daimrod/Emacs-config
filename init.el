@@ -5,14 +5,43 @@
 
 ;; Load path etc.
 
+;; load-path enhancement
+(defun fni/add-to-load-path (this-directory &optional with-subdirs recursive)
+  "Add THIS-DIRECTORY at the beginning of the load-path, if it exists.
+Add all its subdirectories not starting with a '.' if the
+optional argument WITH-SUBDIRS is not nil.
+Do it recursively if the third argument is not nil."
+  (when (and this-directory
+             (file-directory-p this-directory))
+    (let* ((this-directory (expand-file-name this-directory))
+           (files (directory-files this-directory t "^[^\\.]")))
+
+      ;; completely canonicalize the directory name (*may not* begin with `~')
+      (while (not (string= this-directory (expand-file-name this-directory)))
+             (setq this-directory (expand-file-name this-directory)))
+
+      (message "Adding `%s' to load-path..." this-directory)
+      (add-to-list 'load-path this-directory)
+
+      (when with-subdirs
+        (while files
+               (let ((dir-or-file (car files)))
+                 (when (file-directory-p dir-or-file)
+                   (if recursive
+                       (fni/add-to-load-path dir-or-file 'with-subdirs 'recursive)
+                       (fni/add-to-load-path dir-or-file))))
+               (setq files (cdr files)))))))
+
 (setq home-dir "/home/daimrod/")
 (setq dotfiles-dir (file-name-directory
-		    (or (buffer-file-name) load-file-name)))
+                    (or (buffer-file-name) load-file-name)))
 (setq elisp-dir (concat dotfiles-dir "elisp/"))
-(setq bzr-dir (concat home-dir "bzr/"))
+(setq elpa-dir (concat home-dir "elpa/"))
 
-(add-to-list 'load-path dotfiles-dir)
-(add-to-list 'load-path elisp-dir)
+(fni/add-to-load-path dotfiles-dir)
+(fni/add-to-load-path elisp-dir t)
+(fni/add-to-load-path elpa-dir t)
+
 (setq custom-file (concat dotfiles-dir "custom.el"))
 
 ;; These should be loaded on startup rahter than autoloaded on demande
