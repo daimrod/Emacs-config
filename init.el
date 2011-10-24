@@ -36,7 +36,7 @@ Do it recursively if the third argument is not nil."
 (setq dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
 (setq elisp-dir (concat dotfiles-dir "elisp/"))
-(setq elpa-dir (concat home-dir "elpa/"))
+(setq elpa-dir (concat dotfiles-dir "elpa/"))
 
 (fni/add-to-load-path dotfiles-dir)
 (fni/add-to-load-path elisp-dir t)
