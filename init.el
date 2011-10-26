@@ -59,6 +59,7 @@ Do it recursively if the third argument is not nil."
 (require 'scratch)
 (require 'verbiste)
 (require 'undo-tree)
+(require 'woman)
 
 ;; Load my configuration
 (require 'config-defuns)
@@ -72,6 +73,7 @@ Do it recursively if the third argument is not nil."
 (require 'config-misc)
 (require 'config-bbdb)
 (require 'config-git)
+(require 'config-alias)
 
 (load custom-file 'noerror)
 
