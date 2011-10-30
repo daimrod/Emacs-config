@@ -73,9 +73,6 @@
 ;; waf config
 (setq auto-mode-alist (cons '("wscript" . python-mode) auto-mode-alist))
 
-;; nuke whitespaces when writing to a file
-(add-hook 'before-save-hook 'whitespace-cleanup)
-
 ;; do not ask confirmation to open a file or a buffer
 (setq confirm-nonexistent-file-or-buffer nil)
 
@@ -84,5 +81,8 @@
 
 ;; undo-tree everywhere
 (global-undo-tree-mode)
+
+;; show trailing whitespace
+(setq show-trailing-whitespace t)
 
 (provide 'config-misc)
