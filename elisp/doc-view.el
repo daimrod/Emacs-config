@@ -813,9 +813,10 @@ is named like ODF with the extension turned to pdf."
   (doc-view-start-process
    "pdf/ps->png" doc-view-ghostscript-program
    (append doc-view-ghostscript-options
-           (list (format "-r%d" (round doc-view-resolution))
-                 (concat "-sOutputFile=" png)
-                 pdf-ps))
+           (let ((round-resolution (round doc-view-resolution)))
+             (list (format "-r%dx%d" round-resolution round-resolution)
+                   (concat "-sOutputFile=" png)
+                   pdf-ps)))
    (let ((resolution doc-view-resolution))
      (lambda ()
        ;; Only create the resolution file when it's all done, so it also
@@ -841,13 +842,14 @@ Call CALLBACK with no arguments when done."
   (doc-view-start-process
    "pdf->png-1" doc-view-ghostscript-program
    (append doc-view-ghostscript-options
-           (list (format "-r%d" (round doc-view-resolution))
-                 ;; Sadly, `gs' only supports the page-range
-                 ;; for PDF files.
-                 (format "-dFirstPage=%d" page)
-                 (format "-dLastPage=%d" page)
-                 (concat "-sOutputFile=" png)
-                 pdf))
+           (let ((round-resolution (round doc-view-resolution)))
+             (list (format "-r%dx%d" round-resolution round-resolution)
+                   ;; Sadly, `gs' only supports the page-range
+                   ;; for PDF files.
+                   (format "-dFirstPage=%d" page)
+                   (format "-dLastPage=%d" page)
+                   (concat "-sOutputFile=" png)
+                   pdf)))
    callback))
 
 (declare-function clear-image-cache "image.c" (&optional filter))
@@ -1193,7 +1195,7 @@ the pagenumber and CONTEXTS are all lines of text containing a match."
                    (setq matches (cons
                                   (append
                                    (or
-                 ;; This page already is a match.
+                                    ;; This page already is a match.
                                     (car matches)
                                     ;; This is the first match on page.
                                     (list page))
