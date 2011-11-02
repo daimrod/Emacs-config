@@ -85,4 +85,8 @@
 ;; show trailing whitespace
 (setq show-trailing-whitespace t)
 
+;; ImageMagick support
+(autoload 'eimp-mode "eimp" "Emacs Image Manipulation Package." t)
+(add-hook 'image-mode-hook 'eimp-mode)
+
 (provide 'config-misc)
