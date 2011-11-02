@@ -112,16 +112,16 @@ This is the same as using \\[set-mark-command] with the prefix argument."
   (interactive)
   (set-mark-command 1))
 
-(defun small-scroll-up-command (&optional n)
+(defun small-scroll-up-command (&optional arg)
   (interactive "^P")
-  (if n
-      (scroll-up-command n)
-      (scroll-up-command 1)))
+  (if arg
+      (scroll-up-command arg)
+      (scroll-up-command 5)))
 
-(defun small-scroll-down-command (&optional n)
+(defun small-scroll-down-command (&optional arg)
   (interactive "^P")
-  (if n
-      (scroll-down-command n)
-      (scroll-down-command 1)))
+  (if arg
+      (scroll-down-command arg)
+      (scroll-down-command 5)))
 
 (provide 'config-defuns)
