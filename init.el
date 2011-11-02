@@ -74,6 +74,7 @@ Do it recursively if the third argument is not nil."
 (require 'config-bbdb)
 (require 'config-git)
 (require 'config-alias)
+(require 'config-org)
 
 (load custom-file 'noerror)
 
