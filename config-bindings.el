@@ -33,7 +33,6 @@
 ;; Window switching. (C-x o goes to the next window)
 (windmove-default-keybindings) ;; Shift+direction
 (global-set-key (kbd "C-x O") (lambda () (interactive) (other-window -1))) ;; back one
-(global-set-key (kbd "C-x C-o") (lambda () (interactive) (other-window 2))) ;; forward two
 
 ;; use another version of zap-to-char (don't chopd the last char)
 (global-set-key (kbd "M-z") 'zap-to-char-)
