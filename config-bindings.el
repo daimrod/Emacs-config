@@ -46,4 +46,11 @@
 (global-set-key (kbd "C-`") 'push-mark-no-activate)
 (global-set-key (kbd "M-`") 'jump-to-mark)
 
+;; scroll up and down slowly by default (one line at time)
+(global-set-key (kbd "C-v") 'small-scroll-up-command)
+(global-set-key (kbd "M-v") 'small-scroll-down-command)
+(global-set-key (kbd "C-S-v") 'scroll-up-command)
+(global-set-key (kbd "M-S-v") 'scroll-down-command)
+
+
 (provide 'config-bindings)
