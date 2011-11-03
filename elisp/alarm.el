@@ -73,6 +73,7 @@
   "The actual alarm action.
 Argument TEXT alarm message."
   (shell-command (format "notify-send -t 10000 -- \"%s\" " text)))
+
 (defun alarm-clock ()
   "Set an alarm.
 The time format is the same accepted by `run-at-time'.  For
@@ -81,6 +82,7 @@ example \"11:30am\"."
   (let ((time (read-string "Time(example, 11:30am): "))
         (text (read-string "Message: ")))
     (setq alarm-clock-timer (run-at-time time nil 'alarm-clock-message text))))
+
 (defun alarm-clock-cancel ()
   "Cancel the alarm clock."
   (interactive)
