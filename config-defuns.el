@@ -133,9 +133,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
         (font (if (null font)
                   "doh"
                   font)))
-   (shell-command (concat "figlet "
-                          " -w " size
-                          " -f " font
-                          " " text))))
+   (shell-command (format "figlet -w %s -f %s %s"
+                          size font text))))
 
 (provide 'config-defuns)
