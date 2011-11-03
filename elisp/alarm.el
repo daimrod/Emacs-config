@@ -66,13 +66,16 @@
 
 ;;; Code:
 
+(require 'config-defuns)
+
 (defvar alarm-clock-timer nil
   "Keep timer so that the user can cancel the alarm.")
 
 (defun alarm-clock-message (text)
   "The actual alarm action.
 Argument TEXT alarm message."
-  (shell-command (format "notify-send -t 10000 -- \"%s\" " text)))
+  (shell-command (format "notify-send -t 10000 -- \"%s\" " text))
+  (show-big-text text))
 
 (defun alarm-clock ()
   "Set an alarm.
