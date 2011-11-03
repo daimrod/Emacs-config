@@ -124,4 +124,18 @@ This is the same as using \\[set-mark-command] with the prefix argument."
       (scroll-down-command arg)
       (scroll-down-command 5)))
 
+(defun show-big-text (text &optional size font)
+  (interactive "sText to show: ")
+  (let ((size (number-to-string
+               (if (null size)
+                   (window-width)
+                   size)))
+        (font (if (null font)
+                  "doh"
+                  font)))
+   (shell-command (concat "figlet "
+                          " -w " size
+                          " -f " font
+                          " " text))))
+
 (provide 'config-defuns)
