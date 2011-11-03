@@ -17,7 +17,7 @@
 \\)+\\)")
  '(whitespace-empty-at-eob-regexp "^\\([ 	
 ]\\{2,\\}\\)")
- '(whitespace-style (quote (face trailing space-before-tab lines-tail empty))))
+ '(whitespace-style (quote (face trailing space-before-tab empty))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
