@@ -11,6 +11,12 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c b") 'org-iswitchb)
 
+;; capture
+(global-set-key (kbd "C-c c") 'org-capture)
+
+;; define where notes should be stored
+(setq org-default-notes-file (concat org-directory "notes.org"))
+
 ;; enable silent org-mode within mail
 (add-hook 'mail-mode-hook 'turn-on-orgstruct)
 (add-hook 'mail-mode-hook 'turn-on-orgstruct++)
