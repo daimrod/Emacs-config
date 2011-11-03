@@ -8,7 +8,8 @@
  '(ido-default-buffer-method (quote selected-window))
  '(ido-default-file-method (quote selected-window))
  '(safe-local-variable-values (quote ((Syntax . ANSI-Common-Lisp) (Base . 10) (readtable . runes) (Readtable . GLISP) (Package . SGML) (Package . LALR) (Syntax . Common-Lisp))))
- '(send-mail-function (quote sendmail-send-it)))
+ '(send-mail-function (quote sendmail-send-it))
+ '(show-trailing-whitespace t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
