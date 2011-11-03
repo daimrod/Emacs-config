@@ -7,7 +7,7 @@
 (global-set-key (kbd "C-x \\") 'align-regexp)
 
 ;; Completion that uses many different methods to find options.
-(global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "M-/") 'dabbrev-expand)
 
 ;; Perform general cleanup.
 (global-set-key (kbd "C-c n") 'cleanup-buffer)
