@@ -2,6 +2,9 @@
 
 (require 'org-install)
 
+;; define where org file should be located by default
+(setq org-directory "~/org/")
+
 ;; The following lines are always needed. Choose your own keys.
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (global-set-key (kbd "C-c l") 'org-store-link)
