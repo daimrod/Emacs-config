@@ -11,4 +11,6 @@
 
 (ac-config-default)
 
+(setq ac-use-quick-help t)
+
 (provide 'config-auto-comple)
