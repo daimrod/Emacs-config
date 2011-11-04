@@ -93,4 +93,7 @@
 (global-whitespace-newline-mode t)
 (setq-default whitespace-style '(face trailing space-before-tab))
 
+;; automatically refresh files from disk when they are updated
+(global-auto-revert-mode t)
+
 (provide 'config-misc)
