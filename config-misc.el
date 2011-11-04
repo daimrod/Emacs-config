@@ -40,7 +40,9 @@
       ido-everywhere t
       ido-create-new-buffer 'always
       ido-use-filename-at-point 'guess
-      ido-max-prospects 10)
+      ido-max-prospects 10
+      ido-default-file-method 'selected-window
+      ido-default-buffer-method 'selected-window)
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
@@ -85,5 +87,10 @@
 ;; ImageMagick support
 (autoload 'eimp-mode "eimp" "Emacs Image Manipulation Package." t)
 (add-hook 'image-mode-hook 'eimp-mode)
+
+;; whitespace configuration
+(global-whitespace-mode t)
+(global-whitespace-newline-mode t)
+(setq-default whitespace-style '(face trailing space-before-tab))
 
 (provide 'config-misc)
