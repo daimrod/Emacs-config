@@ -52,5 +52,10 @@
 (global-set-key (kbd "C-S-v") 'scroll-up-command)
 (global-set-key (kbd "M-S-v") 'scroll-down-command)
 
+;; remove C-t
+(global-unset-key (kbd "C-t"))
+
+;; Speedbar
+(global-set-key (kbd "C-t C-t") 'speedbar)
 
 (provide 'config-bindings)
