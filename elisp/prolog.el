@@ -1415,8 +1415,7 @@ This function must be called from the source code buffer."
                                                       real-file first-line))
          (process (get-process "prolog"))
          (old-filter (process-filter process)))
-    (save-excursion
-     (set-buffer buffer)
+    (with-current-buffer buffer
      (delete-region (point-min) (point-max))
      (compilation-mode)
      ;; Setting up font-locking for this buffer
@@ -1440,8 +1439,7 @@ This function must be called from the source code buffer."
                                                 file buffer-file-name)
                                                nil
                                                real-file))
-    (save-excursion
-     (set-buffer buffer)
+    (with-current-buffer buffer
      (goto-char (point-max))
      (set-process-filter process 'prolog-consult-compile-filter)
      (process-send-string "prolog" command-string)
