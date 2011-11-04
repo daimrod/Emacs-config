@@ -45,27 +45,27 @@
      (defvaralias ',offset 'tab-width)
      (defadvice ,function (around smart-tabs activate)
        (cond
-        (indent-tabs-mode
-         (save-excursion
+         (indent-tabs-mode
+          (save-excursion
            (beginning-of-line)
            (while (looking-at "\t*\\( +\\)\t+")
-             (replace-match "" nil nil nil 1)))
-         (setq tab-width tab-width)
-         (let ((tab-width fill-column)
-               (,offset fill-column))
-           (unwind-protect
-               (progn ad-do-it))))
-        (t
-         ad-do-it)))))
+                  (replace-match "" nil nil nil 1)))
+          (setq tab-width tab-width)
+          (let ((tab-width fill-column)
+                (,offset fill-column))
+            (unwind-protect
+                 (progn ad-do-it))))
+         (t
+          ad-do-it)))))
 
 (defun smart-tabs-set-indent-automatically ()
   (interactive)
   (save-excursion
-    (goto-char (point-min))
-    (if (search-forward "\t" nil t)
-        (progn (setq indent-tabs-mode t)
-               (message "Tabs found; indent-tabs-mode is automatically turned on."))
-	  (message "tab not found"))))
+   (goto-char (point-min))
+   (if (search-forward "\t" nil t)
+       (progn (setq indent-tabs-mode t)
+              (message "Tabs found; indent-tabs-mode is automatically turned on."))
+       (message "tab not found"))))
 
 ;; C/C++
 (smart-tabs-advice c-indent-line c-basic-offset)

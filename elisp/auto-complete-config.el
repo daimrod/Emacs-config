@@ -26,7 +26,7 @@
 ;;; Code:
 
 (eval-when-compile
-  (require 'cl))
+ (require 'cl))
 
 (require 'auto-complete)
 
@@ -48,156 +48,156 @@
                        (or ac-imenu-index
                            (setq ac-imenu-index
                                  (ignore-errors
-                                   (with-no-warnings
-                                     (imenu--make-index-alist))))))
+                                  (with-no-warnings
+                                      (imenu--make-index-alist))))))
         with result
         while (and stack (or (not (integerp ac-limit))
                              (< i ac-limit)))
         for node = (pop stack)
         if (consp node)
-        do
-        (let ((car (car node))
-              (cdr (cdr node)))
-          (if (consp cdr)
-              (mapc (lambda (child)
-                      (push child stack))
-                    cdr)
-            (when (and (stringp car)
-                       (string-match (concat "^" (regexp-quote ac-prefix)) car))
-              ;; Remove extra characters
-              (if (string-match "^.*\\(()\\|=\\|<>\\)$" car)
-                  (setq car (substring car 0 (match-beginning 1))))
-              (push car result)
-              (incf i))))
+          do
+             (let ((car (car node))
+                   (cdr (cdr node)))
+               (if (consp cdr)
+                   (mapc (lambda (child)
+                           (push child stack))
+                         cdr)
+                   (when (and (stringp car)
+                              (string-match (concat "^" (regexp-quote ac-prefix)) car))
+                     ;; Remove extra characters
+                     (if (string-match "^.*\\(()\\|=\\|<>\\)$" car)
+                         (setq car (substring car 0 (match-beginning 1))))
+                     (push car result)
+                     (incf i))))
         finally return (nreverse result)))
 
 (ac-define-source imenu
-  '((depends imenu)
-    (candidates . ac-imenu-candidates)
-    (symbol . "s")))
+                  '((depends imenu)
+                    (candidates . ac-imenu-candidates)
+                    (symbol . "s")))
 
 ;; gtags
 
 (defface ac-gtags-candidate-face
-  '((t (:background "lightgray" :foreground "navy")))
+    '((t (:background "lightgray" :foreground "navy")))
   "Face for gtags candidate"
   :group 'auto-complete)
 
 (defface ac-gtags-selection-face
-  '((t (:background "navy" :foreground "white")))
+    '((t (:background "navy" :foreground "white")))
   "Face for the gtags selected candidate."
   :group 'auto-complete)
 
 (defun ac-gtags-candidate ()
   (ignore-errors
-    (split-string (shell-command-to-string (format "global -ciq %s" ac-prefix)) "\n")))
+   (split-string (shell-command-to-string (format "global -ciq %s" ac-prefix)) "\n")))
 
 (ac-define-source gtags
-  '((candidates . ac-gtags-candidate)
-    (candidate-face . ac-gtags-candidate-face)
-    (selection-face . ac-gtags-selection-face)
-    (requires . 3)
-    (symbol . "s")))
+                  '((candidates . ac-gtags-candidate)
+                    (candidate-face . ac-gtags-candidate-face)
+                    (selection-face . ac-gtags-selection-face)
+                    (requires . 3)
+                    (symbol . "s")))
 
 ;; yasnippet
 
 (defface ac-yasnippet-candidate-face
-  '((t (:background "sandybrown" :foreground "black")))
+    '((t (:background "sandybrown" :foreground "black")))
   "Face for yasnippet candidate."
   :group 'auto-complete)
 
 (defface ac-yasnippet-selection-face
-  '((t (:background "coral3" :foreground "white")))
+    '((t (:background "coral3" :foreground "white")))
   "Face for the yasnippet selected candidate."
   :group 'auto-complete)
 
 (defun ac-yasnippet-table-hash (table)
   (cond
-   ((fboundp 'yas/snippet-table-hash)
-    (yas/snippet-table-hash table))
-   ((fboundp 'yas/table-hash)
-    (yas/table-hash table))))
+    ((fboundp 'yas/snippet-table-hash)
+     (yas/snippet-table-hash table))
+    ((fboundp 'yas/table-hash)
+     (yas/table-hash table))))
 
 (defun ac-yasnippet-table-parent (table)
   (cond
-   ((fboundp 'yas/snippet-table-parent)
-    (yas/snippet-table-parent table))
-   ((fboundp 'yas/table-parent)
-    (yas/table-parent table))))
+    ((fboundp 'yas/snippet-table-parent)
+     (yas/snippet-table-parent table))
+    ((fboundp 'yas/table-parent)
+     (yas/table-parent table))))
 
 (defun ac-yasnippet-candidate-1 (table)
   (with-no-warnings
-    (let ((hashtab (ac-yasnippet-table-hash table))
-          (parent (ac-yasnippet-table-parent table))
-          candidates)
-      (maphash (lambda (key value)
-                 (push key candidates))
-               hashtab)
-      (setq candidates (all-completions ac-prefix (nreverse candidates)))
-      (if parent
-          (setq candidates
-                (append candidates (ac-yasnippet-candidate-1 parent))))
-      candidates)))
+      (let ((hashtab (ac-yasnippet-table-hash table))
+            (parent (ac-yasnippet-table-parent table))
+            candidates)
+        (maphash (lambda (key value)
+                   (push key candidates))
+                 hashtab)
+        (setq candidates (all-completions ac-prefix (nreverse candidates)))
+        (if parent
+            (setq candidates
+                  (append candidates (ac-yasnippet-candidate-1 parent))))
+        candidates)))
 
 (defun ac-yasnippet-candidates ()
   (with-no-warnings
-    (if (fboundp 'yas/get-snippet-tables)
-        ;; >0.6.0
-        (apply 'append (mapcar 'ac-yasnippet-candidate-1 (yas/get-snippet-tables major-mode)))
-      (let ((table
-             (if (fboundp 'yas/snippet-table)
-                 ;; <0.6.0
-                 (yas/snippet-table major-mode)
-               ;; 0.6.0
-               (yas/current-snippet-table))))
-        (if table
-            (ac-yasnippet-candidate-1 table))))))
+      (if (fboundp 'yas/get-snippet-tables)
+          ;; >0.6.0
+          (apply 'append (mapcar 'ac-yasnippet-candidate-1 (yas/get-snippet-tables major-mode)))
+          (let ((table
+                  (if (fboundp 'yas/snippet-table)
+                      ;; <0.6.0
+                      (yas/snippet-table major-mode)
+                      ;; 0.6.0
+                      (yas/current-snippet-table))))
+            (if table
+                (ac-yasnippet-candidate-1 table))))))
 
 (ac-define-source yasnippet
-  '((depends yasnippet)
-    (candidates . ac-yasnippet-candidates)
-    (action . yas/expand)
-    (candidate-face . ac-yasnippet-candidate-face)
-    (selection-face . ac-yasnippet-selection-face)
-    (symbol . "a")))
+                  '((depends yasnippet)
+                    (candidates . ac-yasnippet-candidates)
+                    (action . yas/expand)
+                    (candidate-face . ac-yasnippet-candidate-face)
+                    (selection-face . ac-yasnippet-selection-face)
+                    (symbol . "a")))
 
 ;; semantic
 
 (defun ac-semantic-candidates (prefix)
   (with-no-warnings
-    (delete ""            ; semantic sometimes returns an empty string
-            (mapcar 'semantic-tag-name
-                    (ignore-errors
-                      (or (semantic-analyze-possible-completions
-                           (semantic-analyze-current-context))
-                          (senator-find-tag-for-completion prefix)))))))
+      (delete ""            ; semantic sometimes returns an empty string
+              (mapcar 'semantic-tag-name
+                      (ignore-errors
+                       (or (semantic-analyze-possible-completions
+                            (semantic-analyze-current-context))
+                           (senator-find-tag-for-completion prefix)))))))
 
 (ac-define-source semantic
-  '((available . (or (require 'semantic-ia nil t)
-                     (require 'semantic/ia nil t)))
-    (candidates . (ac-semantic-candidates ac-prefix))
-    (prefix . c-dot-ref)
-    (requires . 0)
-    (symbol . "m")))
+                  '((available . (or (require 'semantic-ia nil t)
+                                  (require 'semantic/ia nil t)))
+                    (candidates . (ac-semantic-candidates ac-prefix))
+                    (prefix . c-dot-ref)
+                    (requires . 0)
+                    (symbol . "m")))
 
 (ac-define-source semantic-raw
-  '((available . (or (require 'semantic-ia nil t)
-                     (require 'semantic/ia nil t)))
-    (candidates . (ac-semantic-candidates ac-prefix))
-    (symbol . "s")))
+                  '((available . (or (require 'semantic-ia nil t)
+                                  (require 'semantic/ia nil t)))
+                    (candidates . (ac-semantic-candidates ac-prefix))
+                    (symbol . "s")))
 
 ;; eclim
 
 (defun ac-eclim-candidates ()
   (with-no-warnings
-    (loop for c in (eclim/java-complete)
-          collect (nth 1 c))))
+      (loop for c in (eclim/java-complete)
+            collect (nth 1 c))))
 
 (ac-define-source eclim
-  '((candidates . ac-eclim-candidates)
-    (prefix . c-dot)
-    (requires . 0)
-    (symbol . "f")))
+                  '((candidates . ac-eclim-candidates)
+                    (prefix . c-dot)
+                    (requires . 0)
+                    (symbol . "f")))
 
 ;; css
 
@@ -343,12 +343,12 @@
 
 (defconst ac-css-value-classes
   '((absolute-size "xx-small" "x-small" "small" "medium" "large" "x-large"
-                   "xx-large")
+     "xx-large")
     (border-style "none" "hidden" "dotted" "dashed" "solid" "double" "groove"
-                  "ridge" "inset" "outset")
+     "ridge" "inset" "outset")
     (color "aqua" "black" "blue" "fuchsia" "gray" "green" "lime" "maroon" "navy"
-           "olive" "orange" "purple" "red" "silver" "teal" "white" "yellow"
-           "rgb")
+     "olive" "orange" "purple" "red" "silver" "teal" "white" "yellow"
+     "rgb")
     (counter "counter")
     (family-name "Courier" "Helvetica" "Times")
     (generic-family "serif" "sans-serif" "cursive" "fantasy" "monospace")
@@ -379,33 +379,33 @@
               with value
               while (setq value (pop list))
               if (symbolp value)
-              do (unless (memq value seen)
-                   (push value seen)
-                   (setq list
-                         (append list
-                                 (or (assoc-default value ac-css-value-classes)
-                                     (assoc-default (symbol-name value) ac-css-property-alist)))))
+                do (unless (memq value seen)
+                     (push value seen)
+                     (setq list
+                           (append list
+                                   (or (assoc-default value ac-css-value-classes)
+                                       (assoc-default (symbol-name value) ac-css-property-alist)))))
               else collect value)
-      ac-css-pseudo-classes)))
+        ac-css-pseudo-classes)))
 
 (ac-define-source css-property
-  '((candidates . ac-css-property-candidates)
-    (prefix . ac-css-prefix)
-    (requires . 0)))
+                  '((candidates . ac-css-property-candidates)
+                    (prefix . ac-css-prefix)
+                    (requires . 0)))
 
 ;; slime
 (ac-define-source slime
-  '((depends slime)
-    (candidates . (car (slime-simple-completions ac-prefix)))
-    (symbol . "s")
-    (cache)))
+                  '((depends slime)
+                    (candidates . (car (slime-simple-completions ac-prefix)))
+                    (symbol . "s")
+                    (cache)))
 
 ;; ghc-mod
 (ac-define-source ghc-mod
-  '((depends ghc)
-    (candidates . (ghc-select-completion-symbol))
-    (symbol . "s")
-    (cache)))
+                  '((depends ghc)
+                    (candidates . (ghc-select-completion-symbol))
+                    (symbol . "s")
+                    (cache)))
 
 
 
@@ -416,15 +416,15 @@
 (defvar ac-ropemacs-loaded nil)
 (defun ac-ropemacs-require ()
   (with-no-warnings
-    (unless ac-ropemacs-loaded
-      (pymacs-load "ropemacs" "rope-")
-      (if (boundp 'ropemacs-enable-autoimport)
-          (setq ropemacs-enable-autoimport t))
-      (setq ac-ropemacs-loaded t))))
+      (unless ac-ropemacs-loaded
+        (pymacs-load "ropemacs" "rope-")
+        (if (boundp 'ropemacs-enable-autoimport)
+            (setq ropemacs-enable-autoimport t))
+        (setq ac-ropemacs-loaded t))))
 
 (defun ac-ropemacs-setup ()
   (ac-ropemacs-require)
-  ;(setq ac-sources (append (list 'ac-source-ropemacs) ac-sources))
+                                        ;(setq ac-sources (append (list 'ac-source-ropemacs) ac-sources))
   (setq ac-omni-completion-sources '(("\\." ac-source-ropemacs))))
 
 (defun ac-ropemacs-initialize ()
@@ -445,7 +445,7 @@
                 (lambda (completion)
                   (concat ac-prefix completion))
                 (ignore-errors
-                  (rope-completions))))))
+                 (rope-completions))))))
     (candidates . ac-ropemacs-completions-cache)))
 
 ;; rcodetools
@@ -454,9 +454,9 @@
   '((init . (lambda ()
               (require 'rcodetools)
               (condition-case x
-                  (save-excursion
-                    (rct-exec-and-eval rct-complete-command-name "--completion-emacs-icicles"))
-                (error) (setq rct-method-completion-table nil))))
+                              (save-excursion
+                               (rct-exec-and-eval rct-complete-command-name "--completion-emacs-icicles"))
+                              (error) (setq rct-method-completion-table nil))))
     (candidates . (lambda ()
                     (all-completions
                      ac-prefix

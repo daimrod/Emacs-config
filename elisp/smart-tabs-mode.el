@@ -60,11 +60,11 @@
      (defadvice ,function (around smart-tabs activate)
        (if smart-tabs-mode
            (let ((indent-tabs-mode nil)) ad-do-it)
-         ad-do-it))))
+           ad-do-it))))
 
 
 (define-minor-mode smart-tabs-mode
-  "Intelligently indent with tabs, align with spaces!"
+    "Intelligently indent with tabs, align with spaces!"
 
   (progn
     (smart-tabs-mode/no-tabs-mode-advice align)
@@ -81,7 +81,7 @@
                           indent-relative-maybe))
                   (setq indent-tabs-mode nil))
               ad-do-it)
-          ad-do-it)))
+            ad-do-it)))
     ))
 
 (defun smart-tabs-mode-enable ()
@@ -94,19 +94,19 @@
      (defvaralias ',offset 'tab-width)
      (defadvice ,function (around smart-tabs activate)
        (cond
-        (smart-tabs-mode
-         (save-excursion
+         (smart-tabs-mode
+          (save-excursion
            (beginning-of-line)
            (while (looking-at "\t*\\( +\\)\t+")
-             (replace-match "" nil nil nil 1)))
-         (setq tab-width tab-width)
-         (let ((indent-tabs-mode t)
-               (tab-width fill-column)
-               (,offset fill-column))
-           (unwind-protect
-               (progn ad-do-it))))
-        (t
-         ad-do-it)))))
+                  (replace-match "" nil nil nil 1)))
+          (setq tab-width tab-width)
+          (let ((indent-tabs-mode t)
+                (tab-width fill-column)
+                (,offset fill-column))
+            (unwind-protect
+                 (progn ad-do-it))))
+         (t
+          ad-do-it)))))
 
 
 (provide 'smart-tabs-mode)

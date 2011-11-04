@@ -99,9 +99,9 @@ for those buffers."
                       (cdr tmp))
                      (t major-mode)))
          (name
-          (format "*%s*"
-                  (or name (replace-regexp-in-string "-mode$" ""
-                                                     (symbol-name mode)))))
+           (format "*%s*"
+                   (or name (replace-regexp-in-string "-mode$" ""
+                                                      (symbol-name mode)))))
          (buf (get-buffer name)))
     (cond ((bufferp buf)
            (pop-to-buffer buf))

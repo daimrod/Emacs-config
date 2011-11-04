@@ -423,97 +423,97 @@ This will not take effect until Emacs is restarted."
   :group 'faces)
 
 (defface markdown-italic-face
-  '((t :inherit font-lock-variable-name-face :italic t))
+    '((t :inherit font-lock-variable-name-face :italic t))
   "Face for italic text."
   :group 'markdown-faces)
 
 (defface markdown-bold-face
-  '((t :inherit font-lock-variable-name-face :bold t))
+    '((t :inherit font-lock-variable-name-face :bold t))
   "Face for bold text."
   :group 'markdown-faces)
 
 (defface markdown-header-face
-  '((t :inherit font-lock-function-name-face :weight bold))
+    '((t :inherit font-lock-function-name-face :weight bold))
   "Base face for headers."
   :group 'markdown-faces)
 
 (defface markdown-header-face-1
-  '((t :inherit markdown-header-face))
+    '((t :inherit markdown-header-face))
   "Face for level-1 headers."
   :group 'markdown-faces)
 
 (defface markdown-header-face-2
-  '((t :inherit markdown-header-face))
+    '((t :inherit markdown-header-face))
   "Face for level-2 headers."
   :group 'markdown-faces)
 
 (defface markdown-header-face-3
-  '((t :inherit markdown-header-face))
+    '((t :inherit markdown-header-face))
   "Face for level-3 headers."
   :group 'markdown-faces)
 
 (defface markdown-header-face-4
-  '((t :inherit markdown-header-face))
+    '((t :inherit markdown-header-face))
   "Face for level-4 headers."
   :group 'markdown-faces)
 
 (defface markdown-header-face-5
-  '((t :inherit markdown-header-face))
+    '((t :inherit markdown-header-face))
   "Face for level-5 headers."
   :group 'markdown-faces)
 
 (defface markdown-header-face-6
-  '((t :inherit markdown-header-face))
+    '((t :inherit markdown-header-face))
   "Face for level-6 headers."
   :group 'markdown-faces)
 
 (defface markdown-inline-code-face
-  '((t :inherit font-lock-constant-face))
+    '((t :inherit font-lock-constant-face))
   "Face for inline code."
   :group 'markdown-faces)
 
 (defface markdown-list-face
-  '((t :inherit font-lock-builtin-face))
+    '((t :inherit font-lock-builtin-face))
   "Face for list item markers."
   :group 'markdown-faces)
 
 (defface markdown-blockquote-face
-  '((t :inherit font-lock-doc-face))
+    '((t :inherit font-lock-doc-face))
   "Face for blockquote sections."
   :group 'markdown-faces)
 
 (defface markdown-pre-face
-  '((t :inherit font-lock-constant-face))
+    '((t :inherit font-lock-constant-face))
   "Face for preformatted text."
   :group 'markdown-faces)
 
 (defface markdown-link-face
-  '((t :inherit font-lock-keyword-face))
+    '((t :inherit font-lock-keyword-face))
   "Face for links."
   :group 'markdown-faces)
 
 (defface markdown-reference-face
-  '((t :inherit font-lock-type-face))
+    '((t :inherit font-lock-type-face))
   "Face for link references."
   :group 'markdown-faces)
 
 (defface markdown-url-face
-  '((t :inherit font-lock-string-face))
+    '((t :inherit font-lock-string-face))
   "Face for URLs."
   :group 'markdown-faces)
 
 (defface markdown-link-title-face
-  '((t :inherit font-lock-comment-face))
+    '((t :inherit font-lock-comment-face))
   "Face for reference link titles."
   :group 'markdown-faces)
 
 (defface markdown-comment-face
-  '((t :inherit font-lock-comment-face))
+    '((t :inherit font-lock-comment-face))
   "Face for HTML comments."
   :group 'markdown-faces)
 
 (defface markdown-math-face
-  '((t :inherit font-lock-string-face))
+    '((t :inherit font-lock-string-face))
   "Face for LaTeX expressions."
   :group 'markdown-faces)
 
@@ -619,14 +619,14 @@ This will not take effect until Emacs is restarted."
   "Regular expression for itex $..$ or $$..$$ math mode expressions.")
 
 (defconst markdown-regex-latex-display
-    "^\\\\\\[\\(.\\|\n\\)*?\\\\\\]$"
+  "^\\\\\\[\\(.\\|\n\\)*?\\\\\\]$"
   "Regular expression for itex \[..\] display mode expressions.")
 
 (defconst markdown-regex-list-indent
   "^\\(\\s *\\)\\([0-9]+\\.\\|[\\*\\+-]\\)\\(\\s +\\)"
   "Regular expression for matching indentation of list items.")
 
-; From html-helper-mode
+                                        ; From html-helper-mode
 (defun markdown-match-comments (last)
   "Matches HTML comments from the point to LAST"
   (cond ((search-forward "<!--" last t)
@@ -707,16 +707,16 @@ This will not take effect until Emacs is restarted."
 ;;; Element Insertion =========================================================
 
 (defun markdown-wrap-or-insert (s1 s2)
- "Insert the strings S1 and S2.
+  "Insert the strings S1 and S2.
 If Transient Mark mode is on and a region is active, wrap the strings S1
 and S2 around the region."
- (if (and transient-mark-mode mark-active)
-     (let ((a (region-beginning)) (b (region-end)))
-       (goto-char a)
-       (insert s1)
-       (goto-char (+ b (length s1)))
-       (insert s2))
-   (insert s1 s2)))
+  (if (and transient-mark-mode mark-active)
+      (let ((a (region-beginning)) (b (region-end)))
+        (goto-char a)
+        (insert s1)
+        (goto-char (+ b (length s1)))
+        (insert s2))
+      (insert s1 s2)))
 
 (defun markdown-insert-hr ()
   "Insert a horizonal rule."
@@ -733,7 +733,7 @@ If Transient Mark mode is on and a region is active, it is made bold."
   (interactive)
   (if markdown-bold-underscore
       (markdown-wrap-or-insert "__" "__")
-    (markdown-wrap-or-insert "**" "**"))
+      (markdown-wrap-or-insert "**" "**"))
   (backward-char 2))
 
 (defun markdown-insert-italic ()
@@ -742,7 +742,7 @@ If Transient Mark mode is on and a region is active, it is made italic."
   (interactive)
   (if markdown-italic-underscore
       (markdown-wrap-or-insert "_" "_")
-    (markdown-wrap-or-insert "*" "*"))
+      (markdown-wrap-or-insert "*" "*"))
   (backward-char 1))
 
 (defun markdown-insert-code ()
@@ -852,8 +852,8 @@ as the header text."
           (setq hdr (concat "=" hdr)))  ; Build a === title underline
         (end-of-line)
         (insert "\n" hdr "\n"))
-    (insert "\n==========\n")
-    (backward-char 12)))
+      (insert "\n==========\n")
+      (backward-char 12)))
 
 (defun markdown-insert-section ()
   "Insert a setext-style (underline) second level header.
@@ -870,8 +870,8 @@ as the header text."
           (setq hdr (concat "-" hdr)))  ; Build a --- section underline
         (end-of-line)
         (insert "\n" hdr "\n"))
-    (insert "\n----------\n")
-    (backward-char 12)))
+      (insert "\n----------\n")
+      (backward-char 12)))
 
 (defun markdown-insert-blockquote ()
   "Start a blockquote section (or blockquote the region).
@@ -880,7 +880,7 @@ the blockquote text."
   (interactive)
   (if (and (boundp 'transient-mark-mode) transient-mark-mode mark-active)
       (markdown-blockquote-region (region-beginning) (region-end))
-    (insert "> ")))
+      (insert "> ")))
 
 (defun markdown-block-region (beg end prefix)
   "Format the region using a block prefix.
@@ -889,26 +889,26 @@ region.The characters PREFIX will appear at the beginning
 of each line."
   (if mark-active
       (save-excursion
-        (let ((endpos end))
-          ; Ensure that there is a leading blank line
-          (goto-char beg)
-          (while (not (looking-back "\n\n" 2))
-            (insert "\n")
-            (setq endpos (+ 1 endpos)))
-          ; Insert blockquote characters
-          (move-to-left-margin)
-          (while (< (point-at-bol) endpos)
-            (insert prefix)
-            (setq endpos (+ (length prefix) endpos))
-            (forward-line))
-          ; Move back before any blank lines at the end
-          (goto-char endpos)
-          (while (looking-back "\n" 1)
-            (backward-char))
-          ; Ensure one blank line at the end
-          (while (not (looking-at "\n\n"))
-            (insert "\n")
-            (backward-char))))))
+       (let ((endpos end))
+                                        ; Ensure that there is a leading blank line
+         (goto-char beg)
+         (while (not (looking-back "\n\n" 2))
+                (insert "\n")
+                (setq endpos (+ 1 endpos)))
+                                        ; Insert blockquote characters
+         (move-to-left-margin)
+         (while (< (point-at-bol) endpos)
+                (insert prefix)
+                (setq endpos (+ (length prefix) endpos))
+                (forward-line))
+                                        ; Move back before any blank lines at the end
+         (goto-char endpos)
+         (while (looking-back "\n" 1)
+                (backward-char))
+                                        ; Ensure one blank line at the end
+         (while (not (looking-at "\n\n"))
+                (insert "\n")
+                (backward-char))))))
 
 (defun markdown-blockquote-region (beg end)
   "Blockquote the region.
@@ -923,7 +923,7 @@ as preformatted text."
   (interactive)
   (if (and (boundp 'transient-mark-mode) transient-mark-mode mark-active)
       (markdown-pre-region (region-beginning) (region-end))
-    (insert "    ")))
+      (insert "    ")))
 
 (defun markdown-pre-region (beg end)
   "Format the region as preformatted text.
@@ -939,31 +939,31 @@ Arguments BEG and END specify the beginning and end of the region."
   "Return the position after the index of CUR-POS in POSITIONS."
   (while (and positions
               (not (equal cur-pos (car positions))))
-    (setq positions (cdr positions)))
+         (setq positions (cdr positions)))
   (or (cadr positions) 0))
 
 (defun markdown-prev-line-indent-p ()
   "Return t if the previous line is indented."
   (save-excursion
-    (forward-line -1)
-    (goto-char (point-at-bol))
-    (if (re-search-forward "^\\s " (point-at-eol) t) t)))
+   (forward-line -1)
+   (goto-char (point-at-bol))
+   (if (re-search-forward "^\\s " (point-at-eol) t) t)))
 
 (defun markdown-prev-line-indent ()
   "Return the number of leading whitespace characters in the previous line."
   (save-excursion
-    (forward-line -1)
-    (goto-char (point-at-bol))
-    (when (re-search-forward "^\\s +" (point-at-eol) t)
-        (current-column))))
+   (forward-line -1)
+   (goto-char (point-at-bol))
+   (when (re-search-forward "^\\s +" (point-at-eol) t)
+     (current-column))))
 
 (defun markdown-prev-list-indent ()
   "Return position of the first non-list-marker on the previous line."
   (save-excursion
-    (forward-line -1)
-    (goto-char (point-at-bol))
-    (when (re-search-forward markdown-regex-list-indent (point-at-eol) t)
-        (current-column))))
+   (forward-line -1)
+   (goto-char (point-at-bol))
+   (when (re-search-forward markdown-regex-list-indent (point-at-eol) t)
+     (current-column))))
 
 (defun markdown-indent-line ()
   "Indent the current line using some heuristics."
@@ -991,10 +991,10 @@ Arguments BEG and END specify the beginning and end of the region."
 
     ;; Indentation of the previous line + tab-width
     (cond
-     (prev-line-pos
-      (setq positions (cons (+ prev-line-pos tab-width) positions)))
-     (t
-      (setq positions (cons tab-width positions))))
+      (prev-line-pos
+       (setq positions (cons (+ prev-line-pos tab-width) positions)))
+      (t
+       (setq positions (cons tab-width positions))))
 
     ;; Indentation of the previous line - tab-width
     (if (and prev-line-pos
@@ -1004,14 +1004,14 @@ Arguments BEG and END specify the beginning and end of the region."
     ;; Indentation of preceeding list item
     (setq pos
           (save-excursion
-            (forward-line -1)
-            (catch 'break
-              (while (not (equal (point) (point-min)))
-                (forward-line -1)
-                (goto-char (point-at-bol))
-                (when (re-search-forward markdown-regex-list-indent (point-at-eol) t)
-                  (throw 'break (length (match-string 1)))))
-              nil)))
+           (forward-line -1)
+           (catch 'break
+             (while (not (equal (point) (point-min)))
+                    (forward-line -1)
+                    (goto-char (point-at-bol))
+                    (when (re-search-forward markdown-regex-list-indent (point-at-eol) t)
+                      (throw 'break (length (match-string 1)))))
+             nil)))
     (if pos
         (setq positions (cons pos positions)))
 
@@ -1072,40 +1072,40 @@ Arguments BEG and END specify the beginning and end of the region."
 ;;; Menu ==================================================================
 
 (easy-menu-define markdown-mode-menu markdown-mode-map
-  "Menu for Markdown mode"
-  '("Markdown"
-    ("Show/Hide"
-     ["Cycle visibility" markdown-cycle (outline-on-heading-p)]
-     ["Cycle global visibility" markdown-shifttab])
-    "---"
-    ["Compile" markdown]
-    ["Preview" markdown-preview]
-    "---"
-    ("Headers (setext)"
-     ["Insert Title" markdown-insert-title]
-     ["Insert Section" markdown-insert-section])
-    ("Headers (atx)"
-     ["First level" markdown-insert-header-1]
-     ["Second level" markdown-insert-header-2]
-     ["Third level" markdown-insert-header-3]
-     ["Fourth level" markdown-insert-header-4]
-     ["Fifth level" markdown-insert-header-5]
-     ["Sixth level" markdown-insert-header-6])
-    "---"
-    ["Bold" markdown-insert-bold]
-    ["Italic" markdown-insert-italic]
-    ["Blockquote" markdown-insert-blockquote]
-    ["Preformatted" markdown-insert-pre]
-    ["Code" markdown-insert-code]
-    "---"
-    ["Insert inline link" markdown-insert-link]
-    ["Insert image" markdown-insert-image]
-    ["Insert horizontal rule" markdown-insert-hr]
-    "---"
-    ["Check references" markdown-check-refs]
-    "---"
-    ["Version" markdown-show-version]
-    ))
+                  "Menu for Markdown mode"
+                  '("Markdown"
+                    ("Show/Hide"
+                     ["Cycle visibility" markdown-cycle (outline-on-heading-p)]
+                     ["Cycle global visibility" markdown-shifttab])
+                    "---"
+                    ["Compile" markdown]
+                    ["Preview" markdown-preview]
+                    "---"
+                    ("Headers (setext)"
+                     ["Insert Title" markdown-insert-title]
+                     ["Insert Section" markdown-insert-section])
+                    ("Headers (atx)"
+                     ["First level" markdown-insert-header-1]
+                     ["Second level" markdown-insert-header-2]
+                     ["Third level" markdown-insert-header-3]
+                     ["Fourth level" markdown-insert-header-4]
+                     ["Fifth level" markdown-insert-header-5]
+                     ["Sixth level" markdown-insert-header-6])
+                    "---"
+                    ["Bold" markdown-insert-bold]
+                    ["Italic" markdown-insert-italic]
+                    ["Blockquote" markdown-insert-blockquote]
+                    ["Preformatted" markdown-insert-pre]
+                    ["Code" markdown-insert-code]
+                    "---"
+                    ["Insert inline link" markdown-insert-link]
+                    ["Insert image" markdown-insert-image]
+                    ["Insert horizontal rule" markdown-insert-hr]
+                    "---"
+                    ["Check references" markdown-check-refs]
+                    "---"
+                    ["Version" markdown-show-version]
+                    ))
 
 
 
@@ -1120,16 +1120,16 @@ The string %BUFFER% will be replaced by the corresponding
 `markdown-mode' buffer name.")
 
 (defun markdown-has-reference-definition (reference)
-    "Find out whether Markdown REFERENCE is defined.
+  "Find out whether Markdown REFERENCE is defined.
 
 REFERENCE should include the square brackets, like [this]."
-    (let ((reference (downcase reference)))
-      (save-excursion
-        (goto-char (point-min))
-        (catch 'found
-          (while (re-search-forward markdown-regex-reference-definition nil t)
-            (when (string= reference (downcase (match-string-no-properties 1)))
-              (throw 'found t)))))))
+  (let ((reference (downcase reference)))
+    (save-excursion
+     (goto-char (point-min))
+     (catch 'found
+       (while (re-search-forward markdown-regex-reference-definition nil t)
+              (when (string= reference (downcase (match-string-no-properties 1)))
+                (throw 'found t)))))))
 
 (defun markdown-get-undefined-refs ()
   "Return a list of undefined Markdown references.
@@ -1143,20 +1143,20 @@ For example, an alist corresponding to [Nice editor][Emacs] at line 12,
 \((\"[emacs]\" (\"[Nice editor]\" . 12) (\"[GNU Emacs]\" . 45)) (\"[elisp]\" (\"[manual]\" . 127)))."
   (let ((missing))
     (save-excursion
-      (goto-char (point-min))
-      (while
-          (re-search-forward markdown-regex-link-reference nil t)
-        (let* ((label (match-string-no-properties 1))
-               (reference (match-string-no-properties 2))
-               (target (downcase (if (string= reference "[]") label reference))))
-          (unless (markdown-has-reference-definition target)
-            (let ((entry (assoc target missing)))
-              (if (not entry)
-                  (add-to-list 'missing (cons target
-                                              (list (cons label (markdown-line-number-at-pos)))) t)
+     (goto-char (point-min))
+     (while
+      (re-search-forward markdown-regex-link-reference nil t)
+      (let* ((label (match-string-no-properties 1))
+             (reference (match-string-no-properties 2))
+             (target (downcase (if (string= reference "[]") label reference))))
+        (unless (markdown-has-reference-definition target)
+          (let ((entry (assoc target missing)))
+            (if (not entry)
+                (add-to-list 'missing (cons target
+                                            (list (cons label (markdown-line-number-at-pos)))) t)
                 (setcdr entry
                         (append (cdr entry) (list (cons label (markdown-line-number-at-pos))))))))))
-      missing)))
+     missing)))
 
 (defun markdown-add-missing-ref-definition (ref buffer &optional recheck)
   "Add blank REF definition to the end of BUFFER.
@@ -1166,11 +1166,11 @@ REF is a Markdown reference in square brackets, like \"[lisp-history]\".
 When RECHECK is non-nil, BUFFER gets rechecked for undefined
 references so that REF disappears from the list of those links."
   (with-current-buffer buffer
-      (when (not (eq major-mode 'markdown-mode))
-        (error "Not available in current mode"))
-      (goto-char (point-max))
-      (indent-new-comment-line)
-      (insert (concat ref ": ")))
+    (when (not (eq major-mode 'markdown-mode))
+      (error "Not available in current mode"))
+    (goto-char (point-max))
+    (indent-new-comment-line)
+    (insert (concat ref ": ")))
   (switch-to-buffer-other-window buffer)
   (goto-char (point-max))
   (when recheck
@@ -1181,7 +1181,7 @@ references so that REF disappears from the list of those links."
 ;; is button's label
 (when (>= emacs-major-version 22)
   (define-button-type 'markdown-ref-button
-    'help-echo "Push to create an empty reference definition"
+      'help-echo "Push to create an empty reference definition"
     'face 'bold
     'action (lambda (b)
               (markdown-add-missing-ref-definition
@@ -1191,7 +1191,7 @@ references so that REF disappears from the list of those links."
 ;; property. Line number is button's 'line property.
 (when (>= emacs-major-version 22)
   (define-button-type 'goto-line-button
-    'help-echo "Push to go to this line"
+      'help-echo "Push to go to this line"
     'face 'italic
     'action (lambda (b)
               (message (button-get b 'buffer))
@@ -1212,44 +1212,44 @@ defined."
   (let ((oldbuf (current-buffer))
         (refs (markdown-get-undefined-refs))
         (refbuf (get-buffer-create (replace-regexp-in-string
-                                 "%BUFFER%" (buffer-name)
-                                 markdown-refcheck-buffer t))))
+                                    "%BUFFER%" (buffer-name)
+                                    markdown-refcheck-buffer t))))
     (if (null refs)
         (progn
           (when (not silent)
             (message "No undefined references found"))
           (kill-buffer refbuf))
-      (with-current-buffer refbuf
-        (when view-mode
-          (View-exit-and-edit))
-        (erase-buffer)
-        (insert "Following references lack definitions:")
-        (newline 2)
-        (dolist (ref refs)
-          (let ((button-label (format "%s" (car ref))))
-            (if (>= emacs-major-version 22)
-                ;; Create a reference button in Emacs 22
-                (insert-text-button button-label
-                                    :type 'markdown-ref-button
-                                    'target-buffer oldbuf)
-              ;; Insert reference as text in Emacs < 22
-              (insert button-label)))
-          (insert " (")
-          (dolist (occurency (cdr ref))
-            (let ((line (cdr occurency)))
+        (with-current-buffer refbuf
+          (when view-mode
+            (View-exit-and-edit))
+          (erase-buffer)
+          (insert "Following references lack definitions:")
+          (newline 2)
+          (dolist (ref refs)
+            (let ((button-label (format "%s" (car ref))))
               (if (>= emacs-major-version 22)
-                  ;; Create a line number button in Emacs 22
-                  (insert-button (number-to-string line)
-                                 :type 'goto-line-button
-                                 'target-buffer oldbuf
-                                 'target-line line)
-                ;; Insert line number as text in Emacs < 22
-                (insert (number-to-string line)))
-              (insert " "))) (delete-backward-char 1)
-          (insert ")")
-          (newline))
-        (view-buffer-other-window refbuf)
-        (goto-line 4)))))
+                  ;; Create a reference button in Emacs 22
+                  (insert-text-button button-label
+                                      :type 'markdown-ref-button
+                                      'target-buffer oldbuf)
+                  ;; Insert reference as text in Emacs < 22
+                  (insert button-label)))
+            (insert " (")
+            (dolist (occurency (cdr ref))
+              (let ((line (cdr occurency)))
+                (if (>= emacs-major-version 22)
+                    ;; Create a line number button in Emacs 22
+                    (insert-button (number-to-string line)
+                                   :type 'goto-line-button
+                                   'target-buffer oldbuf
+                                   'target-line line)
+                    ;; Insert line number as text in Emacs < 22
+                    (insert (number-to-string line)))
+                (insert " "))) (delete-backward-char 1)
+            (insert ")")
+            (newline))
+          (view-buffer-other-window refbuf)
+          (goto-line 4)))))
 
 
 ;;; Outline ===================================================================
@@ -1270,8 +1270,8 @@ non-nil."
         (level (funcall outline-level)))
     (while (and (not (eobp))
                 (or first (> (funcall outline-level) level)))
-      (setq first nil)
-      (outline-next-heading))
+           (setq first nil)
+           (outline-next-heading))
     (if (memq (preceding-char) '(?\n ?\^M))
         (progn
           ;; Go to end of line before heading
@@ -1289,8 +1289,8 @@ at an atx-style header, cycle visibility of the corresponding
 subtree.  Otherwise, insert a tab using `indent-relative'."
   (interactive "P")
   (cond
-     ((eq arg t) ;; Global cycling
-      (cond
+    ((eq arg t) ;; Global cycling
+     (cond
        ((and (eq last-command this-command)
              (eq markdown-cycle-global-status 2))
         ;; Move from overview to contents
@@ -1311,25 +1311,25 @@ subtree.  Otherwise, insert a tab using `indent-relative'."
         (message "OVERVIEW")
         (setq markdown-cycle-global-status 2))))
 
-     ((save-excursion (beginning-of-line 1) (looking-at outline-regexp))
-      ;; At a heading: rotate between three different views
-      (outline-back-to-heading)
-      (let ((goal-column 0) eoh eol eos)
-        ;; Determine boundaries
+    ((save-excursion (beginning-of-line 1) (looking-at outline-regexp))
+     ;; At a heading: rotate between three different views
+     (outline-back-to-heading)
+     (let ((goal-column 0) eoh eol eos)
+       ;; Determine boundaries
+       (save-excursion
+        (outline-back-to-heading)
         (save-excursion
-          (outline-back-to-heading)
-          (save-excursion
-            (beginning-of-line 2)
-            (while (and (not (eobp)) ;; this is like `next-line'
-                        (get-char-property (1- (point)) 'invisible))
-              (beginning-of-line 2)) (setq eol (point)))
-          (outline-end-of-heading)   (setq eoh (point))
-          (markdown-end-of-subtree t)
-          (skip-chars-forward " \t\n")
-          (beginning-of-line 1) ; in case this is an item
-          (setq eos (1- (point))))
-        ;; Find out what to do next and set `this-command'
-      (cond
+         (beginning-of-line 2)
+         (while (and (not (eobp)) ;; this is like `next-line'
+                     (get-char-property (1- (point)) 'invisible))
+                (beginning-of-line 2)) (setq eol (point)))
+        (outline-end-of-heading)   (setq eoh (point))
+        (markdown-end-of-subtree t)
+        (skip-chars-forward " \t\n")
+        (beginning-of-line 1) ; in case this is an item
+        (setq eos (1- (point))))
+       ;; Find out what to do next and set `this-command'
+       (cond
          ((= eos eoh)
           ;; Nothing is hidden behind this heading
           (message "EMPTY ENTRY")
@@ -1352,9 +1352,9 @@ subtree.  Otherwise, insert a tab using `indent-relative'."
           (message "FOLDED")
           (setq markdown-cycle-subtree-status 'folded)))))
 
-     (t
-      (message "TAB")
-      (funcall indent-line-function))))
+    (t
+     (message "TAB")
+     (funcall indent-line-function))))
 
 ;; Based on org-shifttab from org.el.
 (defun markdown-shifttab ()
@@ -1371,30 +1371,30 @@ Calls `markdown-cycle' with argument t."
   (if (and (boundp 'transient-mark-mode) transient-mark-mode mark-active)
       (shell-command-on-region (region-beginning) (region-end) markdown-command
                                "*markdown-output*" nil)
-    (shell-command-on-region (point-min) (point-max) markdown-command
-                             "*markdown-output*" nil))
+      (shell-command-on-region (point-min) (point-max) markdown-command
+                               "*markdown-output*" nil))
   (let (title)
     (setq title (buffer-name))
     (save-excursion
-      (set-buffer "*markdown-output*")
-      (goto-char (point-min))
-      (insert "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"
-              "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n"
-              "\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\n"
-              "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n\n"
-              "<head>\n<title>")
-      (insert title)
-      (insert "</title>\n")
-      (if markdown-css-path
-          (insert "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\""
-                  markdown-css-path
-                  "\"  />\n"))
-      (insert "</head>\n\n"
-              "<body>\n\n")
-      (goto-char (point-max))
-      (insert "\n"
-              "</body>\n"
-              "</html>\n"))))
+     (set-buffer "*markdown-output*")
+     (goto-char (point-min))
+     (insert "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"
+             "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n"
+             "\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\n"
+             "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n\n"
+             "<head>\n<title>")
+     (insert title)
+     (insert "</title>\n")
+     (if markdown-css-path
+         (insert "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\""
+                 markdown-css-path
+                 "\"  />\n"))
+     (insert "</head>\n\n"
+             "<body>\n\n")
+     (goto-char (point-max))
+     (insert "\n"
+             "</body>\n"
+             "</html>\n"))))
 
 (defun markdown-preview ()
   "Run markdown on the current buffer and preview the output in a browser."
@@ -1411,11 +1411,11 @@ If POS is nil, use current buffer location.
 This is an exact copy of `line-number-at-pos' for use in emacs21."
   (let ((opoint (or pos (point))) start)
     (save-excursion
-      (goto-char (point-min))
-      (setq start (point))
-      (goto-char opoint)
-      (forward-line 0)
-      (1+ (count-lines start (point))))))
+     (goto-char (point-min))
+     (setq start (point))
+     (goto-char opoint)
+     (forward-line 0)
+     (1+ (count-lines start (point))))))
 
 (defun markdown-nobreak-p ()
   "Returns nil if it is ok for fill-paragraph to insert a line
@@ -1462,7 +1462,7 @@ This is an exact copy of `line-number-at-pos' for use in emacs21."
   (add-hook 'fill-nobreak-predicate 'markdown-nobreak-p)
   (setq indent-line-function markdown-indent-function))
 
-;(add-to-list 'auto-mode-alist '("\\.text$" . markdown-mode))
+                                        ;(add-to-list 'auto-mode-alist '("\\.text$" . markdown-mode))
 
 (provide 'markdown-mode)
 

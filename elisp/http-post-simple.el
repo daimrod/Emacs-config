@@ -98,13 +98,13 @@ FIELDS is an alist, as for `http-post-simple', FILES is an a list of
 (defun http-post-encode-string (str content-type)
   "URL encode STR using CONTENT-TYPE as the coding system."
   (apply 'concat
-	 (mapcar (lambda (c)
-		   (if (or (and (>= c ?a) (<= c ?z))
-			   (and (>= c ?A) (<= c ?Z))
-			   (and (>= c ?0) (<= c ?9)))
-		       (string c)
-		       (format "%%%02x" c)))
-		 (encode-coding-string str content-type))))
+         (mapcar (lambda (c)
+                   (if (or (and (>= c ?a) (<= c ?z))
+                           (and (>= c ?A) (<= c ?Z))
+                           (and (>= c ?0) (<= c ?9)))
+                       (string c)
+                       (format "%%%02x" c)))
+                 (encode-coding-string str content-type))))
 
 
 (defun http-post-encode-fields (fields &optional charset)
@@ -117,39 +117,39 @@ FIELDS is an alist of \(
 CHARSET defaults to 'utf-8"
   (let ((charset (or charset 'utf-8)))
     (mapconcat #'identity
-	       (mapcar #'(lambda (field)
+               (mapcar #'(lambda (field)
                            (concat (symbol-name (car field))
                                    "="
                                    (http-post-encode-string (cdr field) charset)))
-		       (mapcan #'(lambda (field)
+                       (mapcan #'(lambda (field)
                                    (if (atom (cdr field)) (list field)
                                        ;; unpack the list
                                        (mapcar #'(lambda (value)
                                                    `(,(car field) . ,value))
                                                (cdr field))))
-			       fields))
-	       "&")))
+                               fields))
+               "&")))
 
 
 (defun http-post-simple-internal (url data charset extra-headers)
   (let ((url-request-method        "POST")
-	(url-request-data          data)
-	(url-request-extra-headers extra-headers)
+        (url-request-data          data)
+        (url-request-extra-headers extra-headers)
         (url-mime-charset-string   (http-post-charset-name charset)))
     (let (header
-	  data
-	  status)
+          data
+          status)
       (with-current-buffer
-	  (url-retrieve-synchronously url)
-	;; status
-	(setq status url-http-response-status)
-	;; return the header and the data separately
-	(goto-char (point-min))
-	(if (search-forward-regexp "^$" nil t)
-	    (setq header (buffer-substring (point-min) (point))
-		  data   (buffer-substring (1+ (point)) (point-max)))
-	    ;; unexpected situation, return the whole buffer
-	    (setq data (buffer-string))))
+          (url-retrieve-synchronously url)
+        ;; status
+        (setq status url-http-response-status)
+        ;; return the header and the data separately
+        (goto-char (point-min))
+        (if (search-forward-regexp "^$" nil t)
+            (setq header (buffer-substring (point-min) (point))
+                  data   (buffer-substring (1+ (point)) (point-max)))
+            ;; unexpected situation, return the whole buffer
+            (setq data (buffer-string))))
       (values data header status))))
 
 
@@ -170,7 +170,7 @@ CHARSET defaults to 'utf-8"
                 (format "Content-Disposition: form-data; name=%S" (symbol-name (car field)))
                 ""
                 (cdr field)))
-	   fields)
+           fields)
    (mapcan #'(lambda (file)
                (destructuring-bind (fieldname filename mime-type data) file
                  (http-post-bound-field
@@ -178,17 +178,17 @@ CHARSET defaults to 'utf-8"
                   (format "Content-type: %s" (http-post-content-type mime-type charset))
                   ""
                   data)))
-	   files)
+           files)
    (format "--%s--" (http-post-multipart-boundary))))
 
 
 (defun http-post-join-lines (&rest bits)
   (let ((sep "\r\n"))
     (mapconcat (lambda (bit)
-		 (if (listp bit)
-		     (apply 'http-post-join-lines bit)
-		     bit))
-	       bits sep)))
+                 (if (listp bit)
+                     (apply 'http-post-join-lines bit)
+                     bit))
+               bits sep)))
 
 
 (defun http-post-finesse-code-100 ()
