@@ -1,6 +1,6 @@
 ;;;; config-slime.el --- SLIME configuration
 
-(load (expand-file-name "~/quicklisp/slime-helper.el")) 
+(load (expand-file-name "~/quicklisp/slime-helper.el"))
 (require 'slime-autoloads)
 (require 'slime)
 (slime-setup '(slime-repl
