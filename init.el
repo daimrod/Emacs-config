@@ -61,6 +61,7 @@ Do it recursively if the third argument is not nil."
 (require 'undo-tree)
 (require 'woman)
 (require 'alarm)
+(require 'pos-tip)
 
 ;; Load my configuration
 (require 'config-defuns)
