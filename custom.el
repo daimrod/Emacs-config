@@ -9,6 +9,7 @@
  '(global-whitespace-newline-mode t)
  '(ido-default-buffer-method (quote selected-window))
  '(ido-default-file-method (quote selected-window))
+ '(org-agenda-files (quote ("~/org/notes.org")))
  '(safe-local-variable-values (quote ((Syntax . ANSI-Common-Lisp) (Base . 10) (readtable . runes) (Readtable . GLISP) (Package . SGML) (Package . LALR) (Syntax . Common-Lisp))))
  '(send-mail-function (quote sendmail-send-it))
  '(whitespace-empty (quote whitespace-empty))
