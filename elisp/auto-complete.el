@@ -1778,7 +1778,7 @@ completion menu. This workaround stops that annoying behavior."
       (setq symbol (intern-soft symbol)))
   (ignore-errors
    (with-temp-buffer
-       (let ((standard-output (current-buffer)))
+       (with-output-to-temp-buffer (current-buffer)
          (prin1 symbol)
          (princ " is ")
          (cond
