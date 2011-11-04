@@ -13,4 +13,6 @@
 
 (setq ac-use-quick-help t)
 
-(provide 'config-auto-comple)
+(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+
+(provide 'config-auto-complete)

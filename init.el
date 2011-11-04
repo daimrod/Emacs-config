@@ -76,6 +76,7 @@ Do it recursively if the third argument is not nil."
 (require 'config-git)
 (require 'config-alias)
 (require 'config-org)
+(require 'config-auto-complete)
 
 (load custom-file 'noerror)
 
