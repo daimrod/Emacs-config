@@ -55,7 +55,4 @@
 ;; remove C-t
 (global-unset-key (kbd "C-t"))
 
-;; Speedbar
-(global-set-key (kbd "C-t C-t") 'speedbar)
-
 (provide 'config-bindings)
