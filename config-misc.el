@@ -112,4 +112,7 @@
 ;; automatically refresh files from disk when they are updated
 (global-auto-revert-mode t)
 
+;; hide the cursor in the others windows
+(setq-default cursor-in-non-selected-windows nil)
+
 (provide 'config-misc)
