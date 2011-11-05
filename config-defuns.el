@@ -136,4 +136,11 @@ This is the same as using \\[set-mark-command] with the prefix argument."
    (shell-command (format "figlet -w %s -f %s %s"
                           size font text))))
 
+(defun bnb/exit ()
+  "Check for a server-buffer closing a buffer before closing the server-buffer"
+  (interactive)
+  (if server-clients
+      (server-edit))
+  (make-frame-invisible nil t))
+
 (provide 'config-defuns)
