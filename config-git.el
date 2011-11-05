@@ -2,6 +2,6 @@
 
 (require 'magit)
 
-(global-set-key (kbd "C-x C-g") 'magit-status)
+(define-key mode-specific-map (kbd "g") 'magit-status)
 
 (provide 'config-git)
