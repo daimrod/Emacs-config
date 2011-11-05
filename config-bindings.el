@@ -1,8 +1,5 @@
 ;;;; config-bindings.el
 
-;; You know, like Readline.
-(global-set-key (kbd "C-M-h") 'backward-kill-word)
-
 ;; Align your code in a pretty way.
 (global-set-key (kbd "C-x \\") 'align-regexp)
 
