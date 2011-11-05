@@ -29,7 +29,7 @@
 
 ;; customize TODO keywords
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d@/!)")
+      '((sequence "TODO(t)" "STARTED(s@/!)" "WAIT(w@/!)" "|" "DONE(d@/!)" "CANCELED(c@/!)" "DEFERRED(d@/!)")
         (sequence "REPORT(r@/!)" "BUG(b@/!)" "KNOWNCAUSE(k@/!)" "|" "FIXED(f@/!)" "CANCELED(c@/!)")))
 
 (provide 'config-org)
