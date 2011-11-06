@@ -105,7 +105,7 @@ Symbols matching the text at point are put first in the completion list."
   (map nil #'byte-compile-file
        '("~/.gnus.el"
          "~/.emacs-w3m.el"))
-  (byte-recompile-directory dotfiles-dir))
+  (byte-recompile-directory dotfiles-dir 0))
 
 (defun move-to-window-line-top ()
   (interactive)
