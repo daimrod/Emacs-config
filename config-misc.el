@@ -115,4 +115,7 @@
 ;; hide the cursor in the others windows
 (setq-default cursor-in-non-selected-windows nil)
 
+;; Prefer text-mode over fundamental-mode
+(setq-default major-mode 'text-mode)
+
 (provide 'config-misc)
