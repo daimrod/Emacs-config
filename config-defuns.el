@@ -152,11 +152,16 @@ This is the same as using \\[set-mark-command] with the prefix argument."
    (shell-command (format "figlet -w %s -f %s %s"
                           size font text))))
 
-(defun bnb/exit ()
-  "Check for a server-buffer closing a buffer before closing the server-buffer"
+(defun quit-or-hide ()
+  "If it this is an instance of a running Emacs daemon, then
+if it's the last frame, hide it, otherwise delete it.
+
+If not, use the classic save-buffers-and-kill-emacs function."
   (interactive)
-  (if server-clients
-      (server-edit))
-  (make-frame-invisible nil t))
+  (if (boundp 'server-name)
+   (if (> (length server-clients) 1)
+       (delete-frame)
+       (make-frame-invisible nil t))
+   (save-buffers-kill-emacs)))
 
 (provide 'config-defuns)

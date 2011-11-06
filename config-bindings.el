@@ -68,8 +68,7 @@
 ;; remove C-t
 (global-unset-key (kbd "C-t"))
 
-;; never kill emacs daemon
-(if (boundp 'server-name)
-    (global-set-key (kbd "C-x C-c") 'bnb/exit))
+;; never quit emacs daemon
+(global-set-key (kbd "C-x C-c") 'quit-or-hide)
 
 (provide 'config-bindings)
