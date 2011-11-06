@@ -28,7 +28,7 @@
 
 (ac-config-default)
 
-(setq ac-use-quick-help t)
+(setq ac-use-quick-help nil)
 
 (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
 
