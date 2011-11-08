@@ -17,6 +17,7 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (require 'magit)
+(require 'magit-svn)
 
 (define-key mode-specific-map (kbd "g") 'magit-status)
 
