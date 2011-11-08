@@ -34,8 +34,6 @@
                                          ("C-SPC" . set-mark-command)
                                          ("C-w" . kill-region)
                                          ("M-w" . kill-ring-save)
-                                         ("C-y" . yank)
-                                         ("M-y" . yank-pop)
                                          ("C-s" . isearch-forward)
                                          ("C-r" . isearch-backward)
                                          ("M-f" . term-send-forward-word)
@@ -44,7 +42,9 @@
                                          ("M-n" . term-send-down)
                                          ("M-r" . term-send-reverse-search-history)
                                          ("C-c C-c" . term-interrupt-subjob)
-                                         ("C-c C-z" . term-stop-subjob))))
+                                         ("C-c C-z" . term-stop-subjob)
+                                         ("TAB" . term-send-raw))
+                   term-term-name "xterm-256color"))
 
 (custom-set-variables '(term-prompt-regexp "^.*\\$ *"))
 
