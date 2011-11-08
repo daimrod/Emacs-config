@@ -44,7 +44,7 @@
       slime-startup-animation t
       slime-complete-symbol*-fancy t
       max-lisp-eval-depth 2000
-      common-lisp-hyperspec-root "/home/daimrod/lisp/doc/HyperSpec/"
+      common-lisp-hyperspec-root (concat home-dir "doc/HyperSpec/")
       slime-net-coding-system 'utf-8-unix)
 
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
