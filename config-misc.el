@@ -104,11 +104,6 @@
 (autoload 'eimp-mode "eimp" "Emacs Image Manipulation Package." t)
 (add-hook 'image-mode-hook 'eimp-mode)
 
-;; whitespace configuration
-(global-whitespace-mode t)
-(global-whitespace-newline-mode t)
-(setq-default whitespace-style '(face trailing space-before-tab))
-
 ;; automatically refresh files from disk when they are updated
 (global-auto-revert-mode t)
 
