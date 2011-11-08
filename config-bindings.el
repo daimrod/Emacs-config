@@ -68,6 +68,9 @@
 ;; remove C-t
 (global-unset-key (kbd "C-t"))
 
+;; remove C-x C-z
+(global-unset-key (kbd "C-x C-z"))
+
 ;; never quit emacs daemon
 (global-set-key (kbd "C-x C-c") 'quit-or-hide)
 
