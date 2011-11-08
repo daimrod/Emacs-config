@@ -52,8 +52,8 @@
   (let ((old-pos (point)))
     ad-do-it
     (let ((new-pos (point)))
-      (dotimes (i (- new-pos old-pos))
-        (term-send-raw-string "C-b")))))
+      (dotimes (i (- old-pos new-pos))
+        (term-send-raw-string "")))))
 
 (ad-activate 'term-bol)
 
