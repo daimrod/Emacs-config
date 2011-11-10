@@ -83,11 +83,6 @@
 (setq ispell-program-name "aspell"
       ispell-extra-args '("--sug-mode=ultra"))
 
-;; enable flyspell
-(add-hook 'text-mode-hook
-          (lambda()
-            (flyspell-mode t)))
-
 ;; waf config
 (setq auto-mode-alist (cons '("wscript" . python-mode) auto-mode-alist))
 
