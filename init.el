@@ -48,11 +48,11 @@ Do it recursively if the third argument is not nil."
                        (fni/add-to-load-path dir-or-file))))
                (setq files (cdr files)))))))
 
-(setq home-dir "/home/daimrod/")
-(setq dotfiles-dir (file-name-directory
+(defvar home-dir "/home/daimrod/")
+(defvar dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
-(setq elisp-dir (concat dotfiles-dir "elisp/"))
-(setq elpa-dir (concat dotfiles-dir "elpa/"))
+(defvar elisp-dir (concat dotfiles-dir "elisp/"))
+(defvar elpa-dir (concat dotfiles-dir "elpa/"))
 
 (fni/add-to-load-path dotfiles-dir)
 (fni/add-to-load-path elisp-dir t)
