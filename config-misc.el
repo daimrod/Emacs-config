@@ -113,4 +113,9 @@
 (require 'zaps)
 (global-zaps-mode t)
 
+;; yaml-mode configuration
+(fni/add-to-load-path (concat src-dir "yaml-mode/"))
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+
 (provide 'config-misc)
