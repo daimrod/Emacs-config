@@ -53,6 +53,7 @@ Do it recursively if the third argument is not nil."
                     (or (buffer-file-name) load-file-name)))
 (defvar elisp-dir (concat dotfiles-dir "elisp/"))
 (defvar elpa-dir (concat dotfiles-dir "elpa/"))
+(defvar src-dir (concat home-dir "src/elisp/"))
 
 (fni/add-to-load-path dotfiles-dir)
 (fni/add-to-load-path elisp-dir t)
