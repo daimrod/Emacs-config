@@ -108,4 +108,9 @@
 ;; Prefer text-mode over fundamental-mode
 (setq-default major-mode 'text-mode)
 
+;; enable Zaps mode everywhere
+(fni/add-to-load-path (concat src-dir "zaps/"))
+(require 'zaps)
+(global-zaps-mode t)
+
 (provide 'config-misc)
