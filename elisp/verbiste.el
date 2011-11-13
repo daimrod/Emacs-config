@@ -38,7 +38,10 @@
 (defun verbiste ()
   "Display conjugation of verb at point"
   (interactive)
-  (let* ((word (car (last (split-string (current-word) "'"))))
+  (let* ((cur-word (current-word))
+         (word (if cur-word
+                   (car (last (split-string cur-word "'")))
+                   ""))
          (verb (read-string "Conjugaison du verbe : "
                             word nil word))
          (split (verbiste-split verb))
