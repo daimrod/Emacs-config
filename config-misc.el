@@ -118,4 +118,7 @@
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
+;; Enable delete-selection-mode
+(delete-selection-mode)
+
 (provide 'config-misc)
