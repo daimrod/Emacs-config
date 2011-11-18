@@ -26,7 +26,4 @@
 (require 'highlight-parentheses)
 (global-highlight-parentheses-mode)
 
-(custom-set-faces
- '(show-paren-match ((t (:background "firebrick4" :foreground "white")))))
-
 (provide 'config-lisp)
