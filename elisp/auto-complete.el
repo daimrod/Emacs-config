@@ -177,9 +177,7 @@
 (defvaralias 'ac-candidate-max 'ac-candidate-limit)
 
 (defcustom ac-modes
-  '(emacs-lisp-mode lisp-mode lisp-interaction-mode
-    slime-repl-mode
-    c-mode cc-mode c++-mode
+  '(c-mode cc-mode c++-mode
     java-mode malabar-mode clojure-mode scala-mode
     scheme-mode
     ocaml-mode tuareg-mode haskell-mode
