@@ -98,33 +98,33 @@ This is used to prevent analyzing the same context over and over.")
           pos1 pos2
           (pos (point)))
       (save-excursion
-        (condition-case err
-            (while (and (setq pos1 (cadr (syntax-ppss pos1)))
-                        (cddr overlays))
-              (move-overlay (pop overlays) pos1 (1+ pos1))
-              (when (setq pos2 (scan-sexps pos1 1))
-                (move-overlay (pop overlays) (1- pos2) pos2)
-                ))
-          (error nil))
-        (goto-char pos))
+       (condition-case err
+                       (while (and (setq pos1 (cadr (syntax-ppss pos1)))
+                                   (cddr overlays))
+                         (move-overlay (pop overlays) pos1 (1+ pos1))
+                         (when (setq pos2 (scan-sexps pos1 1))
+                           (move-overlay (pop overlays) (1- pos2) pos2)
+                           ))
+                       (error nil))
+       (goto-char pos))
       (dolist (ov overlays)
         (move-overlay ov 1 1)))))
 
 ;;;###autoload
 (define-minor-mode highlight-parentheses-mode
-  "Minor mode to highlight the surrounding parentheses."
+    "Minor mode to highlight the surrounding parentheses."
   nil " hl-p" nil
   (if highlight-parentheses-mode
       (progn
         (hl-paren-create-overlays)
         (add-hook 'post-command-hook 'hl-paren-highlight nil t))
-    (mapc 'delete-overlay hl-paren-overlays)
-    (kill-local-variable 'hl-paren-overlays)
-    (kill-local-variable 'hl-paren-point)
-    (remove-hook 'post-command-hook 'hl-paren-highlight t)))
+      (mapc 'delete-overlay hl-paren-overlays)
+      (kill-local-variable 'hl-paren-overlays)
+      (kill-local-variable 'hl-paren-point)
+      (remove-hook 'post-command-hook 'hl-paren-highlight t)))
 
 (define-globalized-minor-mode global-highlight-parentheses-mode
-  highlight-parentheses-mode
+    highlight-parentheses-mode
   (lambda ()
     (highlight-parentheses-mode t)))
 
