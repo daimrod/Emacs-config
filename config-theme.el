@@ -22,8 +22,9 @@
       color-theme-is-cumulative t
       color-theme-load-all-themes nil)
 
-(require 'color-theme-tango)
-(color-theme-tango)
+(fni/add-to-load-path (concat src-dir "color-theme-tangotango/"))
+(require 'color-theme-tangotango)
+(color-theme-tangotango)
 
 ;; Set the default font
 (set-face-attribute 'default (not 'this-frame-only)
