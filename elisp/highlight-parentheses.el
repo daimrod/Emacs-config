@@ -123,6 +123,11 @@ This is used to prevent analyzing the same context over and over.")
     (kill-local-variable 'hl-paren-point)
     (remove-hook 'post-command-hook 'hl-paren-highlight t)))
 
+(define-globalized-minor-mode global-highlight-parentheses-mode
+  highlight-parentheses-mode
+  (lambda ()
+    (highlight-parentheses-mode t)))
+
 ;;; overlays ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun hl-paren-create-overlays ()
