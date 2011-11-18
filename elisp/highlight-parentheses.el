@@ -66,6 +66,12 @@ The list starts with the the inside parentheses and moves outwards."
   :set 'hl-paren-set
   :group 'highlight-parentheses)
 
+(defcustom hl-paren-background-color
+  "4b3b4b"
+  "*The color used for the highlighted region."
+  :type 'color
+  :group 'highlight-parentheses)
+
 (defcustom hl-paren-background-colors nil
   "*List of colors for the background highlighted parentheses.
 The list starts with the the inside parentheses and moves outwards."
@@ -98,13 +104,18 @@ This is used to prevent analyzing the same context over and over.")
           pos1 pos2
           (pos (point)))
       (save-excursion
-       (condition-case err
-                       (while (and (setq pos1 (cadr (syntax-ppss pos1)))
-                                   (cddr overlays))
-                         (move-overlay (pop overlays) pos1 (1+ pos1))
-                         (when (setq pos2 (scan-sexps pos1 1))
-                           (move-overlay (pop overlays) (1- pos2) pos2)))
-                       (error nil))
+       (ignore-errors
+        (when (and (setq pos1 (cadr (syntax-ppss pos1)))
+                   (cddr overlays))
+          (move-overlay (pop overlays) pos1 (1+ pos1))
+          (when (setq pos2 (scan-sexps pos1 1))
+            (move-overlay (pop overlays) (1- pos2) pos2)
+            (move-overlay (pop overlays) (1+ pos1) (1- pos2))))
+        (while (and (setq pos1 (cadr (syntax-ppss pos1)))
+                    (cddr overlays))
+          (move-overlay (pop overlays) pos1 (1+ pos1))
+          (when (setq pos2 (scan-sexps pos1 1))
+            (move-overlay (pop overlays) (1- pos2) pos2))))
        (goto-char pos))
       (dolist (ov overlays)
         (move-overlay ov 1 1)))))
@@ -133,6 +144,22 @@ This is used to prevent analyzing the same context over and over.")
   (let ((fg hl-paren-colors)
         (bg hl-paren-background-colors)
         attributes)
+    (when (or fg bg)
+      (setq attributes (face-attr-construct 'hl-paren-face))
+      (when (car fg)
+        (setq attributes (plist-put attributes :foreground (car fg))))
+      (pop fg)
+      (when (car bg)
+        (setq attributes (plist-put attributes :background (car bg))))
+      (pop bg)
+      (dotimes (i 2) ;; front and back
+        (push (make-overlay 0 0) hl-paren-overlays)
+        (overlay-put (car hl-paren-overlays) 'face attributes)))
+    (when hl-paren-background-color
+      (setq attributes (face-attr-construct 'hl-paren-face))
+      (setq attributes (plist-put attributes :background hl-paren-background-color))
+      (push (make-overlay 0 0) hl-paren-overlays)
+      (overlay-put (car hl-paren-overlays) 'face attributes))
     (while (or fg bg)
       (setq attributes (face-attr-construct 'hl-paren-face))
       (when (car fg)
