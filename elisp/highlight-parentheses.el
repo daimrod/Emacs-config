@@ -67,7 +67,7 @@ The list starts with the the inside parentheses and moves outwards."
   :group 'highlight-parentheses)
 
 (defcustom hl-paren-background-color
-  "4b3b4b"
+  "#4b3b4b"
   "*The color used for the highlighted region."
   :type 'color
   :group 'highlight-parentheses)
