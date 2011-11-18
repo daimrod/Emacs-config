@@ -65,4 +65,17 @@
 (make-directory "/tmp/slime-fasls/" t) ;; be sure the directory exists
 (setq slime-compile-file-options '(:fasl-directory "/tmp/slime-fasls/"))
 
+;; Add a directory to asdf:*central-registry*
+(defslime-repl-shortcut slime-repl-add-to-central-registry
+    ("add-to-central-registry" "+a" "add")
+  (:handler (lambda (directory)
+              (interactive
+               (list (read-directory-name
+                 "Add directory: "
+                 (slime-eval '(swank:default-directory))
+                 nil nil "")))
+              (insert "(cl:pushnew (cl:truename #P\"" directory "\") asdf:*central-registry* :test #'equal)")
+              (slime-repl-send-input t)))
+  (:one-liner "Add a directory to asdf:*central-registry*"))
+
 (provide 'config-slime)
