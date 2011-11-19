@@ -164,4 +164,12 @@ If not, use the classic save-buffers-and-kill-emacs function."
        (make-frame-invisible nil t))
    (save-buffers-kill-emacs)))
 
+(defun autocompile ()
+  "Byte compile an elisp."
+  (interactive)
+  (require 'bytecomp)
+  (let ((filename (buffer-file-name)))
+            (if (string-match "\\.el$" filename)
+                (byte-compile-file filename))))
+
 (provide 'config-defuns)

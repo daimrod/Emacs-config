@@ -121,4 +121,7 @@
 ;; Enable delete-selection-mode
 (delete-selection-mode)
 
+;; Autocompile el files at save
+(add-hook 'after-save-hook 'autocompile)
+
 (provide 'config-misc)
