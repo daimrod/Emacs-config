@@ -23,7 +23,9 @@
 (add-hook 'lisp-mode-hook 'enable-paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
 
-(require 'highlight-parentheses)
-(global-highlight-parentheses-mode)
+(fni/add-to-load-path (concat src-dir "highlight-region/"))
+(require 'highlight-region)
+(add-hook 'lisp-mode-hook 'highlight-region-mode)
+(add-hook 'emacs-lisp-mode-hook 'highlight-region-mode)
 
 (provide 'config-lisp)
