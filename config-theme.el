@@ -29,7 +29,7 @@
 ;; Set the default font
 (set-face-attribute 'default (not 'this-frame-only)
                     :family "Bitstream Vera Sans Mono"
-		    :height 130
+		    :height 135
 		    :width 'expanded)
 
 ;; tab and indentation configuration
