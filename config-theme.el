@@ -27,10 +27,16 @@
 (color-theme-tangotango)
 
 ;; Set the default font
-(set-face-attribute 'default (not 'this-frame-only)
+(set-face-attribute 'default nil
                     :family "Bitstream Vera Sans Mono"
-		    :height 135
-		    :width 'expanded)
+                    :height 135
+                    :width 'expanded)
+
+(defun fontify-frame (frame)
+  (set-frame-parameter frame 'font "-bitstream-Bitstream Vera Sans Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1"))
+
+(pushnew #'fontify-frame
+         after-make-frame-functions)
 
 ;; tab and indentation configuration
 (setq-default indent-tabs-mode nil)
