@@ -18,14 +18,16 @@
 
 (require 'python)
 
-(defun my-run-python (&optional NEW)
+(defun my-run-python (&optional new)
   "Run a python interpreter and display it.
 
 If NEW is set to nil, try to switch to the current python
 interpreter, otherwise create a new one even if a python
 interpreter already exists."
   (interactive "P")
-  (run-python nil nil NEW))
+  (if new
+   (run-python nil nil new)
+   (pop-to-buffer (process-buffer (python-proc)) t)))
 
 (define-key python-mode-map (kbd "C-c C-z") 'my-run-python)
 
