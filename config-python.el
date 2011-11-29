@@ -31,4 +31,12 @@ interpreter already exists."
 
 (define-key python-mode-map (kbd "C-c C-z") 'my-run-python)
 
+(defun my-python-set-proc (buffer-name)
+  "Set the python interpreter associated to the current buffer.
+
+BUFFER-NAME can be either a old buffer or a new one."
+  (interactive "B")
+  (setf python-buffer (get-buffer buffer-name))
+  (python-set-proc))
+
 (provide 'config-python)
