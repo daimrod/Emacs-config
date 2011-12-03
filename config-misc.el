@@ -18,8 +18,8 @@
 
 (require 'linum)
 
-;; line number everywhere
-(global-linum-mode 1)
+;; disable line number everywhere
+(global-linum-mode -1)
 
 ;; answer by y and n instead of yes and no
 (defalias 'yes-or-no-p 'y-or-n-p)
