@@ -71,4 +71,7 @@
 ;; never quit emacs daemon
 (global-set-key (kbd "C-x C-c") 'quit-or-hide)
 
+;; copy url at point
+(global-set-key (kbd "C-c y") 'copy-this-url)
+
 (provide 'config-bindings)

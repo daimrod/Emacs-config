@@ -172,4 +172,23 @@ If not, use the classic save-buffers-and-kill-emacs function."
             (if (string-match "\\.el$" filename)
                 (byte-compile-file filename))))
 
+(defun copy-this-url ()
+  "Copy the url at point."
+  (interactive)
+  (flet ((copy (url)
+           (kill-new url)
+           (message "%s" url))
+         (try-thing-at-point ()
+           (thing-at-point 'url))
+         (try-text-property ()
+           (get-text-property (point) 'shr-url)))
+    (let (url)
+      (loop for fun in '(try-thing-at-point
+                         try-text-property)
+            do (setf url (funcall fun))
+            until url)
+      (if url
+          (copy url)
+          (message "No url found at point")))))
+
 (provide 'config-defuns)
