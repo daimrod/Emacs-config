@@ -102,3 +102,4 @@ Do it recursively if the third argument is not nil."
 ;; enabled/disabled commands
 (put 'upcase-region 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
+(put 'dired-find-alternate-file 'disabled nil)
