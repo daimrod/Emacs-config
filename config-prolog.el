@@ -20,4 +20,11 @@
 
 (setq prolog-system 'swi)
 
+(setf auto-mode-alist
+      (mapcar (lambda (pair)
+                (if (equal (cdr pair) 'perl-mode)
+                    (cons (car pair) 'prolog-mode)
+                    pair))
+              auto-mode-alist))
+
 (provide 'config-prolog)
