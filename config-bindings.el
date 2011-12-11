@@ -74,8 +74,4 @@
 ;; copy url at point
 (global-set-key (kbd "C-c y") 'copy-this-url)
 
-;; close visits the file or directory at point and closes the dired
-;; buffer
-(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
-
 (provide 'config-bindings)
