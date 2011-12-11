@@ -35,7 +35,7 @@
 (define-key mode-specific-org-map (kbd "c") 'org-capture)
 
 ;; define where notes should be stored (for capture with C-c c)
-(setq-default org-default-notes-file (concat org-directory "notes.org"))
+(setq-default org-default-notes-file (concat org-directory "capture.org"))
 
 ;; start the overview on the current day
 (setq-default org-agenda-start-on-weekday nil)
