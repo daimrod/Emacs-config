@@ -136,5 +136,6 @@
 ;; buffer
 (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
 
+(setq sentence-end-double-space nil)
 
 (provide 'config-misc)
