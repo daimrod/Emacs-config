@@ -21,20 +21,20 @@
 (require 'slime)
 (slime-setup '(slime-repl
                inferior-slime
-	       slime-asdf
-	       slime-banner
-	       slime-autodoc
-	       slime-editing-commands
-	       slime-fancy-inspector
-	       slime-fancy
-	       slime-fontifying-fu
-	       slime-fuzzy
-	       slime-indentation
-	       slime-package-fu
-	       slime-references
-	       slime-scratch
-	       slime-xref-browser
-	       slime-presentations))
+               slime-asdf
+               slime-banner
+               slime-autodoc
+               slime-editing-commands
+               slime-fancy-inspector
+               slime-fancy
+               slime-fontifying-fu
+               slime-fuzzy
+               slime-indentation
+               slime-package-fu
+               slime-references
+               slime-scratch
+               slime-xref-browser
+               slime-presentations))
 
 (slime-autodoc-mode)
 
@@ -57,9 +57,9 @@
   "Close the current connection and the repl-buffer"
   (interactive)
   (save-window-excursion
-	(slime-switch-to-output-buffer)
-	(kill-buffer)
-	(slime-net-close (slime-connection))))
+   (slime-switch-to-output-buffer)
+   (kill-buffer)
+   (slime-net-close (slime-connection))))
 
 ;; Store fasls here
 (make-directory "/tmp/slime-fasls/" t) ;; be sure the directory exists
@@ -71,9 +71,9 @@
   (:handler (lambda (directory)
               (interactive
                (list (read-directory-name
-                 "Add directory: "
-                 (slime-eval '(swank:default-directory))
-                 nil nil "")))
+                      "Add directory: "
+                      (slime-eval '(swank:default-directory))
+                      nil nil "")))
               (insert "(cl:pushnew (cl:truename #P\"" directory "\") asdf:*central-registry* :test #'equal)")
               (slime-repl-send-input t)))
   (:one-liner "Add a directory to asdf:*central-registry*"))
