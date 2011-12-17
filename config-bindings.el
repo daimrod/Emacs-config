@@ -74,4 +74,7 @@
 ;; copy url at point
 (global-set-key (kbd "C-c y") 'copy-this-url)
 
+;; pretty print last s-exp
+(global-set-key (kbd "C-x M-e") 'pp-eval-last-sexp)
+
 (provide 'config-bindings)
