@@ -96,6 +96,7 @@ Do it recursively if the third argument is not nil."
 (require 'config-org)
 (require 'config-auto-complete)
 (require 'config-haskell)
+(require 'config-prolog)
 
 (load custom-file 'noerror)
 
