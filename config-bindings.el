@@ -77,4 +77,13 @@
 ;; pretty print last s-exp
 (global-set-key (kbd "C-x M-e") 'pp-eval-last-sexp)
 
+;; iy-go-to-char configuration
+(fni/add-to-load-path (concat src-dir "iy-go-to-char/"))
+(require 'iy-go-to-char)
+
+(global-set-key (kbd "C-c f") 'iy-go-to-char)
+(global-set-key (kbd "C-c F") 'iy-go-to-char-backward)
+(global-set-key (kbd "C-c ;") 'iy-go-to-char-continue)
+(global-set-key (kbd "C-c ,") 'iy-go-to-char-continue-backward)
+
 (provide 'config-bindings)
