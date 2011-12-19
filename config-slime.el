@@ -50,8 +50,10 @@
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
 (add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
 
-(define-key slime-repl-mode-map (kbd "C-c C-v C-l") 'slime-pretty-print-presentation-at-point)slime-mode-map
-(define-key slime-repl-mode-map (kbd "C-c C-v l") 'slime-pretty-print-presentation-at-point)slime-mode-map
+(define-key slime-repl-mode-map (kbd "C-c C-v C-l") 'slime-pretty-print-presentation-at-point)
+(define-key slime-repl-mode-map (kbd "C-c C-v l") 'slime-pretty-print-presentation-at-point)
+(define-key slime-repl-mode-map (kbd "C-x M-e") 'slime-pprint-eval-last-expression)
+(define-key slime-mode-map (kbd "C-x M-e") 'slime-pprint-eval-last-expression)
 
 (defun slime-dc ()
   "Close the current connection and the repl-buffer"
