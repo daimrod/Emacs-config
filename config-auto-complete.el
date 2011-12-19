@@ -17,7 +17,7 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;; How to update auto-complete
-;; cd ~/git/auto-complete/
+;; cd ~/src/elisp/auto-complete/
 ;; git pull
 ;; make install DIR=~/.emacs.d/elisp/
 

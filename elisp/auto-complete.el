@@ -44,7 +44,7 @@
 
 
 (eval-when-compile
- (require 'cl))
+  (require 'cl))
 
 (require 'popup)
 
@@ -53,9 +53,9 @@
 (defun ac-error (&optional var)
   "Report an error and disable `auto-complete-mode'."
   (ignore-errors
-   (message "auto-complete error: %s" var)
-   (auto-complete-mode -1)
-   var))
+    (message "auto-complete error: %s" var)
+    (auto-complete-mode -1)
+    var))
 
 
 
@@ -74,8 +74,8 @@
 (defcustom ac-auto-show-menu 0.8
   "Non-nil means completion menu will be automatically shown."
   :type '(choice (const :tag "Yes" t)
-          (const :tag "Never" nil)
-          (float :tag "Timer"))
+                 (const :tag "Never" nil)
+                 (float :tag "Timer"))
   :group 'auto-complete)
 
 (defcustom ac-show-menu-immediately-on-auto-complete t
@@ -121,7 +121,7 @@
 (defcustom ac-comphist-file
   (expand-file-name (concat (if (boundp 'user-emacs-directory)
                                 user-emacs-directory
-                                "~/.emacs.d/")
+                              "~/.emacs.d/")
                             "/ac-comphist.dat"))
   "Completion history file name."
   :type 'string
@@ -177,7 +177,9 @@
 (defvaralias 'ac-candidate-max 'ac-candidate-limit)
 
 (defcustom ac-modes
-  '(c-mode cc-mode c++-mode
+  '(emacs-lisp-mode lisp-mode lisp-interaction-mode
+    slime-repl-mode
+    c-mode cc-mode c++-mode
     java-mode malabar-mode clojure-mode scala-mode
     scheme-mode
     ocaml-mode tuareg-mode haskell-mode
@@ -234,8 +236,8 @@ Positive integer means if a length of a word you entered is larger than the valu
 completion will be started automatically.
 If you specify `nil', never be started automatically."
   :type '(choice (const :tag "Yes" t)
-          (const :tag "Never" nil)
-          (integer :tag "Require"))
+                 (const :tag "Never" nil)
+                 (integer :tag "Require"))
   :group 'auto-complete)
 
 (defcustom ac-stop-words nil
@@ -254,8 +256,8 @@ If you specify `nil', never be started automatically."
 If this value is `smart', auto-complete ignores case only when
 a prefix doen't contain any upper case letters."
   :type '(choice (const :tag "Yes" t)
-          (const :tag "Smart" smart)
-          (const :tag "No" nil))
+                 (const :tag "Smart" smart)
+                 (const :tag "No" nil))
   :group 'auto-complete)
 
 (defcustom ac-dwim t
@@ -274,17 +276,17 @@ a prefix doen't contain any upper case letters."
   :group 'auto-complete)
 
 (defface ac-completion-face
-    '((t (:foreground "darkgray" :underline t)))
+  '((t (:foreground "darkgray" :underline t)))
   "Face for inline completion"
   :group 'auto-complete)
 
 (defface ac-candidate-face
-    '((t (:background "lightgray" :foreground "black")))
+  '((t (:background "lightgray" :foreground "black")))
   "Face for candidate."
   :group 'auto-complete)
 
 (defface ac-selection-face
-    '((t (:background "steelblue" :foreground "white")))
+  '((t (:background "steelblue" :foreground "white")))
   "Face for selected candidate."
   :group 'auto-complete)
 
@@ -503,7 +505,7 @@ If there is no common part, this will be nil.")
                       for x = (max (- b) (min b (- d (abs (- prefix p)))))
                       for r = (/ 1.0 (1+ (exp (* (- a) x))))
                       do
-                         (incf score (* (aref stat p) r))))
+                      (incf score (* (aref stat p) r))))
               ;; Weight by distance
               (incf score (max 0.0 (- 0.3 (/ (- (length string) prefix) 100.0))))
               (unless cache
@@ -511,7 +513,7 @@ If there is no common part, this will be nil.")
                 (puthash string cache (ac-comphist-cache db)))
               (aset cache prefix score)
               score)))
-      0.0))
+    0.0))
 
 (defun ac-comphist-sort (db collection prefix &optional threshold)
   (let (result
@@ -522,8 +524,8 @@ If there is no common part, this will be nil.")
                            (when (and cur threshold)
                              (if (>= cur (* total threshold))
                                  (setq cur nil)
-                                 (incf n)
-                                 (incf cur (cdr a))))
+                               (incf n)
+                               (incf cur (cdr a))))
                            (car a))
                          (sort (mapcar (lambda (string)
                                          (let ((score (ac-comphist-score db string prefix)))
@@ -533,7 +535,7 @@ If there is no common part, this will be nil.")
                                (lambda (a b) (< (cdr b) (cdr a))))))
     (if threshold
         (cons n result)
-        result)))
+      result)))
 
 (defun ac-comphist-serialize (db)
   (let (alist)
@@ -544,12 +546,12 @@ If there is no common part, this will be nil.")
 
 (defun ac-comphist-deserialize (sexp)
   (condition-case nil
-                  (ac-comphist-make (let ((tab (ac-comphist-make-tab)))
-                                      (mapc (lambda (cons)
-                                              (puthash (car cons) (cdr cons) tab))
-                                            (nth 0 sexp))
-                                      tab))
-                  (error (message "Invalid comphist db.") nil)))
+      (ac-comphist-make (let ((tab (ac-comphist-make-tab)))
+                          (mapc (lambda (cons)
+                                  (puthash (car cons) (cdr cons) tab))
+                                (nth 0 sexp))
+                          tab))
+    (error (message "Invalid comphist db.") nil)))
 
 (defun ac-comphist-init ()
   (ac-comphist-load)
@@ -559,19 +561,19 @@ If there is no common part, this will be nil.")
   (interactive)
   (let ((db (if (file-exists-p ac-comphist-file)
                 (ignore-errors
-                 (with-temp-buffer
-                     (insert-file-contents ac-comphist-file)
-                   (goto-char (point-min))
-                   (ac-comphist-deserialize (read (current-buffer))))))))
+                  (with-temp-buffer
+                    (insert-file-contents ac-comphist-file)
+                    (goto-char (point-min))
+                    (ac-comphist-deserialize (read (current-buffer))))))))
     (setq ac-comphist (or db (ac-comphist-make)))))
 
 (defun ac-comphist-save ()
   (interactive)
   (require 'pp)
   (ignore-errors
-   (with-temp-buffer
-       (pp (ac-comphist-serialize ac-comphist) (current-buffer))
-     (write-region (point-min) (point-max) ac-comphist-file))))
+    (with-temp-buffer
+      (pp (ac-comphist-serialize ac-comphist) (current-buffer))
+      (write-region (point-min) (point-max) ac-comphist-file))))
 
 
 
@@ -591,13 +593,13 @@ If there is no common part, this will be nil.")
   (let ((cache (gethash filename ac-file-dictionary 'none)))
     (if (and cache (not (eq cache 'none)))
         cache
-        (let (result)
-          (ignore-errors
-           (with-temp-buffer
-               (insert-file-contents filename)
-             (setq result (split-string (buffer-string) "\n"))))
-          (puthash filename result ac-file-dictionary)
-          result))))
+      (let (result)
+        (ignore-errors
+          (with-temp-buffer
+            (insert-file-contents filename)
+            (setq result (split-string (buffer-string) "\n"))))
+        (puthash filename result ac-file-dictionary)
+        result))))
 
 (defun ac-mode-dictionary (mode)
   (loop for name in (cons (symbol-name mode)
@@ -605,18 +607,18 @@ If there is no common part, this will be nil.")
         for dir in ac-dictionary-directories
         for file = (concat dir "/" name)
         if (file-exists-p file)
-          append (ac-file-dictionary file)))
+        append (ac-file-dictionary file)))
 
 (defun ac-buffer-dictionary (&optional buffer)
   (with-current-buffer (or buffer (current-buffer))
     (if (local-variable-p 'ac-buffer-dictionary)
         ac-buffer-dictionary
-        (make-local-variable 'ac-buffer-dictionary)
-        (setq ac-buffer-dictionary
-              (apply 'append
-                     ac-user-dictionary
-                     (ac-mode-dictionary major-mode)
-                     (mapcar 'ac-file-dictionary ac-dictionary-files))))))
+      (make-local-variable 'ac-buffer-dictionary)
+      (setq ac-buffer-dictionary
+            (apply 'append
+                   ac-user-dictionary
+                   (ac-mode-dictionary major-mode)
+                   (mapcar 'ac-file-dictionary ac-dictionary-files))))))
 
 
 
@@ -627,8 +629,8 @@ If there is no common part, this will be nil.")
   (and (not truncate-lines)
        (eq (line-beginning-position)
            (save-excursion
-            (vertical-motion 1)
-            (line-beginning-position)))))
+             (vertical-motion 1)
+             (line-beginning-position)))))
 
 (defun ac-stop-word-p (word)
   (or (member word ac-stop-words)
@@ -679,55 +681,55 @@ You can not use it in source definition like (prefix . `NAME')."
   (loop with regexp = (regexp-quote prefix)
         for candidate in candidates
         if (string-match regexp candidate)
-          collect candidate))
+        collect candidate))
 
 (defsubst ac-source-entity (source)
   (if (symbolp source)
       (symbol-value source)
-      source))
+    source))
 
 (defun ac-source-available-p (source)
   (if (and (symbolp source)
            (get source 'available))
       (eq (get source 'available) t)
-      (let* ((src (ac-source-entity source))
-             (avail-pair (assq 'available src))
-             (avail-cond (cdr avail-pair))
-             (available (and (if avail-pair
-                                 (cond
-                                   ((symbolp avail-cond)
-                                    (funcall avail-cond))
-                                   ((listp avail-cond)
-                                    (eval avail-cond)))
-                                 t)
-                             (loop for feature in (assoc-default 'depends src)
-                                   unless (require feature nil t) return nil
-                                     finally return t))))
-        (if (symbolp source)
-            (put source 'available (if available t 'no)))
-        available)))
+    (let* ((src (ac-source-entity source))
+           (avail-pair (assq 'available src))
+           (avail-cond (cdr avail-pair))
+           (available (and (if avail-pair
+                               (cond
+                                ((symbolp avail-cond)
+                                 (funcall avail-cond))
+                                ((listp avail-cond)
+                                 (eval avail-cond)))
+                             t)
+                           (loop for feature in (assoc-default 'depends src)
+                                 unless (require feature nil t) return nil
+                                 finally return t))))
+      (if (symbolp source)
+          (put source 'available (if available t 'no)))
+      available)))
 
 (defun ac-compile-sources (sources)
   "Compiled `SOURCES' into expanded sources style."
   (loop for source in sources
         if (ac-source-available-p source)
-          do
-             (setq source (ac-source-entity source))
-             (flet ((add-attribute (name value &optional append) (add-to-list 'source (cons name value) append)))
-               ;; prefix
-               (let* ((prefix (assoc 'prefix source))
-                      (real (assoc-default (cdr prefix) ac-prefix-definitions)))
-                 (cond
-                   (real
-                    (add-attribute 'prefix real))
-                   ((null prefix)
-                    (add-attribute 'prefix 'ac-prefix-default))))
-               ;; match
-               (let ((match (assq 'match source)))
-                 (cond
-                   ((eq (cdr match) 'substring)
-                    (setcdr match 'ac-match-substring)))))
-          and collect source))
+        do
+        (setq source (ac-source-entity source))
+        (flet ((add-attribute (name value &optional append) (add-to-list 'source (cons name value) append)))
+          ;; prefix
+          (let* ((prefix (assoc 'prefix source))
+                 (real (assoc-default (cdr prefix) ac-prefix-definitions)))
+            (cond
+             (real
+              (add-attribute 'prefix real))
+             ((null prefix)
+              (add-attribute 'prefix 'ac-prefix-default))))
+          ;; match
+          (let ((match (assq 'match source)))
+            (cond
+             ((eq (cdr match) 'substring)
+              (setcdr match 'ac-match-substring)))))
+        and collect source))
 
 (defun ac-compiled-sources ()
   (or ac-compiled-sources
@@ -762,25 +764,25 @@ You can not use it in source definition like (prefix . `NAME')."
   (unless ac-inline
     (setq ac-inline (list nil)))
   (save-excursion
-   (let ((overlay (ac-inline-overlay))
-         (width 0)
-         (string-width (string-width string))
-         (length 0)
-         (original-string string))
-     ;; Calculate string space to show completion
-     (goto-char point)
-     (let (c)
-       (while (and (not (eolp))
-                   (< width string-width)
-                   (setq c (char-after))
-                   (not (eq c ?\t)))   ; special case for tab
-              (incf width (char-width c))
-              (incf length)
-              (forward-char)))
+    (let ((overlay (ac-inline-overlay))
+          (width 0)
+          (string-width (string-width string))
+          (length 0)
+          (original-string string))
+      ;; Calculate string space to show completion
+      (goto-char point)
+      (let (c)
+        (while (and (not (eolp))
+                    (< width string-width)
+                    (setq c (char-after))
+                    (not (eq c ?\t)))   ; special case for tab
+        (incf width (char-width c))
+        (incf length)
+        (forward-char)))
 
-     ;; Show completion
-     (goto-char point)
-     (cond
+      ;; Show completion
+      (goto-char point)
+      (cond
        ((= width 0)
         ;; End-of-line
         ;; Do nothing
@@ -792,27 +794,27 @@ You can not use it in source definition like (prefix . `NAME')."
        ((> width string-width)
         ;; Need to fill space
         (setq string (concat string (make-string (- width string-width) ? )))))
-     (setq string (propertize string 'face 'ac-completion-face))
-     (if overlay
-         (progn
-           (move-overlay overlay point (+ point length))
-           (overlay-put overlay 'invisible nil))
-         (setq overlay (make-overlay point (+ point length)))
-         (setf (nth 0 ac-inline)  overlay)
-         (overlay-put overlay 'priority 9999)
-         ;; Help prefix-overlay in some cases
-         (overlay-put overlay 'keymap ac-current-map))
-     ;; TODO no width but char
-     (if (eq length 0)
-         ;; Case: End-of-line
-         (progn
-           (put-text-property 0 1 'cursor t string)
-           (overlay-put overlay 'after-string string))
-         (let ((display (substring string 0 1))
-               (after-string (substring string 1)))
-           (overlay-put overlay 'display display)
-           (overlay-put overlay 'after-string after-string)))
-     (overlay-put overlay 'string original-string))))
+      (setq string (propertize string 'face 'ac-completion-face))
+      (if overlay
+          (progn
+            (move-overlay overlay point (+ point length))
+            (overlay-put overlay 'invisible nil))
+        (setq overlay (make-overlay point (+ point length)))
+        (setf (nth 0 ac-inline)  overlay)
+        (overlay-put overlay 'priority 9999)
+        ;; Help prefix-overlay in some cases
+        (overlay-put overlay 'keymap ac-current-map))
+      ;; TODO no width but char
+      (if (eq length 0)
+          ;; Case: End-of-line
+          (progn
+            (put-text-property 0 1 'cursor t string)
+            (overlay-put overlay 'after-string string))
+        (let ((display (substring string 0 1))
+              (after-string (substring string 1)))
+          (overlay-put overlay 'display display)
+          (overlay-put overlay 'after-string after-string)))
+      (overlay-put overlay 'string original-string))))
 
 (defun ac-inline-delete ()
   (when (ac-inline-live-p)
@@ -838,8 +840,8 @@ You can not use it in source definition like (prefix . `NAME')."
             (progn
               (ac-inline-hide)
               (ac-inline-show (point) (substring ac-common-part prefix-length)))
-            (ac-inline-delete)))
-      (ac-inline-delete)))
+          (ac-inline-delete)))
+    (ac-inline-delete)))
 
 (defun ac-put-prefix-overlay ()
   (unless ac-prefix-overlay
@@ -848,7 +850,7 @@ You can not use it in source definition like (prefix . `NAME')."
       (when (and (eq ac-point (point-max))
                  (eq ac-point (point)))
         (popup-save-buffer-state
-         (insert "\n"))
+          (insert "\n"))
         (setq newline t))
       (setq ac-prefix-overlay (make-overlay ac-point (1+ (point)) nil t t))
       (overlay-put ac-prefix-overlay 'priority 9999)
@@ -860,9 +862,9 @@ You can not use it in source definition like (prefix . `NAME')."
     (when (overlay-get ac-prefix-overlay 'newline)
       ;; Remove inserted newline
       (popup-save-buffer-state
-       (goto-char (point-max))
-       (if (eq (char-before) ?\n)
-           (delete-char -1))))
+        (goto-char (point-max))
+        (if (eq (char-before) ?\n)
+            (delete-char -1))))
     (delete-overlay ac-prefix-overlay)))
 
 (defun ac-activate-completing-map ()
@@ -896,35 +898,35 @@ You can not use it in source definition like (prefix . `NAME')."
         for req = (or (assoc-default 'requires source) requires 1)
 
         if (null prefix-def)
-          do
-             (unless (member prefix ignore-list)
-               (save-excursion
-                (setq point (cond
-                              ((symbolp prefix)
-                               (funcall prefix))
-                              ((stringp prefix)
-                               (and (re-search-backward (concat prefix "\\=") nil t)
-                                    (or (match-beginning 1) (match-beginning 0))))
-                              ((stringp (car-safe prefix))
-                               (let ((regexp (nth 0 prefix))
-                                     (end (nth 1 prefix))
-                                     (group (nth 2 prefix)))
-                                 (and (re-search-backward (concat regexp "\\=") nil t)
-                                      (funcall (if end 'match-end 'match-beginning)
-                                               (or group 0)))))
-                              (t
-                               (eval prefix))))
-                (if (and point
-                         (integerp req)
-                         (< (- current point) req))
-                    (setq point nil))
-                (if point
-                    (setq prefix-def prefix))))
-             
+        do
+        (unless (member prefix ignore-list)
+          (save-excursion
+            (setq point (cond
+                         ((symbolp prefix)
+                          (funcall prefix))
+                         ((stringp prefix)
+                          (and (re-search-backward (concat prefix "\\=") nil t)
+                               (or (match-beginning 1) (match-beginning 0))))
+                         ((stringp (car-safe prefix))
+                          (let ((regexp (nth 0 prefix))
+                                (end (nth 1 prefix))
+                                (group (nth 2 prefix)))
+                            (and (re-search-backward (concat regexp "\\=") nil t)
+                                 (funcall (if end 'match-end 'match-beginning)
+                                          (or group 0)))))
+                         (t
+                          (eval prefix))))
+            (if (and point
+                     (integerp req)
+                     (< (- current point) req))
+                (setq point nil))
+            (if point
+                (setq prefix-def prefix))))
+        
         if (equal prefix prefix-def) do (push source sources)
 
-          finally return
-                  (and point (list prefix-def point (nreverse sources)))))
+        finally return
+        (and point (list prefix-def point (nreverse sources)))))
 
 (defun ac-init ()
   "Initialize current sources to start completion."
@@ -932,12 +934,12 @@ You can not use it in source definition like (prefix . `NAME')."
   (loop for source in ac-current-sources
         for function = (assoc-default 'init source)
         if function do
-          (save-excursion
-           (cond
-             ((functionp function)
-              (funcall function))
-             (t
-              (eval function))))))
+        (save-excursion
+          (cond
+           ((functionp function)
+            (funcall function))
+           (t
+            (eval function))))))
 
 (defun ac-candidates-1 (source)
   (let* ((do-cache (assq 'cache source))
@@ -952,7 +954,7 @@ You can not use it in source definition like (prefix . `NAME')."
          (candidates (cdr cache)))
     (unless cache
       (setq candidates (save-excursion
-                        (cond
+                         (cond
                           ((functionp function)
                            (funcall function))
                           (t
@@ -961,7 +963,7 @@ You can not use it in source definition like (prefix . `NAME')."
       (setq candidates (mapcar (lambda (candidate)
                                  (if (consp candidate)
                                      (propertize (car candidate) 'value (cdr candidate))
-                                     candidate))
+                                   candidate))
                                candidates))
       (when do-cache
         (push (cons source candidates) ac-candidates-cache)))
@@ -992,27 +994,27 @@ You can not use it in source definition like (prefix . `NAME')."
         for source in ac-current-sources
         append (ac-candidates-1 source) into candidates
         finally return
-                (progn
-                  (delete-dups candidates)
-                  (if (and ac-use-comphist ac-comphist)
-                      (if ac-show-menu
-                          (let* ((pair (ac-comphist-sort ac-comphist candidates prefix-len ac-comphist-threshold))
-                                 (n (car pair))
-                                 (result (cdr pair))
-                                 (cons (if (> n 0) (nthcdr (1- n) result)))
-                                 (cdr (cdr cons)))
-                            (if cons (setcdr cons nil))
-                            (setq ac-common-part (try-completion ac-prefix result))
-                            (setq ac-whole-common-part (try-completion ac-prefix candidates))
-                            (if cons (setcdr cons cdr))
-                            result)
-                          (setq candidates (ac-comphist-sort ac-comphist candidates prefix-len))
-                          (setq ac-common-part (if candidates (popup-x-to-string (car candidates))))
-                          (setq ac-whole-common-part (try-completion ac-prefix candidates))
-                          candidates)
-                      (setq ac-common-part (try-completion ac-prefix candidates))
-                      (setq ac-whole-common-part ac-common-part)
-                      candidates))))
+        (progn
+          (delete-dups candidates)
+          (if (and ac-use-comphist ac-comphist)
+              (if ac-show-menu
+                  (let* ((pair (ac-comphist-sort ac-comphist candidates prefix-len ac-comphist-threshold))
+                         (n (car pair))
+                         (result (cdr pair))
+                         (cons (if (> n 0) (nthcdr (1- n) result)))
+                         (cdr (cdr cons)))
+                    (if cons (setcdr cons nil))
+                    (setq ac-common-part (try-completion ac-prefix result))
+                    (setq ac-whole-common-part (try-completion ac-prefix candidates))
+                    (if cons (setcdr cons cdr))
+                    result)
+                (setq candidates (ac-comphist-sort ac-comphist candidates prefix-len))
+                (setq ac-common-part (if candidates (popup-x-to-string (car candidates))))
+                (setq ac-whole-common-part (try-completion ac-prefix candidates))
+                candidates)
+            (setq ac-common-part (try-completion ac-prefix candidates))
+            (setq ac-whole-common-part ac-common-part)
+            candidates))))
 
 (defun ac-update-candidates (cursor scroll-top)
   "Update candidates of menu to `ac-candidates' and redraw it."
@@ -1023,15 +1025,15 @@ You can not use it in source definition like (prefix . `NAME')."
       (progn
         (setq ac-completing t)
         (ac-activate-completing-map))
-      (setq ac-completing nil)
-      (ac-deactivate-completing-map))
+    (setq ac-completing nil)
+    (ac-deactivate-completing-map))
   (ac-inline-update)
   (popup-set-list ac-menu ac-candidates)
   (if (and (not ac-fuzzy-enable)
            (<= (length ac-candidates) 1))
       (popup-hide ac-menu)
-      (if ac-show-menu
-          (popup-draw ac-menu))))
+    (if ac-show-menu
+        (popup-draw ac-menu))))
 
 (defun ac-reposition ()
   "Force to redraw candidate menu with current `ac-candidates'."
@@ -1057,7 +1059,7 @@ You can not use it in source definition like (prefix . `NAME')."
                        ac-selected-candidate
                        (if ac-last-point
                            (- ac-last-point ac-point)
-                           (length ac-prefix)))))
+                         (length ac-prefix)))))
   (ac-deactivate-completing-map)
   (ac-remove-prefix-overlay)
   (ac-remove-quick-help)
@@ -1109,10 +1111,10 @@ that have been made before in this function."
         (progn
           (let (buffer-undo-list)
             (save-excursion
-             (delete-region ac-point (point))))
+              (delete-region ac-point (point))))
           (setq buffer-undo-list
                 (nthcdr 2 buffer-undo-list)))
-        (delete-region ac-point (point)))
+      (delete-region ac-point (point)))
     (insert string)
     ;; Sometimes, possible when omni-completion used, (insert) added
     ;; to buffer-undo-list strange record about position changes.
@@ -1227,22 +1229,22 @@ that have been made before in this function."
     (when (stringp doc)
       (if (popup-hidden-p menu)
           (setq around t)
-          (setq point nil))
+        (setq point nil))
       (with-no-warnings
-          (pos-tip-show doc
-                        'popup-tip-face
-                        (or point
-                            (and menu
-                                 (popup-child-point menu parent-offset))
-                            (point))
-                        nil 0
-                        popup-tip-max-width
-                        nil nil
-                        (and (not around) 0))
+        (pos-tip-show doc
+                      'popup-tip-face
+                      (or point
+                          (and menu
+                               (popup-child-point menu parent-offset))
+                          (point))
+                      nil 0
+                      popup-tip-max-width
+                      nil nil
+                      (and (not around) 0))
         (unless (plist-get args :nowait)
           (clear-this-command-keys)
           (unwind-protect
-               (push (read-event (plist-get args :prompt)) unread-command-events)
+              (push (read-event (plist-get args :prompt)) unread-command-events)
             (pos-tip-hide))
           t)))))
 
@@ -1256,19 +1258,19 @@ that have been made before in this function."
   (when (and (or force (null this-command))
              (ac-menu-live-p)
              (null ac-quick-help))
-    (setq ac-quick-help
-          (funcall (if (ac-quick-help-use-pos-tip-p)
-                       'ac-pos-tip-show-quick-help
+      (setq ac-quick-help
+            (funcall (if (ac-quick-help-use-pos-tip-p)
+                         'ac-pos-tip-show-quick-help
                        'popup-menu-show-quick-help)
-                   ac-menu nil
-                   :point ac-point
-                   :height ac-quick-help-height
-                   :nowait t))))
+                     ac-menu nil
+                     :point ac-point
+                     :height ac-quick-help-height
+                     :nowait t))))
 
 (defun ac-remove-quick-help ()
   (when (ac-quick-help-use-pos-tip-p)
     (with-no-warnings
-        (pos-tip-hide)))
+      (pos-tip-hide)))
   (when ac-quick-help
     (popup-delete ac-quick-help)
     (setq ac-quick-help nil)))
@@ -1283,11 +1285,11 @@ that have been made before in this function."
       (when (stringp doc)
         (if (ac-quick-help-use-pos-tip-p)
             (with-no-warnings (pos-tip-show doc nil point nil 0))
-            (popup-tip doc
-                       :point point
-                       :around t
-                       :scroll-bar t
-                       :margin t))))))
+          (popup-tip doc
+                     :point point
+                     :around t
+                     :scroll-bar t
+                     :margin t))))))
 
 (defmacro ac-define-quick-help-command (name arglist &rest body)
   (declare (indent 2))
@@ -1296,14 +1298,14 @@ that have been made before in this function."
      (put ',name 'ac-quick-help-command t)))
 
 (ac-define-quick-help-command ac-quick-help-scroll-down ()
-                              (interactive)
-                              (when ac-quick-help
-                                (popup-scroll-down ac-quick-help)))
+  (interactive)
+  (when ac-quick-help
+    (popup-scroll-down ac-quick-help)))
 
 (ac-define-quick-help-command ac-quick-help-scroll-up ()
-                              (interactive)
-                              (when ac-quick-help
-                                (popup-scroll-up ac-quick-help)))
+  (interactive)
+  (when ac-quick-help
+    (popup-scroll-up ac-quick-help)))
 
 
 
@@ -1406,12 +1408,12 @@ that have been made before in this function."
   (interactive)
   (if (and ac-dwim ac-dwim-enable)
       (ac-complete)
-      (when (and (ac-inline-live-p)
-                 ac-common-part)
-        (ac-inline-hide)
-        (ac-expand-string ac-common-part (eq last-command this-command))
-        (setq ac-common-part nil)
-        t)))
+    (when (and (ac-inline-live-p)
+               ac-common-part)
+      (ac-inline-hide) 
+      (ac-expand-string ac-common-part (eq last-command this-command))
+      (setq ac-common-part nil)
+      t)))
 
 (defun ac-complete ()
   "Try complete."
@@ -1430,10 +1432,10 @@ that have been made before in this function."
         (setcdr ac-last-completion candidate)))
     (ac-abort)
     (cond
-      (action
-       (funcall action))
-      (fallback
-       (ac-fallback-command)))
+     (action
+      (funcall action))
+     (fallback
+      (ac-fallback-command)))
     candidate))
 
 (defun* ac-start (&key
@@ -1443,34 +1445,34 @@ that have been made before in this function."
   (interactive)
   (if (not auto-complete-mode)
       (message "auto-complete-mode is not enabled")
-      (let* ((info (ac-prefix requires ac-ignoring-prefix-def))
-             (prefix-def (nth 0 info))
-             (point (nth 1 info))
-             (sources (nth 2 info))
-             prefix
-             (init (or force-init (not (eq ac-point point)))))
-        (if (or (null point)
-                (progn
-                  (setq prefix (buffer-substring-no-properties point (point)))
-                  (ac-stop-word-p prefix)))
-            (prog1 nil
-              (ac-abort))
-            (unless ac-cursor-color
-              (setq ac-cursor-color (frame-parameter (selected-frame) 'cursor-color)))
-            (setq ac-show-menu (or ac-show-menu (if (eq ac-auto-show-menu t) t))
-                  ac-current-sources sources
-                  ac-buffer (current-buffer)
-                  ac-point point
-                  ac-prefix prefix
-                  ac-limit ac-candidate-limit
-                  ac-triggered t
-                  ac-current-prefix-def prefix-def)
-            (when (or init (null ac-prefix-overlay))
-              (ac-init))
-            (ac-set-timer)
-            (ac-set-show-menu-timer)
-            (ac-set-quick-help-timer)
-            (ac-put-prefix-overlay)))))
+    (let* ((info (ac-prefix requires ac-ignoring-prefix-def))
+           (prefix-def (nth 0 info))
+           (point (nth 1 info))
+           (sources (nth 2 info))
+           prefix
+           (init (or force-init (not (eq ac-point point)))))
+      (if (or (null point)
+              (progn
+                (setq prefix (buffer-substring-no-properties point (point)))
+                (ac-stop-word-p prefix)))
+          (prog1 nil
+            (ac-abort))
+        (unless ac-cursor-color
+          (setq ac-cursor-color (frame-parameter (selected-frame) 'cursor-color)))
+        (setq ac-show-menu (or ac-show-menu (if (eq ac-auto-show-menu t) t))
+              ac-current-sources sources
+              ac-buffer (current-buffer)
+              ac-point point
+              ac-prefix prefix
+              ac-limit ac-candidate-limit
+              ac-triggered t
+              ac-current-prefix-def prefix-def)
+        (when (or init (null ac-prefix-overlay))
+          (ac-init))
+        (ac-set-timer)
+        (ac-set-show-menu-timer)
+        (ac-set-quick-help-timer)
+        (ac-put-prefix-overlay)))))
 
 (defun ac-stop ()
   "Stop completiong."
@@ -1482,7 +1484,7 @@ that have been made before in this function."
   (interactive "P")
   (if (or force (ac-trigger-command-p last-command))
       (auto-complete)
-      (ac-fallback-command 'ac-trigger-key-command)))
+    (ac-fallback-command 'ac-trigger-key-command)))
 
 
 
@@ -1548,32 +1550,32 @@ that have been made before in this function."
 
 (defun ac-handle-pre-command ()
   (condition-case var
-                  (if (or (setq ac-triggered (and (not ac-fuzzy-enable) ; ignore key storkes in fuzzy mode
-                                                  (or (eq this-command 'auto-complete) ; special case
-                                                      (ac-trigger-command-p this-command)
-                                                      (and ac-completing
-                                                           (memq this-command ac-trigger-commands-on-completing)))
-                                                  (not (ac-cursor-on-diable-face-p))))
-                          (ac-compatible-package-command-p this-command))
-                      (progn
-                        (if (or (not (symbolp this-command))
-                                (not (get this-command 'ac-quick-help-command)))
-                            (ac-remove-quick-help))
-                        ;; Not to cause inline completion to be disrupted.
-                        (ac-inline-hide))
-                      (ac-abort))
-                  (error (ac-error var))))
+      (if (or (setq ac-triggered (and (not ac-fuzzy-enable) ; ignore key storkes in fuzzy mode
+                                      (or (eq this-command 'auto-complete) ; special case
+                                          (ac-trigger-command-p this-command)
+                                          (and ac-completing
+                                               (memq this-command ac-trigger-commands-on-completing)))
+                                      (not (ac-cursor-on-diable-face-p))))
+              (ac-compatible-package-command-p this-command))
+          (progn
+            (if (or (not (symbolp this-command))
+                    (not (get this-command 'ac-quick-help-command)))
+                (ac-remove-quick-help))
+            ;; Not to cause inline completion to be disrupted.
+            (ac-inline-hide))
+        (ac-abort))
+    (error (ac-error var))))
 
 (defun ac-handle-post-command ()
   (condition-case var
-                  (when (and ac-triggered
-                             (or ac-auto-start
-                                 ac-completing)
-                             (not isearch-mode))
-                    (setq ac-last-point (point))
-                    (ac-start :requires (unless ac-completing ac-auto-start))
-                    (ac-inline-update))
-                  (error (ac-error var))))
+      (when (and ac-triggered
+                 (or ac-auto-start
+                     ac-completing)
+                 (not isearch-mode))
+        (setq ac-last-point (point))
+        (ac-start :requires (unless ac-completing ac-auto-start))
+        (ac-inline-update))
+    (error (ac-error var))))
 
 (defun ac-setup ()
   (if ac-trigger-key
@@ -1586,10 +1588,10 @@ that have been made before in this function."
       (defadvice flymake-on-timer-event (around ac-flymake-stop-advice activate)
         (unless ac-completing
           ad-do-it))
-      (ad-disable-advice 'flymake-on-timer-event 'around 'ac-flymake-stop-advice)))
+    (ad-disable-advice 'flymake-on-timer-event 'around 'ac-flymake-stop-advice)))
 
 (define-minor-mode auto-complete-mode
-    "AutoComplete mode"
+  "AutoComplete mode"
   :lighter " AC"
   :keymap ac-mode-map
   :group 'auto-complete
@@ -1600,10 +1602,10 @@ that have been made before in this function."
         (add-hook 'post-command-hook 'ac-handle-post-command nil t)
         (add-hook 'after-save-hook 'ac-clear-variables-after-save nil t)
         (run-hooks 'auto-complete-mode-hook))
-      (remove-hook 'pre-command-hook 'ac-handle-pre-command t)
-      (remove-hook 'post-command-hook 'ac-handle-post-command t)
-      (remove-hook 'after-save-hook 'ac-clear-variables-after-save t)
-      (ac-abort)))
+    (remove-hook 'pre-command-hook 'ac-handle-pre-command t)
+    (remove-hook 'post-command-hook 'ac-handle-post-command t)
+    (remove-hook 'after-save-hook 'ac-clear-variables-after-save t)
+    (ac-abort)))
 
 (defun auto-complete-mode-maybe ()
   "What buffer `auto-complete-mode' prefers."
@@ -1612,7 +1614,7 @@ that have been made before in this function."
       (auto-complete-mode 1)))
 
 (define-global-minor-mode global-auto-complete-mode
-    auto-complete-mode auto-complete-mode-maybe
+  auto-complete-mode auto-complete-mode-maybe
   :group 'auto-complete)
 
 
@@ -1659,23 +1661,23 @@ completion menu. This workaround stops that annoying behavior."
         candidates
         (regexp (concat "\\_<" (regexp-quote prefix) "\\(\\sw\\|\\s_\\)+\\_>")))
     (save-excursion
-     ;; Search backward
-     (goto-char point)
-     (while (and (or (not (integerp limit)) (< i limit))
-                 (re-search-backward regexp nil t))
-            (setq candidate (match-string-no-properties 0))
-            (unless (member candidate candidates)
-              (push candidate candidates)
-              (incf i)))
-     ;; Search backward
-     (goto-char (+ point (length prefix)))
-     (while (and (or (not (integerp limit)) (< i limit))
-                 (re-search-forward regexp nil t))
-            (setq candidate (match-string-no-properties 0))
-            (unless (member candidate candidates)
-              (push candidate candidates)
-              (incf i)))
-     (nreverse candidates))))
+      ;; Search backward
+      (goto-char point)
+      (while (and (or (not (integerp limit)) (< i limit))
+                  (re-search-backward regexp nil t))
+        (setq candidate (match-string-no-properties 0))
+        (unless (member candidate candidates)
+          (push candidate candidates)
+          (incf i)))
+      ;; Search backward
+      (goto-char (+ point (length prefix)))
+      (while (and (or (not (integerp limit)) (< i limit))
+                  (re-search-forward regexp nil t))
+        (setq candidate (match-string-no-properties 0))
+        (unless (member candidate candidates)
+          (push candidate candidates)
+          (incf i)))
+      (nreverse candidates))))
 
 (defun ac-incremental-update-word-index ()
   (unless (local-variable-p 'ac-word-index)
@@ -1715,25 +1717,25 @@ completion menu. This workaround stops that annoying behavior."
         for buffer in (buffer-list)
         if (and (or (not (integerp ac-limit)) (< (length candidates) ac-limit))
                 (if buffer-pred (funcall buffer-pred buffer) t))
-          append (funcall ac-match-function
-                          ac-prefix
-                          (and (local-variable-p 'ac-word-index buffer)
-                               (cdr (buffer-local-value 'ac-word-index buffer))))
-            into candidates
+        append (funcall ac-match-function
+                        ac-prefix
+                        (and (local-variable-p 'ac-word-index buffer)
+                             (cdr (buffer-local-value 'ac-word-index buffer))))
+        into candidates
         finally return candidates))
 
 (ac-define-source words-in-buffer
-                  '((candidates . ac-word-candidates)))
+  '((candidates . ac-word-candidates)))
 
 (ac-define-source words-in-all-buffer
-                  '((init . ac-update-word-index)
-                    (candidates . ac-word-candidates)))
+  '((init . ac-update-word-index)
+    (candidates . ac-word-candidates)))
 
 (ac-define-source words-in-same-mode-buffers
-                  '((init . ac-update-word-index)
-                    (candidates . (ac-word-candidates
-                                   (lambda (buffer)
-                                     (derived-mode-p (buffer-local-value 'major-mode buffer)))))))
+  '((init . ac-update-word-index)
+    (candidates . (ac-word-candidates
+                   (lambda (buffer)
+                     (derived-mode-p (buffer-local-value 'major-mode buffer)))))))
 
 ;; Lisp symbols source
 (defvar ac-symbols-cache nil)
@@ -1742,80 +1744,80 @@ completion menu. This workaround stops that annoying behavior."
 (defun ac-symbol-file (symbol type)
   (if (fboundp 'find-lisp-object-file-name)
       (find-lisp-object-file-name symbol type)
-      (let ((file-name (with-no-warnings
-                           (describe-simplify-lib-file-name
-                            (symbol-file symbol type)))))
-        (when (equal file-name "loaddefs.el")
-          ;; Find the real def site of the preloaded object.
-          (let ((location (condition-case nil
-                                          (if (eq type 'defun)
-                                              (find-function-search-for-symbol symbol nil
-                                                                               "loaddefs.el")
-                                              (find-variable-noselect symbol file-name))
-                                          (error nil))))
-            (when location
-              (with-current-buffer (car location)
-                (when (cdr location)
-                  (goto-char (cdr location)))
-                (when (re-search-backward
-                       "^;;; Generated autoloads from \\(.*\\)" nil t)
-                  (setq file-name (match-string 1)))))))
-        (if (and (null file-name)
-                 (or (eq type 'defun)
-                     (integerp (get symbol 'variable-documentation))))
-            ;; It's a object not defined in Elisp but in C.
-            (if (get-buffer " *DOC*")
-                (if (eq type 'defun)
-                    (help-C-file-name (symbol-function symbol) 'subr)
-                    (help-C-file-name symbol 'var))
-                'C-source)
-            file-name))))
+    (let ((file-name (with-no-warnings
+                       (describe-simplify-lib-file-name
+                        (symbol-file symbol type)))))
+      (when (equal file-name "loaddefs.el")
+        ;; Find the real def site of the preloaded object.
+        (let ((location (condition-case nil
+                            (if (eq type 'defun)
+                                (find-function-search-for-symbol symbol nil
+                                                                 "loaddefs.el")
+                              (find-variable-noselect symbol file-name))
+                          (error nil))))
+          (when location
+            (with-current-buffer (car location)
+              (when (cdr location)
+                (goto-char (cdr location)))
+              (when (re-search-backward
+                     "^;;; Generated autoloads from \\(.*\\)" nil t)
+                (setq file-name (match-string 1)))))))
+      (if (and (null file-name)
+               (or (eq type 'defun)
+                   (integerp (get symbol 'variable-documentation))))
+          ;; It's a object not defined in Elisp but in C.
+          (if (get-buffer " *DOC*")
+              (if (eq type 'defun)
+                  (help-C-file-name (symbol-function symbol) 'subr)
+                (help-C-file-name symbol 'var))
+            'C-source)
+        file-name))))
 
 (defun ac-symbol-documentation (symbol)
   (if (stringp symbol)
       (setq symbol (intern-soft symbol)))
   (ignore-errors
-   (with-temp-buffer
-       (with-output-to-temp-buffer (current-buffer)
-         (prin1 symbol)
-         (princ " is ")
-         (cond
-           ((fboundp symbol)
-            ;; import help-xref-following
-            (require 'help-mode)
-            (let ((help-xref-following t))
-              (describe-function-1 symbol))
-            (buffer-string))
-           ((boundp symbol)
-            (let ((file-name  (ac-symbol-file symbol 'defvar)))
-              (princ "a variable")
-              (when file-name
-                (princ " defined in `")
-                (princ (if (eq file-name 'C-source)
-                           "C source code"
-                           (file-name-nondirectory file-name))))
-              (princ "'.\n\n")
-              (princ (or (documentation-property symbol 'variable-documentation t)
-                         "Not documented."))
-              (buffer-string)))
-           ((facep symbol)
-            (let ((file-name  (ac-symbol-file symbol 'defface)))
-              (princ "a face")
-              (when file-name
-                (princ " defined in `")
-                (princ (if (eq file-name 'C-source)
-                           "C source code"
-                           (file-name-nondirectory file-name))))
-              (princ "'.\n\n")
-              (princ (or (documentation-property symbol 'face-documentation t)
-                         "Not documented."))
-              (buffer-string)))
-           (t
-            (let ((doc (documentation-property symbol 'group-documentation t)))
-              (when doc
-                (princ "a group.\n\n")
-                (princ doc)
-                (buffer-string)))))))))
+    (with-temp-buffer
+      (with-output-to-temp-buffer (current-buffer)
+        (prin1 symbol)
+        (princ " is ")
+        (cond
+         ((fboundp symbol)
+          ;; import help-xref-following
+          (require 'help-mode)
+          (let ((help-xref-following t))
+            (describe-function-1 symbol))
+          (buffer-string))
+         ((boundp symbol)
+          (let ((file-name  (ac-symbol-file symbol 'defvar)))
+            (princ "a variable")
+            (when file-name
+              (princ " defined in `")
+              (princ (if (eq file-name 'C-source)
+                         "C source code"
+                       (file-name-nondirectory file-name))))
+            (princ "'.\n\n")
+            (princ (or (documentation-property symbol 'variable-documentation t)
+                       "Not documented."))
+            (buffer-string)))
+         ((facep symbol)
+          (let ((file-name  (ac-symbol-file symbol 'defface)))
+            (princ "a face")
+            (when file-name
+              (princ " defined in `")
+              (princ (if (eq file-name 'C-source)
+                         "C source code"
+                       (file-name-nondirectory file-name))))
+            (princ "'.\n\n")
+            (princ (or (documentation-property symbol 'face-documentation t)
+                       "Not documented."))
+            (buffer-string)))
+         (t
+          (let ((doc (documentation-property symbol 'group-documentation t)))
+            (when doc
+              (princ "a group.\n\n")
+              (princ doc)
+              (buffer-string)))))))))
 
 (defun ac-symbol-candidates ()
   (or ac-symbols-cache
@@ -1824,13 +1826,13 @@ completion menu. This workaround stops that annoying behavior."
                   if (or (fboundp x)
                          (boundp x)
                          (symbol-plist x))
-                    collect (symbol-name x)))))
+                  collect (symbol-name x)))))
 
 (ac-define-source symbols
-                  '((candidates . ac-symbol-candidates)
-                    (document . ac-symbol-documentation)
-                    (symbol . "s")
-                    (cache)))
+  '((candidates . ac-symbol-candidates)
+    (document . ac-symbol-documentation)
+    (symbol . "s")
+    (cache)))
 
 ;; Lisp functions source
 (defvar ac-functions-cache nil)
@@ -1841,14 +1843,14 @@ completion menu. This workaround stops that annoying behavior."
       (setq ac-functions-cache
             (loop for x being the symbols
                   if (fboundp x)
-                    collect (symbol-name x)))))
+                  collect (symbol-name x)))))
 
 (ac-define-source functions
-                  '((candidates . ac-function-candidates)
-                    (document . ac-symbol-documentation)
-                    (symbol . "f")
-                    (prefix . "(\\(\\(?:\\sw\\|\\s_\\)+\\)")
-                    (cache)))
+  '((candidates . ac-function-candidates)
+    (document . ac-symbol-documentation)
+    (symbol . "f")
+    (prefix . "(\\(\\(?:\\sw\\|\\s_\\)+\\)")
+    (cache)))
 
 ;; Lisp variables source
 (defvar ac-variables-cache nil)
@@ -1859,13 +1861,13 @@ completion menu. This workaround stops that annoying behavior."
       (setq ac-variables-cache
             (loop for x being the symbols
                   if (boundp x)
-                    collect (symbol-name x)))))
+                  collect (symbol-name x)))))
 
 (ac-define-source variables
-                  '((candidates . ac-variable-candidates)
-                    (document . ac-symbol-documentation)
-                    (symbol . "v")
-                    (cache)))
+  '((candidates . ac-variable-candidates)
+    (document . ac-symbol-documentation)
+    (symbol . "v")
+    (cache)))
 
 ;; Lisp features source
 (defvar ac-emacs-lisp-features nil)
@@ -1879,29 +1881,29 @@ completion menu. This workaround stops that annoying behavior."
                   (append (mapcar 'prin1-to-string features)
                           (loop for dir in load-path
                                 if (file-directory-p dir)
-                                  append (loop for file in (directory-files dir)
-                                               if (string-match suffix file)
-                                                 collect (substring file 0 (match-beginning 0))))))))))
+                                append (loop for file in (directory-files dir)
+                                             if (string-match suffix file)
+                                             collect (substring file 0 (match-beginning 0))))))))))
 
 (ac-define-source features
-                  '((depends find-func)
-                    (candidates . ac-emacs-lisp-feature-candidates)
-                    (prefix . "require +'\\(\\(?:\\sw\\|\\s_\\)*\\)")
-                    (requires . 0)))
+  '((depends find-func)
+    (candidates . ac-emacs-lisp-feature-candidates)
+    (prefix . "require +'\\(\\(?:\\sw\\|\\s_\\)*\\)")
+    (requires . 0)))
 
 (defvaralias 'ac-source-emacs-lisp-features 'ac-source-features)
 
 ;; Abbrev source
 (ac-define-source abbrev
-                  '((candidates . (mapcar 'popup-x-to-string (append (vconcat local-abbrev-table global-abbrev-table) nil)))
-                    (action . expand-abbrev)
-                    (symbol . "a")
-                    (cache)))
+  '((candidates . (mapcar 'popup-x-to-string (append (vconcat local-abbrev-table global-abbrev-table) nil)))
+    (action . expand-abbrev)
+    (symbol . "a")
+    (cache)))
 
 ;; Files in current directory source
 (ac-define-source files-in-current-dir
-                  '((candidates . (directory-files default-directory))
-                    (cache)))
+  '((candidates . (directory-files default-directory))
+    (cache)))
 
 ;; Filename source
 (defvar ac-filename-cache nil)
@@ -1909,29 +1911,29 @@ completion menu. This workaround stops that annoying behavior."
 (defun ac-filename-candidate ()
   (unless (file-regular-p ac-prefix)
     (ignore-errors
-     (loop with dir = (file-name-directory ac-prefix)
-           with files = (or (assoc-default dir ac-filename-cache)
-                            (let ((files (directory-files dir nil "^[^.]")))
-                              (push (cons dir files) ac-filename-cache)
-                              files))
-           for file in files
-           for path = (concat dir file)
-           collect (if (file-directory-p path)
-                       (concat path "/")
-                       path)))))
+      (loop with dir = (file-name-directory ac-prefix)
+            with files = (or (assoc-default dir ac-filename-cache)
+                             (let ((files (directory-files dir nil "^[^.]")))
+                               (push (cons dir files) ac-filename-cache)
+                               files))
+            for file in files
+            for path = (concat dir file)
+            collect (if (file-directory-p path)
+                        (concat path "/")
+                      path)))))
 
 (ac-define-source filename
-                  '((init . (setq ac-filename-cache nil))
-                    (candidates . ac-filename-candidate)
-                    (prefix . valid-file)
-                    (requires . 0)
-                    (action . ac-start)
-                    (limit . nil)))
+  '((init . (setq ac-filename-cache nil))
+    (candidates . ac-filename-candidate)
+    (prefix . valid-file)
+    (requires . 0)
+    (action . ac-start)
+    (limit . nil)))
 
 ;; Dictionary source
 (ac-define-source dictionary
-                  '((candidates . ac-buffer-dictionary)
-                    (symbol . "d")))
+  '((candidates . ac-buffer-dictionary)
+    (symbol . "d")))
 
 (provide 'auto-complete)
 ;;; auto-complete.el ends here
