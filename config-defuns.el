@@ -149,8 +149,8 @@ This is the same as using \\[set-mark-command] with the prefix argument."
         (font (if (null font)
                   "doh"
                   font)))
-   (shell-command (format "figlet -w %s -f %s %s"
-                          size font text))))
+    (shell-command (format "figlet -w %s -f %s %s"
+                           size font text))))
 
 (defun quit-or-hide ()
   "If it this is an instance of a running Emacs daemon, then
@@ -159,18 +159,18 @@ if it's the last frame, hide it, otherwise delete it.
 If not, use the classic save-buffers-and-kill-emacs function."
   (interactive)
   (if (boundp 'server-name)
-   (if (> (length server-clients) 1)
-       (delete-frame)
-       (make-frame-invisible nil t))
-   (save-buffers-kill-emacs)))
+      (if (> (length server-clients) 1)
+          (delete-frame)
+          (make-frame-invisible nil t))
+      (save-buffers-kill-emacs)))
 
 (defun autocompile ()
   "Byte compile an elisp."
   (interactive)
   (require 'bytecomp)
   (let ((filename (buffer-file-name)))
-            (if (string-match "\\.el$" filename)
-                (byte-compile-file filename))))
+    (if (string-match "\\.el$" filename)
+        (byte-compile-file filename))))
 
 (defun copy-this-url ()
   "Copy the url at point."
@@ -179,10 +179,14 @@ If not, use the classic save-buffers-and-kill-emacs function."
         (tests '((lambda ()
                    (thing-at-point 'url))
                  (lambda ()
-                   (get-text-property (point) 'shr-url)))))
+                   (get-text-property (point) 'shr-url))
+                 (lambda ()
+                   (org-in-regexp org-bracket-link-regexp)
+                   (org-link-unescape
+                    (org-match-string-no-properties 1))))))
     (loop for fun in tests
-          do (setf url (funcall fun))
-          until url)
+          until (setf url (ignore-errors
+                           (funcall fun))))
     (if (not url)
         (message "No url found at point")
         (kill-new url)
