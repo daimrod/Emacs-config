@@ -177,13 +177,15 @@ If not, use the classic save-buffers-and-kill-emacs function."
   (interactive)
   (let (url
         (tests '((lambda ()
-                   (thing-at-point 'url))
+                   (org-in-regexp org-bracket-link-regexp)
+                   (org-link-unescape
+                    (org-match-string-no-properties 1)))
+                 (lambda ()
+                   (w3m-url-valid (w3m-anchor)))
                  (lambda ()
                    (get-text-property (point) 'shr-url))
                  (lambda ()
-                   (org-in-regexp org-bracket-link-regexp)
-                   (org-link-unescape
-                    (org-match-string-no-properties 1))))))
+                   (thing-at-point 'url)))))
     (loop for fun in tests
           until (setf url (ignore-errors
                            (funcall fun))))
