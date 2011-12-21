@@ -138,4 +138,7 @@
 
 (setq sentence-end-double-space nil)
 
+(require 'key-chord)
+(key-chord-mode t)
+
 (provide 'config-misc)
