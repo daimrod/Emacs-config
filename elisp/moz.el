@@ -81,7 +81,7 @@
 ;; major modes) so it complies I think ...
 (defvar moz-minor-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-c C-s") 'run-mozilla)
+    (define-key map (kbd "C-c C-z") 'run-mozilla)
     (define-key map (kbd "C-M-x")  'moz-send-defun)
     (define-key map (kbd "C-c C-c") 'moz-send-defun-and-go)
     (define-key map (kbd "C-c C-r") 'moz-send-region)
