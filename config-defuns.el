@@ -177,9 +177,9 @@ If not, use the classic save-buffers-and-kill-emacs function."
   (interactive)
   (let (url
         (tests '((lambda ()
-                   (org-in-regexp org-bracket-link-regexp)
-                   (org-link-unescape
-                    (org-match-string-no-properties 1)))
+                   (if (org-at-regexp-p org-bracket-link-regexp)
+                    (org-link-unescape
+                     (org-match-string-no-properties 1))))
                  (lambda ()
                    (w3m-url-valid (w3m-anchor)))
                  (lambda ()
