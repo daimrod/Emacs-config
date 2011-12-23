@@ -5905,8 +5905,7 @@ Function also calls `js2-node-add-children' to add the parent link."
         pos)
     (unless buf
       (error "No buffer available for node %s" node))
-    (save-excursion
-     (set-buffer buf)
+    (with-current-buffer buf
      (buffer-substring-no-properties (setq pos (js2-node-abs-pos node))
                                      (+ pos (js2-node-len node))))))
 
@@ -7723,8 +7722,7 @@ leaving a statement, an expression, or a function definition."
         ast)
     (or buf (setq buf (current-buffer)))
     (message nil)  ; clear any error message from previous parse
-    (save-excursion
-     (set-buffer buf)
+    (with-current-buffer buf
      (setq js2-scanned-comments nil
            js2-parsed-errors nil
            js2-parsed-warnings nil
@@ -11699,7 +11697,7 @@ Some users don't like having warnings/errors reported while they type."
   (interactive)
   (setq js2-mode-show-parse-errors (not js2-mode-show-parse-errors)
         js2-mode-show-strict-warnings (not js2-mode-show-strict-warnings))
-  (if (interactive-p)
+  (if (called-interactively-p 'interactive)
       (message "warnings and errors %s"
                (if js2-mode-show-parse-errors
                    "enabled"
