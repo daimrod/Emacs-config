@@ -98,6 +98,7 @@ Do it recursively if the third argument is not nil."
 (require 'config-haskell)
 (require 'config-prolog)
 (require 'config-markdown)
+(require 'config-js)
 
 (load custom-file 'noerror)
 
