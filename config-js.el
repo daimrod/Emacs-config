@@ -16,13 +16,15 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+(require 'js2-mode)
+
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
 (autoload 'js2-mode "js2" nil t)
 (autoload 'inferior-moz-mode "moz" "MozRepl Inferior Mode" t)
 (autoload 'moz-minor-mode "moz" "MozRepl Minor Mode" t)
 
-(add-hook 'javascript-mode-hook 'javascript-moz-setup)
+(add-hook 'js2-mode-hook 'javascript-moz-setup)
 
 (defun javascript-moz-setup ()
   (moz-minor-mode 1))
