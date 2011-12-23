@@ -90,7 +90,7 @@
 
 ;;;###autoload
 (define-minor-mode moz-minor-mode
-  "MozRepl minor mode for interaction with Firefox.
+    "MozRepl minor mode for interaction with Firefox.
 With no argument, this command toggles the mode.
 Non-null prefix argument turns on the mode.
 Null prefix argument turns off the mode.
@@ -123,7 +123,7 @@ The following keys are bound in this minor mode:
   (if (and moz-temporary-file
            (file-readable-p moz-temporary-file))
       moz-temporary-file
-    (setq moz-temporary-file (make-temp-file "emacs-mozrepl"))))
+      (setq moz-temporary-file (make-temp-file "emacs-mozrepl"))))
 
 (defun moz-send-region (start end)
   "Send the region to Firefox via MozRepl."
@@ -152,8 +152,8 @@ The following keys are bound in this minor mode:
 Curent function is the one recognized by c-mark-function."
   (interactive)
   (save-excursion
-    (mark-defun)
-    (moz-send-region (point) (mark))))
+   (mark-defun)
+   (moz-send-region (point) (mark))))
 
 (defun moz-send-defun-and-go ()
   "Send the current function to Firefox via MozRepl.
@@ -168,11 +168,21 @@ Also switch to the interaction buffer."
   (save-buffer)
   (comint-send-string (inferior-moz-process)
                       (concat moz-repl-name ".pushenv('printPrompt', 'inputMode'); "
-                              moz-repl-name ".setenv('inputMode', 'line'); "
-                              moz-repl-name ".setenv('printPrompt', false); undefined; "))
+                              moz-repl-name ".setenv('printPrompt', false); "
+                              moz-repl-name ".setenv('inputMode', 'multiline'); "
+                              "undefined; \n"))
+  ;; Give the previous line a chance to be evaluated on its own.  If
+  ;; it gets concatenated to the following ones, we are doomed.
+  (sleep-for 0 1)
+  (comint-send-region (inferior-moz-process)
+                      (point-min) (point-max))
   (comint-send-string (inferior-moz-process)
-                      (concat moz-repl-name ".load('file://localhost/" (buffer-file-name) "');\n"
-                              moz-repl-name ".popenv('inputMode', 'printPrompt'); undefined;\n"))
+                      "\n--end-remote-input\n")
+  (comint-send-string (inferior-moz-process)
+                      (concat moz-repl-name ".popenv('inputMode', 'printPrompt'); "
+                              "undefined; \n"))
+  (comint-send-string (inferior-moz-process)
+                      "\n--end-remote-input\n")
   (display-buffer (process-buffer (inferior-moz-process))))
 
 ;;; Inferior Mode
@@ -203,7 +213,7 @@ Also switch to the interaction buffer."
   (interactive)
   (if (looking-back "\\(\\w+\\)> $")
       (insert moz-repl-name ".")
-    (insert last-command-char)))
+      (insert last-command-char)))
 
 (defun inferior-moz-input-sender (proc string)
   "Custom function to send input with comint-send-input.
@@ -243,39 +253,39 @@ and setting up the inferior Firefox buffer.
 Note that you have to start the MozRepl server from Firefox."
   (interactive)
   (condition-case err
-      (progn
-        (setq inferior-moz-buffer
-              (apply 'make-comint "MozRepl" (cons moz-repl-host moz-repl-port) nil nil))
-        (sleep-for 0 100)
-        (with-current-buffer inferior-moz-buffer
-          (inferior-moz-mode)
-          (run-hooks 'inferior-moz-hook)))
-    (file-error
-     (with-output-to-temp-buffer "*MozRepl Error*"
-       (with-current-buffer (get-buffer "*MozRepl Error*")
-         (insert "Can't start MozRepl, the error message was:\n\n     "
-                 (error-message-string err)
-                 "\n"
-                 "\nA possible reason is that you have not installed"
-                 "\nthe MozRepl add-on to Firefox or that you have not"
-                 "\nstarted it.  You start it from the menus in Firefox:"
-                 "\n\n     Tools / MozRepl / Start"
-                 "\n"
-                 "\nSee ")
-         (insert-text-button
-          "MozRepl home page"
-          'action (lambda (button)
-                    (browse-url
-                     "http://hyperstruct.net/projects/mozrepl")
-                    )
-          'face 'button)
-         (insert
-          " for more information."
-          "\n"
-          "\nMozRepl is also available directly from Firefox add-on"
-          "\npages, but is updated less frequently there.")
-         ))
-     (error "Can't start MozRepl"))))
+                  (progn
+                    (setq inferior-moz-buffer
+                          (apply 'make-comint "MozRepl" (cons moz-repl-host moz-repl-port) nil nil))
+                    (sleep-for 0 100)
+                    (with-current-buffer inferior-moz-buffer
+                      (inferior-moz-mode)
+                      (run-hooks 'inferior-moz-hook)))
+                  (file-error
+                   (with-output-to-temp-buffer "*MozRepl Error*"
+                     (with-current-buffer (get-buffer "*MozRepl Error*")
+                       (insert "Can't start MozRepl, the error message was:\n\n     "
+                               (error-message-string err)
+                               "\n"
+                               "\nA possible reason is that you have not installed"
+                               "\nthe MozRepl add-on to Firefox or that you have not"
+                               "\nstarted it.  You start it from the menus in Firefox:"
+                               "\n\n     Tools / MozRepl / Start"
+                               "\n"
+                               "\nSee ")
+                       (insert-text-button
+                        "MozRepl home page"
+                        'action (lambda (button)
+                                  (browse-url
+                                   "http://hyperstruct.net/projects/mozrepl")
+                                  )
+                        'face 'button)
+                       (insert
+                        " for more information."
+                        "\n"
+                        "\nMozRepl is also available directly from Firefox add-on"
+                        "\npages, but is updated less frequently there.")
+                       ))
+                   (error "Can't start MozRepl"))))
 
 (provide 'moz)
 
