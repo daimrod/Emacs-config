@@ -39,7 +39,6 @@
 (slime-autodoc-mode)
 
 (setq inferior-lisp-program "/usr/bin/sbcl"
-      lisp-indent-function 'common-lisp-indent-function
       slime-complete-symbol-function 'slime-fuzzy-complete-symbol
       slime-startup-animation t
       slime-complete-symbol*-fancy t
@@ -49,6 +48,12 @@
 
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
 (add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
+
+(defun common-lisp-indentation ()
+  (set (make-local-variable lisp-indent-function)
+       'common-lisp-indent-function))
+
+(add-hook 'lisp-mode-hook 'common-lisp-indentation)
 
 (define-key slime-repl-mode-map (kbd "C-c C-v C-l") 'slime-pretty-print-presentation-at-point)
 (define-key slime-repl-mode-map (kbd "C-c C-v l") 'slime-pretty-print-presentation-at-point)
