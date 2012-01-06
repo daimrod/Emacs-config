@@ -21,41 +21,22 @@
 
 (eval-after-load "multi-term"
                  '(setq multi-term-program "/bin/bash"
-                   term-unbind-key-list '("C-x" "C-h")))
-
-(eval-after-load "multi-term"
-                 '(setq multi-term-program "/bin/bash"
                    term-unbind-key-list '("C-x" "C-h")
-                   term-bind-key-alist '(("C-p" . previous-line)
-                                         ("C-n" . next-line)
-                                         ("C-a" . move-beginning-of-line)
-                                         ("C-c C-a" . term-bol)
-                                         ("C-e" . move-end-of-line)
-                                         ("C-SPC" . set-mark-command)
-                                         ("C-w" . kill-region)
-                                         ("M-w" . kill-ring-save)
-                                         ("C-s" . isearch-forward)
-                                         ("C-r" . isearch-backward)
-                                         ("M-f" . term-send-forward-word)
-                                         ("M-b" . term-send-backward-word)
-                                         ("M-p" . term-send-up)
-                                         ("M-n" . term-send-down)
-                                         ("M-r" . term-send-reverse-search-history)
-                                         ("C-c C-c" . term-interrupt-subjob)
-                                         ("C-c C-z" . term-stop-subjob)
-                                         ("TAB" . term-send-raw))
                    term-term-name "xterm-256color"))
 
 (custom-set-variables '(term-prompt-regexp "^.*\\$ *"))
 
-(defadvice term-bol (around update-process-mark)
-  (let ((old-pos (point)))
-    ad-do-it
-    (let ((new-pos (point)))
-      (dotimes (i (- old-pos new-pos))
-        (term-send-raw-string "")))))
-
-(ad-activate 'term-bol)
+(setq-default ansi-term-color-vector
+              [unspecified
+               "black"          ; black
+               "tomato"         ; red
+               "#6ac214"        ; green
+               "#edd400"        ; yellow
+               "light sky blue" ; blue
+               "magenta"        ; magenta
+               "cyan"           ; cyan
+               "white"          ; white
+               ])
 
 (global-set-key (kbd "C-c t") 'multi-term-next)
 (global-set-key (kbd "C-c T") 'multi-term)
