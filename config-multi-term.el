@@ -28,14 +28,14 @@
 
 (setq-default ansi-term-color-vector
               [unspecified
-               "black"          ; black
+               "#2e3434"        ; black
                "tomato"         ; red
                "#6ac214"        ; green
                "#edd400"        ; yellow
                "light sky blue" ; blue
                "magenta"        ; magenta
                "cyan"           ; cyan
-               "white"          ; white
+               "#eeeeec"        ; white
                ])
 
 (global-set-key (kbd "C-c t") 'multi-term-next)
