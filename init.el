@@ -101,6 +101,7 @@ Do it recursively if the third argument is not nil."
 (require 'config-js)
 (require 'config-multi-term)
 (require 'config-smerge)
+(require 'config-notmuch)
 
 (load custom-file 'noerror)
 
