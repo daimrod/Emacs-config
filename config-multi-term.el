@@ -21,7 +21,7 @@
 
 (eval-after-load "multi-term"
                  '(setq multi-term-program "/bin/bash"
-                   term-unbind-key-list '("C-x" "C-h")
+                   term-unbind-key-list '("C-x" "C-h" "M-x")
                    term-term-name "xterm-256color"))
 
 (custom-set-variables '(term-prompt-regexp "^.*\\$ *"))
