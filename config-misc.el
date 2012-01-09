@@ -67,7 +67,6 @@
 (setq wg-morph-on nil)
 
 (setq browse-url-browser-function 'w3m-browse-url)
-(global-set-key "\C-xm" 'browse-url-at-point)
 
 ;; markdown configuration
 (autoload 'markdown-mode "markdown-mode"
