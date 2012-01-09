@@ -100,6 +100,7 @@ Do it recursively if the third argument is not nil."
 (require 'config-markdown)
 (require 'config-js)
 (require 'config-multi-term)
+(require 'config-smerge)
 
 (load custom-file 'noerror)
 
