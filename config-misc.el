@@ -29,8 +29,11 @@
       '(("." . "~/backup/")))
 (setq backup-by-copying t)
 
-;; use x-clipboard
-(setq x-select-enable-clipboard t)
+;; configure cliboard
+(setq x-select-enable-clipboard t
+      x-select-enable-primary t
+      mouse-drag-copy-region t
+      yank-pop-change-selection t)
 
 ;; utf-8 roxx
 (set-terminal-coding-system 'utf-8)
