@@ -64,9 +64,9 @@
   "Close the current connection and the repl-buffer"
   (interactive)
   (save-window-excursion
-   (slime-switch-to-output-buffer)
-   (kill-buffer)
-   (slime-net-close (slime-connection))))
+    (slime-switch-to-output-buffer)
+    (kill-buffer)
+    (slime-net-close (slime-connection))))
 
 ;; Store fasls here
 (make-directory "/tmp/slime-fasls/" t) ;; be sure the directory exists
@@ -74,7 +74,7 @@
 
 ;; Add a directory to asdf:*central-registry*
 (defslime-repl-shortcut slime-repl-add-to-central-registry
-    ("add-to-central-registry" "+a" "add")
+  ("add-to-central-registry" "+a" "add")
   (:handler (lambda (directory)
               (interactive
                (list (file-name-as-directory
