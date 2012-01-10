@@ -72,7 +72,7 @@
 (global-set-key (kbd "C-x C-c") 'quit-or-hide)
 
 ;; manage url at point
-(global-set-key (kbd "C-c y") 'copy-this-url)
+(global-set-key (kbd "C-c y") 'copy-url-at-point)
 (global-set-key (kbd "C-c b") 'browse-url-at-point)
 
 ;; pretty print last s-exp

@@ -28,24 +28,24 @@ Symbols matching the text at point are put first in the completion list."
   (let ((name-and-pos '())
         (symbol-names '()))
     (flet ((addsymbols (symbol-list)
-             (when (listp symbol-list)
-               (dolist (symbol symbol-list)
-                 (let ((name nil) (position nil))
-                   (cond
-                     ((and (listp symbol) (imenu--subalist-p symbol))
-                      (addsymbols symbol))
+                       (when (listp symbol-list)
+                         (dolist (symbol symbol-list)
+                           (let ((name nil) (position nil))
+                             (cond
+                              ((and (listp symbol) (imenu--subalist-p symbol))
+                               (addsymbols symbol))
 
-                     ((listp symbol)
-                      (setq name (car symbol))
-                      (setq position (cdr symbol)))
+                              ((listp symbol)
+                               (setq name (car symbol))
+                               (setq position (cdr symbol)))
 
-                     ((stringp symbol)
-                      (setq name symbol)
-                      (setq position (get-text-property 1 'org-imenu-marker symbol))))
+                              ((stringp symbol)
+                               (setq name symbol)
+                               (setq position (get-text-property 1 'org-imenu-marker symbol))))
 
-                   (unless (or (null position) (null name))
-                     (add-to-list 'symbol-names name)
-                     (add-to-list 'name-and-pos (cons name position))))))))
+                             (unless (or (null position) (null name))
+                               (add-to-list 'symbol-names name)
+                               (add-to-list 'name-and-pos (cons name position))))))))
       (addsymbols imenu--index-alist))
     ;; If there are matching symbols at point, put them at the beginning of `symbol-names'.
     (let ((symbol-at-point (thing-at-point 'symbol)))
@@ -73,7 +73,7 @@ Symbols matching the text at point are put first in the completion list."
   (interactive "p")
   (if (or arg (not buffer-file-name))
       (find-file (concat "/sudo::" (ido-read-file-name "File: ")))
-      (find-alternate-file (concat "/sudo::" buffer-file-name))))
+    (find-alternate-file (concat "/sudo::" buffer-file-name))))
 
 (defun sbrk-paste ()
   "paste a chunk of code to pastebin.sbrk.org"
@@ -90,15 +90,15 @@ Symbols matching the text at point are put first in the completion list."
   (interactive "p\ncZap to char-: ")
   ;; Avoid "obsolete warnings for translation-table-for-input.
   (with-no-warnings
-      (if (char-table-p translation-table-for-input)
-          (setq char (or (aref translation-table-for-input char) char))))
+    (if (char-table-p translation-table-for-input)
+        (setq char (or (aref translation-table-for-input char) char))))
   (save-excursion
-   (kill-region (point)
-                (progn
-                  (search-forward (char-to-string char) nil nil arg)
-                  (if (>= arg 0)
-                      (- (point) 1)
-                      (+ (point) 1))))))
+    (kill-region (point)
+                 (progn
+                   (search-forward (char-to-string char) nil nil arg)
+                   (if (>= arg 0)
+                       (- (point) 1)
+                     (+ (point) 1))))))
 
 (defun recompile-config ()
   (interactive)
@@ -133,23 +133,23 @@ This is the same as using \\[set-mark-command] with the prefix argument."
   (interactive "^P")
   (if arg
       (scroll-up-command arg)
-      (scroll-up-command 5)))
+    (scroll-up-command 5)))
 
 (defun small-scroll-down-command (&optional arg)
   (interactive "^P")
   (if arg
       (scroll-down-command arg)
-      (scroll-down-command 5)))
+    (scroll-down-command 5)))
 
 (defun show-big-text (text &optional size font)
   (interactive "sText to show: ")
   (let ((size (number-to-string
                (if (null size)
                    (window-width)
-                   size)))
+                 size)))
         (font (if (null font)
                   "doh"
-                  font)))
+                font)))
     (shell-command (format "figlet -w %s -f %s %s"
                            size font text))))
 
@@ -162,8 +162,8 @@ If not, use the classic save-buffers-and-kill-emacs function."
   (if (boundp 'server-name)
       (if (> (length server-clients) 1)
           (delete-frame)
-          (make-frame-invisible nil t))
-      (save-buffers-kill-emacs)))
+        (make-frame-invisible nil t))
+    (save-buffers-kill-emacs)))
 
 (defun autocompile ()
   "Byte compile an elisp."
@@ -173,14 +173,33 @@ If not, use the classic save-buffers-and-kill-emacs function."
     (if (string-match "\\.el$" filename)
         (byte-compile-file filename))))
 
-(defun copy-this-url ()
+(defun copy-url-at-point ()
   "Copy the url at point."
   (interactive)
+  (let ((url (find-url-at-point)))
+    (if (not url)
+        (error "No url found at point")
+      (kill-new url)
+      (message "%s" url))))
+
+(defun browse-url-at-point (&optional arg)
+  "Ask a WWW browser to load the URL at or before point.
+Doesn't let you edit the URL like `browse-url'.  Variable
+`browse-url-browser-function' says which browser to use."
+  (interactive "P")
+  (let ((url (find-url-at-point)))
+    (if url
+        (browse-url url (if arg
+                            (not browse-url-new-window-flag)
+                          browse-url-new-window-flag))
+      (error "No URL found"))))
+
+(defun find-url-at-point ()
   (let (url
         (tests '((lambda ()
                    (if (org-at-regexp-p org-bracket-link-regexp)
-                    (org-link-unescape
-                     (org-match-string-no-properties 1))))
+                       (org-link-unescape
+                        (org-match-string-no-properties 1))))
                  (lambda ()
                    (w3m-url-valid (w3m-anchor)))
                  (lambda ()
@@ -189,10 +208,7 @@ If not, use the classic save-buffers-and-kill-emacs function."
                    (thing-at-point 'url)))))
     (loop for fun in tests
           until (setf url (ignore-errors
-                           (funcall fun))))
-    (if (not url)
-        (message "No url found at point")
-        (kill-new url)
-        (message "%s" url))))
+                            (funcall fun))))
+    url))
 
 (provide 'config-defuns)
