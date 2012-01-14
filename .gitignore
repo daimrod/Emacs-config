@@ -11,3 +11,5 @@ auto-save-list/
 /ac-comphist.dat
 /custom.el
 /session.*
+/abbrev_defs
+elpa/archives/
