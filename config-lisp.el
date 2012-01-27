@@ -28,4 +28,6 @@
 (add-hook 'lisp-mode-hook 'highlight-sexp-mode)
 (add-hook 'emacs-lisp-mode-hook 'highlight-sexp-mode)
 
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+
 (provide 'config-lisp)
