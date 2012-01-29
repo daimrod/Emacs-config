@@ -2,7 +2,8 @@
 # name: config-file
 # expand-env: ((yas/indent-line 'fixed))
 # --
-;; `(buffer-name)`
+;;; `(buffer-name)` ---
+
 ;; Copyright (C) `(format-time-string "%Y")` Grégoire Jadi
 
 ;; Author: Grégoire Jadi <gregoire.jadi@gmail.com>
@@ -20,6 +21,12 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;;; Commentary:
+
+;;; Code:
+
 $0
 
 (provide '`(subseq (buffer-name) 0 (- (length (buffer-name)) 3))`)
+
+;;; `(buffer-name)` ends here
