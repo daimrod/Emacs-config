@@ -65,6 +65,9 @@ Do it recursively if the third argument is not nil."
 ;; These should be loaded on startup rahter than autoloaded on demande
 ;; since they are likely to be used in every session
 
+(require 'bytecomp)
+(byte-compile-disable-warning 'cl-functions)
+
 (require 'cl)
 (require 'saveplace)
 (require 'ffap)
