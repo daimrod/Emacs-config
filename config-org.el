@@ -52,4 +52,7 @@
       '((sequence "TODO(t)" "STARTED(s@/!)" "WAIT(w@/!)" "|" "DONE(d@/!)" "CANCELED(c@/!)" "DEFERRED(e@/!)")
         (sequence "REPORT(r@/!)" "BUG(b@/!)" "KNOWNCAUSE(k@/!)" "|" "FIXED(f@/!)" "CANCELED(c@/!)")))
 
+;; fontify src code
+(setq org-src-fontify-natively t)
+
 (provide 'config-org)
