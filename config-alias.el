@@ -17,5 +17,7 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (defalias 'renb 'rename-buffer)
+(defalias 'srepl 'slime-repl)
+(defalias 'article 'gnus-article-mode)
 
 (provide 'config-alias)
