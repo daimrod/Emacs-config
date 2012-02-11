@@ -211,10 +211,18 @@ Doesn't let you edit the URL like `browse-url'.  Variable
                             (funcall fun))))
     url))
 
-(defvar *evince-extensions* nil)
+(defvar *evince-extensions* nil
+  "List of extentions supported by evince.")
 (setf *evince-extensions* '("pdf" "ps" "dvi"))
 
+(defvar *evince-location* "/usr/bin/evince"
+  "Where is evince?")
+
 (defun evince (filename)
+  "Open the given FILENAME with evince in a background.
+
+`ido-read-file-name' is used to find the files. Extensions can be
+added to `*evince-extensions*'."
   (interactive
    (let* ((exts (copy-list *evince-extensions*))
           (ext (do* ((ret (concat "\\(" (pop exts)) (concat ret "\\|" ext))
