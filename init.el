@@ -106,6 +106,7 @@ Do it recursively if the third argument is not nil."
 (require 'config-multi-term)
 (require 'config-smerge)
 (require 'config-notmuch)
+(require 'config-ocaml)
 
 (load custom-file 'noerror)
 
