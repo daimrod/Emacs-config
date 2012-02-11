@@ -144,4 +144,6 @@
 (require 'rainbow-mode)
 (add-hook 'css-mode-hook 'rainbow-mode)
 
+(require 'chm-view)
+
 (provide 'config-misc)
