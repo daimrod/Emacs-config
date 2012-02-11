@@ -222,12 +222,14 @@ Doesn't let you edit the URL like `browse-url'.  Variable
                    ((null exts) (concat ret "\\)")))))
      (list (ido-read-file-name
             "File: " nil nil
-            nil nil '(lambda (filename)
-                       (and (file-exists-p filename)
-                            (or
-                             (string= "~" filename)
-                             (file-directory-p filename)
-                             (string-match (format "^.*\.%s$" ext) filename))))))))
+            nil
+            (ffap-file-at-point)
+            '(lambda (filename)
+               (and (file-exists-p filename)
+                    (or
+                     (string= "~" filename)
+                     (file-directory-p filename)
+                     (string-match (format "^.*\.%s$" ext) filename))))))))
   (shell-command (format "evince \"%s\" & disown" (expand-file-name filename)))
   (message "%s" filename))
 
