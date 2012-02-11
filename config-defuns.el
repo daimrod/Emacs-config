@@ -211,4 +211,25 @@ Doesn't let you edit the URL like `browse-url'.  Variable
                             (funcall fun))))
     url))
 
+(defvar *evince-extensions* nil)
+(setf *evince-extensions* '("pdf" "ps" "dvi"))
+
+(defun evince (filename)
+  (interactive
+   (let* ((exts (copy-list *evince-extensions*))
+          (ext (do* ((ret (concat "\\(" (pop exts)) (concat ret "\\|" ext))
+                     (ext (pop exts) (pop exts)))
+                   ((null exts) (concat ret "\\)")))))
+     (list (ido-read-file-name
+            "File: " nil nil
+            nil nil '(lambda (filename)
+                       (and (file-exists-p filename)
+                            (or
+                             (string= "~" filename)
+                             (file-directory-p filename)
+                             (string-match (format "^.*\.%s$" ext) filename))))))))
+  (shell-command (format "evince \"%s\" & disown" (expand-file-name filename)))
+  (message "%s" filename))
+
+
 (provide 'config-defuns)
