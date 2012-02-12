@@ -16,18 +16,16 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(autoload 'tuareg-mode "tuareg" "Major mode for editing Caml code" t)
-(autoload 'camldebug "camldebug" "Run the Caml debugger" t)
-(autoload 'tuareg-imenu-set-imenu "tuareg-imenu" 
-  "Configuration of imenu for tuareg" t) 
-
-(add-hook 'tuareg-mode-hook 'tuareg-imenu-set-imenu)
+(require 'tuareg)
+(require 'ocamldebug)
 
 (setq auto-mode-alist 
       (append '(("\\.ml[ily]?$" . tuareg-mode)
                 ("\\.topml$" . tuareg-mode))
               auto-mode-alist))
 
-(define-key tuareg-mode-map (kbd "C-c C-z") 'tuareg-run-ocaml)
+(add-hook 'tuare-mode-hook
+          '(lambda ()
+             (define-key tuareg-mode-map (kbd "C-c C-z") 'tuareg-run-ocaml)))
 
 (provide 'config-ocaml)
