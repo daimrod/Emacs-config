@@ -35,8 +35,7 @@
 (defun fontify-frame (frame)
   (set-frame-parameter frame 'font "-bitstream-Bitstream Vera Sans Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1"))
 
-(pushnew #'fontify-frame
-         after-make-frame-functions)
+(add-hook 'after-make-frame-functions 'fontify-frame)
 
 ;; tab and indentation configuration
 (setq-default indent-tabs-mode nil)
