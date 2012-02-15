@@ -24,8 +24,8 @@
                 ("\\.topml$" . tuareg-mode))
               auto-mode-alist))
 
-(add-hook 'tuare-mode-hook
-          '(lambda ()
-             (define-key tuareg-mode-map (kbd "C-c C-z") 'tuareg-run-ocaml)))
+(add-hook 'tuareg-mode-hook
+          (lambda ()
+            (define-key tuareg-mode-map (kbd "C-c C-z") 'tuareg-run-ocaml)))
 
 (provide 'config-ocaml)
