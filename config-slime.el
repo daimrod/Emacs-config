@@ -17,8 +17,10 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (load (expand-file-name "~/quicklisp/slime-helper.el"))
+
 (require 'slime-autoloads)
 (require 'slime)
+
 (slime-setup '(slime-repl
                inferior-slime
                slime-asdf
@@ -43,7 +45,7 @@
       slime-startup-animation t
       slime-complete-symbol*-fancy t
       max-lisp-eval-depth 2000
-      common-lisp-hyperspec-root (concat home-dir "doc/HyperSpec/")
+      common-lisp-hyperspec-root (concat home-dir "src/lisp/HyperSpec/")
       slime-net-coding-system 'utf-8-unix)
 
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
