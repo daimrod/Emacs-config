@@ -74,8 +74,6 @@ Do it recursively if the third argument is not nil."
 (require 'uniquify)
 (require 'ansi-color)
 (require 'recentf)
-(require 'w3m-load)
-(require 'mime-w3m)
 (require 'workgroups)
 (require 'scratch)
 (require 'verbiste)
@@ -83,6 +81,12 @@ Do it recursively if the third argument is not nil."
 (require 'woman)
 (require 'alarm)
 (require 'pos-tip)
+
+;;; W3M
+(require 'w3m-load)
+(require 'mime-w3m)
+(require 'w3m-search)
+(setq w3m-init-file (concat dotfiles-dir "config-w3m"))
 
 ;; Load my configuration
 (require 'config-defuns)
@@ -107,6 +111,7 @@ Do it recursively if the third argument is not nil."
 (require 'config-smerge)
 (require 'config-notmuch)
 (require 'config-ocaml)
+(require 'config-w3m)
 
 (load custom-file 'noerror)
 
