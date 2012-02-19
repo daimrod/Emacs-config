@@ -72,8 +72,8 @@
 (global-set-key (kbd "C-x C-c") 'quit-or-hide)
 
 ;; manage url at point
-(global-set-key (kbd "C-c y") 'copy-url-at-point)
-(global-set-key (kbd "C-c b") 'browse-url-at-point)
+(global-set-key (kbd "C-c y") 'daimrod/copy-url-at-point)
+(global-set-key (kbd "C-c b") 'daimrod/browse-url-at-point)
 
 ;; pretty print last s-exp
 (global-set-key (kbd "C-x M-e") 'pp-eval-last-sexp)

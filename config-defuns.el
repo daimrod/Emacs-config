@@ -103,8 +103,7 @@ Symbols matching the text at point are put first in the completion list."
 (defun recompile-config ()
   (interactive)
   (map nil #'byte-compile-file
-       '("~/.gnus.el"
-         "~/.emacs-w3m.el"))
+       '("~/.gnus.el"))
   (byte-recompile-directory dotfiles-dir 0)
   (byte-recompile-directory src-dir 0))
 
@@ -173,7 +172,7 @@ If not, use the classic save-buffers-and-kill-emacs function."
     (if (string-match "\\.el$" filename)
         (byte-compile-file filename))))
 
-(defun copy-url-at-point ()
+(defun daimrod/copy-url-at-point ()
   "Copy the url at point."
   (interactive)
   (let ((url (find-url-at-point)))
@@ -182,7 +181,7 @@ If not, use the classic save-buffers-and-kill-emacs function."
       (kill-new url)
       (message "%s" url))))
 
-(defun browse-url-at-point (&optional arg)
+(defun daimrod/browse-url-at-point (&optional arg)
   "Ask a WWW browser to load the URL at or before point.
 Doesn't let you edit the URL like `browse-url'.  Variable
 `browse-url-browser-function' says which browser to use."
