@@ -23,19 +23,14 @@
       color-theme-load-all-themes nil)
 
 (fni/add-to-load-path (concat src-dir "color-theme-tangotango/"))
+
 (require 'color-theme-tangotango)
+
 (color-theme-tangotango)
 
 ;; Set the default font
-(set-face-attribute 'default nil
-                    :family "Bitstream Vera Sans Mono"
-                    :height 135
-                    :width 'expanded)
-
-(defun fontify-frame (frame)
-  (set-frame-parameter frame 'font "-bitstream-Bitstream Vera Sans Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1"))
-
-(add-hook 'after-make-frame-functions 'fontify-frame)
+(add-to-list 'default-frame-alist '(font . "-bitstream-Bitstream Vera Sans Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1"))
+(add-to-list 'initial-frame-alist '(font . "-bitstream-Bitstream Vera Sans Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1"))
 
 ;; tab and indentation configuration
 (setq-default indent-tabs-mode nil)
