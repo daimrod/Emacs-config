@@ -39,7 +39,25 @@
 (setf w3m-command-arguments '("-o" "http_proxy=http://localhost:8250/")
       w3m-search-default-engine "seeks")
 
-(defun redefine-w3m-map ()
+(defun dmd/w3m-browse-url (url prefix)
+  "Ask emacs-w3m to browse URL."
+  (interactive
+   (progn
+     (require 'browse-url)
+     (browse-url-interactive-arg "URL: ")))
+  (when (stringp url)
+    (w3m-goto-url (w3m-canonicalize-url url))))
+
+(defun dmd/w3m-browse-url-new-session (url prefix)
+  "Ask emacs-w3m to browse URL."
+  (interactive
+   (progn
+     (require 'browse-url)
+     (browse-url-interactive-arg "URL: ")))
+  (when (stringp url)
+    (w3m-goto-url-new-session (w3m-canonicalize-url url))))
+
+(defun dmd/redefine-w3m-map ()
   (interactive)
   (let ((map (make-keymap)))
     (suppress-keymap map)
@@ -57,6 +75,8 @@
        ("S"             . w3m-search-new-session)
        ("h"             . w3m-history)
        ("a"             . w3m-bookmark-add-current-url)
+       ("g"             . dmd/w3m-browse-url)
+       ("G"             . dmd/w3m-browse-url-new-session)
        ("v"             . w3m-bookmark-view)
        ("V"             . w3m-bookmark-view-new-session)
        ("C-c C-c"       . w3m-submit-form)
@@ -74,7 +94,7 @@
        ("<backtab>"     . w3m-previous-anchor)))
     (setf w3m-mode-map map)))
 
-(add-hook 'w3m-mode-hook 'redefine-w3m-map)
+(add-hook 'w3m-mode-hook 'dmd/redefine-w3m-map)
 
 (provide 'config-w3m)
 
