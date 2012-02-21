@@ -81,11 +81,10 @@ Do it recursively if the third argument is not nil."
 (require 'woman)
 (require 'alarm)
 (require 'pos-tip)
-
-;;; W3M
-(require 'w3m-load)
+(require 'w3m)
 (require 'mime-w3m)
 (require 'w3m-search)
+
 (setq w3m-init-file (concat dotfiles-dir "config-w3m"))
 
 ;; Load my configuration
