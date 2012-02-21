@@ -21,9 +21,6 @@
 
 ;;; Code:
 
-(setq w3m-command-arguments
-      '("-o" "http_proxy=http://localhost:8250/"))
-
 (flet ((w3m-add-search-engine-with-quickshort
         (search-engine)
         (let ((name (elt search-engine 0))
@@ -37,9 +34,13 @@
   (mapc #'w3m-add-search-engine-with-quickshort
         '(("enfr" "http://www.wordreference.com/enfr/%s")
           ("fren" "http://www.wordreference.com/fren/%s")
-          ("search" "http://s.s/search?q=%s"))))
+          ("seeks" "http://s.s/search?q=%s"))))
+
+(setf w3m-command-arguments '("-o" "http_proxy=http://localhost:8250/")
+      w3m-search-default-engine "seeks")
 
 (defun redefine-w3m-map ()
+  (interactive)
   (let ((map (make-keymap)))
     (suppress-keymap map)
     (mapc
@@ -68,7 +69,9 @@
        ("C-c C-t"       . w3m-copy-buffer)
        ("Q"             . w3m-quit)
        ("SPC"           . w3m-scroll-up-or-next-url)
-       ("DEL"          . w3m-scroll-down-or-previous-url)))
+       ("DEL"           . w3m-scroll-down-or-previous-url)
+       ("TAB"           . w3m-next-anchor)
+       ("<backtab>"     . w3m-previous-anchor)))
     (setf w3m-mode-map map)))
 
 (add-hook 'w3m-mode-hook 'redefine-w3m-map)
