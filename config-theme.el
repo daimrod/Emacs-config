@@ -37,6 +37,7 @@
 (setq tab-width 4)
 
 (global-font-lock-mode 1)
-(setq font-lock-maximum-decoration t)
+(setq font-lock-maximum-decoration t
+      font-lock-verbose nil)
 
 (provide 'config-theme)

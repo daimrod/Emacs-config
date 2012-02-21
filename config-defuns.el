@@ -172,44 +172,6 @@ If not, use the classic save-buffers-and-kill-emacs function."
     (if (string-match "\\.el$" filename)
         (byte-compile-file filename))))
 
-(defun dmd/copy-url-at-point ()
-  "Copy the url at point."
-  (interactive)
-  (let ((url (dmd/find-url-at-point)))
-    (if (not url)
-        (error "No url found at point")
-      (kill-new url)
-      (message "%s" url))))
-
-(defun dmd/browse-url-at-point (&optional arg)
-  "Ask a WWW browser to load the URL at or before point.
-Doesn't let you edit the URL like `browse-url'.  Variable
-`browse-url-browser-function' says which browser to use."
-  (interactive "P")
-  (let ((url (dmd/find-url-at-point)))
-    (if url
-        (browse-url url (if arg
-                            (not browse-url-new-window-flag)
-                          browse-url-new-window-flag))
-      (error "No URL found"))))
-
-(defun dmd/find-url-at-point ()
-  (let (url
-        (tests '((lambda ()
-                   (if (org-at-regexp-p org-bracket-link-regexp)
-                       (org-link-unescape
-                        (org-match-string-no-properties 1))))
-                 (lambda ()
-                   (w3m-url-valid (w3m-anchor)))
-                 (lambda ()
-                   (get-text-property (point) 'shr-url))
-                 (lambda ()
-                   (thing-at-point 'url)))))
-    (loop for fun in tests
-          until (setf url (ignore-errors
-                            (funcall fun))))
-    url))
-
 (defvar *evince-extensions* nil
   "List of extentions supported by evince.")
 (setf *evince-extensions* '("pdf" "ps" "dvi"))
@@ -239,6 +201,5 @@ added to `*evince-extensions*'."
                      (string-match (format "^.*\.%s$" ext) filename))))))))
   (shell-command (format "evince \"%s\" & disown" (expand-file-name filename)))
   (message "%s" filename))
-
 
 (provide 'config-defuns)

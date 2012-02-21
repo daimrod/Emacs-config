@@ -84,6 +84,7 @@ Do it recursively if the third argument is not nil."
 (require 'w3m)
 (require 'mime-w3m)
 (require 'w3m-search)
+(require 'browse-url)
 
 (setq w3m-init-file (concat dotfiles-dir "config-w3m"))
 

@@ -72,8 +72,9 @@
 (global-set-key (kbd "C-x C-c") 'dmd/quit-or-hide)
 
 ;; manage url at point
-(global-set-key (kbd "C-c y") 'dmd/copy-url-at-point)
-(global-set-key (kbd "C-c b") 'dmd/browse-url-at-point)
+(require 'graze-url)
+(global-set-key (kbd "C-c y") 'gu-copy-url-at-point)
+(global-set-key (kbd "C-c b") 'gu-browse-url)
 
 ;; pretty print last s-exp
 (global-set-key (kbd "C-x M-e") 'pp-eval-last-sexp)
