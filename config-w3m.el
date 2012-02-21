@@ -66,7 +66,9 @@
        ("C-c N"         . w3m-tab-move-right)
        ("C-c P"         . w3m-tab-move-left)
        ("C-c C-t"       . w3m-copy-buffer)
-       ("Q"             . w3m-quit)))
+       ("Q"             . w3m-quit)
+       ("SPC"           . w3m-scroll-up-or-next-url)
+       ("DEL"          . w3m-scroll-down-or-previous-url)))
     (setf w3m-mode-map map)))
 
 (add-hook 'w3m-mode-hook 'redefine-w3m-map)
