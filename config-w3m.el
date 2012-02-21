@@ -37,7 +37,39 @@
   (mapc #'w3m-add-search-engine-with-quickshort
         '(("enfr" "http://www.wordreference.com/enfr/%s")
           ("fren" "http://www.wordreference.com/fren/%s")
-          ("seeks" "http://s.s/search?q=%s"))))
+          ("search" "http://s.s/search?q=%s"))))
+
+(defun redefine-w3m-map ()
+  (let ((map (make-keymap)))
+    (suppress-keymap map)
+    (mapc
+     (lambda (pair)
+       (destructuring-bind (key &rest def)
+           pair
+         (define-key map (read-kbd-macro key) def)))
+     `(("B"             . w3m-view-previous-page)
+       ("F"             . w3m-view-next-page)
+       ("RET"           . w3m-view-this-url)
+       ("S-RET"         . w3m-view-this-url-new-session)
+       ("C-c C-w"       . w3m-delete-buffer)
+       ("s"             . w3m-search)
+       ("S"             . w3m-search-new-session)
+       ("h"             . w3m-history)
+       ("a"             . w3m-bookmark-add-current-url)
+       ("v"             . w3m-bookmark-view)
+       ("V"             . w3m-bookmark-view-new-session)
+       ("C-c C-c"       . w3m-submit-form)
+       ("C-c C-l"       . w3m-go-to-linknum)
+       ("C-c C-k"       . w3m-process-stop)
+       ("C-c C-n"       . w3m-next-buffer)
+       ("C-c C-p"       . w3m-previous-buffer)
+       ("C-c N"         . w3m-tab-move-right)
+       ("C-c P"         . w3m-tab-move-left)
+       ("C-c C-t"       . w3m-copy-buffer)
+       ("Q"             . w3m-quit)))
+    (setf w3m-mode-map map)))
+
+(add-hook 'w3m-mode-hook 'redefine-w3m-map)
 
 (provide 'config-w3m)
 
