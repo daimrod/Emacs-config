@@ -80,6 +80,7 @@
 (defvar *gu-second-browse-url-function* 'gu-conkeror-browse-url)
 
 (defun gu-browse-url-interactive-arg (prompt)
+  "Ask an URL with the given PROMPT."
   (list (read-string prompt
                      (or (and transient-mark-mode mark-active
                               ;; rfc2396 Appendix E.
@@ -96,6 +97,14 @@
                *gu-second-browse-url-function*
              *gu-first-browse-url-function*)
            url))
+
+(defun gu-search (term &optional second-function?)
+  (interactive (list (read-string "Search: ")
+                     current-prefix-arg))
+  (funcall (if second-function?
+               *gu-second-browse-url-function*
+             *gu-first-browse-url-function*)
+           (format "http://s.s/search?q=%s" term)))
 
 (provide 'graze-url)
 

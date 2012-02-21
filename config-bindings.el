@@ -75,6 +75,7 @@
 (require 'graze-url)
 (global-set-key (kbd "C-c y") 'gu-copy-url-at-point)
 (global-set-key (kbd "C-c b") 'gu-browse-url)
+(global-set-key (kbd "C-c s") 'gu-search)
 
 ;; pretty print last s-exp
 (global-set-key (kbd "C-x M-e") 'pp-eval-last-sexp)
