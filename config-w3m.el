@@ -39,6 +39,24 @@
 (setf w3m-command-arguments '("-o" "http_proxy=http://localhost:8250/")
       w3m-search-default-engine "seeks")
 
+(defun dmd/w3m-browse-url (url prefix)
+  "Ask emacs-w3m to browse URL."
+  (interactive
+   (progn
+     (require 'browse-url)
+     (browse-url-interactive-arg "URL: ")))
+  (when (stringp url)
+    (w3m-goto-url (w3m-canonicalize-url url))))
+
+(defun dmd/w3m-browse-url-new-session (url prefix)
+  "Ask emacs-w3m to browse URL."
+  (interactive
+   (progn
+     (require 'browse-url)
+     (browse-url-interactive-arg "URL: ")))
+  (when (stringp url)
+    (w3m-goto-url-new-session (w3m-canonicalize-url url))))
+
 (let ((map (make-keymap)))
   (suppress-keymap map)
   (mapc
