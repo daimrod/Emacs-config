@@ -60,8 +60,8 @@
 (global-set-key (kbd "M-`") 'jump-to-mark)
 
 ;; scroll up and down slowly by default (one line at time)
-(global-set-key (kbd "C-v") 'small-scroll-up-command)
-(global-set-key (kbd "M-v") 'small-scroll-down-command)
+(global-set-key (kbd "C-v") 'dmd/small-scroll-up-command)
+(global-set-key (kbd "M-v") 'dmd/small-scroll-down-command)
 (global-set-key (kbd "C-S-v") 'scroll-up-command)
 (global-set-key (kbd "M-S-v") 'scroll-down-command)
 
@@ -69,11 +69,11 @@
 (global-unset-key (kbd "C-x C-z"))
 
 ;; never quit emacs daemon
-(global-set-key (kbd "C-x C-c") 'quit-or-hide)
+(global-set-key (kbd "C-x C-c") 'dmd/quit-or-hide)
 
 ;; manage url at point
-(global-set-key (kbd "C-c y") 'daimrod/copy-url-at-point)
-(global-set-key (kbd "C-c b") 'daimrod/browse-url-at-point)
+(global-set-key (kbd "C-c y") 'dmd/copy-url-at-point)
+(global-set-key (kbd "C-c b") 'dmd/browse-url-at-point)
 
 ;; pretty print last s-exp
 (global-set-key (kbd "C-x M-e") 'pp-eval-last-sexp)

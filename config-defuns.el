@@ -100,7 +100,7 @@ Symbols matching the text at point are put first in the completion list."
                        (- (point) 1)
                      (+ (point) 1))))))
 
-(defun recompile-config ()
+(defun dmd/recompile-config ()
   (interactive)
   (map nil #'byte-compile-file
        '("~/.gnus.el"))
@@ -128,19 +128,19 @@ This is the same as using \\[set-mark-command] with the prefix argument."
   (interactive)
   (set-mark-command 1))
 
-(defun small-scroll-up-command (&optional arg)
+(defun dmd/small-scroll-up-command (&optional arg)
   (interactive "^P")
   (if arg
       (scroll-up-command arg)
     (scroll-up-command 5)))
 
-(defun small-scroll-down-command (&optional arg)
+(defun dmd/small-scroll-down-command (&optional arg)
   (interactive "^P")
   (if arg
       (scroll-down-command arg)
     (scroll-down-command 5)))
 
-(defun show-big-text (text &optional size font)
+(defun dmd/show-big-text (text &optional size font)
   (interactive "sText to show: ")
   (let ((size (number-to-string
                (if (null size)
@@ -152,7 +152,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
     (shell-command (format "figlet -w %s -f %s %s"
                            size font text))))
 
-(defun quit-or-hide ()
+(defun dmd/quit-or-hide ()
   "If it this is an instance of a running Emacs daemon, then
 if it's the last frame, hide it, otherwise delete it.
 
@@ -164,7 +164,7 @@ If not, use the classic save-buffers-and-kill-emacs function."
         (make-frame-invisible nil t))
     (save-buffers-kill-emacs)))
 
-(defun autocompile ()
+(defun dmd/autocompile ()
   "Byte compile an elisp."
   (interactive)
   (require 'bytecomp)
@@ -172,28 +172,28 @@ If not, use the classic save-buffers-and-kill-emacs function."
     (if (string-match "\\.el$" filename)
         (byte-compile-file filename))))
 
-(defun daimrod/copy-url-at-point ()
+(defun dmd/copy-url-at-point ()
   "Copy the url at point."
   (interactive)
-  (let ((url (find-url-at-point)))
+  (let ((url (dmd/find-url-at-point)))
     (if (not url)
         (error "No url found at point")
       (kill-new url)
       (message "%s" url))))
 
-(defun daimrod/browse-url-at-point (&optional arg)
+(defun dmd/browse-url-at-point (&optional arg)
   "Ask a WWW browser to load the URL at or before point.
 Doesn't let you edit the URL like `browse-url'.  Variable
 `browse-url-browser-function' says which browser to use."
   (interactive "P")
-  (let ((url (find-url-at-point)))
+  (let ((url (dmd/find-url-at-point)))
     (if url
         (browse-url url (if arg
                             (not browse-url-new-window-flag)
                           browse-url-new-window-flag))
       (error "No URL found"))))
 
-(defun find-url-at-point ()
+(defun dmd/find-url-at-point ()
   (let (url
         (tests '((lambda ()
                    (if (org-at-regexp-p org-bracket-link-regexp)
@@ -217,7 +217,7 @@ Doesn't let you edit the URL like `browse-url'.  Variable
 (defvar *evince-location* "/usr/bin/evince"
   "Where is evince?")
 
-(defun evince (filename)
+(defun dmd/evince (filename)
   "Open the given FILENAME with evince in a background.
 
 `ido-read-file-name' is used to find the files. Extensions can be

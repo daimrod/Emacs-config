@@ -124,7 +124,7 @@
 (delete-selection-mode)
 
 ;; Autocompile el files at save
-(add-hook 'after-save-hook 'autocompile)
+(add-hook 'after-save-hook 'dmd/autocompile)
 
 ;; ELPA configuration
 (setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
