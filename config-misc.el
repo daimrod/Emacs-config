@@ -146,4 +146,11 @@
 
 (require 'chm-view)
 
+(require 'cursor-chg)
+(toggle-cursor-type-when-idle 1)
+(change-cursor-mode 1)
+(setq-default curchg-default-cursor-color "gold"
+              curchg-default-cursor-type 'box
+              curchg-idle-cursor-type nil)
+
 (provide 'config-misc)
