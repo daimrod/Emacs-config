@@ -29,7 +29,7 @@
 
 (custom-set-variables '(term-prompt-regexp "^.*\\$ *"))
 
-(setq-default ansi-term-color-vector
+(setq-default ansi-color-names-vector
               [unspecified
                "#2e3434"        ; black
                "tomato"         ; red
