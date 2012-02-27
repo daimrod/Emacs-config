@@ -88,4 +88,7 @@
               (slime-repl-send-input t)))
   (:one-liner "Add a directory to asdf:*central-registry*"))
 
+;;; Awesome hacks available!
+(setq slime-enable-evaluate-in-emacs t)
+
 (provide 'config-slime)
