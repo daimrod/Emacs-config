@@ -220,4 +220,13 @@ added to `*evince-extensions*'."
   (when (stringp url)
     (w3m-goto-url-new-session (w3m-canonicalize-url url))))
 
+(defun dmd/switch-color-frame ()
+  "Switch the color between the foreground and the background of
+he current frame."
+  (interactive)
+  (let ((org-bg (face-attribute 'default :background))
+        (org-fg (face-attribute 'default :foreground)))
+    (set-face-background 'default org-fg (selected-frame))
+    (set-face-foreground 'default org-bg (selected-frame))))
+
 (provide 'config-defuns)
