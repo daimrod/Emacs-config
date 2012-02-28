@@ -80,7 +80,9 @@
      ("DEL"             . w3m-scroll-down-or-previous-url)
      ("TAB"             . w3m-next-anchor)
      ("<backtab>"       . w3m-previous-anchor)
-     ("E"               . w3m-bookmark-edit)))
+     ("E"               . w3m-bookmark-edit)
+     ("r"               . w3m-reload-this-page)
+     ("R"               . w3m-reload-all-pages)))
   (setf w3m-mode-map map))
 
 (provide 'config-w3m)
