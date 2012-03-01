@@ -16,6 +16,8 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+(fni/add-to-load-path (concat src-dir "yasnippet/"))
+
 (require 'yasnippet)
 (yas/initialize)
 
@@ -24,7 +26,9 @@
 ;; Load the snippets
 (yas/load-directory yas/root-directory)
 (setq yas/trigger-key (kbd "C-\\")
-      yas/fallback-behavior nil)
+      yas/fallback-behavior '(apply (lambda (&rest args)
+                                      (interactive)
+                                      (message "No expansion found"))))
 
 (yas/global-mode 1)
 
