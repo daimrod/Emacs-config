@@ -43,5 +43,6 @@
 
 (global-set-key (kbd "C-c t") 'multi-term-next)
 (global-set-key (kbd "C-c T") 'multi-term)
+(global-set-key (kbd "C-x 4 t") 'multi-term-dedicated-toggle)
 
 (provide 'config-multi-term)
