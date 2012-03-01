@@ -25,6 +25,7 @@
 (setq yas/trigger-key (kbd "C-\\")
       yas/fallback-behavior '(apply (lambda (&rest args)
                                       (interactive)
-      (message "No expansion found"))))
+                                      (message "No expansion found")))
+      yas/prompt-functions '(yas/ido-prompt))
 
 (provide 'config-yasnippet)
