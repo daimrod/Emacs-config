@@ -26,4 +26,6 @@
 (setq yas/trigger-key (kbd "C-\\")
       yas/fallback-behavior nil)
 
+(yas/global-mode 1)
+
 (provide 'config-yasnippet)
