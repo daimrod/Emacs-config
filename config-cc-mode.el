@@ -22,8 +22,7 @@
 (setq-default c-basic-offset 4
               tab-width 4 ; or any other preferred value
               cua-auto-tabify-rectangles nil
-              compilation-window-height 10
-              c-auto-newline t)
+              compilation-window-height 10)
 
 (setq c-default-style
       '((java-mode . "java")
