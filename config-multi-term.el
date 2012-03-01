@@ -29,16 +29,16 @@
 
 (custom-set-variables '(term-prompt-regexp "^.*\\$ *"))
 
-(setq-default ansi-color-names-vector
+(setq-default ansi-term-color-vector
               [unspecified
-               "#2e3434"        ; black
-               "tomato"         ; red
-               "#6ac214"        ; green
-               "#edd400"        ; yellow
-               "light sky blue" ; blue
-               "magenta"        ; magenta
-               "cyan"           ; cyan
-               "#eeeeec"        ; white
+               "#2e3434"                ; black
+               "tomato"                 ; red
+               "#6ac214"                ; green
+               "#edd400"                ; yellow
+               "light sky blue"         ; blue
+               "magenta"                ; magenta
+               "cyan"                   ; cyan
+               "#eeeeec"                ; white
                ])
 
 (global-set-key (kbd "C-c t") 'multi-term-next)
