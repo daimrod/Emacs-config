@@ -19,13 +19,16 @@
 (fni/add-to-load-path (concat src-dir "yasnippet/"))
 
 (require 'yasnippet)
+(setq yas/snippet-dirs
+      (list
+       (concat dotfiles-dir "snippets/")
+       (concat src-dir "yasnippet/snippets/")))
+
 (yas/global-mode 1)
 
 ;; Load the snippets
-(setq yas/trigger-key (kbd "C-\\")
-      yas/fallback-behavior '(apply (lambda (&rest args)
-                                      (interactive)
-                                      (message "No expansion found")))
+(setq yas/trigger-key "TAB"
+      yas/fallback-behavior 'call-other-command
       yas/prompt-functions '(yas/ido-prompt))
 
 (provide 'config-yasnippet)
