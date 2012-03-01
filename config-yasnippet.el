@@ -23,5 +23,7 @@
 
 ;; Load the snippets
 (yas/load-directory yas/root-directory)
+(setq yas/trigger-key (kbd "C-\\")
+      yas/fallback-behavior nil)
 
 (provide 'config-yasnippet)
