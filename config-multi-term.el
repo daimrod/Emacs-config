@@ -16,8 +16,7 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(autoload 'multi-term "multi-term" nil t)
-(autoload 'multi-term-next "multi-term" nil t)
+(require 'multi-term)
 
 (eval-after-load "multi-term"
                  '(setq multi-term-program "/bin/bash"
