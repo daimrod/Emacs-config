@@ -16,6 +16,12 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+(defvar org-dir (concat src-dir "org-mode/"))
+(fni/add-to-load-path org-dir t t)
+(add-to-list 'Info-default-directory-list
+             (expand-file-name (concat org-dir
+                                       "doc/")))
+
 (require 'org-install)
 
 ;;; babel requirements
