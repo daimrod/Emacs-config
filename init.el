@@ -78,7 +78,6 @@ Do it recursively if the third argument is not nil."
 (require 'scratch)
 (require 'verbiste)
 (require 'undo-tree)
-(require 'woman)
 (require 'alarm)
 (require 'pos-tip)
 (require 'w3m)

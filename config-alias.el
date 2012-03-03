@@ -19,5 +19,6 @@
 (defalias 'renb 'rename-buffer)
 (defalias 'srepl 'slime-repl)
 (defalias 'article 'gnus-article-mode)
+(defalias 'man 'woman)
 
 (provide 'config-alias)

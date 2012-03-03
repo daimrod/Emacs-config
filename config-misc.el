@@ -153,4 +153,7 @@
               curchg-default-cursor-type 'box
               curchg-idle-cursor-type nil)
 
+(require 'woman)
+(add-to-list 'woman-manpath "~/.local/share/man")
+
 (provide 'config-misc)
