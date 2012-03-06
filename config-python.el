@@ -16,7 +16,12 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(require 'python)
+(defvar python-mode-dir (concat src-dir "python-mode/"))
+
+(fni/add-to-load-path python-mode-dir t t)
+
+(setq py-install-directory python-mode-dir)
+(require 'python-mode)
 
 (defun my-run-python (&optional new)
   "Run a python interpreter and display it.
