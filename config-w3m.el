@@ -21,6 +21,8 @@
 
 ;;; Code:
 
+(fni/add-to-load-path (concat src-dir "w3m/") t t)
+
 (flet ((w3m-add-search-engine-with-quickshort
         (search-engine)
         (let ((name (elt search-engine 0))

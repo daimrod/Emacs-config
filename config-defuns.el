@@ -206,7 +206,6 @@ added to `*evince-extensions*'."
   "Ask emacs-w3m to browse URL."
   (interactive
    (progn
-     (require 'browse-url)
      (browse-url-interactive-arg "URL: ")))
   (when (stringp url)
     (w3m-goto-url (w3m-canonicalize-url url))))
@@ -215,7 +214,6 @@ added to `*evince-extensions*'."
   "Ask emacs-w3m to browse URL."
   (interactive
    (progn
-     (require 'browse-url)
      (browse-url-interactive-arg "URL: ")))
   (when (stringp url)
     (w3m-goto-url-new-session (w3m-canonicalize-url url))))

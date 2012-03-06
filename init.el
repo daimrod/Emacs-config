@@ -81,7 +81,6 @@ Do it recursively if the third argument is not nil."
 (require 'alarm)
 (require 'pos-tip)
 (require 'w3m)
-(require 'mime-w3m)
 (require 'w3m-search)
 (require 'browse-url)
 
