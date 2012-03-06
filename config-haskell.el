@@ -16,7 +16,9 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(load (concat src-dir "haskell-mode/haskell-site-file"))
+(defvar haskell-mode-dir (concat src-dir "haskell-mode/"))
+(fni/add-to-load-path haskell-mode-dir)
+(load (concat haskell-mode-dir "haskell-site-file"))
 
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
