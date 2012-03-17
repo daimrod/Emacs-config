@@ -96,4 +96,7 @@
 ;; fontify src code
 (setq org-src-fontify-natively t)
 
+;;; Plantuml
+(setq org-plantuml-jar-path "/opt/plantuml/plantuml.jar")
+
 (provide 'config-org)

@@ -105,6 +105,7 @@ Do it recursively if the third argument is not nil."
 (require 'config-notmuch)
 (require 'config-ocaml)
 (require 'config-w3m)
+(require 'config-plantuml)
 
 (load custom-file 'noerror)
 
