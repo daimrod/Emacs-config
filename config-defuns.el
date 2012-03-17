@@ -202,6 +202,7 @@ added to `*evince-extensions*'."
   (shell-command (format "evince \"%s\" & disown" (expand-file-name filename)))
   (message "%s" filename))
 
+(require 'config-w3m)
 (defun dmd/w3m-browse-url (url prefix)
   "Ask emacs-w3m to browse URL."
   (interactive

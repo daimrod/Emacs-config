@@ -22,6 +22,11 @@
 ;;; Code:
 
 (fni/add-to-load-path (concat src-dir "w3m/") t t)
+(require 'w3m)
+(require 'w3m-search)
+(require 'browse-url)
+
+(setq w3m-init-file (concat dotfiles-dir "config-w3m"))
 
 (flet ((w3m-add-search-engine-with-quickshort
         (search-engine)
