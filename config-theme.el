@@ -30,7 +30,8 @@
 
 ;; Set the default font
 (add-to-list 'default-frame-alist '(font . "-bitstream-Bitstream Vera Sans Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1"))
-(add-to-list 'initial-frame-alist (copy-alist default-frame-alist))
+
+(setq initial-frame-alist (append initial-frame-alist (copy-alist default-frame-alist)))
 
 ;; tab and indentation configuration
 (setq-default indent-tabs-mode nil)
