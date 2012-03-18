@@ -23,7 +23,6 @@
 
 (fni/add-to-load-path (concat src-dir "plantuml-mode/"))
 (require 'plantuml-mode)
-(setq plantuml-jar-path "/opt/plantuml/plantuml.jar")
 
 (provide 'config-plantuml)
 
