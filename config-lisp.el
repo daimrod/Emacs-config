@@ -31,4 +31,11 @@
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 
+(fni/add-to-load-path (concat src-dir "redshank/"))
+(require 'redshank-loader)
+(eval-after-load "redshank-loader"
+  (redshank-setup '(lisp-mode-hook
+                    slime-repl-mode-hook) t))
+
+
 (provide 'config-lisp)
