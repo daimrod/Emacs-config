@@ -67,7 +67,9 @@
 
 ;; workgroups configuration
 (workgroups-mode)
-(setq wg-morph-on nil)
+(setq wg-morph-on nil
+      wg-query-for-save-on-emacs-exit nil
+      wg-query-for-save-on-workgroups-mode-exit nil)
 
 (setq browse-url-browser-function 'w3m-browse-url)
 
