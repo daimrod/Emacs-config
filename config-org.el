@@ -97,6 +97,6 @@
 (setq org-src-fontify-natively t)
 
 ;;; Plantuml
-(setq org-plantuml-jar-path "/opt/plantuml/plantuml.jar")
+(setq org-plantuml-jar-path (expand-file-name "/opt/plantuml/plantuml.jar"))
 
 (provide 'config-org)
