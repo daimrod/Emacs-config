@@ -29,7 +29,7 @@
 (color-theme-tangotango)
 
 ;; Set the default font
-(add-to-list 'default-frame-alist '(font . "-bitstream-Bitstream Vera Sans Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1"))
+(add-to-list 'default-frame-alist '(font . "-unknown-Inconsolata-normal-normal-normal-*-18-*-*-*-m-0-iso10646-1"))
 
 (setq initial-frame-alist (append initial-frame-alist (copy-alist default-frame-alist)))
 
