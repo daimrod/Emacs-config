@@ -108,6 +108,7 @@ Do it recursively if the third argument is not nil."
 (require 'config-plantuml)
 (require 'config-xml)
 (require 'config-html)
+(require 'config-irc)
 
 (load custom-file 'noerror)
 
