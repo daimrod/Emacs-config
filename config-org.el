@@ -23,7 +23,7 @@
                                        "doc/")))
 
 (require 'org-install)
-
+(require 'org)
 ;;; babel requirements
 (require 'ob-asymptote)
 (require 'ob-awk)
@@ -98,5 +98,17 @@
 
 ;;; Plantuml
 (setq org-plantuml-jar-path (expand-file-name "/opt/plantuml/plantuml.jar"))
+
+;;; Calendar/Diary
+(setq org-agenda-include-diary t)
+(require 'calendar)
+(require 'diary-lib)
+
+(setq diary-file "~/.diary")
+(add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
+(add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
+
+;;; export Latex
+(add-to-list 'org-export-latex-default-packages-alist '("" "listings" t))
 
 (provide 'config-org)
