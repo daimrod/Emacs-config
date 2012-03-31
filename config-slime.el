@@ -93,4 +93,12 @@
 ;;; CLHS
 (load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
 
+;;; dpans
+(require 'info-look)
+(info-lookup-add-help
+ :mode 'lisp-mode
+ :regexp "[^][()'\" \t\n]+"
+ :ignore-case t
+ :doc-spec '(("(ansicl)Symbol Index" nil nil nil)))
+
 (provide 'config-slime)
