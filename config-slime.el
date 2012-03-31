@@ -45,7 +45,6 @@
       slime-startup-animation t
       slime-complete-symbol*-fancy t
       max-lisp-eval-depth 2000
-      common-lisp-hyperspec-root (concat home-dir "src/lisp/HyperSpec/")
       slime-net-coding-system 'utf-8-unix)
 
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
@@ -90,5 +89,8 @@
 
 ;;; Awesome hacks available!
 (setq slime-enable-evaluate-in-emacs t)
+
+;;; CLHS
+(load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
 
 (provide 'config-slime)
