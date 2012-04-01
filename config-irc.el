@@ -28,7 +28,7 @@
 (require 'znc)
 
 (setq erc-timestamp-format "[%H:%M] "
-      erc-fill-prefix      "      + ")
+      erc-fill-prefix      "        ")
 
 (make-variable-buffer-local 'erc-fill-column)
 (add-hook 'window-configuration-change-hook 
