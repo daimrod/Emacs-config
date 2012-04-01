@@ -37,5 +37,7 @@
   (redshank-setup '(lisp-mode-hook
                     slime-repl-mode-hook) t))
 
+(setq lisp-lambda-list-keyword-alignment t
+      lisp-lambda-list-keyword-parameter-alignment t)
 
 (provide 'config-lisp)
