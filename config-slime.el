@@ -101,4 +101,7 @@
  :ignore-case t
  :doc-spec '(("(ansicl)Symbol Index" nil nil nil)))
 
+;;; paredit
+(add-hook 'slime-repl-mode-hook 'enable-paredit-mode)
+
 (provide 'config-slime)
