@@ -24,6 +24,8 @@
 
 (require 'org-install)
 (require 'org)
+(require 'org-latex)
+(require 'org-beamer)
 ;;; babel requirements
 (require 'ob-asymptote)
 (require 'ob-awk)
