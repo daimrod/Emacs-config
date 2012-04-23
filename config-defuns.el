@@ -102,7 +102,9 @@ Symbols matching the text at point are put first in the completion list."
 
 (defun dmd/recompile-config ()
   (interactive)
-  (map nil #'byte-compile-file
+  (map nil (lambda (file)
+             (if (file-exists-p file)
+                 (byte-compile-file file)))
        '("~/.gnus.el"))
   (byte-recompile-directory dotfiles-dir 0)
   (byte-recompile-directory src-dir 0))
