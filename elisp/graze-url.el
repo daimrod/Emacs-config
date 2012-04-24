@@ -21,7 +21,7 @@
 
 ;;; Code:
 
-(require 'w3m-load)
+(require 'config-w3m)
 (require 'cl)
 
 (defvar gu-find-url-functions nil
