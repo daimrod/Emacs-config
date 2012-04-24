@@ -78,11 +78,11 @@
   ("add-to-central-registry" "+a" "add")
   (:handler (lambda (directory)
               (interactive
-               (list (file-name-as-directory
-                      (read-directory-name
-                       "Add directory: "
-                       (slime-eval '(swank:default-directory))
-                       nil nil ""))))
+               (list (expand-file-name (file-name-as-directory
+                                        (read-directory-name
+                                         "Add directory: "
+                                         (slime-eval '(swank:default-directory))
+                                         nil nil "")))))
               (insert "(cl:pushnew (cl:truename #P\"" directory "\") asdf:*central-registry* :test #'equal)")
               (slime-repl-send-input t)))
   (:one-liner "Add a directory to asdf:*central-registry*"))
