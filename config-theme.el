@@ -17,7 +17,6 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (require 'color-theme)
-(color-theme-initialize)
 (setq color-theme-is-global t
       color-theme-is-cumulative t
       color-theme-load-all-themes nil)
@@ -25,7 +24,6 @@
 (fni/add-to-load-path (concat src-dir "color-theme-tangotango/"))
 
 (require 'color-theme-tangotango)
-
 (color-theme-tangotango)
 
 ;; Set the default font
