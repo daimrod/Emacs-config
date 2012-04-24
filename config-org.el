@@ -48,7 +48,6 @@
 (require 'ob-octave)
 (require 'ob-org)
 (require 'ob-perl)
-(require 'ob-plantuml)
 (require 'ob-python)
 (require 'ob-R)
 (require 'ob-ruby)
@@ -97,7 +96,9 @@
 (setq org-src-fontify-natively t)
 
 ;;; Plantuml
-(setq org-plantuml-jar-path (expand-file-name "/opt/plantuml/plantuml.jar"))
+(require 'config-plantuml)
+(setq org-plantuml-jar-path plantuml-jar-path)
+(require 'ob-plantuml)
 
 ;;; Calendar/Diary
 (setq org-agenda-include-diary t)
