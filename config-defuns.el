@@ -132,15 +132,21 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 (defun dmd/small-scroll-up-command (&optional arg)
   (interactive "^P")
-  (if arg
-      (scroll-up-command arg)
-    (scroll-up-command 5)))
+  (let ((fun-scroll-up (if (fboundp 'scroll-up-command)
+                       'scroll-up-command
+                     'scroll-up)))
+   (if arg
+       (funcall fun-scroll-up arg)
+     (funcall fun-scroll-up 5))))
 
 (defun dmd/small-scroll-down-command (&optional arg)
   (interactive "^P")
-  (if arg
-      (scroll-down-command arg)
-    (scroll-down-command 5)))
+  (let ((fun-scroll-down (if (fboundp 'scroll-down-command)
+                             'scroll-down-command
+                           'scroll-down)))
+   (if arg
+       (funcall fun-scroll-down arg)
+     (funcall fun-scroll-down 5))))
 
 (defun dmd/show-big-text (text &optional size font)
   (interactive "sText to show: ")
