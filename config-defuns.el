@@ -210,30 +210,4 @@ added to `*evince-extensions*'."
   (shell-command (format "evince \"%s\" & disown" (expand-file-name filename)))
   (message "%s" filename))
 
-(require 'config-w3m)
-(defun dmd/w3m-browse-url (url prefix)
-  "Ask emacs-w3m to browse URL."
-  (interactive
-   (progn
-     (browse-url-interactive-arg "URL: ")))
-  (when (stringp url)
-    (w3m-goto-url (w3m-canonicalize-url url))))
-
-(defun dmd/w3m-browse-url-new-session (url prefix)
-  "Ask emacs-w3m to browse URL."
-  (interactive
-   (progn
-     (browse-url-interactive-arg "URL: ")))
-  (when (stringp url)
-    (w3m-goto-url-new-session (w3m-canonicalize-url url))))
-
-(defun dmd/switch-color-frame ()
-  "Switch the color between the foreground and the background of
-he current frame."
-  (interactive)
-  (let ((org-bg (face-attribute 'default :background))
-        (org-fg (face-attribute 'default :foreground)))
-    (set-face-background 'default org-fg (selected-frame))
-    (set-face-foreground 'default org-bg (selected-frame))))
-
 (provide 'config-defuns)
