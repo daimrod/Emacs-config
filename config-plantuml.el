@@ -22,7 +22,7 @@
 ;;; Code:
 
 (fni/add-to-load-path (concat src-dir "plantuml-mode/"))
-(defvar plantuml-jar-path (expand-file-name "/opt/plantuml/plantuml.jar"))
+(defvar plantuml-jar-path (expand-file-name "~/opt/plantuml.jar"))
 (require 'plantuml-mode)
 
 (provide 'config-plantuml)
