@@ -21,7 +21,7 @@
 
 ;;; Code:
 
-(fni/add-to-load-path (concat src-dir "w3m/") t t)
+(fni/add-to-load-path (concat src-dir "emacs-w3m/") t t)
 (require 'w3m-load)
 (require 'w3m)
 (require 'w3m-search)
