@@ -163,4 +163,9 @@
 ;;; look at fringe.el::138 defconst fringe-styles
 (set-fringe-style 0)
 
+;;; enable flyspell nearly everywhere
+(require 'flyspell)
+(add-hook 'text-mode-hook 'flyspell-mode)
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+
 (provide 'config-misc)
