@@ -31,7 +31,6 @@
 
 ;; configure cliboard
 (setq x-select-enable-clipboard t
-      x-select-enable-primary t
       mouse-drag-copy-region t
       yank-pop-change-selection t
       kill-do-not-save-duplicates t)
