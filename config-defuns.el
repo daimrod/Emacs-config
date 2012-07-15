@@ -72,8 +72,8 @@ Symbols matching the text at point are put first in the completion list."
 (defun sudo-edit (&optional arg)
   (interactive "p")
   (if (or arg (not buffer-file-name))
-      (find-file (concat "/sudo::" (ido-read-file-name "File: ")))
-    (find-alternate-file (concat "/sudo::" buffer-file-name))))
+      (find-file (concat "/sudo:localhost:" (ido-read-file-name "File: ")))
+    (find-alternate-file (concat "/sudo:localhost:" buffer-file-name))))
 
 (defun sbrk-paste ()
   "paste a chunk of code to pastebin.sbrk.org"
