@@ -14,4 +14,4 @@ auto-save-list/
 /abbrev_defs
 elpa/archives/
 /.org-id-locations
-/eshell/history
+/eshell/*
