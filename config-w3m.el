@@ -66,7 +66,7 @@
      ("a"               . w3m-bookmark-add-current-url)
      ("g"               . dmd/w3m-browse-url)
      ("G"               . dmd/w3m-browse-url-new-session)
-     ("C-c s"           . w3m-save-image)
+     ("C-c i s"           . w3m-save-image)
      ("d"               . w3m-download-this-url)
      ("t"               . w3m-toggle-inline-image)
      ("T"               . w3m-toggle-inline-images)
