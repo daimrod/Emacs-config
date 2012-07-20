@@ -167,8 +167,7 @@ if it's the last frame, hide it, otherwise delete it.
 If not, use the classic save-buffers-and-kill-emacs function."
   (interactive)
   (if (boundp 'server-name)
-      (if (> (length server-clients) 1)
-          (delete-frame)
+      (unless (ignore-errors (delete-frame))
         (make-frame-invisible nil t))
     (save-buffers-kill-emacs)))
 
