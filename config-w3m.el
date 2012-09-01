@@ -89,7 +89,9 @@
      ("<backtab>"       . w3m-previous-anchor)
      ("E"               . w3m-bookmark-edit)
      ("r"               . w3m-reload-this-page)
-     ("R"               . w3m-reload-all-pages)))
+     ("R"               . w3m-reload-all-pages)
+     ("z i"             . w3m-zoom-in-image)
+     ("z o"             . w3m-zoom-out-image)))
   (setf w3m-mode-map map))
 
 (defun dmd/w3m-browse-url (url prefix)
