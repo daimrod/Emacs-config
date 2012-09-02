@@ -91,6 +91,7 @@ Do it recursively if the third argument is not nil."
 (require 'config-slime)
 (require 'config-yasnippet)
 (require 'config-misc)
+(require 'config-search)
 (require 'config-bbdb)
 (require 'config-git)
 (require 'config-alias)

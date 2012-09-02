@@ -88,7 +88,4 @@
 (global-set-key (kbd "C-c ;") 'iy-go-to-char-continue)
 (global-set-key (kbd "C-c ,") 'iy-go-to-char-continue-backward)
 
-;;; occur-mode configuration
-(global-set-key (kbd "C-c s") 'occur)
-
 (provide 'config-bindings)
