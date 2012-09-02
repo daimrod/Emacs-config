@@ -95,11 +95,15 @@
 
 ;;; dpans
 (require 'info-look)
-(info-lookup-add-help
- :mode 'lisp-mode
- :regexp "[^][()'\" \t\n]+"
- :ignore-case t
- :doc-spec '(("(ansicl)Symbol Index" nil nil nil)))
+(flet ((ansicl-lookup (major-mode)
+                      (info-lookup-add-help
+                       :mode major-mode
+                       :regexp "[^][()'\" \t\n]+"
+                       :ignore-case t
+                       :doc-spec '(("(ansicl)Symbol Index" nil nil nil)))))
+  (mapc 'ansicl-lookup
+          '(lisp-mode
+            slime-repl-mode)))
 
 ;;; paredit
 (add-hook 'slime-repl-mode-hook 'enable-paredit-mode)
