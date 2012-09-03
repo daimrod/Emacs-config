@@ -103,7 +103,7 @@ Do it recursively if the third argument is not nil."
 (require 'config-js)
 (require 'config-multi-term)
 (require 'config-smerge)
-(require 'config-notmuch)
+;; (require 'config-notmuch)
 (require 'config-ocaml)
 (require 'config-w3m)
 (require 'config-plantuml)
