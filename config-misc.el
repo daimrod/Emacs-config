@@ -166,5 +166,6 @@
 (require 'flyspell)
 (add-hook 'text-mode-hook 'flyspell-mode)
 (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+(setq flyspell-use-meta-tab nil)
 
 (provide 'config-misc)
