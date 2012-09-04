@@ -116,4 +116,9 @@
 ;;; export Latex
 (add-to-list 'org-export-latex-default-packages-alist '("" "listings" t))
 
+;;; config org-registry (contrib)
+(require 'org-registry)
+(org-registry-initialize)
+(org-registry-insinuate)
+
 (provide 'config-org)
