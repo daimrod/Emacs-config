@@ -119,6 +119,7 @@
 (require 'org-registry)
 (org-registry-initialize)
 (org-registry-insinuate)
+(define-key mode-specific-org-map (kbd "s") 'org-registry-show)
 
 ;;; config org-annotate (contrib)
 (require 'org-annotate-file)
