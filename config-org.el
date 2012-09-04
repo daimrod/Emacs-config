@@ -120,4 +120,9 @@
 (org-registry-initialize)
 (org-registry-insinuate)
 
+;;; config org-annotate (contrib)
+(require 'org-annotate-file)
+(setq org-annotate-file-storage-file (concat org-directory "annotated.org"))
+(define-key mode-specific-org-map (kbd "n") 'org-annotate-file)
+
 (provide 'config-org)
