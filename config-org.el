@@ -72,7 +72,6 @@
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (define-key mode-specific-org-map (kbd "l") 'org-store-link)
 (define-key mode-specific-org-map (kbd "a") 'org-agenda)
-(define-key mode-specific-org-map (kbd "b") 'org-iswitchb)
 
 ;; capture
 (define-key mode-specific-org-map (kbd "c") 'org-capture)
