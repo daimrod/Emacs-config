@@ -53,4 +53,4 @@
 
 (provide 'config-search)
 
-;;; config-search.el ends here# -*- mode: snippet -*-
+;;; config-search.el ends here
