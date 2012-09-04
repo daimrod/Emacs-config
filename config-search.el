@@ -33,6 +33,9 @@
 (define-key moccur-map (kbd "m") 'moccur)
 (define-key moccur-map (kbd "d") 'dmoccur)
 
+(require 'dired)
+(define-key dired-mode-map (kbd "M-o") 'moccur-map)
+
 (defalias 'grep 'moccur-grep)
 (defalias 'rgrep 'moccur-grep-find)
 
