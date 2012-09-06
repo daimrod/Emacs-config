@@ -93,7 +93,8 @@
 (setq org-todo-keywords
       '((sequence "TODO(t@)" "STARTED(s!/@)" "WAIT(w@/!)" "|" "DONE(d@/!)" "CANCELLED(c@/!)" "DEFERRED(e@/!)")
         (sequence "REPORT(r@)" "BUG(b!/@)" "KNOWNCAUSE(k!/@)" "|" "FIXED(f@/!)" "CANCELLED(c@/!)")
-        (sequence "TOREAD(o@)" "|" "READ(a!/@)" "CANCELLED(c@/!)")))
+        (sequence "TOREAD(o@)" "|" "READ(a!/@)" "CANCELLED(c@/!)")
+        (sequence "MEMO(m@)")))
 
 ;; fontify src code
 (setq org-src-fontify-natively t)
