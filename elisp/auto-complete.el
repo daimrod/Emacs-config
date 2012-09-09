@@ -381,7 +381,7 @@ If there is no common part, this will be nil.")
   (let ((map (make-sparse-keymap)))
     (define-key map "\t" 'ac-expand)
     (define-key map "\r" 'ac-complete)
-    (define-key map (kbd "M-TAB") 'auto-complete)
+    (define-key map (kbd "C-M-TAB") 'auto-complete)
     (define-key map "\C-s" 'ac-isearch)
 
     (define-key map "\M-n" 'ac-next)

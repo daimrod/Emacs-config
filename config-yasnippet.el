@@ -27,7 +27,7 @@
 (yas/global-mode 1)
 
 ;; Load the snippets
-(setq yas/trigger-key "C-\\"
+(setq yas/trigger-key (kbd "M-TAB")
       yas/fallback-behavior 'call-other-command
       yas/prompt-functions '(yas/ido-prompt))
 
