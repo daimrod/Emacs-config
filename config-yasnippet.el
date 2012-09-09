@@ -24,11 +24,11 @@
        (concat dotfiles-dir "snippets/")
        (concat src-dir "yasnippet/snippets/")))
 
-(yas-global-mode 1)
-
 ;; Load the snippets
-(setq yas-trigger-key (kbd "M-TAB")
+(setq yas-trigger-key "M-TAB"
       yas-fallback-behavior 'call-other-command
       yas-prompt-functions '(yas-ido-prompt))
+
+(yas-global-mode 1)
 
 (provide 'config-yasnippet)
