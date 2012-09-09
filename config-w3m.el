@@ -44,7 +44,7 @@
           ("fren" "http://www.wordreference.com/fren/%s")
           ("seeks" "http://s.s/search?q=%s"))))
 
-(setf w3m-command-arguments '("-o" "http_proxy=http://localhost:8118/"))
+(setf w3m-command-arguments (list "-o" (concat "http_proxy=" (getenv "http_proxy"))))
 
 (let ((map (make-keymap)))
   (suppress-keymap map)
