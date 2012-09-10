@@ -40,7 +40,7 @@
 
 (slime-autodoc-mode)
 
-(setq inferior-lisp-program "/usr/bin/sbcl"
+(setq inferior-lisp-program "~/bin/sbcl"
       slime-complete-symbol-function 'slime-fuzzy-complete-symbol
       slime-startup-animation t
       slime-complete-symbol*-fancy t
