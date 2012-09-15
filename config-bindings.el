@@ -63,7 +63,7 @@
 (global-set-key (kbd "C-v") 'dmd/small-scroll-up-command)
 (global-set-key (kbd "M-v") 'dmd/small-scroll-down-command)
 (global-set-key (kbd "C-S-v") 'scroll-up-command)
-(global-set-key (kbd "M-S-v") 'scroll-down-command)
+(global-set-key (kbd "M-V") 'scroll-down-command)
 
 ;; remove C-x C-z
 (global-unset-key (kbd "C-x C-z"))
