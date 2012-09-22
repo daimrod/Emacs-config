@@ -21,18 +21,20 @@
 
 ;;; Code:
 
-
 (fni/add-to-load-path (concat src-dir "scala-mode/"))
 (require 'scala-mode-auto)
 
-(fni/add-to-load-path (concat src-dir "ensime/elisp/"))
+(defvar ensime-dir (concat src-dir "ensime/dist_2.9.2/"))
+(fni/add-to-load-path (concat ensime-dir "elisp/"))
 (require 'ensime)
+(setq-default scala-inf-buffer-name ensime-inf-buffer-name)
 
 ;; This step causes the ensime-mode to be started whenever
 ;; scala-mode is started for a buffer. You may have to customize this step
 ;; if you're not using the standard scala mode.
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 
+(setq exec-path (cons (concat ensime-dir "bin/") exec-path))
 
 (provide 'config-scala)
 
