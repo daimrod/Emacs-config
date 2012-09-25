@@ -78,8 +78,6 @@ Do it recursively if the third argument is not nil."
 (require 'scratch)
 (require 'verbiste)
 (require 'undo-tree)
-(require 'alarm)
-(require 'pos-tip)
 
 ;; Load my configuration
 (require 'config-defuns)
