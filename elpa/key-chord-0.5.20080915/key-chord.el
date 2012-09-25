@@ -24,7 +24,7 @@
 
 ;; Author: David Andersson <l.david.andersson(at)sverige.nu>
 ;; Created: 27 April 2003
-;; Version: 0.5 (2008-09-15)
+;; Version: 0.5.20080915
 ;; Keywords: keyboard chord input
 
 ;;; Commentary:
@@ -307,7 +307,7 @@ Please ignore that."
 		     key-chord-two-keys-delay)))
 	(if (if executing-kbd-macro
 		(not (memq first-char key-chord-in-last-kbd-macro))
-	      (sit-for delay 'no-redisplay))
+	      (sit-for delay 0 'no-redisplay))
 	    (progn
 	      (setq key-chord-last-unmatched nil)
 	      (list first-char))
