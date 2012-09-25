@@ -1,6 +1,8 @@
 ;;; scratch.el --- Mode-specific scratch buffers
 
-;; Author: Ian Eure <ian.eure@gmail.com>
+;;; Author: Ian Eure <ian.eure@gmail.com>, Christopher Browne <cbbrowne@acm.org>
+;;; URL: https://github.com/cbbrowne/scratch-el
+;;; Version: 20110708
 
 ;; Keywords: editing
 
@@ -86,6 +88,7 @@ for those buffers."
                (push (substring name 0 -5) modes)))))
         modes)))
 
+;;;###autoload
 (defun scratch (&optional arg)
   "Get a scratch buffer for the current mode."
   (interactive "p")
@@ -99,9 +102,9 @@ for those buffers."
                       (cdr tmp))
                      (t major-mode)))
          (name
-           (format "*%s*"
-                   (or name (replace-regexp-in-string "-mode$" ""
-                                                      (symbol-name mode)))))
+          (format "*%s*"
+                  (or name (replace-regexp-in-string "-mode$" ""
+                                                     (symbol-name mode)))))
          (buf (get-buffer name)))
     (cond ((bufferp buf)
            (pop-to-buffer buf))
@@ -113,3 +116,4 @@ for those buffers."
            (setq scratch-buffer t)))))
 
 (provide 'scratch)
+;;; scratch.el ends here
