@@ -3,7 +3,10 @@
 ;;; Copyright (C) 2006, 2007 Matthew P. Hodges
 
 ;; Author: Matthew P. Hodges <MPHodges@member.fsf.org>
-;; Version: $Id: eimp.el,v 1.113 2008-07-16 10:15:56 mphodges-guest Exp $
+;; Version: 1.4.0
+;; Maintainer: Nic Ferrier <nferrier@ferrier.me.uk>
+;; Created: 26th August 2012
+;; Keywords: files,frames
 
 ;; eimp.el is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
@@ -156,50 +159,50 @@ operations act sequentially on any given image."
 
 (when (fboundp 'easy-menu-define)
   (easy-menu-define eimp-menu eimp-minor-mode-map "EIMP Menu"
-                    '("EIMP"
-                      ("Transforms"
-                       ["Increase Size"         eimp-increase-image-size t]
-                       ["Decrease Size"         eimp-decrease-image-size t]
-                       ["Fit to Window (keep aspect ratio)"      eimp-fit-image-to-window t]
-                       ["Fit to Window"         eimp-fit-image-to-whole-window t]
-                       ["Fit Height to Window"  eimp-fit-image-height-to-window t]
-                       ["Fit Width to Window"   eimp-fit-image-width-to-window t]
-                       "---"
-                       ["Flip Horizontally"     eimp-flop-image t]
-                       ["Flip Vertically"       eimp-flip-image t]
-                       "---"
-                       ["Rotate Clockwise"      eimp-rotate-image-clockwise t]
-                       ["Rotate Anticlockwise"  eimp-rotate-image-anticlockwise t]
-                       "---"
-                       ["Roll Right"            eimp-roll-image-right t]
-                       ["Roll Left"             eimp-roll-image-left t]
-                       ["Roll Up"               eimp-roll-image-up t]
-                       ["Roll Down"             eimp-roll-image-down t])
+    '("EIMP"
+      ("Transforms"
+       ["Increase Size"         eimp-increase-image-size t]
+       ["Decrease Size"         eimp-decrease-image-size t]
+       ["Fit to Window (keep aspect ratio)"      eimp-fit-image-to-window t]
+       ["Fit to Window"         eimp-fit-image-to-whole-window t]
+       ["Fit Height to Window"  eimp-fit-image-height-to-window t]
+       ["Fit Width to Window"   eimp-fit-image-width-to-window t]
+       "---"
+       ["Flip Horizontally"     eimp-flop-image t]
+       ["Flip Vertically"       eimp-flip-image t]
+       "---"
+       ["Rotate Clockwise"      eimp-rotate-image-clockwise t]
+       ["Rotate Anticlockwise"  eimp-rotate-image-anticlockwise t]
+       "---"
+       ["Roll Right"            eimp-roll-image-right t]
+       ["Roll Left"             eimp-roll-image-left t]
+       ["Roll Up"               eimp-roll-image-up t]
+       ["Roll Down"             eimp-roll-image-down t])
 
-                      ("Colours"
-                       ("Brightness"
-                        ["Increase"      eimp-increase-image-brightness t]
-                        ["Decrease"      eimp-decrease-image-brightness t])
-                       ("Contrast"
-                        ["Increase"      eimp-increase-image-contrast t]
-                        ["Decrease"      eimp-decrease-image-contrast t])
-                       "---"
-                       ["Invert"      eimp-negate-image t])
-                      
-                      ("Filters"
-                       ("Blur Image"
-                        ["Blur Image" eimp-blur-image t]
-                        ["Blur Image (Gaussian)" eimp-gaussian-blur-image t]
-                        ["Blur Image (Radial)" eimp-radial-blur-image t])
+      ("Colours"
+       ("Brightness"
+        ["Increase"      eimp-increase-image-brightness t]
+        ["Decrease"      eimp-decrease-image-brightness t])
+       ("Contrast"
+        ["Increase"      eimp-increase-image-contrast t]
+        ["Decrease"      eimp-decrease-image-contrast t])
+       "---"
+       ["Invert"      eimp-negate-image t])
+      
+      ("Filters"
+       ("Blur Image"
+        ["Blur Image" eimp-blur-image t]
+        ["Blur Image (Gaussian)" eimp-gaussian-blur-image t]
+        ["Blur Image (Radial)" eimp-radial-blur-image t])
 
-                       ("Enhance Image"
-                        ["Sharpen Image" eimp-sharpen-image t])
+       ("Enhance Image"
+        ["Sharpen Image" eimp-sharpen-image t])
 
-                       ("Distort Image"
-                        ["Emboss Image" eimp-emboss-image t]))
+       ("Distort Image"
+        ["Emboss Image" eimp-emboss-image t]))
 
-                      ("Processes"
-                       ["Kill All" eimp-stop-all t]))))
+      ("Processes"
+       ["Kill All" eimp-stop-all t]))))
 
 (defvar eimp-mode-string " EIMP"
   "String used to indicate EIMP status in mode line.")
@@ -207,7 +210,7 @@ operations act sequentially on any given image."
 
 ;;;###autoload
 (define-minor-mode eimp-mode
-    "Toggle Eimp mode."
+  "Toggle Eimp mode."
   nil eimp-mode-string eimp-minor-mode-map
   (when eimp-mode
     (setq eimp-mode-string " EIMP"))
@@ -215,7 +218,7 @@ operations act sequentially on any given image."
       (progn
         (add-hook 'write-contents-functions 'eimp-update-buffer-contents nil t)
         (set (make-local-variable 'require-final-newline) nil))
-      (remove-hook 'write-contents-functions 'eimp-update-buffer-contents t))
+    (remove-hook 'write-contents-functions 'eimp-update-buffer-contents t))
   (when (and (fboundp 'easy-menu-add)
              eimp-menu)
     (easy-menu-add eimp-menu)))
@@ -250,15 +253,15 @@ deleting it again\), so that the user never sees them on his
 
 The return value is the value of the last form in BODY."
   `(let* ((modified (buffer-modified-p)) (buffer-undo-list t)
-          (inhibit-read-only t) (inhibit-point-motion-hooks t)
-          before-change-functions after-change-functions
-          deactivate-mark
-          ,@varlist)
+	  (inhibit-read-only t) (inhibit-point-motion-hooks t)
+	  before-change-functions after-change-functions
+	  deactivate-mark
+	  ,@varlist)
      (unwind-protect
-          (progn ,@body)
+	 (progn ,@body)
        (and (not modified)
-            (buffer-modified-p)
-            (set-buffer-modified-p nil)))))
+	    (buffer-modified-p)
+	    (set-buffer-modified-p nil)))))
 (put 'eimp-save-buffer-state 'lisp-indent-function 1)
 
 (defun eimp-get-display-property (&optional posn)
@@ -268,13 +271,13 @@ the image data."
   (or posn (setq posn (point)))
   (let (display)
     (cond
-      ((setq display (eimp-get-text-property-display-property posn))
-       (if (and (listp (car display))
-                (eq (caar display) 'slice))
-           (list 'text-prop-sliced display)
-           (list 'text-prop display)))
-      ((setq display (eimp-get-overlay-display-property posn))
-       (list 'overlay display)))))
+     ((setq display (eimp-get-text-property-display-property posn))
+      (if (and (listp (car display))
+               (eq (caar display) 'slice))
+          (list 'text-prop-sliced display)
+        (list 'text-prop display)))
+     ((setq display (eimp-get-overlay-display-property posn))
+      (list 'overlay display)))))
 
 (defun eimp-get-text-property-display-property (posn)
   "Get display text property at POSN."
@@ -295,23 +298,23 @@ the image data."
   "Get image specification at point."
   (let ((display (cadr (eimp-get-display-property))))
     (cond
-      ((eq 'image (car display))
-       display)
-      ((and (listp (cdr display))
-            (eq 'image (car (cadr display))))
-       (cadr display)))))
+     ((eq 'image (car display))
+      display)
+     ((and (listp (cdr display))
+           (eq 'image (car (cadr display))))
+      (cadr display)))))
 
 (defun eimp-get-image-data (&optional posn)
   "Get data for image at POSN (or point, if POSN is nil)."
   (save-excursion
-   (goto-char (or posn (point)))
-   (let ((image-spec (eimp-get-image)))
-     (or (cadr (member :data image-spec))
-         (let ((file (cadr (member :file image-spec))))
-           (when (and file (file-readable-p file))
-             (with-temp-buffer
-                 (insert-file-contents-literally file)
-               (string-as-unibyte (buffer-string)))))))))
+    (goto-char (or posn (point)))
+    (let ((image-spec (eimp-get-image)))
+      (or (cadr (member :data image-spec))
+          (let ((file (cadr (member :file image-spec))))
+            (when (and file (file-readable-p file))
+              (with-temp-buffer
+                (insert-file-contents-literally file)
+                (string-as-unibyte (buffer-string)))))))))
 
 (defun eimp-mogrify-image (args)
   "Transform image, passing ARGS to mogrify."
@@ -323,15 +326,15 @@ the image data."
                (memq (car image-spec) '(text-prop text-prop-sliced)))
       (barf-if-buffer-read-only))
     (cond
-      ((null image-spec)
-       (error "EIMP: No image at point"))
-      (t
-       (eimp-queue-process (cons (current-buffer) id))
-       (eimp-save-buffer-state nil
-                               (put-text-property (point) (1+ (point)) id
-                                                  `(image-type ,(car image-spec)
-                                                               proc-args ,args)))
-       (eimp-run-queued-processes)))))
+     ((null image-spec)
+      (error "EIMP: No image at point"))
+     (t
+      (eimp-queue-process (cons (current-buffer) id))
+      (eimp-save-buffer-state nil
+        (put-text-property (point) (1+ (point)) id
+                           `(image-type ,(car image-spec)
+                                        proc-args ,args)))
+      (eimp-run-queued-processes)))))
 
 (defun eimp-queue-process (specs)
   "Add process identified by SPECS to list.
@@ -347,9 +350,9 @@ string)."
   (eimp-clean-process-queue)
   (let ((queue (copy-alist eimp-process-queue)))
     (while (and queue (< (length eimp-process-list) eimp-max-concurrent-processes))
-           (when (eimp-start-process (car queue))
-             (setq eimp-process-queue (delete (car queue) eimp-process-queue)))
-           (setq queue (cdr queue)))))
+      (when (eimp-start-process (car queue))
+        (setq eimp-process-queue (delete (car queue) eimp-process-queue)))
+      (setq queue (cdr queue)))))
 
 (defun eimp-clean-process-queue ()
   "Remove unrunnable processes from `eimp-process-queue'."
@@ -369,47 +372,47 @@ string).  Return the process, if any."
         proc)
     (if (not (buffer-live-p buffer))
         (message "Buffer not live")
-        (with-current-buffer buffer
-          (let* ((posn (eimp-image-position-by-id id))
-                 (image-data (and posn (eimp-get-image-data posn))))
-            (when posn
-              (eimp-check-for-zombie posn))
-            (cond
-              ((or (not posn) (not image-data))
-               ;; Maybe the image was deleted, or the display property
-               ;; removed; remove this queued process, and carry on
-               ;; regardless.
-               (setq eimp-process-queue (delete spec eimp-process-queue)))
-              ((get-text-property posn 'eimp-proc)
-               ;; Process already running for image at point; do nothing.
-               )
-              (t
-               (save-excursion
-                (goto-char posn)
-                (let* ((coding-system-for-write 'no-conversion)
-                       (eimp-data (get-text-property (point) id))
-                       (temp-file (expand-file-name (make-temp-name "eimp-")
-                                                    temporary-file-directory))
-                       (args (cadr (member 'proc-args eimp-data)))
-                       (image-type (cadr (member 'image-type eimp-data))))
-                  (with-temp-file temp-file
-                    (insert (string-to-multibyte image-data)))
-                  (setq proc
-                        (apply #'start-process id nil eimp-mogrify-program
-                               ;; TODO: haven't understood why things
-                               ;; are so much slower when
-                               ;; eimp-mogrify-arguments is nil
-                               `(,@eimp-mogrify-arguments ,@args ,temp-file)))
-                  (push proc eimp-process-list)
-                  (set-process-buffer proc (current-buffer))
-                  (set-process-filter proc #'eimp-mogrify-process-filter)
-                  (set-process-sentinel proc #'eimp-mogrify-process-sentinel)
-                  (eimp-save-buffer-state nil
-                                          (put-text-property (point) (1+ (point)) 'eimp-proc
-                                                             `(proc ,proc
-                                                                    image-type ,image-type
-                                                                    temp-file ,temp-file))
-                                          (remove-text-properties (point) (1+ (point)) (list id))))))))))
+      (with-current-buffer buffer
+        (let* ((posn (eimp-image-position-by-id id))
+               (image-data (and posn (eimp-get-image-data posn))))
+          (when posn
+            (eimp-check-for-zombie posn))
+          (cond
+           ((or (not posn) (not image-data))
+            ;; Maybe the image was deleted, or the display property
+            ;; removed; remove this queued process, and carry on
+            ;; regardless.
+            (setq eimp-process-queue (delete spec eimp-process-queue)))
+           ((get-text-property posn 'eimp-proc)
+            ;; Process already running for image at point; do nothing.
+            )
+           (t
+            (save-excursion
+              (goto-char posn)
+              (let* ((coding-system-for-write 'no-conversion)
+                     (eimp-data (get-text-property (point) id))
+                     (temp-file (expand-file-name (make-temp-name "eimp-")
+                                                  temporary-file-directory))
+                     (args (cadr (member 'proc-args eimp-data)))
+                     (image-type (cadr (member 'image-type eimp-data))))
+                (with-temp-file temp-file
+                  (insert (string-to-multibyte image-data)))
+                (setq proc
+                      (apply #'start-process id nil eimp-mogrify-program
+                             ;; TODO: haven't understood why things
+                             ;; are so much slower when
+                             ;; eimp-mogrify-arguments is nil
+                             `(,@eimp-mogrify-arguments ,@args ,temp-file)))
+                (push proc eimp-process-list)
+                (set-process-buffer proc (current-buffer))
+                (set-process-filter proc #'eimp-mogrify-process-filter)
+                (set-process-sentinel proc #'eimp-mogrify-process-sentinel)
+                (eimp-save-buffer-state nil
+                  (put-text-property (point) (1+ (point)) 'eimp-proc
+                                     `(proc ,proc
+                                            image-type ,image-type
+                                            temp-file ,temp-file))
+                  (remove-text-properties (point) (1+ (point)) (list id))))))))))
     proc))
 
 (defun eimp-check-for-zombie (posn)
@@ -418,7 +421,7 @@ string).  Return the process, if any."
     (when (and proc
                (not (member proc eimp-process-list)))
       (eimp-save-buffer-state nil
-                              (remove-text-properties (point) (1+ (point)) '(eimp-proc))))))
+        (remove-text-properties (point) (1+ (point)) '(eimp-proc))))))
 
 (defun eimp-stop-all (&optional error)
   "Stop all running processes; remove queued processes.
@@ -434,28 +437,28 @@ If ERROR, signal an error with this string."
   "Remove running EIMP objects."
   (let (buffer posn)
     (save-excursion
-     (dolist (proc eimp-process-list)
-       (setq buffer (process-buffer proc))
-       (when (buffer-live-p buffer)
-         (setq posn (eimp-image-position-by-proc proc))
-         (when posn
-           (eimp-save-buffer-state nil
-                                   (remove-text-properties posn (1+ posn) (list proc))))))))
+      (dolist (proc eimp-process-list)
+        (setq buffer (process-buffer proc))
+        (when (buffer-live-p buffer)
+          (setq posn (eimp-image-position-by-proc proc))
+          (when posn
+            (eimp-save-buffer-state nil
+              (remove-text-properties posn (1+ posn) (list proc))))))))
   (setq eimp-process-list nil))
 
 (defun eimp-clear-process-queue ()
   "Remove queued EIMP objects."
   (let (buffer id posn)
     (save-excursion
-     (dolist (spec eimp-process-queue)
-       (setq buffer (car spec)
-             id (cdr spec))
-       (when (buffer-live-p buffer)
-         (with-current-buffer buffer
-           (setq posn (eimp-image-position-by-id id))
-           (when posn
-             (eimp-save-buffer-state nil
-                                     (remove-text-properties posn (1+ posn) (list id)))))))))
+      (dolist (spec eimp-process-queue)
+        (setq buffer (car spec)
+              id (cdr spec))
+        (when (buffer-live-p buffer)
+          (with-current-buffer buffer
+            (setq posn (eimp-image-position-by-id id))
+            (when posn
+              (eimp-save-buffer-state nil
+                (remove-text-properties posn (1+ posn) (list id)))))))))
   (setq eimp-process-queue nil))
 
 (defun eimp-reset-mode-strings ()
@@ -482,44 +485,44 @@ Process PROC with message string MSG."
         error-message stopped)
     (if (buffer-live-p buffer)
         (save-excursion
-         (with-current-buffer buffer
-           (let* ((image-posn (eimp-image-position-by-proc proc))
-                  (display (and image-posn (eimp-get-display-property image-posn)))
-                  ;; Could be nil if no image
-                  (eimp-data (and image-posn (get-text-property image-posn 'eimp-proc)))
-                  (image-type (cadr (member 'image-type eimp-data)))
-                  (temp-file (cadr (member 'temp-file eimp-data))))
-             (cond
+          (with-current-buffer buffer
+            (let* ((image-posn (eimp-image-position-by-proc proc))
+                   (display (and image-posn (eimp-get-display-property image-posn)))
+                   ;; Could be nil if no image
+                   (eimp-data (and image-posn (get-text-property image-posn 'eimp-proc)))
+                   (image-type (cadr (member 'image-type eimp-data)))
+                   (temp-file (cadr (member 'temp-file eimp-data))))
+              (cond
                ((or (not display) (not eimp-data))
                 (setq error-message "EIMP image not found"))
                ((string-equal msg "finished\n")
                 (goto-char image-posn)
                 (if eimp-enable-undo
                     (eimp-replace-image image-type temp-file)
-                    (eimp-save-buffer-state nil
-                                            (eimp-replace-image image-type temp-file))
-                    (when (eq major-mode 'image-mode)
-                      (set-buffer-modified-p t))))
+                  (eimp-save-buffer-state nil
+                    (eimp-replace-image image-type temp-file))
+                  (when (eq major-mode 'image-mode)
+                    (set-buffer-modified-p t))))
                ((string-equal msg "stopped (signal)\n")
                 (setq stopped t))
                (t
                 (setq error-message (format "EIMP process exited with error: %s (exit status = %S)" msg
                                             (process-exit-status proc)))))
-             (unless stopped
-               (when image-posn
-                 (setq eimp-process-list (delq proc eimp-process-list))
-                 (eimp-save-buffer-state nil
-                                         (remove-text-properties
-                                          image-posn (1+ image-posn) '(eimp-proc))))
-               (when (and temp-file (file-exists-p temp-file))
-                 (delete-file temp-file))))))
-        (setq error-message "EIMP image buffer deleted"))
+              (unless stopped
+                (when image-posn
+                  (setq eimp-process-list (delq proc eimp-process-list))
+                  (eimp-save-buffer-state nil
+                    (remove-text-properties
+                     image-posn (1+ image-posn) '(eimp-proc))))
+                (when (and temp-file (file-exists-p temp-file))
+                  (delete-file temp-file))))))
+      (setq error-message "EIMP image buffer deleted"))
     ;; Run queued processes, if no error and there are any remaining
     (if error-message
         (progn
           (run-at-time 0 nil #'eimp-stop-all error-message))
-        (run-at-time eimp-process-delay nil #'eimp-run-queued-processes)
-        (eimp-message proc))))
+      (run-at-time eimp-process-delay nil #'eimp-run-queued-processes)
+      (eimp-message proc))))
 
 (defun eimp-message (proc &optional progress)
   "Emit EIMP message showing the number of running/queued processes.
@@ -553,38 +556,38 @@ any, and optional argument PROGRESS is appended to the message."
                   (progn
                     (setq eimp-mode-string (concat " " message))
                     (force-mode-line-update))
-                  (message "%s" message)))
-            (if eimp-mode
-                (setq eimp-mode-string " EIMP")
-                (message nil)))))))
+                (message "%s" message)))
+          (if eimp-mode
+              (setq eimp-mode-string " EIMP")
+            (message nil)))))))
 
 (defun eimp-image-position-by-id (id)
   "Return point for image associated with ID."
   (cond
-    ((get-text-property (point) id)
-     (point))
-    (t
-     (save-excursion
+   ((get-text-property (point) id)
+    (point))
+   (t
+    (save-excursion
       (goto-char (point-min))
       (catch 'found
         (while (< (point) (point-max))
-               (when (get-text-property (point) id)
-                 (throw 'found (point)))
-               (goto-char (or (next-single-char-property-change (point) id) (point-max)))))))))
+          (when (get-text-property (point) id)
+            (throw 'found (point)))
+          (goto-char (or (next-single-char-property-change (point) id) (point-max)))))))))
 
 (defun eimp-image-position-by-proc (proc)
   "Return point for image associated with process PROC."
   (cond
-    ((eq (cadr (member 'proc (get-text-property (point) 'eimp-proc))) proc)
-     (point))
-    (t
-     (save-excursion
+   ((eq (cadr (member 'proc (get-text-property (point) 'eimp-proc))) proc)
+    (point))
+   (t
+    (save-excursion
       (goto-char (point-min))
       (catch 'found
         (while (< (point) (point-max))
-               (when (eq (cadr (member 'proc (get-text-property (point) 'eimp-proc))) proc)
-                 (throw 'found (point)))
-               (goto-char (or (next-single-char-property-change (point) 'eimp-proc) (point-max)))))))))
+          (when (eq (cadr (member 'proc (get-text-property (point) 'eimp-proc))) proc)
+            (throw 'found (point)))
+          (goto-char (or (next-single-char-property-change (point) 'eimp-proc) (point-max)))))))))
 
 (defun eimp-check-image-delete-process (proc)
   "Check image still exists for process PROC.
@@ -600,12 +603,12 @@ Delete process if it doesn't"
 (defun eimp-replace-image (type file)
   "Replace image at point of type TYPE from file FILE."
   (cond
-    ((equal type 'text-prop)
-     (eimp-replace-text-property-image file))
-    ((equal type 'text-prop-sliced)
-     (eimp-replace-text-property-sliced-image file))
-    ((equal type 'overlay)
-     (eimp-replace-overlay-image file))))
+   ((equal type 'text-prop)
+    (eimp-replace-text-property-image file))
+   ((equal type 'text-prop-sliced)
+    (eimp-replace-text-property-sliced-image file))
+   ((equal type 'overlay)
+    (eimp-replace-overlay-image file))))
 
 (defun eimp-replace-text-property-image (file)
   "Replace text property image using contents of FILE."
@@ -614,27 +617,27 @@ Delete process if it doesn't"
                        (next-single-char-property-change (point) 'display)
                        'display
                        (create-image (with-temp-buffer
-                                         (insert-file-contents-literally file)
+                                       (insert-file-contents-literally file)
                                        (string-as-unibyte (buffer-string))) nil t))))
 
 (defun eimp-replace-text-property-sliced-image (file)
   "Replace text property image slices in region using contents of FILE."
   (let ((inhibit-read-only t)
         (image (create-image (with-temp-buffer
-                                 (insert-file-contents-literally file)
+                               (insert-file-contents-literally file)
                                (string-as-unibyte (buffer-string))) nil t))
         (image-prop (cdr (get-text-property (point) 'display))))
     ;; The slices could be anywhere; unfortunately this will replace
     ;; all slices for multiple copies of the same image.
     (goto-char (point-min))
     (while (not (eobp))
-           (when (equal image-prop (cdr (get-text-property (point) 'display)))
-             (put-text-property (point)
-                                (next-single-char-property-change (point) 'display)
-                                'display
-                                (list (car (cadr (eimp-get-display-property (point))))
-                                      image)))
-           (goto-char (next-single-char-property-change (point) 'display)))))
+      (when (equal image-prop (cdr (get-text-property (point) 'display)))
+        (put-text-property (point)
+                           (next-single-char-property-change (point) 'display)
+                           'display
+                           (list (car (cadr (eimp-get-display-property (point))))
+                                 image)))
+      (goto-char (next-single-char-property-change (point) 'display)))))
 
 
 (defun eimp-replace-overlay-image (file)
@@ -643,27 +646,27 @@ Delete process if it doesn't"
         (before-string (overlay-get (car (overlays-in (1+ (point)) (1+ (point)))) 'before-string)))
     (put-text-property 0 (length before-string) 'display
                        (create-image (with-temp-buffer
-                                         (insert-file-contents-literally file)
+                                       (insert-file-contents-literally file)
                                        (string-as-unibyte (buffer-string))) nil t)
                        before-string)))
 
 (defun eimp-update-buffer-contents ()
   "Update buffer contents with image text property."
   (save-excursion
-   (goto-char (point-min))
-   (let ((inhibit-read-only t)
-         (data (string-as-unibyte (eimp-get-image-data))))
-     (if eimp-enable-undo
-         (progn
-           (erase-buffer)
-           (insert data))
-         (eimp-save-buffer-state nil
-                                 (erase-buffer)
-                                 (insert data))))
-   (require 'image-mode)
-   (image-toggle-display)
-   ;; Return nil
-   nil))
+    (goto-char (point-min))
+    (let ((inhibit-read-only t)
+          (data (string-as-unibyte (eimp-get-image-data))))
+      (if eimp-enable-undo
+          (progn
+            (erase-buffer)
+            (insert data))
+        (eimp-save-buffer-state nil
+          (erase-buffer)
+          (insert data))))
+    (require 'image-mode)
+    (image-toggle-display)
+    ;; Return nil
+    nil))
 
 (defun eimp-negate-image ()
   "Negate image."
@@ -709,7 +712,7 @@ With a prefix arg, ARG, don't preserve the aspect ratio."
     (eimp-mogrify-image
      (if arg
          `("-resize" ,(concat (format "%dx%d!" image-width height)))
-         `("-resize" ,(format "%d%%" (* 100 (/ (float height) image-height))))))))
+       `("-resize" ,(format "%d%%" (* 100 (/ (float height) image-height))))))))
 
 (defun eimp-fit-image-width-to-window (arg)
   "Scale image width to fit in the current window.
@@ -724,7 +727,7 @@ With a prefix arg, ARG, don't preserve the aspect ratio."
     (eimp-mogrify-image
      (if arg
          `("-resize" ,(concat (format "%dx%d!" width image-height)))
-         `("-resize" ,(format "%d%%" (* 100 (/ (float width) image-width))))))))
+       `("-resize" ,(format "%d%%" (* 100 (/ (float width) image-width))))))))
 
 (defun eimp-mouse-resize-image (event)
   "Resize image with mouse.
@@ -754,50 +757,50 @@ preserve the aspect ratio."
     (unless (eimp-get-display-property)
       (backward-char))
     (cond
-      ((not (posn-image event-start))
-       (message "No image at mouse"))
-      (t
-       (setq image-size (image-size (eimp-get-image) t)
-             image-width (car image-size)
-             image-height (cdr image-size))
-       (setq start-x-y (eimp-frame-relative-coordinates event-start)
-             dx-dy (posn-object-x-y event-start))
-       (setq start-x-y (cons (- (car start-x-y) (car dx-dy))
-                             (- (cdr start-x-y) (cdr dx-dy))))
-       (track-mouse
+     ((not (posn-image event-start))
+      (message "No image at mouse"))
+     (t
+      (setq image-size (image-size (eimp-get-image) t)
+            image-width (car image-size)
+            image-height (cdr image-size))
+      (setq start-x-y (eimp-frame-relative-coordinates event-start)
+            dx-dy (posn-object-x-y event-start))
+      (setq start-x-y (cons (- (car start-x-y) (car dx-dy))
+                            (- (cdr start-x-y) (cdr dx-dy))))
+      (track-mouse
         (while (progn
                  (setq event (read-event))
                  (or (mouse-movement-p event)
                      (memq (car-safe event) '(switch-frame select-window))))
-               
-               (if (memq (car-safe event) '(switch-frame select-window))
-                   nil
-                   (setq end (event-end event))
-                   (if (numberp (posn-point end))
-                       (progn
-                         (setq x-y (eimp-frame-relative-coordinates end)
-                               dx (- (car x-y) (car start-x-y))
-                               dy (- (cdr x-y) (cdr start-x-y))))
-                       (setq dx -1 dy -1))
-                   (if (or (< dx 0) (< dy 0))
-                       (message "Not scaling image")
-                       (if preserve-aspect
-                           (progn
-                             (setq width-ratio (/ dx (float image-width))
-                                   height-ratio (/ dy (float image-height))
-                                   ratio (max width-ratio height-ratio))
-                             (message "Resizing image from %dx%d to %dx%d"
-                                      image-width image-height
-                                      (* image-width ratio)
-                                      (* image-height ratio)))
-                           (message "Resizing image from %dx%d to %dx%d"
-                                    image-width image-height dx dy))))))
-       (when (and (> dx 0) (> dy 0))
-         (if preserve-aspect
-             (eimp-mogrify-image
-              `("-resize" ,(format "%d%%" (* 100 ratio))))
-             (eimp-mogrify-image
-              `("-resize" ,(concat (format "%dx%d!" dx dy))))))))))
+        
+          (if (memq (car-safe event) '(switch-frame select-window))
+              nil
+            (setq end (event-end event))
+            (if (numberp (posn-point end))
+                (progn
+                  (setq x-y (eimp-frame-relative-coordinates end)
+                        dx (- (car x-y) (car start-x-y))
+                        dy (- (cdr x-y) (cdr start-x-y))))
+              (setq dx -1 dy -1))
+            (if (or (< dx 0) (< dy 0))
+                (message "Not scaling image")
+              (if preserve-aspect
+                  (progn
+                    (setq width-ratio (/ dx (float image-width))
+                          height-ratio (/ dy (float image-height))
+                          ratio (max width-ratio height-ratio))
+                    (message "Resizing image from %dx%d to %dx%d"
+                             image-width image-height
+                             (* image-width ratio)
+                             (* image-height ratio)))
+                (message "Resizing image from %dx%d to %dx%d"
+                         image-width image-height dx dy))))))
+      (when (and (> dx 0) (> dy 0))
+        (if preserve-aspect
+            (eimp-mogrify-image
+             `("-resize" ,(format "%d%%" (* 100 ratio))))
+          (eimp-mogrify-image
+           `("-resize" ,(concat (format "%dx%d!" dx dy))))))))))
 
 (defun eimp-frame-relative-coordinates (position)
   "Return frame-relative coordinates from POSITION."
@@ -853,7 +856,7 @@ preserve the aspect ratio."
   (eimp-mogrify-image (list "-rotate" (format "-%d" (or arg eimp-rotate-amount)))))
 
 (defalias 'eimp-rotate-image-counterclockwise
-    'eimp-rotate-image-anticlockwise)
+  'eimp-rotate-image-anticlockwise)
 (put 'eimp-rotate-image-counterclockwise 'function-documentation "Rotate image counterclockwise.")
 
 (defun eimp-increase-image-brightness (arg)
