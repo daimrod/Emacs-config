@@ -19,10 +19,13 @@
 (autoload 'enable-paredit-mode "paredit"
   "Turn on pseudo-structural editing of Lisp code."
   t)
-
 (add-hook 'lisp-mode-hook 'enable-paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
 
+(require 'elisp-slime-nav)
+(add-hook 'emacs-lisp-mode-hook 'elisp-slime-nav-mode)
+
+;;; higlight-sexp configuration
 (fni/add-to-load-path (concat src-dir "highlight-sexp/"))
 (require 'highlight-sexp)
 (add-hook 'lisp-mode-hook 'highlight-sexp-mode)
@@ -31,6 +34,7 @@
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 
+;;; redshank configuration
 (fni/add-to-load-path (concat src-dir "redshank/"))
 (require 'redshank-loader)
 (eval-after-load "redshank-loader"
