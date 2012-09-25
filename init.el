@@ -108,6 +108,7 @@ Do it recursively if the third argument is not nil."
 (require 'config-html)
 (require 'config-irc)
 (require 'config-scala)
+(require 'config-python)
 
 (load custom-file 'noerror)
 
