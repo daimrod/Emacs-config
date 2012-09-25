@@ -1,6 +1,7 @@
 ;;; http-post-simple.el --- HTTP POST requests using the url library
 
 ;; Author: Tom Schutzer-Weissmann
+;; Version: 1.0
 ;; Keywords: comm, data, processes, hypermedia
 
 ;; This program is free software; you can redistribute it and/or
@@ -49,6 +50,7 @@
 (require 'url-http)
 (require 'cl)
 
+;;;###autoload
 (defun http-post-simple (url fields &optional charset)
   "Send FIELDS to URL as an HTTP POST request, returning the response
 and response headers.
@@ -66,21 +68,22 @@ which defaults to 'utf-8"
         charset)))))
 
 
+;;;###autoload
 (defun http-post-simple-multipart (url fields files &optional charset)
   "Send FIELDS and FILES to URL as a multipart HTTP POST, returning the
 response and response headers.
 FIELDS is an alist, as for `http-post-simple', FILES is an a list of
 \(fieldname \"filename\" \"file MIME type\" \"file data\")*"
-  (let ((boundary (http-post-multipart-boundary)))
-    (http-post-simple-internal
-     url
-     (http-post-encode-multipart-data fields files charset)
-     charset
-     `(("Content-Type"
-        .
-        ,(http-post-content-type
-          (format "multipart/form-data; boundary=%S" boundary)
-          charset))))))
+(let ((boundary (http-post-multipart-boundary)))
+  (http-post-simple-internal
+   url
+   (http-post-encode-multipart-data fields files charset)
+   charset
+   `(("Content-Type"
+      .
+      ,(http-post-content-type
+        (format "multipart/form-data; boundary=%S" boundary)
+        charset))))))
 
 
 (defun http-post-content-type (content-type &optional charset)
@@ -98,13 +101,13 @@ FIELDS is an alist, as for `http-post-simple', FILES is an a list of
 (defun http-post-encode-string (str content-type)
   "URL encode STR using CONTENT-TYPE as the coding system."
   (apply 'concat
-         (mapcar (lambda (c)
-                   (if (or (and (>= c ?a) (<= c ?z))
-                           (and (>= c ?A) (<= c ?Z))
-                           (and (>= c ?0) (<= c ?9)))
-                       (string c)
-                       (format "%%%02x" c)))
-                 (encode-coding-string str content-type))))
+	 (mapcar (lambda (c)
+		   (if (or (and (>= c ?a) (<= c ?z))
+			   (and (>= c ?A) (<= c ?Z))
+			   (and (>= c ?0) (<= c ?9)))
+		       (string c)
+		       (format "%%%02x" c)))
+		 (encode-coding-string str content-type))))
 
 
 (defun http-post-encode-fields (fields &optional charset)
@@ -117,39 +120,39 @@ FIELDS is an alist of \(
 CHARSET defaults to 'utf-8"
   (let ((charset (or charset 'utf-8)))
     (mapconcat #'identity
-               (mapcar #'(lambda (field)
-                           (concat (symbol-name (car field))
-                                   "="
-                                   (http-post-encode-string (cdr field) charset)))
-                       (mapcan #'(lambda (field)
-                                   (if (atom (cdr field)) (list field)
-                                       ;; unpack the list
-                                       (mapcar #'(lambda (value)
-                                                   `(,(car field) . ,value))
-                                               (cdr field))))
-                               fields))
-               "&")))
+	       (mapcar '(lambda (field)
+			 (concat (symbol-name (car field))
+			  "="
+			  (http-post-encode-string (cdr field) charset)))
+		       (mapcan '(lambda (field)
+				 (if (atom (cdr field)) (list field)
+				     ;; unpack the list
+				     (mapcar '(lambda (value)
+					       `(,(car field) . ,value))
+					     (cdr field))))
+			       fields))
+	       "&")))
 
 
 (defun http-post-simple-internal (url data charset extra-headers)
   (let ((url-request-method        "POST")
-        (url-request-data          data)
-        (url-request-extra-headers extra-headers)
+	(url-request-data          data)
+	(url-request-extra-headers extra-headers)
         (url-mime-charset-string   (http-post-charset-name charset)))
     (let (header
-          data
-          status)
+	  data
+	  status)
       (with-current-buffer
-          (url-retrieve-synchronously url)
-        ;; status
-        (setq status url-http-response-status)
-        ;; return the header and the data separately
-        (goto-char (point-min))
-        (if (search-forward-regexp "^$" nil t)
-            (setq header (buffer-substring (point-min) (point))
-                  data   (buffer-substring (1+ (point)) (point-max)))
-            ;; unexpected situation, return the whole buffer
-            (setq data (buffer-string))))
+	  (url-retrieve-synchronously url)
+	;; status
+	(setq status url-http-response-status)
+	;; return the header and the data separately
+	(goto-char (point-min))
+	(if (search-forward-regexp "^$" nil t)
+	    (setq header (buffer-substring (point-min) (point))
+		  data   (buffer-substring (1+ (point)) (point-max)))
+	    ;; unexpected situation, return the whole buffer
+	    (setq data (buffer-string))))
       (values data header status))))
 
 
@@ -165,30 +168,30 @@ CHARSET defaults to 'utf-8"
 (defun http-post-encode-multipart-data (fields files charset)
   "Return FIELDS and FILES encoded for use as the data for a multipart HTTP POST request"
   (http-post-join-lines
-   (mapcar #'(lambda (field)
-               (http-post-bound-field
-                (format "Content-Disposition: form-data; name=%S" (symbol-name (car field)))
-                ""
-                (cdr field)))
-           fields)
-   (mapcan #'(lambda (file)
-               (destructuring-bind (fieldname filename mime-type data) file
-                 (http-post-bound-field
-                  (format "Content-Disposition: form-data; name=%S; filename=%S" fieldname filename)
-                  (format "Content-type: %s" (http-post-content-type mime-type charset))
-                  ""
-                  data)))
-           files)
+   (mapcar '(lambda (field)
+	     (http-post-bound-field
+	      (format "Content-Disposition: form-data; name=%S" (symbol-name (car field)))
+	      ""
+	      (cdr field)))
+	   fields)
+   (mapcan '(lambda (file)
+	     (destructuring-bind (fieldname filename mime-type data) file
+	       (http-post-bound-field
+		(format "Content-Disposition: form-data; name=%S; filename=%S" fieldname filename)
+		(format "Content-type: %s" (http-post-content-type mime-type charset))
+		""
+		data)))
+	   files)
    (format "--%s--" (http-post-multipart-boundary))))
 
 
 (defun http-post-join-lines (&rest bits)
   (let ((sep "\r\n"))
     (mapconcat (lambda (bit)
-                 (if (listp bit)
-                     (apply 'http-post-join-lines bit)
-                     bit))
-               bits sep)))
+		 (if (listp bit)
+		     (apply 'http-post-join-lines bit)
+		     bit))
+	       bits sep)))
 
 
 (defun http-post-finesse-code-100 ()
