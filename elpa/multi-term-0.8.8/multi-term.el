@@ -46,12 +46,12 @@
 ;; 2. By default, the keystrokes of term.el conflict with global-mode keystrokes,
 ;;    which makes it difficult for the user to integrate term.el with Emacs.
 ;;
-;; 3. By default, executing *NIX command “exit” from term-mode,
+;; 3. By default, executing *NIX command exit from term-mode,
 ;;    it will leave an unused buffer.
 ;;
-;; 4. term.el won’t quit running sub-process when you kill terminal buffer forcibly.
+;; 4. term.el wont quit running sub-process when you kill terminal buffer forcibly.
 ;;
-;; 5. Haven’t a dedicated window for debug program.
+;; 5. Havent a dedicated window for debug program.
 ;;
 ;; And multi-term.el is enhanced with those features.
 ;;
@@ -244,11 +244,6 @@ If this is nil, setup to environment variable of `SHELL'."
   :type 'string
   :group 'multi-term)
 
-(defcustom multi-term-program-switches nil
-  "The command-line switches to pass to the term program."
-  :type 'string
-  :group 'multi-term)
-
 (defcustom multi-term-try-create t
   "Try to create a new term buffer when switch.
 
@@ -406,15 +401,15 @@ Will prompt you shell name when you type `C-u' before this command."
         (if (multi-term-buffer-exist-p multi-term-dedicated-buffer)
             (unless (multi-term-window-exist-p multi-term-dedicated-window)
               (multi-term-dedicated-get-window))
-            ;; Set buffer.
-            (setq multi-term-dedicated-buffer (multi-term-get-buffer current-prefix-arg t))
-            (set-buffer (multi-term-dedicated-get-buffer-name))
-            ;; Get dedicate window.
-            (multi-term-dedicated-get-window)
-            ;; Whether skip `other-window'.
-            (multi-term-dedicated-handle-other-window-advice multi-term-dedicated-skip-other-window-p)
-            ;; Internal handle for `multi-term' buffer.
-            (multi-term-internal))
+          ;; Set buffer.
+          (setq multi-term-dedicated-buffer (multi-term-get-buffer current-prefix-arg t))
+          (set-buffer (multi-term-dedicated-get-buffer-name))
+          ;; Get dedicate window.
+          (multi-term-dedicated-get-window)
+          ;; Whether skip `other-window'.
+          (multi-term-dedicated-handle-other-window-advice multi-term-dedicated-skip-other-window-p)
+          ;; Internal handle for `multi-term' buffer.
+          (multi-term-internal))
         (set-window-buffer multi-term-dedicated-window (get-buffer (multi-term-dedicated-get-buffer-name)))
         (set-window-dedicated-p multi-term-dedicated-window t)
         ;; Select window.
@@ -422,9 +417,9 @@ Will prompt you shell name when you type `C-u' before this command."
          (if multi-term-dedicated-select-after-open-p
              ;; Focus dedicated terminal window if option `multi-term-dedicated-select-after-open-p' is enable.
              multi-term-dedicated-window
-             ;; Otherwise focus current window.
-             current-window)))
-      (message "`multi-term' dedicated window has exist.")))
+           ;; Otherwise focus current window.
+           current-window)))
+    (message "`multi-term' dedicated window has exist.")))
 
 (defun multi-term-dedicated-close ()
   "Close dedicated `multi-term' window."
@@ -441,11 +436,11 @@ Will prompt you shell name when you type `C-u' before this command."
             (progn
               (ecb-deactivate)
               (ecb-activate))
-            ;; Otherwise delete dedicated window.
-            (delete-window multi-term-dedicated-window)
-            (if (multi-term-window-exist-p current-window)
-                (select-window current-window))))
-      (message "`multi-term' window is not exist.")))
+          ;; Otherwise delete dedicated window.
+          (delete-window multi-term-dedicated-window)
+          (if (multi-term-window-exist-p current-window)
+              (select-window current-window))))
+    (message "`multi-term' window is not exist.")))
 
 (defun multi-term-dedicated-remember-window-height ()
   "Remember window height."
@@ -460,14 +455,14 @@ Will prompt you shell name when you type `C-u' before this command."
   (interactive)
   (if (multi-term-dedicated-exist-p)
       (multi-term-dedicated-close)
-      (multi-term-dedicated-open)))
+    (multi-term-dedicated-open)))
 
 (defun multi-term-dedicated-select ()
   "Select the `multi-term' dedicated window."
   (interactive)
   (if (multi-term-dedicated-exist-p)
       (select-window multi-term-dedicated-window)
-      (message "`multi-term' window is not exist.")))
+    (message "`multi-term' window is not exist.")))
 
 (defun term-send-backward-kill-word ()
   "Backward kill word in term mode."
@@ -516,33 +511,30 @@ Will prompt you shell name when you type `C-u' before this command."
 If option SPECIAL-SHELL is `non-nil', will use shell from user input.
 If option DEDICATED-WINDOW is `non-nil' will create dedicated `multi-term' window ."
   (with-temp-buffer
-      (let ((shell-name (or multi-term-program ;shell name
-                            (getenv "SHELL")
-                            (getenv "ESHELL")
-                            "/bin/sh"))
-            term-list-length              ;get length of term list
-            index                         ;setup new term index
-            term-name)                    ;term name
-        (if dedicated-window
-            (setq term-name multi-term-dedicated-buffer-name)
-            ;; Compute index.
-            (setq term-list-length (length (multi-term-list)))
-            (setq index (if term-list-length (1+ term-list-length) 1))
-            ;; switch to current local directory,
-            ;; if in-existence, switch to `multi-term-default-dir'.
-            (cd (or default-directory (expand-file-name multi-term-default-dir)))
-            ;; adjust value N when max index of term buffer is less than length of term list
-            (while (buffer-live-p (get-buffer (format "*%s<%s>*" multi-term-buffer-name index)))
-                   (setq index (1+ index)))
-            (setq term-name (format "%s<%s>" multi-term-buffer-name index)))
-        ;; Try get other shell name if `special-shell' is non-nil.
-        (if special-shell
-            (setq shell-name (read-from-minibuffer "Run program: " shell-name)))
-        ;; Make term, details to see function `make-term' in `term.el'.
-        (if multi-term-program-switches
-            (make-term term-name shell-name nil multi-term-program-switches)
-            (make-term term-name shell-name)))))
-
+    (let ((shell-name (or multi-term-program ;shell name
+                          (getenv "SHELL")
+                          (getenv "ESHELL")
+                          "/bin/sh"))
+          term-list-length              ;get length of term list
+          index                         ;setup new term index
+          term-name)                    ;term name
+      (if dedicated-window
+          (setq term-name multi-term-dedicated-buffer-name)
+        ;; Compute index.
+        (setq term-list-length (length (multi-term-list)))
+        (setq index (if term-list-length (1+ term-list-length) 1))
+        ;; switch to current local directory,
+        ;; if in-existence, switch to `multi-term-default-dir'.
+        (cd (or default-directory (expand-file-name multi-term-default-dir)))
+        ;; adjust value N when max index of term buffer is less than length of term list
+        (while (buffer-live-p (get-buffer (format "*%s<%s>*" multi-term-buffer-name index)))
+          (setq index (1+ index)))
+        (setq term-name (format "%s<%s>" multi-term-buffer-name index)))
+      ;; Try get other shell name if `special-shell' is non-nil.
+      (if special-shell
+          (setq shell-name (read-from-minibuffer "Run program: " shell-name)))
+      ;; Make term, details to see function `make-term' in `term.el'.
+      (make-term term-name shell-name))))
 
 (defun multi-term-handle-close ()
   "Close current term buffer when `exit' from term buffer."
@@ -595,7 +587,7 @@ Option OFFSET for skip OFFSET number term buffer."
         (progn
           (multi-term)
           (message "Create a new `multi-term' buffer."))
-        (message "Haven't any `multi-term' buffer exist."))))
+      (message "Haven't any `multi-term' buffer exist."))))
 
 (defun multi-term-switch-internal (direction offset)
   "Internal `multi-term' buffers switch function.
@@ -611,11 +603,11 @@ Option OFFSET for skip OFFSET number term buffer."
           (if this-buffer
               (if (eql direction 'NEXT)
                   (switch-to-buffer (nth (+ this-buffer offset) terms))
-                  (switch-to-buffer (nth (+ (- (length (multi-term-list)) offset)
-                                            this-buffer) terms)))
-              (switch-to-buffer (car terms)))
+                (switch-to-buffer (nth (+ (- (length (multi-term-list)) offset)
+                                          this-buffer) terms)))
+            (switch-to-buffer (car terms)))
           t)
-        nil)))
+      nil)))
 
 (defun multi-term-keystroke-setup ()
   "Keystroke setup of `term-char-mode'.
@@ -627,9 +619,9 @@ and binds some keystroke with `term-raw-map'."
     ;; Unbind base key that conflict with user's keys-tokes.
     (dolist (unbind-key term-unbind-key-list)
       (cond
-        ((stringp unbind-key) (setq unbind-key (read-kbd-macro unbind-key)))
-        ((vectorp unbind-key) nil)
-        (t (signal 'wrong-type-argument (list 'array unbind-key))))
+       ((stringp unbind-key) (setq unbind-key (read-kbd-macro unbind-key)))
+       ((vectorp unbind-key) nil)
+       (t (signal 'wrong-type-argument (list 'array unbind-key))))
       (define-key term-raw-map unbind-key nil))
     ;; Add some i use keys.
     ;; If you don't like my keystroke,
@@ -638,9 +630,9 @@ and binds some keystroke with `term-raw-map'."
       (setq bind-key (car element))
       (setq bind-command (cdr element))
       (cond
-        ((stringp bind-key) (setq bind-key (read-kbd-macro bind-key)))
-        ((vectorp bind-key) nil)
-        (t (signal 'wrong-type-argument (list 'array bind-key))))
+       ((stringp bind-key) (setq bind-key (read-kbd-macro bind-key)))
+       ((vectorp bind-key) nil)
+       (t (signal 'wrong-type-argument (list 'array bind-key))))
       (define-key term-raw-map bind-key bind-command))))
 
 (defun multi-term-dedicated-handle-other-window-advice (activate)
@@ -650,7 +642,7 @@ If ACTIVATE is `non-nil', will enable advice
 Otherwise, disable it."
   (if activate
       (ad-enable-advice 'other-window 'after 'multi-term-dedicated-other-window-advice)
-      (ad-disable-advice 'other-window 'after 'multi-term-dedicated-other-window-advice))
+    (ad-disable-advice 'other-window 'after 'multi-term-dedicated-other-window-advice))
   (ad-activate 'other-window))
 
 (defun multi-term-current-window-take-height (&optional window)
@@ -718,7 +710,7 @@ Dedicated window can't deleted by command `delete-other-windows'."
                        (not (eq current-window win))
                        (not (window-dedicated-p win)))
               (delete-window win))))
-        ad-do-it)))
+      ad-do-it)))
 
 (defadvice delete-window (before multi-term-delete-window-advice activate)
   "Use `delete-window' delete `multi-term' dedicated window.
@@ -769,6 +761,6 @@ This advice can make `other-window' skip `multi-term' dedicated window."
 ;; time-stamp-end: ">"
 ;; End:
 
-;;; multi-term.el ends here
-
 ;;; LocalWords:  multi el dir sr Hawley eb ef cd
+
+;;; multi-term.el ends here
