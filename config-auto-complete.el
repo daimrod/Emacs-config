@@ -23,13 +23,18 @@
 
 (require 'auto-complete-config)
 
-(add-to-list 'ac-dictionary-directories
-             (concat elisp-dir "ac-dict/"))
-
 (ac-config-default)
 
-(setq ac-use-quick-help nil)
+(setq ac-use-quick-help t
+      ac-quick-help-delay 0.5)
 
-(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+(define-key ac-mode-map (kbd "C-c SPC") 'auto-complete)
+
+(require 'ac-slime)
+(add-hook 'slime-mode-hook 'set-up-slime-ac)
+(add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+(eval-after-load "auto-complete"
+  '(add-to-list 'ac-modes 'slime-repl-mode))
+
 
 (provide 'config-auto-complete)
