@@ -106,8 +106,7 @@ Symbols matching the text at point are put first in the completion list."
              (if (file-exists-p file)
                  (byte-compile-file file)))
        '("~/.gnus.el"))
-  (byte-recompile-directory dotfiles-dir 0)
-  (byte-recompile-directory src-dir 0))
+  (byte-recompile-directory dotfiles-dir 0))
 
 (defun move-to-window-line-top ()
   (interactive)
