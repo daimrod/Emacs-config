@@ -44,13 +44,15 @@
 (eval-after-load 'erc-track
   '(progn
      (defun erc-bar-move-back (n)
-       "Moves back n message lines. Ignores wrapping, and server messages."
+       "Moves back n message lines. Ignores wrapping, and server
+messages."
        (interactive "nHow many lines ? ")
        (re-search-backward "^.*<.*>" nil t n))
 
      (defun erc-bar-update-overlay ()
-       "Update the overlay for current buffer, based on the content of
-erc-modified-channels-alist. Should be executed on window change."
+       "Update the overlay for current buffer, based on the
+content of erc-modified-channels-alist. Should be executed on
+window change."
        (interactive)
        (let* ((info (assq (current-buffer) erc-modified-channels-alist))
               (count (cadr info)))
