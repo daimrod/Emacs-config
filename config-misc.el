@@ -165,4 +165,14 @@
 (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 (setq flyspell-use-meta-tab nil)
 
+;;; apache-mode configuration
+(autoload 'apache-mode "apache-mode" nil t)
+(mapc (lambda (pair)
+        (add-to-list 'auto-mode-alist pair))
+      '(("\\.htaccess\\'"   . apache-mode)
+        ("httpd\\.conf\\'"  . apache-mode)
+        ("srm\\.conf\\'"    . apache-mode)
+        ("access\\.conf\\'" . apache-mode)
+        ("sites-\\(available\\|enabled\\)/" . apache-mode)))
+
 (provide 'config-misc)
