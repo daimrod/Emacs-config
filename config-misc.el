@@ -179,4 +179,8 @@
 (require 'autopair)
 (autopair-global-mode 1)
 
+;;; browse-kill-ring configuration
+(require 'browse-kill-ring)
+(global-set-key (kbd "C-M-y") 'browse-kill-ring)
+
 (provide 'config-misc)
