@@ -58,7 +58,7 @@ Do it recursively if the third argument is not nil."
 
 (fni/add-to-load-path dotfiles-dir)
 (fni/add-to-load-path elisp-dir t)
-(fni/add-to-load-path elpa-dir t)
+(fni/add-to-load-path elpa-dir t t)
 
 (setq custom-file (concat dotfiles-dir "custom.el"))
 
