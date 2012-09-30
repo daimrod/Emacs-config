@@ -175,4 +175,8 @@
         ("access\\.conf\\'" . apache-mode)
         ("sites-\\(available\\|enabled\\)/" . apache-mode)))
 
+;;; autopair configuration
+(require 'autopair)
+(autopair-global-mode 1)
+
 (provide 'config-misc)
