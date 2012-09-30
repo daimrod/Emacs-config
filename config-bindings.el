@@ -52,8 +52,8 @@
 (global-set-key (kbd "M-Z") 'zap-to-char)
 
 ;; Move in window
-(global-set-key (kbd "C-<") 'move-to-window-line-top)
-(global-set-key (kbd "C->") 'move-to-window-line-bottom)
+(global-set-key (kbd "C-c <") 'move-to-window-line-top)
+(global-set-key (kbd "C-c >") 'move-to-window-line-bottom)
 
 ;; quickmove between mark without disturbing transient-mark-mode
 (global-set-key (kbd "C-`") 'push-mark-no-activate)

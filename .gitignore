@@ -15,3 +15,4 @@ auto-save-list/
 elpa/archives/
 /.org-id-locations
 /eshell/*
+/.mc-lists.el
