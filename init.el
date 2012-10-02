@@ -110,6 +110,7 @@ Do it recursively if the third argument is not nil."
 (require 'config-scala)
 (require 'config-python)
 (require 'config-multiple-cursors)
+(require 'config-license)
 
 (load custom-file 'noerror)
 
