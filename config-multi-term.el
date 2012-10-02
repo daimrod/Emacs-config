@@ -1,5 +1,5 @@
 ;; config-multi-term.el
-;; Copyright (C) 2011 Grégoire Jadi
+;; Copyright (C) 2011, 2012 Grégoire Jadi
 
 ;; Author: Grégoire Jadi <gregoire.jadi@gmail.com>
 
