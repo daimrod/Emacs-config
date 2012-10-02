@@ -25,4 +25,4 @@
 
 (provide 'config-html)
 
-;;; config-html.el ends here# -*- mode: snippet -*-
+;;; config-html.el ends here

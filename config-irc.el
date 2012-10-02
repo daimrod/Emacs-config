@@ -84,4 +84,4 @@ window change."
 
 (provide 'config-irc)
 
-;;; config-irc.el ends here# -*- mode: snippet -*-
+;;; config-irc.el ends here

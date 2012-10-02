@@ -28,4 +28,4 @@
 
 (provide 'config-xml)
 
-;;; config-xml.el ends here# -*- mode: snippet -*-
+;;; config-xml.el ends here

@@ -27,4 +27,4 @@
 
 (provide 'config-plantuml)
 
-;;; config-plantuml.el ends here# -*- mode: snippet -*-
+;;; config-plantuml.el ends here

@@ -38,4 +38,4 @@
 
 (provide 'config-scala)
 
-;;; config-scala.el ends here# -*- mode: snippet -*-
+;;; config-scala.el ends here

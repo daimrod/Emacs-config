@@ -33,4 +33,4 @@
 
 (provide 'config-multiple-cursors)
 
-;;; config-multiple-cursors.el ends here# -*- mode: snippet -*-
+;;; config-multiple-cursors.el ends here
