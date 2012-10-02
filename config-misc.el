@@ -183,7 +183,7 @@
 (require 'browse-kill-ring)
 (global-set-key (kbd "C-M-y") 'browse-kill-ring)
 
-;;; xlicense configuration
-(require 'xlicense)
+(setq-default user-mail-address "daimrod@gmail.com"
+              user-full-name "Grégoire Jadi")
 
 (provide 'config-misc)
