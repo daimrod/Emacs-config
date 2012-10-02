@@ -183,4 +183,7 @@
 (require 'browse-kill-ring)
 (global-set-key (kbd "C-M-y") 'browse-kill-ring)
 
+;;; xlicense configuration
+(require 'xlicense)
+
 (provide 'config-misc)
