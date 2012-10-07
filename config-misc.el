@@ -85,7 +85,8 @@
 
 ;; ispell configuration
 (setq ispell-program-name "aspell"
-      ispell-extra-args '("--sug-mode=ultra"))
+      ispell-extra-args '("--sug-mode=ultra")
+      ispell-silently-savep t)
 
 ;; waf config
 (setq auto-mode-alist (cons '("wscript" . python-mode) auto-mode-alist))
