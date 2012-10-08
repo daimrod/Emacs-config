@@ -16,11 +16,6 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-;; How to update auto-complete
-;; cd ~/src/elisp/auto-complete/
-;; git pull
-;; make install DIR=~/.emacs.d/elisp/
-
 (require 'auto-complete-config)
 
 (ac-config-default)
