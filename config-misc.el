@@ -187,4 +187,7 @@
 (setq-default user-mail-address "daimrod@gmail.com"
               user-full-name "Grégoire Jadi")
 
+;;; column-number in the modeline
+(column-number-mode 1)
+
 (provide 'config-misc)
