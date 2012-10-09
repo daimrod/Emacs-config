@@ -63,6 +63,7 @@
 
 ;;; autopair doesn't play well with term-mode
 (add-hook 'term-mode-hook (lambda ()
-                            (autopair-mode -1)))
+                            (autopair-mode -1)
+                            (compilation-shell-minor-mode t)))
 
 (provide 'config-multi-term)
