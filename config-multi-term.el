@@ -44,4 +44,8 @@
 (global-set-key (kbd "C-c T") 'multi-term)
 (global-set-key (kbd "C-x 4 t") 'multi-term-dedicated-toggle)
 
+;;; autopair doesn't play well with term-mode
+(add-hook 'term-mode-hook (lambda ()
+                            (autopair-mode -1)))
+
 (provide 'config-multi-term)
