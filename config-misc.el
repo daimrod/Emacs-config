@@ -124,7 +124,7 @@
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;; Enable delete-selection-mode
-(delete-selection-mode 1)
+(delete-selection-mode t)
 
 ;; ELPA configuration
 (setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
