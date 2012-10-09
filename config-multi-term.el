@@ -28,16 +28,33 @@
 
 (custom-set-variables '(term-prompt-regexp "^.*\\$ *"))
 
+(flet ((set-color (pair)
+                  (multiple-value-bind (face color)
+                      pair
+                    (set-face-attribute face
+                                        nil
+                                        :foreground color
+                                        :background color))))
+  (mapc 'set-color
+        '((term-color-black "#2e3434")
+          (term-color-red "tomato")
+          (term-color-green "#6ac214")
+          (term-color-yellow "#edd400")
+          (term-color-blue "light sky blue")
+          (term-color-magenta "magenta")
+          (term-color-cyan "cyan")
+          (term-color-white "#eeeeec"))))
+
 (setq-default ansi-term-color-vector
-              [unspecified
-               "#2e3434"                ; black
-               "tomato"                 ; red
-               "#6ac214"                ; green
-               "#edd400"                ; yellow
-               "light sky blue"         ; blue
-               "magenta"                ; magenta
-               "cyan"                   ; cyan
-               "#eeeeec"                ; white
+              [term-face
+               term-color-black
+               term-color-red
+               term-color-green
+               term-color-yellow
+               term-color-blue
+               term-color-magenta
+               term-color-cyan
+               term-color-white
                ])
 
 (global-set-key (kbd "C-c t") 'multi-term-next)
