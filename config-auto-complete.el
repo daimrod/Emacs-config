@@ -23,7 +23,7 @@
 (setq ac-use-quick-help t
       ac-quick-help-delay 0.5)
 
-(define-key ac-mode-map (kbd "C-c SPC") 'auto-complete)
+(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
 
 (require 'ac-slime)
 (add-hook 'slime-mode-hook 'set-up-slime-ac)
