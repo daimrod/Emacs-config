@@ -26,7 +26,7 @@
                                           "C-z")
                    term-term-name "xterm-256color"))
 
-(custom-set-variables '(term-prompt-regexp "^.*\\$ *"))
+(custom-set-variables '(term-prompt-regexp "^[^#$%>\n]*[#$%>] *"))
 
 (flet ((set-color (pair)
                   (multiple-value-bind (face color)
