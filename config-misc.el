@@ -186,4 +186,7 @@
 ;;; column-number in the modeline
 (column-number-mode 1)
 
+;;; semantic-mode
+(semantic-mode 1)
+
 (provide 'config-misc)
