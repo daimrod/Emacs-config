@@ -23,6 +23,7 @@
 
 (require 'magit)
 (require 'magit-svn)
+(require 'magit-blame)
 
 (define-key mode-specific-map (kbd "g") 'magit-status)
 
