@@ -173,6 +173,7 @@
         ("sites-\\(available\\|enabled\\)/" . apache-mode)))
 
 ;;; autopair configuration
+(fni/add-to-load-path (concat src-dir "autopair/"))
 (require 'autopair)
 (autopair-global-mode 1)
 
