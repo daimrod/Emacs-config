@@ -27,4 +27,12 @@
         (c-mode . "k&r")
         (other . "linux")))
 
+(add-hook 'c-mode-hook (lambda ()
+                         (add-to-list 'ac-sources
+                                      'ac-source-semantic)))
+
+(add-hook 'c++-mode-hook (lambda ()
+                           (add-to-list 'ac-sources
+                                        'ac-source-semantic)))
+
 (provide 'config-cc-mode)
