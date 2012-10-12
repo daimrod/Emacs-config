@@ -16,6 +16,8 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+(setq py-install-directory (concat src-dir "python-mode/"))
+(fni/add-to-load-path py-install-directory t)
 (require 'python-mode)
 
 (provide 'config-python)
