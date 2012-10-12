@@ -16,6 +16,10 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;;; Use the git version because the current version in ELPA is broken
+;;; with Yasnippet
+(fni/add-to-load-path (concat src-dir "auto-complete/") t)
+(require 'auto-complete)
 (require 'auto-complete-config)
 
 (ac-config-default)
