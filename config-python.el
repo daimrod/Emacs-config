@@ -20,4 +20,8 @@
 (fni/add-to-load-path py-install-directory)
 (require 'python-mode)
 
+;;; needed by semantic which uses the (old) mode python built-in
+;;; emacs.
+(defalias 'python-proc 'python-shell-internal-get-or-create-process)
+
 (provide 'config-python)
