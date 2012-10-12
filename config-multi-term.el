@@ -62,8 +62,9 @@
 (global-set-key (kbd "C-x 4 t") 'multi-term-dedicated-toggle)
 
 ;;; autopair doesn't play well with term-mode
-(add-hook 'term-mode-hook '(lambda ()
-                             (setq autopair-dont-activate t)
-                             (compilation-shell-minor-mode t)))
+(add-hook 'term-mode-hook (lambda ()
+                            (setq autopair-dont-activate t)
+                            (autopair-mode -1)
+                            (compilation-shell-minor-mode t)))
 
 (provide 'config-multi-term)
