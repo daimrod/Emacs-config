@@ -24,7 +24,8 @@
                                           "C-h"
                                           "M-x"
                                           "C-z")
-                   term-term-name "xterm-256color"))
+                   term-term-name "multi-term"))
+
 (add-hook 'term-mode-hook
           (lambda ()
             (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")
