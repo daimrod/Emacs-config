@@ -25,8 +25,15 @@
                                           "M-x"
                                           "C-z")
                    term-term-name "xterm-256color"))
+(add-hook 'term-mode-hook
+          (lambda ()
+            (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")
+            (make-local-variable 'mouse-yank-at-point)
+            (make-local-variable 'transient-mark-mode)
+            (setq mouse-yank-at-point t
+                  transient-mark-mode nil)
+            (auto-fill-mode -1)))
 
-(custom-set-variables '(term-prompt-regexp "^[^#$%>\n]*[#$%>] *"))
 
 (flet ((set-color (pair)
                   (multiple-value-bind (face color)
