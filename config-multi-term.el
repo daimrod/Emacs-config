@@ -24,6 +24,9 @@
                                           "C-h"
                                           "M-x"
                                           "C-z")
+                   ;; required to configure properly the environment
+                   ;; with AnSiT? variables in .bashrc
+                   ;; TERM is restored to xterm-256-color after that.
                    term-term-name "multi-term"))
 
 (add-hook 'term-mode-hook
@@ -73,6 +76,8 @@
 (add-hook 'term-mode-hook (lambda ()
                             (setq autopair-dont-activate t)
                             (autopair-mode -1)
-                            (compilation-shell-minor-mode t)))
+                            ;; awesome bindings available!
+                            (compilation-shell-minor-mode t)
+                            ))
 
 (provide 'config-multi-term)
