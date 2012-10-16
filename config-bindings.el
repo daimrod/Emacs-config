@@ -71,20 +71,24 @@
 (global-set-key (kbd "C-x C-c") 'dmd/quit-or-hide)
 
 ;; manage url at point
-(require 'graze-url)
-(global-set-key (kbd "C-c y") 'gu-copy-url-at-point)
-(global-set-key (kbd "C-c b") 'gu-browse-url)
-(global-set-key (kbd "C-c w s") 'gu-search)
+(require 'graze-url nil t)
+(eval-after-load "graze-url"
+  '(progn
+     (global-set-key (kbd "C-c y") 'gu-copy-url-at-point)
+     (global-set-key (kbd "C-c b") 'gu-browse-url)
+     (global-set-key (kbd "C-c w s") 'gu-search)))
 
 ;; pretty print last s-exp
 (global-set-key (kbd "C-x M-e") 'pp-eval-last-sexp)
 
 ;; iy-go-to-char configuration
 (fni/add-to-load-path (concat src-dir "iy-go-to-char/"))
-(require 'iy-go-to-char)
-(global-set-key (kbd "C-c f") 'iy-go-to-char)
-(global-set-key (kbd "C-c F") 'iy-go-to-char-backward)
-(global-set-key (kbd "C-c ;") 'iy-go-to-char-continue)
-(global-set-key (kbd "C-c ,") 'iy-go-to-char-continue-backward)
+(require 'iy-go-to-char nil t)
+(eval-after-load "iy-go-to-char"
+  '(progn
+     (global-set-key (kbd "C-c f") 'iy-go-to-char)
+     (global-set-key (kbd "C-c F") 'iy-go-to-char-backward)
+     (global-set-key (kbd "C-c ;") 'iy-go-to-char-continue)
+     (global-set-key (kbd "C-c ,") 'iy-go-to-char-continue-backward)))
 
 (provide 'config-bindings)
