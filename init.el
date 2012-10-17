@@ -49,7 +49,7 @@ Do it recursively if the third argument is not nil."
                        (fni/add-to-load-path dir-or-file))))
                (setq files (cdr files)))))))
 
-(defvar home-dir "/home/daimrod/")
+(defvar home-dir (concat (getenv "HOME") "/"))
 (defvar dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
 (defvar elisp-dir (concat dotfiles-dir "elisp/"))
