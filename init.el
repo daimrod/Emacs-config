@@ -88,7 +88,7 @@ Do it recursively if the third argument is not nil."
 (mapc (lambda (module)
         (message "Loading %s" module)
         (unless (ignore-errors (require (intern module)))
-          (message "Failed to load %s" module)))
+          (message "Error: Failed to load %s" module)))
       dmd/modules)
 
 (load custom-file 'noerror)
