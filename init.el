@@ -49,12 +49,14 @@ Do it recursively if the third argument is not nil."
                        (fni/add-to-load-path dir-or-file))))
                (setq files (cdr files)))))))
 
-(defvar home-dir (concat (getenv "HOME") "/"))
 (defvar dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
 (defvar elisp-dir (concat dotfiles-dir "elisp/"))
 (defvar elpa-dir (concat dotfiles-dir "elpa/"))
-(defvar src-dir (concat home-dir "src/elisp/"))
+
+(defcustom src-dir (concat (getenv "HOME") "/src/elisp/")
+  "The source directory where third-part modules are located."
+  :group 'dmd/config)
 
 (fni/add-to-load-path dotfiles-dir)
 (fni/add-to-load-path elisp-dir t)
