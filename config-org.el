@@ -116,12 +116,6 @@
 ;;; export Latex
 (add-to-list 'org-export-latex-default-packages-alist '("" "listings" t))
 
-;;; config org-registry (contrib)
-(require 'org-registry)
-(org-registry-initialize)
-(org-registry-insinuate)
-(define-key mode-specific-org-map (kbd "s") 'org-registry-show)
-
 ;;; config org-annotate (contrib)
 (require 'org-annotate-file)
 (setq org-annotate-file-storage-file (concat org-directory "annotated.org"))
