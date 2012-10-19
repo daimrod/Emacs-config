@@ -34,15 +34,18 @@
             ;; term should use my own face
             (copy-face 'default 'term-face)
 
+            ;; Commentary section in term.el
             (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")
             (make-local-variable 'mouse-yank-at-point)
             (make-local-variable 'transient-mark-mode)
             (setq mouse-yank-at-point t
                   transient-mark-mode nil)
             (auto-fill-mode -1)
+
             ;; autopair doesn't play well with term-mode
             (setq autopair-dont-activate t)
             (autopair-mode -1)
+
             ;; awesome bindings available!
             (compilation-shell-minor-mode t)
             ))
