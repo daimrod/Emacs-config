@@ -44,14 +44,14 @@
             (compilation-shell-minor-mode t)
             ))
 
-(flet ((set-color (pair)
+(cl-flet ((set-color (pair)
                   (multiple-value-bind (face color)
                       pair
                     (set-face-attribute face
                                         nil
                                         :foreground color
                                         :background color))))
-  (mapc 'set-color
+  (mapc #'set-color
         '((term-color-black "#2e3434")
           (term-color-red "tomato")
           (term-color-green "#6ac214")
