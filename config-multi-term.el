@@ -27,7 +27,7 @@
                    ;; required to configure properly the environment
                    ;; with AnSiT? variables in .bashrc
                    ;; TERM is restored to xterm-256-color after that.
-                   term-term-name "multi-term"))
+                   term-term-name "xterm-256color"))
 
 (add-hook 'term-mode-hook
           (lambda ()
@@ -36,8 +36,13 @@
             (make-local-variable 'transient-mark-mode)
             (setq mouse-yank-at-point t
                   transient-mark-mode nil)
-            (auto-fill-mode -1)))
-
+            (auto-fill-mode -1)
+            ;; autopair doesn't play well with term-mode
+            (setq autopair-dont-activate t)
+            (autopair-mode -1)
+            ;; awesome bindings available!
+            (compilation-shell-minor-mode t)
+            ))
 
 (flet ((set-color (pair)
                   (multiple-value-bind (face color)
@@ -71,13 +76,5 @@
 (global-set-key (kbd "C-c t") 'multi-term-next)
 (global-set-key (kbd "C-c T") 'multi-term)
 (global-set-key (kbd "C-x 4 t") 'multi-term-dedicated-toggle)
-
-;;; autopair doesn't play well with term-mode
-(add-hook 'term-mode-hook (lambda ()
-                            (setq autopair-dont-activate t)
-                            (autopair-mode -1)
-                            ;; awesome bindings available!
-                            (compilation-shell-minor-mode t)
-                            ))
 
 (provide 'config-multi-term)
