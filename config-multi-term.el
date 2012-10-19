@@ -31,6 +31,9 @@
 
 (add-hook 'term-mode-hook
           (lambda ()
+            ;; term should use my own face
+            (copy-face 'default 'term-face)
+
             (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")
             (make-local-variable 'mouse-yank-at-point)
             (make-local-variable 'transient-mark-mode)
