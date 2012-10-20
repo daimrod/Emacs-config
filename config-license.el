@@ -32,8 +32,6 @@
   " Copyright (C) " `(format-time-string "%Y") " by "
   (or (getenv "ORGANIZATION")
       user-full-name)
-  '(if (copyright-offset-too-large-p)
-       (message "Copyright extends beyond `copyright-limit' and won't be updated automatically."))
   comment-end \n
   comment-start
   " See the file LICENSE for copying permission."
