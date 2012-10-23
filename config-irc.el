@@ -82,6 +82,11 @@ window change."
      (add-hook 'erc-send-completed-hook (lambda (str)
                                           (erc-bar-update-overlay)))))
 
+;;; erc-truncate-mode should do that but it does not.
+(add-hook 'erc-mode-hook
+          (lambda ()
+            (add-hook 'erc-insert-post-hook 'erc-truncate-buffer)))
+
 (provide 'config-irc)
 
 ;;; config-irc.el ends here
