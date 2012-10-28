@@ -56,7 +56,7 @@
                     (set-face-attribute face
                                         nil
                                         :foreground color
-                                        :background color))))
+                                        :background nil))))
   (mapc #'set-color
         '((term-color-black "#2e3434")
           (term-color-red "tomato")
