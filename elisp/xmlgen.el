@@ -68,7 +68,7 @@ elements content.")
     ("\"" . "&quot;")
     ("<"  . "&lt;")
     (">"  . "&gt;"))
-    "List of (find . replace) pairs for escaping. See
+  "List of (find . replace) pairs for escaping. See
 `xmlgen-escape-elm-vals' and `xmlgen-escape-attribute-vals'")
 
 ;;;###autoload
@@ -77,39 +77,39 @@ elements content.")
   '(p :class \"big\")) => \"<p class=\\\"big\\\" />\""
   (let ((level (or level 0)))
     (cond
-      ((numberp form) (number-to-string form))
-      ((stringp form) form)
-      ((listp form)
-       (destructuring-bind (xml attrs) (xmlgen-extract-plist form)
-         (let ((el (car xml)))
-           (unless (symbolp el)
-             (error "Element must be a symbol (got '%S')." el))
-           (if (member el '(!unescape !escape))
-               (let ((xmlgen-escape-elm-vals (if (equal '!escape el) t nil)))
-                 (mapconcat
-                  (lambda (s) (xmlgen s in-elm (1+ level)))
-                  (cdr xml)
-                  ""))
-             (progn
-                 (setq el (symbol-name el))
-                 (concat "<" el (xmlgen-attr-to-string attrs)
-                         (if (> (length xml) 1)
-                             (concat ">" (mapconcat
-                                          (lambda (s) (xmlgen s el (1+ level)))
-                                          (if xmlgen-escape-elm-vals
-                                              (mapcar 'xmlgen-string-escape (cdr xml))
-                                            (cdr xml))
-                                          "")
-                                     "</" el ">")
-                           "/>"))))))))))
+     ((numberp form) (number-to-string form))
+     ((stringp form) form)
+     ((listp form)
+      (destructuring-bind (xml attrs) (xmlgen-extract-plist form)
+        (let ((el (car xml)))
+          (unless (symbolp el)
+            (error "Element must be a symbol (got '%S')." el))
+          (if (member el '(!unescape !escape))
+              (let ((xmlgen-escape-elm-vals (if (equal '!escape el) t nil)))
+                (mapconcat
+                 (lambda (s) (xmlgen s in-elm (1+ level)))
+                 (cdr xml)
+                 ""))
+            (progn
+              (setq el (symbol-name el))
+              (concat "<" el (xmlgen-attr-to-string attrs)
+                      (if (> (length xml) 1)
+                          (concat ">" (mapconcat
+                                       (lambda (s) (xmlgen s el (1+ level)))
+                                       (if xmlgen-escape-elm-vals
+                                           (mapcar 'xmlgen-string-escape (cdr xml))
+                                         (cdr xml))
+                                       "")
+                                  "</" el ">")
+                        "/>"))))))))))
 
 (defun xmlgen-string-escape (string)
   "Escape STRING for inclusion in some XML."
   (when (stringp string)
     (mapc
      '(lambda (e)
-       (setq string
-        (replace-regexp-in-string (car e) (cdr e) string)))
+        (setq string
+              (replace-regexp-in-string (car e) (cdr e) string)))
      xmlgen-escapees))
   string)
 
@@ -120,15 +120,15 @@ elements content.")
       (let* ((sym (pop plist))
              (val (pop plist))
              (treated (cond
-                        ((numberp val)
-                         (number-to-string val))
-                        ((stringp val)
-                         val))))
+                       ((numberp val)
+                        (number-to-string val))
+                       ((stringp val)
+                        val))))
         (setq res
               (concat res " " (substring (symbol-name sym) 1 ) "=\""
                       (if xmlgen-escape-attribute-vals
                           (xmlgen-string-escape treated)
-                          treated)
+                        treated)
                       "\""))))
     res))
 
@@ -140,8 +140,8 @@ the plist and the plist."
         (last-keyword nil))
     (mapc
      '(lambda (item)
-       (let ((item (pop list)))
-         (cond
+        (let ((item (pop list)))
+          (cond
            (last-keyword
             (setq plist (append plist (list last-keyword)))
             (setq plist (append plist (list item)))
