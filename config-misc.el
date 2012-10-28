@@ -190,4 +190,7 @@
 ;;; semantic-mode
 (semantic-mode 1)
 
+;;; recursive minibuffer
+(setf enable-recursive-minibuffers t)
+
 (provide 'config-misc)
