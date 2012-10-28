@@ -26,6 +26,9 @@
       (cons '("\\.\\(xml\\|xsl\\|rng\\|xhtml\\)\\'" . nxml-mode)
             auto-mode-alist))
 
+(require 'xmlgen)
+(require 'sgml-mode)
+
 (provide 'config-xml)
 
 ;;; config-xml.el ends here
