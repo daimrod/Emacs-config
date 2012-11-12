@@ -95,7 +95,10 @@
                (list
                 (ido-completing-read
                  "Quickload system: "
-                 (slime-eval '(cl:mapcar 'ql-dist:name (ql:system-list))))))
+                 (slime-eval '(cl:append
+                               (cl:mapcar 'ql-dist:name
+                                          (ql:system-list))
+                               (ql:list-local-systems))))))
               (insert "(ql:quickload :" system ")")
               (slime-repl-send-input t)))
   (:one-liner "Quickload a system"))
