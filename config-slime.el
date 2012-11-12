@@ -87,6 +87,19 @@
               (slime-repl-send-input t)))
   (:one-liner "Add a directory to asdf:*central-registry*"))
 
+;;; Quickload a system
+(defslime-repl-shortcut slime-repl-quickload
+  ("quickload" "+ql" "ql")
+  (:handler (lambda (system)
+              (interactive
+               (list
+                (ido-completing-read
+                 "Quickload system: "
+                 (slime-eval '(cl:mapcar 'ql-dist:name (ql:system-list))))))
+              (insert "(ql:quickload :" system ")")
+              (slime-repl-send-input t)))
+  (:one-liner "Quickload a system"))
+
 ;;; Awesome hacks available!
 (setq slime-enable-evaluate-in-emacs t)
 
