@@ -21,6 +21,8 @@
 
 ;;; Code:
 
+(fni/add-to-load-path (concat src-dir "xml/"))
+
 (require 'rng-auto)
 (setq auto-mode-alist
       (cons '("\\.\\(xml\\|xsl\\|rng\\|xhtml\\)\\'" . nxml-mode)
