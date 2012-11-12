@@ -29,6 +29,9 @@
 (require 'xmlgen)
 (require 'sgml-mode)
 
+(fni/add-to-load-path (concat src-dir "sxml<->xml/"))
+(require 'sxml<->xml)
+
 (provide 'config-xml)
 
 ;;; config-xml.el ends here
