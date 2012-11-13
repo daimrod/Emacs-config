@@ -90,19 +90,32 @@
 ;;; Quickload a system
 (defslime-repl-shortcut slime-repl-quickload
   ("quickload" "+ql" "ql")
-  (:handler (lambda (system)
-              (interactive
-               (list
-                (ido-completing-read
-                 "Quickload system: "
-                 (slime-eval '(cl:remove-duplicates
-                               (cl:append
-                                (cl:mapcar 'ql-dist:name
-                                           (ql:system-list))
-                                (ql:list-local-systems))
-                               :test 'cl:string=)))))
-              (insert "(ql:quickload :" system ")")
-              (slime-repl-send-input t)))
+  (:handler (lambda ()
+              (interactive)
+              (let* ((system-names
+                      (slime-eval '(cl:nunion
+                                    (swank:list-asdf-systems)
+                                    (cl:nunion
+                                     (cl:mapcar 'ql-dist:name
+                                                (ql:system-list))
+                                     (ql:list-local-systems)
+                                     :test 'cl:string=)
+                                    :test 'cl:string=)))
+                     (default-value (slime-find-asd-file
+                                     (or default-directory
+                                         (buffer-file-name))
+                                     system-names))
+                     (prompt (concat "System "
+                                     (if default-value
+                                         (format " (default `%s'): " default-value)
+                                       ": ")))
+                     (system (ido-completing-read prompt
+                                                  (slime-bogus-completion-alist system-names)
+                                                  nil nil nil
+                                                  'slime-system-history
+                                                  default-value)))
+                (insert "(ql:quickload :" system ")")
+                (slime-repl-send-input t))))
   (:one-liner "Quickload a system"))
 
 ;;; Awesome hacks available!
