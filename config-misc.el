@@ -193,4 +193,13 @@
 ;;; recursive minibuffer
 (setf enable-recursive-minibuffers t)
 
+;;; enable smex (M-x interface with Ido-style fuzzy matching.)
+(require 'smex)
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;; This is your old M-x.
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+(global-set-key (kbd "C-c C-c C-M-x") 'execute-extended-command)
+
 (provide 'config-misc)
