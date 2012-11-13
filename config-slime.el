@@ -110,7 +110,7 @@
                                          (format " (default `%s'): " default-value)
                                        ": ")))
                      (system (ido-completing-read prompt
-                                                  (slime-bogus-completion-alist system-names)
+                                                  system-names
                                                   nil nil nil
                                                   'slime-system-history
                                                   default-value)))
