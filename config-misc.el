@@ -225,5 +225,9 @@
 
 (setf ace-jump-mode-scope 'frame)
 
+(key-chord-define-global "sa" 'ace-jump-word-mode)
+(key-chord-define-global "sd" 'ace-jump-char-mode)
+(key-chord-define-global "da" 'ace-jump-line-mode)
+
 
 (provide 'config-misc)
