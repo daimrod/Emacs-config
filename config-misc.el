@@ -223,7 +223,7 @@
 (setf ace-jump-mode-scope 'frame)
 
 (key-chord-define-global "qw" 'ace-jump-word-mode)
-(key-chord-define-global "sd" 'ace-jump-char-mode)
+(key-chord-define-global "df" 'ace-jump-char-mode)
 (key-chord-define-global "xc" 'ace-jump-line-mode)
 (key-chord-define-global "qd" 'ace-jump-mode-pop-mark)
 
