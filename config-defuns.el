@@ -159,16 +159,16 @@ This is the same as using \\[set-mark-command] with the prefix argument."
     (shell-command (format "figlet -w %s -f %s %s"
                            size font text))))
 
-(defun dmd/quit-or-hide ()
+(defun dmd/quit-or-hide (rly?)
   "If it this is an instance of a running Emacs daemon, then
 if it's the last frame, hide it, otherwise delete it.
 
 If not, use the classic save-buffers-and-kill-emacs function."
-  (interactive)
-  (if (boundp 'server-name)
-      (condition-case nil
-          (delete-frame)
-        (error (make-frame-invisible nil t)))
+  (interactive "P")
+  (if (and (boundp 'server-name) (null rly?))
+	  (condition-case nil
+		  (delete-frame)
+		(error (make-frame-invisible nil t)))
     (save-buffers-kill-emacs)))
 
 (defun dmd/autocompile ()
