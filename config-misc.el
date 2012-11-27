@@ -227,5 +227,8 @@
 (key-chord-define-global "xc" 'ace-jump-line-mode)
 (key-chord-define-global "qd" 'ace-jump-mode-pop-mark)
 
+;;; manual-tagging
+(fni/add-to-load-path (concat src-dir "manual-tagging/"))
+(require 'manual-tagging)
 
 (provide 'config-misc)
