@@ -83,4 +83,12 @@
 (global-set-key (kbd "C-c T") 'multi-term)
 (global-set-key (kbd "C-x 4 t") 'multi-term-dedicated-toggle)
 
+(defadvice term-send-input (after update-current-directory)
+  "Update the current directory."
+  (let* ((pid (process-id (get-buffer-process (current-buffer))))
+         (cwd (file-truename (format "/proc/%d/cwd" pid))))
+    (cd cwd)))
+
+(ad-activate 'term-send-input)
+
 (provide 'config-multi-term)
