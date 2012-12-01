@@ -16,6 +16,12 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;; ELPA configuration
+(setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
+                         ("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")))
+(package-initialize)
+
 (require 'linum)
 
 ;; disable line number everywhere
@@ -121,11 +127,6 @@
 ;; Enable delete-selection-mode
 (eval-after-load "autopair"
   '(delete-selection-mode t))
-
-;; ELPA configuration
-(setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
-                         ("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")))
 
 ;; dired configuration
 (require 'dired)
