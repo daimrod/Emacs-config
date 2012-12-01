@@ -63,7 +63,7 @@
       ido-default-file-method 'selected-window
       ido-default-buffer-method 'selected-window)
 
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
+(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 
 ;; workgroups configuration
 (workgroups-mode)
