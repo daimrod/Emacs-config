@@ -157,12 +157,6 @@
 ;;; look at fringe.el::138 defconst fringe-styles
 (set-fringe-style 0)
 
-;;; enable flyspell nearly everywhere
-(setq-default flyspell-use-meta-tab nil)
-(require 'flyspell)
-(add-hook 'text-mode-hook 'flyspell-mode)
-(add-hook 'prog-mode-hook 'flyspell-prog-mode)
-
 ;;; apache-mode configuration
 (autoload 'apache-mode "apache-mode" nil t)
 (mapc (lambda (pair)
