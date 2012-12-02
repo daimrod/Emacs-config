@@ -91,4 +91,13 @@
 
 (ad-activate 'term-send-input)
 
+(defadvice term-send-raw (after update-current-directory)
+  "Update the current directory."
+  (let* ((pid (process-id (get-buffer-process (current-buffer))))
+         (cwd (file-truename (format "/proc/%d/cwd" pid))))
+    (cd cwd)))
+
+(ad-activate 'term-send-raw)
+
+
 (provide 'config-multi-term)
