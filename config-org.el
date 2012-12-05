@@ -22,7 +22,6 @@
              (expand-file-name (concat org-dir
                                        "doc/")))
 
-(require 'org-install)
 (require 'org)
 (require 'org-latex)
 (require 'org-beamer)
