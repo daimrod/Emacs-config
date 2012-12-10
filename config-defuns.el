@@ -166,6 +166,16 @@ This is the same as using \\[set-mark-command] with the prefix argument."
     (shell-command (format "figlet -w %s -f %s %s"
                            size font text))))
 
+(defun dmd/client-process ()
+  "Returns the process associated with the current emacsclient"
+  (loop for process in server-clients
+        when (eq (selected-frame)
+                 (process-get process 'frame))
+        return process))
+
+(defvar dmd/dead-clients nil
+  "List of dead clients that should be destroyed.")
+
 (defun dmd/quit-or-hide (rly?)
   "If it this is an instance of a running Emacs daemon, then
 if it's the last frame, hide it, otherwise delete it.
@@ -173,10 +183,20 @@ if it's the last frame, hide it, otherwise delete it.
 If not, use the classic save-buffers-and-kill-emacs function."
   (interactive "P")
   (if (and (boundp 'server-name) (null rly?))
-	  (condition-case nil
-		  (delete-frame)
-		(error (make-frame-invisible nil t)))
+	  (progn
+        (condition-case nil
+            (make-frame-invisible nil t)
+          (error (delete-frame)))
+        (add-to-list 'dmd/dead-clients (dmd/client-process)))
     (save-buffers-kill-emacs)))
+
+(defun dmd/delete-zombie-clients (frame)
+  "Delete zombie clients, that is, emacsclient that are finished
+but still present in the background."
+  (dolist (process dmd/dead-clients)
+    (server-delete-client process)))
+
+(add-hook 'after-make-frame-functions #'dmd/delete-zombie-clients)
 
 (defun dmd/autocompile ()
   "Byte compile an elisp."
