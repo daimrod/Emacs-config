@@ -182,7 +182,7 @@ if it's the last frame, hide it, otherwise delete it.
 
 If not, use the classic save-buffers-and-kill-emacs function."
   (interactive "P")
-  (if (and (boundp 'server-name) (null rly?))
+  (if (and (boundp 'server-process) (not (null server-process)) (null rly?))
 	  (progn
         (condition-case nil
             (make-frame-invisible nil t)
