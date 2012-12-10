@@ -182,9 +182,6 @@
 ;;; column-number in the modeline
 (column-number-mode 1)
 
-;;; semantic-mode
-(semantic-mode 1)
-
 ;;; recursive minibuffer
 (setf enable-recursive-minibuffers t)
 
