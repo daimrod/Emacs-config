@@ -16,12 +16,4 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(setq py-install-directory (concat src-dir "python-mode/"))
-(fni/add-to-load-path py-install-directory)
-(require 'python-mode)
-
-;;; needed by semantic which uses the (old) mode python built-in
-;;; emacs.
-(defalias 'python-proc 'python-shell-internal-get-or-create-process)
-
 (provide 'config-python)
