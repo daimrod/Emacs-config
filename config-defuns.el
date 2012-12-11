@@ -25,7 +25,7 @@
   (let* ((flatten-imenu-alist (dmd/imenu-extract-symbols (imenu--make-index-alist)))
          (index-name-list (loop for (index-name . rest) in flatten-imenu-alist
                                 collect index-name))
-         (index-name (ido-completing-read "Symbol? "
+         (index-name (ido-completing-read "Jump to symbol: "
                                           index-name-list)))
     (dmd/imenu-jump (assoc index-name flatten-imenu-alist))))
 
