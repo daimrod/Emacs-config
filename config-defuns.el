@@ -20,9 +20,9 @@
 (require 'thingatpt)
 (require 'imenu)
 
-(defun ido-goto-symbol (&optional force-imenu)
+(defun ido-goto-symbol ()
   "ido-jump to the given symbol generated from imenu."
-  (interactive "P")
+  (interactive)
   (let* ((flatten-imenu-alist (dmd/imenu-extract-symbols (imenu--make-index-alist)))
          (index-name-list (loop for (index-name . rest) in flatten-imenu-alist
                                 collect index-name))
