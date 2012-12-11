@@ -40,7 +40,7 @@ the symbol name."
         else if (not (and (numberp (rest el)) (< (rest el) 0 )))
         collect (if (null index-name)
                     el
-                  (cons (format "%s %s" (first el) index-name)
+                  (cons (format "%s %s" index-name (first el))
                         (rest el)))
         end))
 
