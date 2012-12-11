@@ -21,6 +21,7 @@
 (require 'imenu)
 
 (defun ido-goto-symbol (&optional force-imenu)
+  "ido-jump to the given symbol generated from imenu."
   (interactive "P")
   (let* ((flatten-imenu-alist (dmd/imenu-extract-symbols (imenu--make-index-alist)))
          (index-name-list (loop for (index-name . rest) in flatten-imenu-alist
