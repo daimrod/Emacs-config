@@ -37,7 +37,7 @@ the symbol name."
   (loop for el in imenu-alist
         if (imenu--subalist-p el)
         append (dmd/imenu-extract-symbols (rest el) (cons (first el) index-name))
-        else if (not (< (rest el) 0 ))
+        else if (not (and (numberp (rest el)) (< (rest el) 0 )))
         collect (if (null index-name)
                     el
                   (cons (format "%s %s" (first el) index-name)
