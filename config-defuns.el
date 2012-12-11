@@ -20,54 +20,44 @@
 (require 'thingatpt)
 (require 'imenu)
 
-(let (symbol-names name-and-pos)
-  (defun ido-goto-symbol (&optional symbol-list)
-    "Refresh imenu and jump to a place in the buffer using Ido."
-    (interactive)
-    (unless (featurep 'imenu)
-      (require 'imenu nil t))
-    (cond
-     ((not symbol-list)
-      (let ((ido-mode ido-mode)
-            (ido-enable-flex-matching
-             (if (boundp 'ido-enable-flex-matching)
-                 ido-enable-flex-matching t))
-            name-and-pos symbol-names position)
-        (unless ido-mode
-          (ido-mode 1)
-          (setq ido-enable-flex-matching t))
-        (while (progn
-                 (imenu--cleanup)
-                 (setq imenu--index-alist nil)
-                 (ido-goto-symbol (imenu--make-index-alist))
-                 (setq selected-symbol
-                       (ido-completing-read "Symbol? " symbol-names))
-                 (string= (car imenu--rescan-item) selected-symbol)))
-        (unless (and (boundp 'mark-active) mark-active)
-          (push-mark nil t nil))
-        (setq position (cdr (assoc selected-symbol name-and-pos)))
-        (cond
-         ((overlayp position)
-          (goto-char (overlay-start position)))
-         (t
-          (goto-char position)))))
-     ((listp symbol-list)
-      (dolist (symbol symbol-list)
-        (let (name position)
-          (cond
-           ((and (listp symbol) (imenu--subalist-p symbol))
-            (ido-goto-symbol symbol))
-           ((listp symbol)
-            (setq name (car symbol))
-            (setq position (cdr symbol)))
-           ((stringp symbol)
-            (setq name symbol)
-            (setq position
-                  (get-text-property 1 'org-imenu-marker symbol))))
-          (unless (or (null position) (null name)
-                      (string= (car imenu--rescan-item) name))
-            (add-to-list 'symbol-names name)
-            (add-to-list 'name-and-pos (cons name position)))))))))
+(defun ido-goto-symbol (&optional force-imenu)
+  (interactive)
+  (let* ((flatten-imenu-alist (dmd/imenu-extract-symbols (imenu--make-index-alist)))
+         (index-name-list (loop for (index-name . rest) in flatten-imenu-alist
+                                collect index-name))
+         (index-name (ido-completing-read "Symbol? "
+                                          index-name-list)))
+    (dmd/imenu-jump (assoc index-name flatten-imenu-alist))))
+
+(defun dmd/imenu-extract-symbols (imenu-alist &optional index-name)
+  "Flatten imenu-alist to remove subalist (see `imenu--subalist-p').
+
+Sublists are removed by appending the `index-name' at the end of
+the symbol name."
+  (loop for el in imenu-alist
+        if (imenu--subalist-p el)
+        append (dmd/imenu-extract-symbols (rest el) (cons (first el) index-name))
+        else if (not (< (rest el) 0 ))
+        collect (if (null index-name)
+                    el
+                  (cons (format "%s %s" (first el) index-name)
+                        (rest el)))
+        end))
+
+(defun dmd/imenu-jump (imenu-el)
+  "Use the right method to jump to the symbol pointed by imenu-el where
+imenu-el is an element of an `imenu--index-alist'."
+  (cond ((numberp (rest imenu-el))
+         (goto-char (rest imenu-el)))
+        ((listp (rest imenu-el))
+         (destructuring-bind (index-name position function &rest arguments)
+             imenu-el
+           (apply function index-name position arguments)))
+        ((markerp (rest imenu-el))
+         (goto-char (marker-position (rest imenu-el))))
+        (t (error "Don't know what to do with %S" imenu-el)))
+  ;; returns the index-name
+  (first imenu-el))
 
 (defun recentf-ido-find-file ()
   "Find a recent file using ido."
@@ -168,10 +158,11 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 (defun dmd/client-process ()
   "Returns the process associated with the current emacsclient"
-  (loop for process in server-clients
-        when (eq (selected-frame)
-                 (process-get process 'frame))
-        return process))
+  (when (boundp 'server-clients)
+    (loop for process in server-clients
+          when (eq (selected-frame)
+                   (process-get process 'frame))
+          return process)))
 
 (defvar dmd/dead-clients nil
   "List of dead clients that should be destroyed.")
@@ -193,8 +184,9 @@ If not, use the classic save-buffers-and-kill-emacs function."
 (defun dmd/delete-zombie-clients (frame)
   "Delete zombie clients, that is, emacsclient that are finished
 but still present in the background."
-  (dolist (process dmd/dead-clients)
-    (server-delete-client process)))
+  (when (fboundp 'server-delete-client)
+   (dolist (process dmd/dead-clients)
+     (server-delete-client process))))
 
 (add-hook 'after-make-frame-functions #'dmd/delete-zombie-clients)
 
