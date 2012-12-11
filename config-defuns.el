@@ -55,6 +55,8 @@ imenu-el is an element of an `imenu--index-alist'."
            (apply function index-name position arguments)))
         ((markerp (rest imenu-el))
          (goto-char (marker-position (rest imenu-el))))
+        ((overlayp (rest imenu-el))
+         (goto-char (overlay-start (rest imenu-el))))
         (t (error "Don't know what to do with %S" imenu-el)))
   ;; returns the index-name
   (first imenu-el))
