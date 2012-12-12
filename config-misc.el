@@ -60,6 +60,7 @@
 (show-paren-mode 1)
 
 ;; enable ido-mode
+(fni/add-to-load-path (concat src-dir "ido-ubiquitous/"))
 (require 'ido-ubiquitous)
 (ido-mode t)
 (setq ido-enable-flex-matching t
