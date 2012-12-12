@@ -20,48 +20,6 @@
 (require 'thingatpt)
 (require 'imenu)
 
-(defun ido-goto-symbol ()
-  "ido-jump to the given symbol generated from imenu."
-  (interactive)
-  (let* ((flatten-imenu-alist (dmd/imenu-extract-symbols (imenu--make-index-alist)))
-         (index-name-list (loop for (index-name . rest) in flatten-imenu-alist
-                                collect index-name))
-         (index-name (ido-completing-read "Jump to symbol: "
-                                          index-name-list)))
-    (dmd/imenu-jump (assoc index-name flatten-imenu-alist))))
-
-(defun dmd/imenu-extract-symbols (imenu-alist &optional index-name)
-  "Flatten imenu-alist to remove subalist (see `imenu--subalist-p').
-
-Sublists are removed by appending the `index-name' at the end of
-the symbol name."
-  (loop for el in imenu-alist
-        if (imenu--subalist-p el)
-        append (dmd/imenu-extract-symbols (rest el) (cons (first el) index-name))
-        else if (not (and (numberp (rest el)) (< (rest el) 0 )))
-        collect (if (null index-name)
-                    el
-                  (cons (format "%s %s" index-name (first el))
-                        (rest el)))
-        end))
-
-(defun dmd/imenu-jump (imenu-el)
-  "Use the right method to jump to the symbol pointed by imenu-el where
-imenu-el is an element of an `imenu--index-alist'."
-  (cond ((numberp (rest imenu-el))
-         (goto-char (rest imenu-el)))
-        ((listp (rest imenu-el))
-         (destructuring-bind (index-name position function &rest arguments)
-             imenu-el
-           (apply function index-name position arguments)))
-        ((markerp (rest imenu-el))
-         (goto-char (marker-position (rest imenu-el))))
-        ((overlayp (rest imenu-el))
-         (goto-char (overlay-start (rest imenu-el))))
-        (t (error "Don't know what to do with %S" imenu-el)))
-  ;; returns the index-name
-  (first imenu-el))
-
 (defun recentf-ido-find-file ()
   "Find a recent file using ido."
   (interactive)
