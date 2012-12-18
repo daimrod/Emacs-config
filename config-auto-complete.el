@@ -23,17 +23,47 @@
 (require 'auto-complete-config)
 
 (ac-config-default)
+(add-to-list 'ac-dictionary-directories (concat dotfiles-dir "ac-dict/"))
 
 (setq ac-use-quick-help t
-      ac-quick-help-delay 0.5)
+      ac-quick-help-delay 1.5
+      ac-auto-show-menu 1)
 
 (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+
+(setq-default ac-sources
+              '(ac-source-filename
+                ac-source-files-in-current-dir
+                ac-source-words-in-buffer
+                ac-source-yasnippet
+                ac-source-dictionary))
+
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (setf ac-sources
+                  (append ac-sources
+                          '(ac-source-features
+                            ac-source-functions
+                            ac-source-symbols
+                            ac-source-variables)))))
+
+(add-hook 'c-mode-hook (lambda ()
+                         (add-to-list 'ac-sources
+                                      'ac-source-semantic)))
+
+(add-hook 'c++-mode-hook (lambda ()
+                           (setf ac-sources
+                                 (append ac-sources
+                                         '(
+                                           ;; Tooo slow
+                                           ;; ac-source-semantic
+                                           ac-source-words-in-same-mode-buffers)))))
+
 
 (require 'ac-slime)
 (add-hook 'slime-mode-hook 'set-up-slime-ac)
 (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
 (eval-after-load "auto-complete"
   '(add-to-list 'ac-modes 'slime-repl-mode))
-
 
 (provide 'config-auto-complete)
