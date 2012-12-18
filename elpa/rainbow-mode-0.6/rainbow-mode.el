@@ -1,10 +1,10 @@
 ;;; rainbow-mode.el --- Colorize color names in buffers
 
-;; Copyright (C) 2010-2011 Free Software Foundation, Inc
+;; Copyright (C) 2010-2012 Free Software Foundation, Inc
 
 ;; Author: Julien Danjou <julien@danjou.info>
 ;; Keywords: faces
-;; Version: 0.2
+;; Version: 0.6
 
 ;; This file is part of GNU Emacs.
 
@@ -34,6 +34,10 @@
 
 (require 'regexp-opt)
 (require 'faces)
+(require 'color)
+
+(unless (require 'xterm-color nil t)
+  (require 'ansi-color))
 
 (defgroup rainbow nil
   "Show color strings with a background color."
@@ -42,7 +46,9 @@
 
 ;; Hexadecimal colors
 (defvar rainbow-hexadecimal-colors-font-lock-keywords
-  '(("#\\(?:[0-9a-fA-F]\\{3\\}\\)+\\{1,4\\}"
+  '(("[^&]\\(#\\(?:[0-9a-fA-F]\\{3\\}\\)+\\{1,4\\}\\)"
+     (1 (rainbow-colorize-itself 1)))
+    ("^\\(#\\(?:[0-9a-fA-F]\\{3\\}\\)+\\{1,4\\}\\)"
      (0 (rainbow-colorize-itself)))
     ("[Rr][Gg][Bb]:[0-9a-fA-F]\\{1,4\\}/[0-9a-fA-F]\\{1,4\\}/[0-9a-fA-F]\\{1,4\\}"
      (0 (rainbow-colorize-itself)))
@@ -263,36 +269,57 @@ will be enabled if a major mode has been detected from the
      (0 (rainbow-colorize-rgb)))
     ("{HTML}{\\([0-9A-Fa-f]\\{6\\}\\)}"
      (0 (rainbow-colorize-hexadecimal-without-sharp))))
-  "Font-lock keywords to add for X colors.")
+  "Font-lock keywords to add for LaTeX colors.")
 
 (defcustom rainbow-latex-colors-major-mode-list
   '(latex-mode)
-  "List of major mode where X colors are enabled when
+  "List of major mode where LaTeX colors are enabled when
 `rainbow-x-colors' is set to auto."
   :group 'rainbow)
 
 (defcustom rainbow-latex-colors 'auto
   "When to enable LaTeX colors.
 If set to t, the LaTeX colors will be enabled. If set to nil, the
-X colors will not be enabled.  If set to auto, the LaTeX colors
+LaTeX colors will not be enabled.  If set to auto, the LaTeX colors
 will be enabled if a major mode has been detected from the
 `rainbow-latex-colors-major-mode-list'."
   :group 'rainbow)
 
+;; Shell colors
+(defvar rainbow-ansi-colors-font-lock-keywords
+  '(("\\(\\\\[eE]\\|\\\\033\\|\\\\x1[bB]\\|\033\\)\\[\\([0-9;]*m\\)"
+     (0 (rainbow-colorize-ansi))))
+  "Font-lock keywords to add for ANSI colors.")
+
+(defcustom rainbow-ansi-colors-major-mode-list
+  '(sh-mode c-mode c++-mode)
+  "List of major mode where ANSI colors are enabled when
+`rainbow-ansi-colors' is set to auto."
+  :group 'rainbow)
+
+(defcustom rainbow-ansi-colors 'auto
+  "When to enable ANSI colors.
+If set to t, the ANSI colors will be enabled. If set to nil, the
+ANSI colors will not be enabled.  If set to auto, the ANSI colors
+will be enabled if a major mode has been detected from the
+`rainbow-ansi-colors-major-mode-list'."
+  :group 'rainbow)
+
 ;; Functions
-(defun rainbow-colorize-match (color)
+(defun rainbow-colorize-match (color &optional match)
   "Return a matched string propertized with a face whose
 background is COLOR. The foreground is computed using
 `rainbow-color-luminance', and is either white or black."
-  (put-text-property
-   (match-beginning 0) (match-end 0)
-   'face `((:foreground ,(if (> 0.5 (rainbow-x-color-luminance color))
-                             "white" "black"))
-           (:background ,color))))
+  (let ((match (or match 0)))
+    (put-text-property
+     (match-beginning match) (match-end match)
+     'face `((:foreground ,(if (> 0.5 (rainbow-x-color-luminance color))
+                               "white" "black"))
+             (:background ,color)))))
 
-(defun rainbow-colorize-itself ()
+(defun rainbow-colorize-itself (&optional match)
   "Colorize a match with itself."
-  (rainbow-colorize-match (match-string-no-properties 0)))
+  (rainbow-colorize-match (match-string-no-properties (or match 0)) match))
 
 (defun rainbow-colorize-hexadecimal-without-sharp ()
   "Colorize an hexadecimal colors and prepend # to it."
@@ -312,26 +339,6 @@ This will convert \"80 %\" to 204, \"100 %\" to 255 but \"123\" to \"123\"."
         (/ (* (string-to-number (substring number 0 string-length)) 255) 100)
       (string-to-number number))))
 
-(defun rainbow-hue-to-rgb (x y h)
-  "Convert X Y H to RGB value."
-  (when (< h 0) (incf h))
-  (when (> h 1) (decf h))
-  (cond ((< h (/ 1 6.0)) (+ x (* (- y x) h 6)))
-        ((< h 0.5) y)
-        ((< h (/ 2.0 3.0)) (+ x (* (- y x) (- (/ 2.0 3.0) h) 6)))
-        (t x)))
-
-(defun rainbow-hsl-to-rgb-fractions (h s l)
-  "Convert H S L to fractional RGB values."
-  (let (m1 m2)
-    (if (<= l 0.5)
-        (setq m2 (* l (+ s 1)))
-        (setq m2 (- (+ l s) (* l s))))
-    (setq m1 (- (* l 2) m2))
-    (list (rainbow-hue-to-rgb m1 m2 (+ h (/ 1 3.0)))
-	  (rainbow-hue-to-rgb m1 m2 h)
-	  (rainbow-hue-to-rgb m1 m2 (- h (/ 1 3.0))))))
-
 (defun rainbow-colorize-hsl ()
   "Colorize a match with itself."
   (let ((h (/ (string-to-number (match-string-no-properties 1)) 360.0))
@@ -339,7 +346,7 @@ This will convert \"80 %\" to 204, \"100 %\" to 255 but \"123\" to \"123\"."
         (l (/ (string-to-number (match-string-no-properties 3)) 100.0)))
     (rainbow-colorize-match
      (multiple-value-bind (r g b)
-	 (rainbow-hsl-to-rgb-fractions h s l)
+	 (color-hsl-to-rgb h s l)
        (format "#%02X%02X%02X" (* r 255) (* g 255) (* b 255))))))
 
 (defun rainbow-colorize-rgb ()
@@ -355,6 +362,40 @@ This will convert \"80 %\" to 204, \"100 %\" to 255 but \"123\" to \"123\"."
         (g (* (string-to-number (match-string-no-properties 2)) 255.0))
         (b (* (string-to-number (match-string-no-properties 3)) 255.0)))
     (rainbow-colorize-match (format "#%02X%02X%02X" r g b))))
+
+(defun rainbow-colorize-ansi ()
+  "Return a matched string propertized with ansi color face."
+  (let ((xterm-color? (featurep 'xterm-color))
+        (string (match-string-no-properties 0))
+        color)
+    (save-match-data
+      (let* ((replaced (concat
+                        (replace-regexp-in-string
+                         "^\\(\\\\[eE]\\|\\\\033\\|\\\\x1[bB]\\)"
+                         "\033" string) "x"))
+             xterm-color-current
+             ansi-color-context
+             (applied (funcall (if xterm-color?
+                                   'xterm-color-filter
+                                 'ansi-color-apply)
+                               replaced))
+             (face-property (get-text-property
+                             0
+                             (if xterm-color? 'face 'font-lock-face)
+                             applied)))
+        (unless (listp (car face-property))
+          (setq face-property (list face-property)))
+        (setq color (funcall (if xterm-color? 'cadr 'cdr)
+                             (or (assq (if xterm-color?
+                                           :foreground
+                                         'foreground-color)
+                                       face-property)
+                                 (assq (if xterm-color?
+                                           :background
+                                         'background-color)
+                                       face-property))))))
+    (when color
+      (rainbow-colorize-match color))))
 
 (defun rainbow-color-luminance (red green blue)
   "Calculate the luminance of color composed of RED, BLUE and GREEN.
@@ -386,6 +427,12 @@ Return a value between 0 and 1."
                  (memq major-mode rainbow-latex-colors-major-mode-list)))
     (font-lock-add-keywords nil
                             rainbow-latex-rgb-colors-font-lock-keywords))
+  ;; Activate ANSI colors?
+  (when (or (eq rainbow-ansi-colors t)
+            (and (eq rainbow-ansi-colors 'auto)
+                 (memq major-mode rainbow-ansi-colors-major-mode-list)))
+    (font-lock-add-keywords nil
+                            rainbow-ansi-colors-font-lock-keywords))
   ;; Activate HTML colors?
   (when (or (eq rainbow-html-colors t)
             (and (eq rainbow-html-colors 'auto)
@@ -418,6 +465,48 @@ This will fontify with colors the string like \"#aabbcc\" or \"blue\"."
       (rainbow-turn-off))
     ;; Turn on font lock
     (font-lock-mode 1)))
+
+;;;; ChangeLog:
+
+;; 2012-11-26  Julien Danjou  <julien@danjou.info>
+;; 
+;; 	rainbow-mode: fix some LaTex docstrings
+;; 
+;; 2012-11-14  Julien Danjou  <julien@danjou.info>
+;; 
+;; 	rainbow-mode: version 0.5
+;; 	
+;; 	* rainbow-mode.el: fix syntax error on
+;; 	`rainbow-hexadecimal-colors-font-lock-keywords'.
+;; 
+;; 2012-11-09  Julien Danjou  <julien@danjou.info>
+;; 
+;; 	rainbow-mode: version 0.4
+;; 	
+;; 	* rainbow-mode.el: Use functions from color package to colorize HSL rather
+;; 	than our own copy.
+;; 
+;; 2012-11-09  Julien Danjou  <julien@danjou.info>
+;; 
+;; 	rainbow-mode 0.3
+;; 	
+;; 	* rainbow-mode.el: avoid colorizing HTML entities
+;; 
+;; 2011-09-23  Julien Danjou  <julien@danjou.info>
+;; 
+;; 	Update rainbow-mode to version 0.2
+;; 
+;; 2011-07-01  Chong Yidong  <cyd@stupidchicken.com>
+;; 
+;; 	Reorganize repository layout, allowing site installation.
+;; 	
+;; 	A Makefile with "site", "archive" and "archive-full" rules can now be
+;; 	used for site-installation, partial archive deployment, and full
+;; 	archive deployment respectively.
+;; 	
+;; 	Rewrite the admin/archive-contents.el script to handle these changes.
+;; 
+
 
 (provide 'rainbow-mode)
 

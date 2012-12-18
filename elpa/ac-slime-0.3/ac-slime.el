@@ -3,7 +3,7 @@
 ;;
 ;;; Author: Steve Purcell <steve@sanityinc.com>
 ;;; URL: https://github.com/purcell/ac-slime
-;;; Version: 0.2
+;;; Version: 0.3
 ;;
 ;;; Commentary:
 ;; Usage:
@@ -27,6 +27,11 @@
   (when (slime-connected-p)
     (car (slime-simple-completions (substring-no-properties ac-prefix)))))
 
+(defun ac-source-slime-case-correcting-completions (name collection)
+  (mapcar #'(lambda (completion)
+              (replace completion name))
+          (all-completions (downcase name) collection)))
+
 (defvar ac-slime-current-doc nil "Holds slime docstring for current symbol")
 (defun ac-slime-documentation (symbol-name)
   (let ((symbol-name (substring-no-properties symbol-name)))
@@ -37,13 +42,13 @@
 
 ;;;###autoload
 (defface ac-slime-menu-face
-  '((t (:inherit 'ac-candidate-face)))
+  '((t (:inherit ac-candidate-face)))
   "Face for slime candidate menu."
   :group 'auto-complete)
 
 ;;;###autoload
 (defface ac-slime-selection-face
-  '((t (:inherit 'ac-selection-face)))
+  '((t (:inherit ac-selection-face)))
   "Face for the slime selected candidate."
   :group 'auto-complete)
 
@@ -67,7 +72,8 @@
     (selection-face . ac-slime-selection-face)
     (prefix . slime-symbol-start-pos)
     (symbol . "l")
-    (document . ac-slime-documentation))
+    (document . ac-slime-documentation)
+    (match . ac-source-slime-case-correcting-completions))
   "Source for slime completion")
 
 
