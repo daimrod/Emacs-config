@@ -217,4 +217,9 @@
 (fni/add-to-load-path (concat src-dir "manual-tagging/"))
 (require 'manual-tagging)
 
+;;; Emacs-wget
+;;; Set downoad directory to current dir
+(require 'w3m-wget)
+(setf wget-download-directory "./")
+
 (provide 'config-misc)
