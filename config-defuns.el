@@ -189,15 +189,16 @@ added to `*evince-extensions*'."
   (shell-command (format "evince \"%s\" & disown" (expand-file-name filename)))
   (message "%s" filename))
 
+(defvar comint-buffer-minimum-size 0)
 (defun dmd/comint-truncate-buffer (&optional n)
   "Does what comint-truncate-buffer should do. That is, truncate
 the buffer to keep N lines.
 
-If N is not set, use `comint-buffer-maximum-size'."
-  (interactive "p")
+If N is not set, use `comint-buffer-minimum-size'."
+  (interactive "P")
   (let ((comint-buffer-maximum-size
          (or n
-             comint-buffer-maximum-size)))
+             comint-buffer-minimum-size)))
     (comint-truncate-buffer)))
 
 (provide 'config-defuns)
