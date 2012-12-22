@@ -120,4 +120,11 @@
 (setq org-annotate-file-storage-file (concat org-directory "annotated.org"))
 (define-key mode-specific-org-map (kbd "n") 'org-annotate-file)
 
+;;; Org Sync
+(fni/add-to-load-path (concat src-dir "org-sync/"))
+(require 'os)
+(require 'os-bb)
+(require 'os-github)
+(require 'os-rmine)
+
 (provide 'config-org)
