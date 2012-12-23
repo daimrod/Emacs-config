@@ -71,6 +71,7 @@
       ido-default-file-method 'selected-window
       ido-default-buffer-method 'selected-window)
 (ido-ubiquitous-mode t)
+(setq ido-ubiquitous-enable-compatibility nil)
 
 (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 
