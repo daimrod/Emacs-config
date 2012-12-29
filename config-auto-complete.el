@@ -57,7 +57,8 @@
                                          '(
                                            ;; Tooo slow
                                            ;; ac-source-semantic
-                                           ac-source-words-in-same-mode-buffers)))))
+                                           ac-source-words-in-same-mode-buffers
+                                           ac-source-gtags)))))
 
 
 (require 'ac-slime)
