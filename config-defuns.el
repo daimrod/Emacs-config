@@ -245,4 +245,19 @@ Header Line mode is a local minor mode."
     (setf saved-header-line-format header-line-format
           header-line-format nil)))
 
+(define-minor-mode quiet-mode
+  "Read text without visual noise.
+
+Quiet is a local minor mode."
+  nil
+  " Quiet"
+  nil
+  (if quiet-mode
+      (progn (header-line-mode 1)
+             (mode-line-mode 1)
+             (centerize-mode 1))
+    (header-line-mode -1)
+    (mode-line-mode -1)
+    (centerize-mode -1)))
+
 (provide 'config-defuns)
