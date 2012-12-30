@@ -250,11 +250,11 @@ Quiet is a local minor mode."
   " Quiet"
   nil
   (if quiet-mode
-      (progn (header-line-mode 1)
-             (mode-line-mode 1)
+      (progn (header-line-mode -1)
+             (mode-line-mode -1)
              (centerize-mode 1))
-    (header-line-mode -1)
-    (mode-line-mode -1)
+    (header-line-mode 1)
+    (mode-line-mode 1)
     (centerize-mode -1)))
 
 (provide 'config-defuns)
