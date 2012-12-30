@@ -19,9 +19,6 @@
 (defalias 'renb 'rename-buffer)
 (defalias 'srepl 'slime-repl)
 
-(require 'gnus-art)
-(defalias 'article 'gnus-article-mode)
-
 (defalias 'isp 'ispell-change-dictionary)
 
 (provide 'config-alias)
