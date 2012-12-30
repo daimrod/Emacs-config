@@ -238,8 +238,7 @@ Header Line mode is a local minor mode."
   ""
   nil
   (if header-line-mode
-      (setf header-line-format
-            (setf header-line-format (or header-line-format saved-header-line-format)))
+      (setf header-line-format (or header-line-format saved-header-line-format))
     (setf saved-header-line-format header-line-format
           header-line-format nil)))
 
