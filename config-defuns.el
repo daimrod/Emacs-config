@@ -201,4 +201,19 @@ If N is not set, use `comint-buffer-minimum-size'."
              comint-buffer-minimum-size)))
     (comint-truncate-buffer)))
 
+(define-minor-mode centerize-mode
+  "Centerize a buffer.
+
+Centerize mode is a buffer-local minor mode."
+  nil
+  " Cent"
+  nil
+  (if centerize-mode
+      (progn
+        (let ((left-margin (/ (window-body-width) 4)))
+          (setf left-margin-width left-margin)
+          (set-window-margins (get-buffer-window) left-margin)))
+    (setf left-margin-width 0)
+    (set-window-margins (get-buffer-window) 0)))
+
 (provide 'config-defuns)
