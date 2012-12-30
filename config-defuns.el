@@ -225,8 +225,7 @@ Mode Line mode is a local minor mode."
   ""
   nil
   (if mode-line-mode
-      (progn
-        (setf mode-line-format (or mode-line-format saved-mode-line-format)))
+      (setf mode-line-format (or mode-line-format saved-mode-line-format))
     (setf saved-mode-line-format mode-line-format
           mode-line-format nil)))
 
@@ -239,9 +238,8 @@ Header Line mode is a local minor mode."
   ""
   nil
   (if header-line-mode
-      (progn
-        (setf header-line-format
-              (setf header-line-format (or header-line-format saved-header-line-format))))
+      (setf header-line-format
+            (setf header-line-format (or header-line-format saved-header-line-format)))
     (setf saved-header-line-format header-line-format
           header-line-format nil)))
 
