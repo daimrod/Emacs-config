@@ -223,4 +223,10 @@
 (require 'w3m-wget)
 (setf wget-download-directory "./")
 
+;;; Smart Tab
+;;; http://www.emacswiki.org/emacs/TabsAreEvil
+;;; http://www.emacswiki.org/emacs/SmartTabs
+(require 'smart-tab)
+(global-smart-tab-mode 1)
+
 (provide 'config-misc)
