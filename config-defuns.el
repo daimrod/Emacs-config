@@ -230,4 +230,19 @@ Mode Line mode is a local minor mode."
     (setf saved-mode-line-format mode-line-format
           mode-line-format nil)))
 
+(defvar-local saved-header-line-format nil)
+(define-minor-mode header-line-mode
+  "Toggle display of the header line for the current buffer.
+
+Header Line mode is a local minor mode."
+  t
+  ""
+  nil
+  (if header-line-mode
+      (progn
+        (setf header-line-format
+              (setf header-line-format (or header-line-format saved-header-line-format))))
+    (setf saved-header-line-format header-line-format
+          header-line-format nil)))
+
 (provide 'config-defuns)
