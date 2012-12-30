@@ -216,4 +216,17 @@ Centerize mode is a buffer-local minor mode."
     (setf left-margin-width 0)
     (set-window-margins (get-buffer-window) 0)))
 
+(define-minor-mode mode-line-mode
+  "Toggle display of the mode line for the current buffer.
+
+Mode Line mode is a local minor mode."
+  t
+  ""
+  nil
+  (if mode-line-mode
+      (progn
+        (setf mode-line-format (or mode-line-format ml-saved-mode-line-format)))
+    (set (make-local-variable 'ml-saved-mode-line-format) mode-line-format)
+    (setf mode-line-format nil)))
+
 (provide 'config-defuns)
