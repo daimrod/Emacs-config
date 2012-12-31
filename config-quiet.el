@@ -60,7 +60,7 @@ Header Line mode is a local minor mode."
           header-line-format nil)))
 
 (defcustom quiet-no-view-mode
-  '(Info-mode)
+  '(Info-mode gnus-article-mode)
   "*Major modes where `view-mode' shouldn't be enabled."
   :group 'quiet
   :type '(repeat variable))
