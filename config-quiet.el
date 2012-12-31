@@ -72,12 +72,25 @@ Quiet is a local minor mode."
   " Quiet"
   nil
   (if quiet-mode
-      (progn (header-line-mode -1)
-             (mode-line-mode -1)
-             (centerize-mode 1))
+      (progn
+        (header-line-mode -1)
+        (mode-line-mode -1)
+        (centerize-mode 1)
+        (view-mode 1)
+        (ad-activate 'view-mode-disable))
+
     (header-line-mode 1)
     (mode-line-mode 1)
-    (centerize-mode -1)))
+    (centerize-mode -1)
+
+    ;; Remove the advice _before_ disabling `view-mode' to avoid an
+    ;; endless loop.
+    (ad-deactivate 'view-mode-disable)
+    (view-mode -1)))
+
+(defadvice view-mode-disable (after disable-quiet-mode)
+  "Disable `quiet-mode' when `view-mode' is disabled."
+  (quiet-mode -1))
 
 (provide 'config-quiet)
 

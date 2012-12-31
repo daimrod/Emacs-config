@@ -87,4 +87,7 @@
 (global-set-key (kbd "C-c ;") 'iy-go-to-char-continue)
 (global-set-key (kbd "C-c ,") 'iy-go-to-char-continue-backward)
 
+(eval-after-load "config-quiet"
+  '(global-set-key (kbd "C-c q") 'quiet-mode))
+
 (provide 'config-bindings)
