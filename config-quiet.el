@@ -27,9 +27,7 @@
   "Centerize a buffer.
 
 Centerize mode is a buffer-local minor mode."
-  nil
-  " Cent"
-  nil
+  :lighter " Cent"
   (if centerize-mode
       (progn
         (let ((left-margin (/ (window-body-width) 4)))
@@ -43,9 +41,8 @@ Centerize mode is a buffer-local minor mode."
   "Toggle display of the mode line for the current buffer.
 
 Mode Line mode is a local minor mode."
-  t
-  ""
-  nil
+  :init-value t
+  :lighter ""
   (if mode-line-mode
       (setf mode-line-format (or saved-mode-line-format mode-line-format))
     (setf saved-mode-line-format mode-line-format
@@ -56,9 +53,7 @@ Mode Line mode is a local minor mode."
   "Toggle display of the header line for the current buffer.
 
 Header Line mode is a local minor mode."
-  t
-  ""
-  nil
+  :lighter ""
   (if header-line-mode
       (setf header-line-format (or saved-header-line-format header-line-format))
     (setf saved-header-line-format header-line-format
@@ -74,9 +69,7 @@ Header Line mode is a local minor mode."
   "Read text without visual noise.
 
 Quiet is a local minor mode."
-  nil
-  " Quiet"
-  nil
+  :lighter " Quiet"
   (if quiet-mode
       (progn
         (header-line-mode -1)
