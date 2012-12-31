@@ -22,7 +22,7 @@
 ;;; Code:
 
 ;;; Try to guess if GNU Global is installed or not.
-(unless (zerop (shell-command "type -p global"))
+(when (null (ignore-errors (call-process "global" nil nil nil "--help")))
   (error "global executable not found, be sure GNU Global is installed and in your PATH."))
 
 (require 'gtags)
