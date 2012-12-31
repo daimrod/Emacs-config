@@ -227,6 +227,6 @@
 ;;; http://www.emacswiki.org/emacs/TabsAreEvil
 ;;; http://www.emacswiki.org/emacs/SmartTabs
 (require 'smart-tab)
-(global-smart-tab-mode 1)
+(add-hook 'prog-mode-hook 'smart-tab-mode)
 
 (provide 'config-misc)
