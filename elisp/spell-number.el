@@ -2904,7 +2904,7 @@ Any other value is treated as 'neuter."
 	 (spell (and integer-base
 		     (spelln-int int gender-sym))))
     (and spell
-	 (interactive-p)
+	 (called-interactively-p 'interactive)
 	 (message spell))
     spell))
 
@@ -2949,7 +2949,7 @@ Any other value is treated as 'neuter."
 					     0
 					   1))))))))
     (and spell
-	 (interactive-p)
+	 (called-interactively-p 'interactive)
 	 (message spell))
     spell))
 
@@ -2989,7 +2989,7 @@ Any other value is treated as 'neuter."
 			str))
 		     (cdr (spelln-str str gender-sym)))))
     (and spell
-	 (interactive-p)
+	 (called-interactively-p 'interactive)
 	 (message spell))
     spell))
 
@@ -3064,7 +3064,7 @@ A valid numeric string is \"+1,234,567.89\" or \"1234567.89\"."
 						0
 					      1)))))))))
     (and spell
-	 (interactive-p)
+	 (called-interactively-p 'interactive)
 	 (message spell))
     spell))
 
