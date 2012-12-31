@@ -64,6 +64,12 @@ Header Line mode is a local minor mode."
     (setf saved-header-line-format header-line-format
           header-line-format nil)))
 
+(defcustom quiet-no-view-mode
+  '(Info-mode)
+  "*Major modes where `view-mode' shouldn't be enabled."
+  :group 'quiet
+  :type '(repeat variable))
+
 (define-minor-mode quiet-mode
   "Read text without visual noise.
 
@@ -76,8 +82,9 @@ Quiet is a local minor mode."
         (header-line-mode -1)
         (mode-line-mode -1)
         (centerize-mode 1)
-        (view-mode 1)
-        (ad-activate 'view-mode-disable))
+        (unless (member major-mode quiet-no-view-mode)
+          (view-mode 1)
+          (ad-activate 'view-mode-disable)))
 
     (header-line-mode 1)
     (mode-line-mode 1)
@@ -85,8 +92,9 @@ Quiet is a local minor mode."
 
     ;; Remove the advice _before_ disabling `view-mode' to avoid an
     ;; endless loop.
-    (ad-deactivate 'view-mode-disable)
-    (view-mode -1)))
+    (unless (member major-mode quiet-no-view-mode)
+      (ad-deactivate 'view-mode-disable)
+      (view-mode -1))))
 
 (defadvice view-mode-disable (after disable-quiet-mode)
   "Disable `quiet-mode' when `view-mode' is disabled."
