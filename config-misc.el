@@ -229,4 +229,7 @@
 (require 'smart-tab)
 (add-hook 'prog-mode-hook 'smart-tab-mode)
 
+;;; Winner mode is a winner!
+(winner-mode 1)
+
 (provide 'config-misc)

@@ -90,4 +90,7 @@
 (eval-after-load "config-quiet"
   '(global-set-key (kbd "C-c q") 'quiet-mode))
 
+(global-set-key (kbd "C-c u") 'winner-undo)
+(global-set-key (kbd "C-c r") 'winner-redo)
+
 (provide 'config-bindings)
