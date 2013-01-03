@@ -95,14 +95,11 @@ Quiet is a local minor mode."
 
 (add-hook 'view-mode-hook
           (lambda ()
-            ;; Makes sure `view-mode-map' is the first minor mode map
-            ;; available in `minor-mode-map-alist', because in case of
-            ;; conflicting bindings, the first one is used.
-            (unless (eq 'view-mode (caar minor-mode-map-alist))
-              (setf minor-mode-map-alist
-                    (cons (cons 'view-mode view-mode-map)
-                          (cl-remove 'view-mode minor-mode-map-alist
-                                     :key #'car))))))
+            ;; In `view-mode', `view-mode-map' overrides other minor
+            ;; mode maps.
+            (pushnew (cons 'view-mode view-mode-map)
+                     minor-mode-overriding-map-alist
+                     :key #'car)))
 
 (provide 'config-quiet)
 
