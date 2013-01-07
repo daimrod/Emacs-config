@@ -223,8 +223,7 @@ If N is not set, use `comint-buffer-minimum-size'."
                                 ((or (atom l1) (atom l2)) ; dotted list
                                  (return-from loop (%equal* l1 l2 index ht1-mem ht2-mem)))
                                 (previous
-                                 ;; "classic" circular list '#1=(a . #1#) as oposed to
-                                 ;; '#1=(a #1#)
+                                 ;; circular list
                                  (return-from loop (= previous (gethash l2 ht2-mem -1))))
                                 (t
                                  ;; store the tails of both objects
