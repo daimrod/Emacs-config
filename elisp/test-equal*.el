@@ -22,7 +22,7 @@
 ;;; Code:
 
 (require 'ert)
-(require 'config-defuns)
+(require 'dmd-utils)
 
 (ert-deftest test-equal* ()
   (should (equal* 'a 'a))
