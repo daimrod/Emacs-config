@@ -201,4 +201,38 @@ If N is not set, use `comint-buffer-minimum-size'."
              comint-buffer-minimum-size)))
     (comint-truncate-buffer)))
 
+(defun equal* (o1 o2)
+  "Compare O1 and O2 without breaking on circular lists."
+  (cl-labels ((%equal* (o1 o2 start ht1-mem ht2-mem)
+                       (if (not (listp o1))
+                           (equal-including-properties o1 o2)
+                         (if (not (listp o2))
+                             nil
+                           (loop
+                            named loop
+       
+                            for l1 = o1 then (cdr l1)
+                            for l2 = o2 then (cdr l2)
+
+                            for index upfrom start
+                            for previous = (gethash l1 ht1-mem)
+
+                            do (cond
+                                ((or (null l1) (null l2)) ; proper list
+                                 (return-from loop (and (null l1) (null l2))))
+                                ((or (atom l1) (atom l2)) ; dotted list
+                                 (return-from loop (%equal* l1 l2 index ht1-mem ht2-mem)))
+                                (previous
+                                 ;; "classic" circular list '#1=(a . #1#) as oposed to
+                                 ;; '#1=(a #1#)
+                                 (return-from loop (= previous (gethash l2 ht2-mem -1))))
+                                (t
+                                 ;; store the tails of both objects
+                                 (setf (gethash l1 ht1-mem) index
+                                       (gethash l2 ht2-mem) index)
+                                 (unless (%equal* (car l1) (car l2) index ht1-mem ht2-mem)
+                                   (return-from loop nil)))))))))
+    (%equal* o1 o2 0 (make-hash-table) (make-hash-table))))
+
+
 (provide 'config-defuns)
