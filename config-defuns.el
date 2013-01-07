@@ -201,11 +201,14 @@ If N is not set, use `comint-buffer-minimum-size'."
              comint-buffer-minimum-size)))
     (comint-truncate-buffer)))
 
-(defun equal* (o1 o2)
-  "Compare O1 and O2 without breaking on circular lists."
+(defun equal* (o1 o2 &optional test)
+  "Compare O1 and O2 without breaking on circular lists.
+
+Atoms are compared with TEST if it is supplied or else `equal'."
+  (setf test (or test 'equal))
   (cl-labels ((%equal* (o1 o2 start ht1-mem ht2-mem)
                        (if (not (listp o1))
-                           (equal-including-properties o1 o2)
+                           (funcall test o1 o2)
                          (if (not (listp o2))
                              nil
                            (loop
