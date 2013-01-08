@@ -24,7 +24,7 @@
 (require 'ert)
 (require 'dmd-utils)
 
-(ert-deftest test-equal* ()
+(ert-deftest dmd-utils-equal* ()
   (should (equal* 'a 'a))
 
   (should-not (equal* 'a 'b))
