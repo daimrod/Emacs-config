@@ -36,12 +36,12 @@
   :type '(repeat function))
 
 (defcustom gu-first-browse-url-function
-  'browse-url-browser-function
+  browse-url-browser-function
   "The default function used to browse an URL."
   :type 'function)
 
 (defcustom gu-second-browse-url-function
-  'browse-url-default-browser
+  browse-url-browser-function
   "The other function used to browse an URL."
   :type 'function)
 
