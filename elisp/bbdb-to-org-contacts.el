@@ -1,9 +1,9 @@
 (require 'bbdb)
 (require 'bbdb-com)
 
-(defvar bbdb-to-org-contacts-record-prefix "***")
+(defvar bbdb-to-org-contacts-record-prefix "*")
 
-(defvar bbdb-to-org-contacts-record-blanks "   ")
+(defvar bbdb-to-org-contacts-record-blanks "  ")
 
 (defun bbdb-to-org-contacts (to-file)
   "outputs a org-contacts file"
