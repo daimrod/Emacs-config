@@ -36,14 +36,14 @@
   :type '(repeat function))
 
 (defcustom gu-first-browse-url-function
-  browse-url-browser-function
+  'browse-url-browser-function
   "The default function used to browse an URL."
-  :type 'function)
+  :type '(choices variable function))
 
 (defcustom gu-second-browse-url-function
-  browse-url-browser-function
+  'browse-url-generic
   "The other function used to browse an URL."
-  :type 'function)
+  :type '(choices variable function))
 
 (defun gu-find-url-org-mode ()
   "Find URL in `org-mode' style."
@@ -100,19 +100,30 @@
                          (gu-find-url-at-point)))
         current-prefix-arg))
 
+(defun gu-get-browse-url-function (second-function?)
+  "Return the function selected."
+  (let* ((fun (if second-function?
+                  gu-second-browse-url-function
+                gu-first-browse-url-function))
+         (fun (if
+                  ;; `gu-****-browse-url-function' can be either a
+                  ;; variable or a function, but we need a function.
+                  (functionp fun)
+                  fun
+                (symbol-value fun))))
+    (unless (functionp fun)
+      (error "%s is not a valid function." fun))
+    fun))
+
 (defun gu-browse-url (url &optional second-function?)
   (interactive (gu-browse-url-interactive-arg "URL: "))
-  (funcall (if second-function?
-               gu-second-browse-url-function
-             gu-first-browse-url-function)
+  (funcall (gu-get-browse-url-function second-function?)
            url))
 
 (defun gu-search (term &optional second-function?)
   (interactive (list (read-string "Search: ")
                      current-prefix-arg))
-  (funcall (if second-function?
-               gu-second-browse-url-function
-             gu-first-browse-url-function)
+  (funcall (gu-get-browse-url-function second-function?)
            (format "http://s.s/search?q=%s" term)))
 
 (provide 'graze-url)
