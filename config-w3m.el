@@ -27,7 +27,8 @@
 (require 'w3m-search)
 (require 'browse-url)
 
-(setq w3m-init-file (concat dotfiles-dir "config-w3m"))
+(setf w3m-init-file (concat dotfiles-dir "config-w3m")
+      browse-url-browser-function 'browse-url-w3)
 
 (flet ((w3m-add-search-engine-with-quickshort
         (search-engine)
