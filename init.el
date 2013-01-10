@@ -102,3 +102,8 @@ Do it recursively if the third argument is not nil."
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'scroll-left 'disabled nil)
+
+;;; Init stuff
+(setf inhibit-startup-screen t)
+(when (fboundp 'org-agenda-list)
+  (org-agenda-list))
