@@ -93,4 +93,6 @@
 (global-set-key (kbd "C-c u") 'winner-undo)
 (global-set-key (kbd "C-c r") 'winner-redo)
 
+(global-set-key [f11] 'toggle-fullscreen)
+
 (provide 'config-bindings)

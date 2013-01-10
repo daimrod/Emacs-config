@@ -201,4 +201,12 @@ If N is not set, use `comint-buffer-minimum-size'."
              comint-buffer-minimum-size)))
     (comint-truncate-buffer)))
 
+(defun toggle-fullscreen ()
+  "Toggle full screen on X11"
+  (interactive)
+  (when (eq window-system 'x)
+    (set-frame-parameter
+     nil 'fullscreen
+     (when (not (frame-parameter nil 'fullscreen)) 'fullboth))))
+
 (provide 'config-defuns)
