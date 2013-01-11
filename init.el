@@ -81,6 +81,7 @@ Do it recursively if the third argument is not nil."
 (require 'scratch)
 (require 'verbiste)
 (require 'undo-tree)
+(require 'info)
 
 ;; Load my configuration
 (defvar dmd/modules

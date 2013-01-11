@@ -19,7 +19,7 @@
 (defvar bbdb-dir (concat src-dir "bbdb/"))
 (fni/add-to-load-path bbdb-dir t t)
 (setq bbdb-file (concat dotfiles-dir "bbdb")) ;; keep ~/ clean; set before loading
-(add-to-list 'Info-default-directory-list
+(add-to-list 'Info-directory-list
              (expand-file-name (concat bbdb-dir
                                        "texinfo/")))
 (require 'bbdb)

@@ -18,7 +18,7 @@
 
 (defvar org-dir (concat src-dir "org-mode/"))
 (fni/add-to-load-path org-dir t t)
-(add-to-list 'Info-default-directory-list
+(add-to-list 'Info-directory-list
              (expand-file-name (concat org-dir
                                        "doc/")))
 
