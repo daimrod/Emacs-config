@@ -23,7 +23,7 @@
              (expand-file-name (concat bbdb-dir
                                        "texinfo/")))
 (require 'bbdb)
-(bbdb-initialize 'gnus 'w3)
+(bbdb-initialize 'gnus)
 
 (add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
 (bbdb-insinuate-w3)
