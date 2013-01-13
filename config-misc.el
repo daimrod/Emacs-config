@@ -190,6 +190,7 @@
 
 ;;; recursive minibuffer
 (setf enable-recursive-minibuffers t)
+(minibuffer-depth-indicate-mode 1)
 
 ;;; ace-jump-mode configuration
 (autoload
