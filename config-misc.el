@@ -177,6 +177,11 @@
 (fni/add-to-load-path (concat src-dir "autopair/"))
 (require 'autopair)
 (autopair-global-mode 1)
+(add-hook 'minibuffer-inactive-mode-hook
+          (lambda ()
+            (if (boundp 'autopair-dont-activate)
+                (setq autopair-dont-activate t)
+              (autopair-mode -1))))
 
 ;;; browse-kill-ring configuration
 (require 'browse-kill-ring)
