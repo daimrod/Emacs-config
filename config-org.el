@@ -128,4 +128,7 @@
 (require 'os-github)
 (require 'os-rmine)
 
+;;; Org Contacts
+(require 'org-contacts)
+
 (provide 'config-org)
