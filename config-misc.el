@@ -60,8 +60,6 @@
 (show-paren-mode 1)
 
 ;; enable ido-mode
-(fni/add-to-load-path (concat src-dir "ido-ubiquitous/"))
-(require 'ido-ubiquitous)
 (ido-mode t)
 (setq ido-enable-flex-matching t
       ido-everywhere t
@@ -70,6 +68,9 @@
       ido-max-prospects 10
       ido-default-file-method 'selected-window
       ido-default-buffer-method 'selected-window)
+
+(fni/add-to-load-path (concat src-dir "ido-ubiquitous/"))
+(require 'ido-ubiquitous)
 (ido-ubiquitous-mode t)
 (setq ido-ubiquitous-enable-compatibility nil)
 
