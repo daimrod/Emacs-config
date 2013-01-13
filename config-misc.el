@@ -150,6 +150,7 @@
 (require 'cursor-chg)
 (toggle-cursor-type-when-idle 1)
 (change-cursor-mode 1)
+(blink-cursor-mode 0)
 (setq-default curchg-default-cursor-color "gold"
               curchg-default-cursor-type 'box
               curchg-idle-cursor-type nil)
