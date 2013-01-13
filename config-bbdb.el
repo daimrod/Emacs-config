@@ -26,7 +26,6 @@
 (require 'bbdb)
 (bbdb-initialize 'gnus)
 
-(add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
 (bbdb-insinuate-w3)
 
 (setq
