@@ -36,7 +36,9 @@ Centerize mode is a buffer-local minor mode."
     (setf left-margin-width 0)
     (set-window-margins (get-buffer-window) 0)))
 
-(defvar-local saved-mode-line-format nil)
+(defvar saved-mode-line-format nil)
+(make-variable-buffer-local 'saved-mode-line-format)
+
 (define-minor-mode mode-line-mode
   "Toggle display of the mode line for the current buffer.
 
@@ -48,7 +50,8 @@ Mode Line mode is a local minor mode."
     (setf saved-mode-line-format mode-line-format
           mode-line-format nil)))
 
-(defvar-local saved-header-line-format nil)
+(defvar saved-header-line-format nil)
+(make-variable-buffer-local 'saved-header-line-format)
 (define-minor-mode header-line-mode
   "Toggle display of the header line for the current buffer.
 
