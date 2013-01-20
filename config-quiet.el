@@ -78,13 +78,15 @@ Quiet is a local minor mode."
         (header-line-mode -1)
         (mode-line-mode -1)
         (centerize-mode 1)
+        (toggle-cursor-type-when-idle 1)
         (unless (member major-mode quiet-no-view-mode)
           (view-mode 1)
           (ad-activate 'view-mode-disable)))
-
+    
     (header-line-mode 1)
     (mode-line-mode 1)
     (centerize-mode -1)
+    (toggle-cursor-type-when-idle 0)
 
     ;; Remove the advice _before_ disabling `view-mode' to avoid an
     ;; endless loop.
