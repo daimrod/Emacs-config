@@ -95,4 +95,8 @@
 
 (global-set-key [f11] 'toggle-fullscreen)
 
+;;; C-x 4 t is for multi-term in another window, so a terminal in
+;;; another frame should be an xterm or similar.
+(global-set-key (kbd "C-x 5 t") 'dmd/terminal-emulator)
+
 (provide 'config-bindings)

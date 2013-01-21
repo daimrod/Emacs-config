@@ -209,4 +209,17 @@ If N is not set, use `comint-buffer-minimum-size'."
      nil 'fullscreen
      (when (not (frame-parameter nil 'fullscreen)) 'fullboth))))
 
+(defcustom terminal-emulator "xterm"
+  "*A terminal emulator to use."
+  :group 'external)
+
+(defun dmd/terminal-emulator ()
+  "Open a terminal emulator using `terminal-emulator'."
+  (interactive)
+  (async-shell-command
+   (etypecase terminal-emulator
+     (string terminal-emulator)
+     (function (funcall terminal-emulator))
+     (symbol (symbol-value terminal-emulator)))))
+
 (provide 'config-defuns)
