@@ -19,7 +19,7 @@
 (defvar magit-dir  (concat src-dir "magit/"))
 (fni/add-to-load-path magit-dir t)
 (add-to-list 'Info-default-directory-list
-             (expand-file-name (concat magit-dir "doc/")))
+             (expand-file-name magit-dir))
 
 (require 'magit)
 (require 'magit-svn)
