@@ -29,4 +29,7 @@
 
 (add-hook 'magit-mode-hook 'magit-load-config-extensions)
 
+(require 'magit-topgit)
+(add-hook 'magit-mode-hook 'magit-topgit-mode)
+
 (provide 'config-git)
