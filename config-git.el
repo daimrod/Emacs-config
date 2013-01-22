@@ -30,6 +30,6 @@
 (add-hook 'magit-mode-hook 'magit-load-config-extensions)
 
 (require 'magit-topgit)
-(add-hook 'magit-mode-hook 'magit-topgit-mode)
+(add-hook 'magit-mode-hook 'turn-on-magit-topgit)
 
 (provide 'config-git)
