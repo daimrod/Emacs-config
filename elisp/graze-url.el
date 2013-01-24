@@ -45,6 +45,12 @@
   "The other function used to browse an URL."
   :type '(choices variable function))
 
+(defcustom gu-search-format
+  "http://www.google.com/search?q=%s"
+  "The string used to search on the web. `%s' will be replaced by
+the terms searched."
+  :type 'string)
+
 (defun gu-find-url-org-mode ()
   "Find URL in `org-mode' style."
   (when (every 'fboundp
@@ -124,7 +130,7 @@
   (interactive (list (read-string "Search: ")
                      current-prefix-arg))
   (funcall (gu-get-browse-url-function second-function?)
-           (format "http://s.s/search?q=%s" term)))
+           (format gu-search-format term)))
 
 (provide 'graze-url)
 
