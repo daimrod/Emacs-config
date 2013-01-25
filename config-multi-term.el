@@ -43,7 +43,8 @@
             (auto-fill-mode -1)
 
             ;; autopair doesn't play well with term-mode
-            (setq autopair-dont-activate t)
+            (when (boundp 'autopair-dont-activate)
+              (setq autopair-dont-activate t))
             (autopair-mode -1)
 
             ;; awesome bindings available!
