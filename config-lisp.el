@@ -27,12 +27,6 @@
 (add-hook 'emacs-lisp-mode-hook 'elisp-slime-nav-mode)
 (add-hook 'ielm-mode-hook 'elisp-slime-nav-mode)
 
-;;; higlight-sexp configuration
-(fni/add-to-load-path (concat src-dir "highlight-sexp/"))
-(require 'highlight-sexp)
-(add-hook 'lisp-mode-hook 'highlight-sexp-mode)
-(add-hook 'emacs-lisp-mode-hook 'highlight-sexp-mode)
-
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 
