@@ -228,11 +228,6 @@
 
 (setf ace-jump-mode-scope 'frame)
 
-(key-chord-define-global "qw" 'ace-jump-word-mode)
-(key-chord-define-global "xs" 'ace-jump-char-mode)
-(key-chord-define-global "xc" 'ace-jump-line-mode)
-(key-chord-define-global "qd" 'ace-jump-mode-pop-mark)
-
 ;;; manual-tagging
 (fni/add-to-load-path (concat src-dir "manual-tagging/"))
 (require 'manual-tagging)

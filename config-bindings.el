@@ -15,6 +15,7 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+(require 'key-chord)
 
 ;; Align your code in a pretty way.
 (global-set-key (kbd "C-x \\") 'align-regexp)
@@ -98,5 +99,10 @@
 ;;; C-x 4 t is for multi-term in another window, so a terminal in
 ;;; another frame should be an xterm or similar.
 (global-set-key (kbd "C-x 5 t") 'dmd/terminal-emulator)
+
+(key-chord-define-global "qw" 'ace-jump-word-mode)
+(key-chord-define-global "xs" 'ace-jump-char-mode)
+(key-chord-define-global "xc" 'ace-jump-line-mode)
+(key-chord-define-global "qd" 'ace-jump-mode-pop-mark)
 
 (provide 'config-bindings)
