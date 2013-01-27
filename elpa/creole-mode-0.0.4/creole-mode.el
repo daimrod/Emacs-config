@@ -5,7 +5,7 @@
 ;; Author: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Maintainer: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Keywords: hypermedia, wp
-;; Version: 0.0.2
+;; Version: 0.0.4
 ;; URL: https://github.com/nicferrier/creole-mode
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -61,12 +61,13 @@
 Basically just does not fill within links."
   (or
    (memq 'link (text-properties-at (point)))
+   (memq 'list-item (text-properties-at (point)))
    (memq 'info-title-1 (text-properties-at (point)))
    (memq 'info-title-2 (text-properties-at (point)))
    (memq 'info-title-3 (text-properties-at (point)))
    (memq 'info-title-4 (text-properties-at (point)))))
 
-
+;;;###autoload
 (define-generic-mode 'creole-mode
   nil ; comments
   nil; keywords
@@ -74,7 +75,9 @@ Basically just does not fill within links."
     ("^\\(== \\)\\(.*?\\)\\($\\| ==$\\)" . 'info-title-2)
     ("^\\(=== \\)\\(.*?\\)\\($\\| ===$\\)" . 'info-title-3)
     ("^\\(====+ \\)\\(.*?\\)\\($\\| ====+$\\)" . 'info-title-4)
+    ("^[ ]*\\** .*" . 'list-item)
     ("\\[\\[.*?\\]\\]" . 'link)
+    ("\\[\\[\\[.*?\\]\\]\\]" . 'link)
     ("\\[.*\\]" . 'link)
     ("\\[b\\].*?\\[/b\\]" . 'bold)
     ("//.*?//" . 'italic)
@@ -85,7 +88,6 @@ Basically just does not fill within links."
   '((lambda ()
       (require 'info)
       (require 'goto-addr)
-      (require 'org)
       (orgtbl-mode)
       (orgstruct-mode) ; for editing lists
       (goto-address)

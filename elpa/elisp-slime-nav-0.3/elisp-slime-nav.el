@@ -4,7 +4,7 @@
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; Keywords: navigation slime elisp emacs-lisp
 ;; URL: https://github.com/purcell/elisp-slime-nav
-;; Version: 0.2
+;; Version: 0.3
 ;;
 ;;; Commentary
 ;;
@@ -31,6 +31,7 @@
   "Enable Slime-style navigation of elisp symbols using M-. and M-,"
   nil " SliNav" elisp-slime-nav-mode-map)
 
+(eval-when-compile (require 'cl))
 (require 'etags)
 
 
