@@ -222,4 +222,11 @@ If N is not set, use `comint-buffer-minimum-size'."
      (function (funcall terminal-emulator))
      (symbol (symbol-value terminal-emulator)))))
 
+(defun unfill-paragraph ()
+  "Takes a multi-line paragraph and makes it into a single line
+of text."
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-paragraph nil)))
+
 (provide 'config-defuns)

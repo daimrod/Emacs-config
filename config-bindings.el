@@ -105,4 +105,6 @@
 (key-chord-define-global "xc" 'ace-jump-line-mode)
 (key-chord-define-global "qd" 'ace-jump-mode-pop-mark)
 
+(global-set-key (kbd "M-Q") 'unfill-paragraph)
+
 (provide 'config-bindings)
