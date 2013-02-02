@@ -99,11 +99,6 @@
 ;; fontify src code
 (setq org-src-fontify-natively t)
 
-;;; Plantuml
-(require 'config-plantuml)
-(setq org-plantuml-jar-path plantuml-jar-path)
-(require 'ob-plantuml)
-
 ;;; Calendar/Diary
 (setq org-agenda-include-diary t)
 (require 'calendar)

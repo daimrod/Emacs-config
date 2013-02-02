@@ -25,6 +25,13 @@
 (defvar plantuml-jar-path (expand-file-name "~/opt/plantuml.jar"))
 (require 'plantuml-mode)
 
+(eval-after-load "config-org"
+  '(progn
+     (setq org-plantuml-jar-path plantuml-jar-path)
+     (require 'ob-plantuml)))
+
+
+
 (provide 'config-plantuml)
 
 ;;; config-plantuml.el ends here
