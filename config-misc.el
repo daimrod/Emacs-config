@@ -18,19 +18,9 @@
 
 ;; ELPA configuration
 (setq package-archives
-      (remove-if (lambda (pair)
-                   (destructuring-bind (name . url)
-                       pair
-                     (unless (= (let ((buffer (url-http-head url)))
-                                  (prog1
-                                      (with-current-buffer buffer
-                                        (url-http-parse-response))
-                                    (kill-buffer buffer)))
-                                200)
-                       (message "Package repository `%s' is not up." name))))
-                 '(("ELPA" . "http://tromey.com/elpa/") 
+	  '(("ELPA" . "http://tromey.com/elpa/") 
                    ("gnu" . "http://elpa.gnu.org/packages/")
-                   ("marmalade" . "http://marmalade-repo.org/packages/"))))
+                   ("marmalade" . "http://marmalade-repo.org/packages/")))
 (package-initialize)
 
 (require 'linum)
