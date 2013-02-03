@@ -7,7 +7,7 @@
 ;; URL: http://github.com/nicferrier/elpakit
 ;; Keywords: lisp
 ;; Package-Requires: ((anaphora "0.0.6")(dash "1.0.3"))
-;; Version: 0.0.8
+;; Version: 0.0.10
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -519,6 +519,99 @@ could have come from anywhere."
            "*elpakit*"
            emacs-bin args)))
 
+(defun elpakit/emacs-server (archive-dir install &optional extra-lisp)
+  "Start an Emacs server process with the ARCHIVE-DIR repository.
+
+The server started is a daemon.  The process that starts the
+daemon should die once the initialization has finished.  The
+daemon remains of course.
+
+INSTALL is a package name symbol for a package from the
+ARCHIVE-DIR that will be installed.
+
+Optionally you can specify a quoted lisp form in EXTRA-LISP and
+this will be included in the daemon initialization.  This is
+useful for testing, for example running batch tests could be done
+like:
+
+ '(ert-run-tests-batch \"my-package.*\")
+
+This function returns a cons of the initialization process and the
+emacs server identifier.  The emacs server identifier can be used
+to contact the emacs daemon directly, thus:
+
+  emacsclient -s /tmp/emacs$UID/$emacs-server-identifier
+
+presuming that you're trying to start it from the same user."
+  (let* ((unique (make-temp-name "elpakit-emacs-server"))
+         (emacs-dir (concat "/tmp/" unique ".emacsd/"))
+         (elpa-dir (concat emacs-dir "elpa/"))
+         (emacs-bin (concat invocation-directory invocation-name))
+         (boot-file (concat "/tmp/" unique ".emacs-init.el"))
+         (args
+          (list (concat "--daemon=" unique)
+                "-Q" "-l" boot-file)))
+    (with-temp-file boot-file
+      (insert (format
+               (concat
+                "(progn"
+                "(setq package-archives (quote %S))"
+                "(setq package-user-dir %S)"
+                "(package-initialize)"
+                "(package-refresh-contents)"
+                "(package-install (quote %S))"
+                "%s)")
+               (acons "local" archive-dir package-archives)
+               elpa-dir ;; where packages will be installed to
+               install
+               (if extra-lisp
+                   (mapconcat
+                    (lambda (a) (format "%S" a))
+                    extra-lisp "\n")
+                   ""))))
+    (cons
+     (apply 'start-process unique "*elpakit-daemon*" emacs-bin args)
+     unique)))
+
+(defun* elpakit-start-server (package-list install &key test extra-lisp)
+  "Start a server with the PACKAGE-LIST.
+
+If TEST is `t' then we run tests in the daemon.
+
+If EXTRA-LISP is a list then that is passed into the daemon to be
+executed as extra initialization.  If EXTRA-LISP is specified
+then automatic requiring of the INSTALL is not performed.  If
+EXTRA-LISP and TEST is specified then tests are done *after*
+EXTRA-LISP.  EXTRA-LISP must do the require in that case."
+  (let ((archive-dir (make-temp-file "elpakit-archive" t)))
+    ;; First build the elpakit with tests
+    (elpakit archive-dir package-list t)
+    (let* ((test-stuff
+            (if test
+                `((ert-run-tests-batch ,(format "%s.*" install)))))
+           (extra
+            (if extra-lisp
+                (cons extra-lisp test-stuff)
+                ;; else do the require automatically
+                (cons
+                 `(require (quote ,install))
+                 test-stuff)))
+           (daemon-value
+            (elpakit/emacs-server archive-dir install extra)))
+      (with-current-buffer (get-buffer-create "*elpakit-daemon*")
+        (make-variable-buffer-local 'elpakit-unique-handle)
+        (setq elpakit-unique-handle (cdr daemon-value))
+        daemon-value))))
+
+(defun elpakit-stop-server ()
+  "Stop the server in the current *elpakit-daemon* buffer."
+  (interactive)
+  (assert (equal "*elpakit-daemon*" (buffer-name)))
+  (assert elpakit-unique-handle)
+  (server-eval-at
+   elpakit-unique-handle
+   '(kill-emacs)))
+
 (defvar elpakit/test-ert-selector-history nil
   "History variable for `elpakit-test'.")
 
@@ -529,6 +622,7 @@ could have come from anywhere."
      (assert
       (listp test-recipe)
       "there's no package in the current dir?")
+     (with-current-buffer (get-buffer-create "*elpakit*") (erase-buffer))
      ;; deliver the interctive args
      (list (list default-directory)
            (car test-recipe)

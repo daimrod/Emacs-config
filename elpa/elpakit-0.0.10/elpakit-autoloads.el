@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads (elpakit-test elpakit elpakit-eval elpakit-make-multi)
-;;;;;;  "elpakit" "elpakit.el" (20723 59953 0 0))
+;;;;;;  "elpakit" "elpakit.el" (20750 17785 0 0))
 ;;; Generated autoloads from elpakit.el
 
 (autoload 'elpakit-make-multi "elpakit" "\
@@ -34,7 +34,8 @@ Make a package archive at DESTINATION from PACKAGE-LIST.
 
 ;;;***
 
-;;;### (autoloads nil nil ("elpakit-pkg.el") (20723 59953 93754 409000))
+;;;### (autoloads nil nil ("elpakit-pkg.el") (20750 17785 542416
+;;;;;;  505000))
 
 ;;;***
 
