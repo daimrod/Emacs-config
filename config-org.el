@@ -104,7 +104,8 @@
 (require 'calendar)
 (require 'diary-lib)
 
-(setq diary-file "~/.diary")
+(setq diary-file "~/.diary"
+      org-agenda-diary-file "~/org/diary.org")
 (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
 (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
 
