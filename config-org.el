@@ -127,4 +127,8 @@
 ;;; Org Contacts
 (require 'org-contacts)
 
+;;; Org Magit
+(fni/add-to-load-path (concat src-dir "org-magit/"))
+(require 'org-magit)
+
 (provide 'config-org)
