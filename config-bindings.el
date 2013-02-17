@@ -107,4 +107,7 @@
 
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
 
+(global-set-key (kbd "<f5>") 'compile)
+(global-set-key (kbd "<f6>") 'recompile)
+
 (provide 'config-bindings)
