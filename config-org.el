@@ -110,7 +110,7 @@
 (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
 
 ;;; export Latex
-(add-to-list 'org-export-latex-default-packages-alist '("" "listings" t))
+(add-to-list 'org-latex-default-packages-alist '("" "listings" t))
 
 ;;; config org-annotate (contrib)
 (require 'org-annotate-file)
