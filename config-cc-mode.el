@@ -27,4 +27,9 @@
         (c-mode . "k&r")
         (other . "linux")))
 
+(define-key c-mode-map (kbd "<f5>") 'compile)
+(define-key c-mode-map (kbd "<f6>") 'recompile)
+(define-key c++-mode-map (kbd "<f5>") 'compile)
+(define-key c++-mode-map (kbd "<f6>") 'recompile)
+
 (provide 'config-cc-mode)
