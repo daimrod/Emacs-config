@@ -131,4 +131,7 @@
 (fni/add-to-load-path (concat src-dir "org-magit/"))
 (require 'org-magit)
 
+;;; see (info "(org) Speed keys")
+(setq org-use-speed-commands t)
+
 (provide 'config-org)
