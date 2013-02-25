@@ -152,12 +152,13 @@ but still present in the background."
 (add-hook 'after-make-frame-functions #'dmd/delete-zombie-clients)
 
 (defun dmd/autocompile ()
-  "Byte compile an elisp."
+  "Byte compile an elisp and reload it."
   (interactive)
   (require 'bytecomp)
   (let ((filename (buffer-file-name)))
-    (if (string-match "\\.el$" filename)
-        (byte-compile-file filename))))
+    (when (string-match "\\.el$" filename)
+      (byte-compile-file filename)
+      (load-file filename))))
 
 (defvar *evince-extensions* nil
   "List of extentions supported by evince.")
