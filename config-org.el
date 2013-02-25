@@ -134,4 +134,8 @@
 ;;; see (info "(org) Speed keys")
 (setq org-use-speed-commands t)
 
+;;; Don't scatter LaTeX images
+(setq org-latex-preview-ltxpng-directory "/tmp/ltxpng/")
+(make-directory org-latex-preview-ltxpng-directory)
+
 (provide 'config-org)
