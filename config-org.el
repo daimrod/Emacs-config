@@ -136,6 +136,6 @@
 
 ;;; Don't scatter LaTeX images
 (setq org-latex-preview-ltxpng-directory "/tmp/ltxpng/")
-(make-directory org-latex-preview-ltxpng-directory)
+(make-directory org-latex-preview-ltxpng-directory t)
 
 (provide 'config-org)
