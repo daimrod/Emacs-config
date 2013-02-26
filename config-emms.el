@@ -26,6 +26,7 @@
 (require 'emms-setup)
 (emms-standard)
 (emms-default-players)
+(global-set-key (kbd "C-c m") 'emms-playlist-mode-go)
 
 (provide 'config-emms)
 
