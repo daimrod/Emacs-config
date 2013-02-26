@@ -32,4 +32,7 @@
 (require 'magit-topgit)
 (add-hook 'magit-mode-hook 'turn-on-magit-topgit)
 
+;;; m0ar context for diff thunks
+(setq magit-diff-context-lines 10)
+
 (provide 'config-git)
