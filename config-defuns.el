@@ -230,4 +230,10 @@ of text."
   (let ((fill-column (point-max)))
     (fill-paragraph nil)))
 
+(defun insert-notebook-note ()
+  (interactive)
+  (insert (org-make-link-string
+           (format-time-string "%A %d %B %Y (%H:%M)")
+           (format-time-string "@%H%M"))))
+
 (provide 'config-defuns)
