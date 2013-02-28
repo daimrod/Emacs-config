@@ -18,3 +18,4 @@ elpa/archives/
 /.mc-lists.el
 /semanticdb/
 /dict/*
+/emms/cache
