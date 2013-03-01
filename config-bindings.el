@@ -110,4 +110,6 @@
 (global-set-key (kbd "<f5>") 'compile)
 (global-set-key (kbd "<f6>") 'recompile)
 
+(global-set-key (kbd "M-\\") 'execute-extended-command)
+
 (provide 'config-bindings)
