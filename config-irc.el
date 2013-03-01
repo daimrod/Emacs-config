@@ -87,6 +87,8 @@ window change."
             ;;; erc-truncate-mode should do that but it does not.
             (add-hook 'erc-insert-post-hook 'erc-truncate-buffer)))
 
+(add-to-list 'global-mode-string '(t erc-modified-channels-object))
+
 (provide 'config-irc)
 
 ;;; config-irc.el ends here
