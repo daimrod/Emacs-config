@@ -5,6 +5,8 @@
 ;; Author: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Maintainer: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Created: 3 Aug 2012
+;; Version: 0.3.2
+;; Url: http://github.com/nicferrier/emacs-web
 ;; Keywords: lisp, http, hypermedia
 
 ;; This file is NOT part of GNU Emacs.
@@ -24,23 +26,28 @@
 
 ;;; Commentary:
 ;;
-;; This is an HTTP client using lexical scope.
+;; This is an HTTP client using lexical scope.  This makes coding with
+;; callbacks easier than with `url'.  This package also provides a
+;; streaming mode where the callback is continually called whenever
+;; chunk encoding chunks are completed.
+
+;;; Code:
+
+;; Style-note: This codes uses the Emacs style of:
 ;;
-;;; Source code
-;;
-;;; Style note
-;;
-;; This codes uses the Emacs style of:
-;;
-;;    web--private-function
+;;    web/private-function
 ;;
 ;; for private functions.
 
 
-;;; Code:
-
 (eval-when-compile
   (require 'cl))
+
+(require 'url-parse)
+
+(defconst web/request-mimetype
+  'application/x-www-form-urlencoded
+  "The default MIME type used for requests.")
 
 (defun web-header-parse (data)
   "Parse an HTTP response header.
@@ -78,7 +85,7 @@ which are stored as symbols the same as the normal header keys."
            (puthash name value header-hash)))
     header-hash))
 
-(defun web--chunked-decode-stream (con data consumer)
+(defun web/chunked-decode-stream (con data consumer)
   "Decode the chunked encoding stream on the process CON.
 
 DATA is a lump of data from the stream, as passed from a filter
@@ -131,10 +138,28 @@ CON is used to store state with the process property
                  (process-put con :chunked-encoding-buffer "")
                  ;; Go round again if we need to
                  (if left
-                     (web--chunked-decode-stream
+                     (web/chunked-decode-stream
                       con left consumer)))))))))
 
-(defun web--http-post-filter (con data callback mode)
+(defun web/cleanup-process (proc)
+  "Kill the buffer and clean the process."
+  (let ((buf (process-buffer proc)))
+    (delete-process proc)
+    (kill-buffer buf)))
+
+(defun web/content-length-filter (callback con header data)
+  "Does the content-length filtering."
+  (let ((so-far (concat (process-get con :web-buffer) data))
+        (content-len (string-to-number
+                      (gethash 'content-length header))))
+    (if (> content-len (length so-far))
+        (process-put con :web-buffer so-far)
+        ;; We have all the data, callback and then kill the process
+        (unwind-protect
+             (funcall callback con header so-far)
+          (web/cleanup-process con)))))
+
+(defun web/http-post-filter (con data callback mode)
   "Filter function for HTTP POST.
 
 Not actually a filter function because it also receives the
@@ -169,12 +194,12 @@ by collecting it and then batching it to the CALLBACK."
                   (process-put con :http-header hdr)
                   ;; If we have more data call ourselves to process it
                   (when part-data
-                    (web--http-post-filter
+                    (web/http-post-filter
                      con part-data callback mode)))))
           ;; We have the header, read the body and call callback
           (cond
             ((equal "chunked" (gethash 'transfer-encoding header))
-             (web--chunked-decode-stream
+             (web/chunked-decode-stream
               con data
               ;; FIXME we still need the callback to know if this is completion
               (lambda (con data)
@@ -182,12 +207,12 @@ by collecting it and then batching it to the CALLBACK."
                   ((eq mode 'stream)
                    (funcall callback con header data)
                    (when (eq data :done)
-                     (delete-process con)))
+                     (web/cleanup-process con)))
                   ((and (eq mode 'batch)
                         (eq data :done))
                    (funcall callback con header
                             (process-get con :web-buffer))
-                   (delete-process con))
+                   (web/cleanup-process con))
                   (t
                    (process-put
                     con :web-buffer
@@ -195,17 +220,9 @@ by collecting it and then batching it to the CALLBACK."
                             data)))))))
             ;; We have a content-length header so just buffer that much data
             ((gethash 'content-length header)
-             (let ((so-far (process-get con :web-buffer)))
-               (if (< (string-to-number (gethash 'content-length header))
-                      (length so-far))
-                   (process-put
-                    con :web-buffer
-                    (concat so-far data))
-                   ;; We have all the data, callback and then kill the process
-                   (funcall callback con header (concat so-far data))
-                   (delete-process con)))))))))
+             (web/content-length-filter callback con header data)))))))
 
-(defun web--key-value-encode (key value)
+(defun web/key-value-encode (key value)
   "Encode a KEY and VALUE for url encoding."
   (cond
     ((or
@@ -218,7 +235,7 @@ by collecting it and then batching it to the CALLBACK."
     (t
      (format "%s" (url-hexify-string (format "%s" key))))))
 
-(defun web--to-query-string (object)
+(defun web/to-query-string (object)
   "Convert OBJECT (a hash-table or alist) to an HTTP query string.
 
 If OBJECT is of type `hash-table' then the keys and values of the
@@ -233,7 +250,7 @@ described) are encoded just as \"key\".
 Keys may be symbols or strings."
   (mapconcat
    (lambda (pair)
-     (web--key-value-encode (car pair) (cdr pair)))
+     (web/key-value-encode (car pair) (cdr pair)))
    (cond
      ((hash-table-p object)
       (let (result)
@@ -249,35 +266,35 @@ Keys may be symbols or strings."
 (defvar web-log-info nil
   "Whether to log info messages, specifically from the sentinel.")
 
-(defun web--http-post-sentinel (con evt)
+(defun web/http-post-sentinel (con evt)
   "Sentinel for the HTTP POST."
   ;; FIXME I'm sure this needs to be different - but how? it needs to
   ;; communicate to the filter function?
   (cond
     ((equal evt "closed\n")
      (when web-log-info
-       (message "web--http-post-sentinel http client post closed")))
+       (message "web/http-post-sentinel http client post closed")))
     ((equal evt "deleted\n")
      (delete-process con)
      (when web-log-info
-       (message "web--http-post-sentinel http client post deleted")))
+       (message "web/http-post-sentinel http client post deleted")))
     ((equal evt "connection broken by peer\n")
      (when web-log-info
-       (message "web--http-post-sentinel http client broken")))
+       (message "web/http-post-sentinel http client broken")))
     (t
      (when web-log-info
-       (message "web--http-post-sentinel unexpected evt: %s" evt)))))
+       (message "web/http-post-sentinel unexpected evt: %s" evt)))))
 
-(defun web--http-post-sentinel-with-logging (con evt logging)
+(defun web/http-post-sentinel-with-logging (con evt logging)
   "Map a logging variable into the sentinel."
   (let ((web-log-info logging))
-    (web--http-post-sentinel con evt)))
+    (web/http-post-sentinel con evt)))
 
-(defun web--header-list (headers)
+(defun web/header-list (headers)
   "Convert HEADERS (hash-table or alist) into a header list."
   (labels
       ((hdr (key val)
-         (format "%s: %s" key val)))
+         (format "%s: %s\r\n" key val)))
     (cond
       ((hash-table-p headers)
        (let (res)
@@ -293,18 +310,29 @@ Keys may be symbols or strings."
 
 (defun* web-http-call (method
                        callback
-                       path
                        &key
+                       url
                        (host "localhost")
                        (port 80)
+                       secure
+                       (path "/")
                        extra-headers
                        data
-                       (mime-type 'application/form-www-url-encoded)
+                       (mime-type web/request-mimetype)
                        (mode 'batch)
                        logging)
-  "Make an HTTP method to the HOST on PORT with PATH and send DATA.
+  "Make an HTTP method to the URL or the HOST, PORT, PATH and send DATA.
 
-PORT is 80 by default.
+If URL is specified then it takes precedence over SECURE, HOST,
+PORT and PATH.  URL may be HTTP or HTTPS.
+
+Important note: any query in URL is currently IGNORED!
+
+SECURE is `nil' by default but if `t' then SSL is used.
+
+PORT is 80 by default.  Even if SECURE it `t'.  If you manually
+specify SECURE you should manually specify PORT to be 443.  Using
+URL negates the need for that, an SSL URL will work correctly.
 
 EXTRA-HEADERS is an alist or a hash-table of extra headers to
 send to the server.
@@ -313,7 +341,7 @@ DATA is of MIME-TYPE.  We try to interpret DATA and MIME-TYPE
 usefully:
 
 If MIME-TYPE is `application/form-www-url-encoded' then
-`web--to-query-string' is used to to format the DATA into a POST
+`web/to-query-string' is used to to format the DATA into a POST
 body.
 
 When the request comes back the CALLBACK is called.  CALLBACK is
@@ -331,35 +359,50 @@ of the stream or `:done' when the stream ends.
 
 The default MODE is `batch' which collects all the data from the
 response before calling CALLBACK with all the data as a string."
+  (message "web-http-call %s" url)
   (let* ((mode (or mode 'batch))
-         (dest (format "%s:%s/%s" host port path))
+         (parsed-url (url-generic-parse-url
+                      (if url url
+                          (format "%s://%s:%d%s"
+                                  (if secure "https" "http")
+                                  host port path))))
+         (host (progn
+                 (assert
+                  (or (equal (url-type parsed-url) "http")
+                      (equal (url-type parsed-url) "https"))
+                  t "The url scheme must be http")
+                 (url-host parsed-url)))
+         (port (url-port parsed-url))
+         (path (url-filename parsed-url))
+         (dest (format "%s:%s%s" host port path))
          (buf (generate-new-buffer dest))
          (con (open-network-stream
                (format "web-http-post-%s" dest)
-               buf
-               host
-               port)))
+               buf host port
+               :type (cond
+                      ((equal (url-type parsed-url) "http") 'plain)
+                      ((equal (url-type parsed-url) "https") 'tls)))))
     ;; We must use this coding system or the web dies
     (set-process-coding-system con 'raw-text-unix 'raw-text-unix)
     (set-process-sentinel
      con
      (lambda (con evt)
-       (web--http-post-sentinel-with-logging con evt logging)))
+       (message "the logging is set to [%s] %s" evt logging)
+       (web/http-post-sentinel-with-logging con evt logging)))
     (set-process-filter
      con
      (lambda (con data)
        (let ((mode mode)
              (cb callback))
-         (web--http-post-filter con data cb mode))))
+         (web/http-post-filter con data cb mode))))
     ;; Send the request
     (let*
         ((to-send
           (cond
-            ((eq (if (symbolp mime-type)
-                     mime-type
-                     (intern mime-type))
-                 'application/x-www-form-urlencoded)
-             (web--to-query-string data))))
+            ((eq
+              (if (symbolp mime-type) mime-type (intern mime-type))
+              web/request-mimetype)
+             (web/to-query-string data))))
          (headers
           (or
            (loop for hdr in
@@ -370,7 +413,7 @@ response before calling CALLBACK with all the data as a string."
                   (when to-send
                     (format
                      "Content-length:%d\r\n" (length to-send))))
-                 (web--header-list extra-headers))
+                 (web/header-list extra-headers))
               if hdr
               concat hdr)
            ""))
@@ -384,57 +427,86 @@ response before calling CALLBACK with all the data as a string."
     con))
 
 (defun* web-http-get (callback
-                      path
                       &key
+                      url
                       (host "localhost")
                       (port 80)
+                      (path "/")
                       extra-headers
                       (mode 'batch)
                       (logging t))
   "Make a GET calling CALLBACK with the result.
 
-For information on PATH, HOST, PORT, EXTRA-HEADERS and MODE see
-`web-http-call'.
+For information on URL or PATH, HOST, PORT and also EXTRA-HEADERS
+and MODE see `web-http-call'.
 
 The callback probably won't work unless you set `lexical-binding'
 to `t'."
   (web-http-call
    "GET"
    callback
-   path
+   :url url
    :host host
    :port port
+   :path path
    :extra-headers extra-headers
    :mode mode
    :logging t))
 
 (defun* web-http-post (callback
-                       path
                        &key
+                       url
                        (host "localhost")
                        (port 80)
+                       (path "/")
                        extra-headers
                        data
-                       (mime-type 'application/x-www-form-urlencoded)
+                       (mime-type web/request-mimetype)
                        (mode 'batch)
                        (logging t))
   "Make a POST and call CALLBACK with the result.
 
-For information on PATH, HOST, PORT and MODE see `web-http-call'.
+For information on URL or PATH, HOST, PORT and also MODE see
+`web-http-call'.
 
 The callback probably won't work unless you set `lexical-binding'
 to `t'."
   (web-http-call
    "POST"
    callback
-   path
+   :url url
    :host host
    :port port
+   :path path
    :extra-headers extra-headers
    :data data
    :mime-type mime-type
    :logging logging
    :mode mode))
+
+(defun* web-json-post (callback &key url data headers)
+  "POST DATA to URL expecting a JSON response sent to CALLBACK.
+
+The CALLBACK is called as:
+
+  CALLBACK RESPONSE-DATA HTTPCON RESPONSE-HEADER
+
+so the function may be defined like this:
+
+  (lambda (data &rest stuff) ...)
+
+HEADERS may be specified, these are treated as extra-headers to
+be sent with the request.
+
+The DATA is sent as `application/x-www-form-urlencoded'."
+  (web-http-call
+   "POST"
+   (lambda (httpcon header data)
+     (let ((lisp-data (json-read-from-string data)))
+       (funcall callback lisp-data httpcon header)))
+   :url url
+   :data data
+   :extra-headers headers))
 
 (provide 'web)
 

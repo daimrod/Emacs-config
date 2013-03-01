@@ -3,10 +3,10 @@
 ;;; Code:
 
 
-;;;### (autoloads (elnode-do-init elnode-init define-elnode-handler
-;;;;;;  elnode-webserver elnode-make-webserver elnode--webserver-handler-proc
-;;;;;;  elnode-hostpath-default-table elnode-start elnode-list elnode-app)
-;;;;;;  "elnode" "elnode.el" (20723 60111 0 0))
+;;;### (autoloads (elnode-do-init elnode-init elnode-webserver elnode-make-webserver
+;;;;;;  elnode--webserver-handler-proc elnode-hostpath-default-table
+;;;;;;  elnode-start elnode-app) "elnode" "elnode.el" (20784 44314
+;;;;;;  0 0))
 ;;; Generated autoloads from elnode.el
 
 (defconst elnode-config-directory (expand-file-name (concat user-emacs-directory "elnode/")) "\
@@ -33,12 +33,7 @@ of your module (which is useful for serving files and such).
 
 \(fn DIR-VAR &rest FEATURES)" nil t)
 
-(put 'elnode-app 'lisp-indent-function '2)
-
-(autoload 'elnode-list "elnode" "\
-
-
-\(fn)" t nil)
+(put 'elnode-app 'lisp-indent-function '1)
 
 (autoload 'elnode-start "elnode" "\
 Start a server using REQUEST-HANDLER.
@@ -56,9 +51,8 @@ You can use functions such as `elnode-http-start' and
 Example:
 
   (defun nic-server (httpcon)
-    (elnode-http-start httpcon 200 '((\"Content-Type: text/html\")))
-    (elnode-http-return httpcon \"<html><b>BIG!</b></html>\")
-x  )
+    (elnode-http-start httpcon 200 '(\"Content-Type\" . \"text/html\"))
+    (elnode-http-return httpcon \"<html><b>BIG!</b></html>\"))
   (elnode-start 'nic-server)
 
 Now visit http://127.0.0.1:8000
@@ -137,16 +131,6 @@ HTTPCON is the HTTP connection to the user agent.
 
 \(fn HTTPCON)" nil nil)
 
-(autoload 'define-elnode-handler "elnode" "\
-Define an Elnode handler function.
-
-This is just like `defun' but it allows Elnode handlers to be
-wrapped by other HTTP implementations.
-
-\(fn NAME ARGLIST &rest BODY)" nil t)
-
-(put 'define-elnode-handler 'lisp-indent-function 'defun)
-
 (autoload 'elnode-init "elnode" "\
 Bootstraps the elnode environment when the Lisp is loaded.
 
@@ -176,8 +160,8 @@ in `elnode-webserver-docroot', which by default is ~/public_html.")
 
 ;;;***
 
-;;;### (autoloads (elnode-wikiserver-test elnode-wikiserver-wikiroot)
-;;;;;;  "elnode-wiki" "elnode-wiki.el" (20723 60111 0 0))
+;;;### (autoloads (elnode-wikiserver elnode-wikiserver-test elnode-wikiserver-wikiroot)
+;;;;;;  "elnode-wiki" "elnode-wiki.el" (20784 44314 0 0))
 ;;; Generated autoloads from elnode-wiki.el
 
 (defconst elnode-wikiserver-wikiroot-default (expand-file-name (concat elnode-config-directory "wiki/")) "\
@@ -198,12 +182,20 @@ Test whether we should serve Wiki or not.
 
 \(fn)" nil nil)
 
-(define-elnode-handler elnode-wikiserver (httpcon) "Serve Wiki pages from `elnode-wikiserver-wikiroot'.\n\nHTTPCON is the request.\n\nThe Wiki server is only available if the `creole' package is\nprovided. Otherwise it will just error." (if (not (elnode-wikiserver-test)) (elnode-send-500 httpcon "The Emacs feature 'creole is required.") (elnode-wiki--setup) (elnode-wiki-handler httpcon elnode-wikiserver-wikiroot)))
+(autoload 'elnode-wikiserver "elnode-wiki" "\
+Serve Wiki pages from `elnode-wikiserver-wikiroot'.
+
+HTTPCON is the request.
+
+The Wiki server is only available if the `creole' package is
+provided. Otherwise it will just error.
+
+\(fn HTTPCON)" nil nil)
 
 ;;;***
 
-;;;### (autoloads nil nil ("elnode-pkg.el" "elnode-rle.el") (20723
-;;;;;;  60111 479622 146000))
+;;;### (autoloads nil nil ("elnode-pkg.el" "elnode-rle.el") (20784
+;;;;;;  44314 961441 300000))
 
 ;;;***
 

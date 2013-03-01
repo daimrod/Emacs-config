@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads nil nil ("fakir-pkg.el" "fakir.el") (20725 54418
-;;;;;;  789299 936000))
+;;;### (autoloads nil nil ("fakir-pkg.el" "fakir.el") (20784 44309
+;;;;;;  743158 369000))
 
 ;;;***
 

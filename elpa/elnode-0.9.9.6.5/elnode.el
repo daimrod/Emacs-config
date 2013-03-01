@@ -22,18 +22,6 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-;;; Commentary:
-;;
-;; This is an elisp version of the popular node.js asynchronous
-;; webserver toolkit.
-;;
-;; You can define HTTP request handlers and start an HTTP server
-;; attached to the handler.  Many HTTP servers can be started, each
-;; must have it's own TCP port.  Handlers can defer processing with a
-;; signal (which allows comet style resource management)
-;;
-;; See elnode-start for how to start an HTTP server.
-
 ;;; Source code
 ;;
 ;; elnode's code can be found here:
@@ -48,8 +36,21 @@
 ;; for private functions.
 
 
+;;; Commentary:
+;;
+;; This is an elisp version of the popular node.js asynchronous
+;; webserver toolkit.
+;;
+;; You can define HTTP request handlers and start an HTTP server
+;; attached to the handler.  Many HTTP servers can be started, each
+;; must have it's own TCP port.  Handlers can defer processing with a
+;; signal (which allows comet style resource management)
+;;
+;; See elnode-start for how to start an HTTP server.
+
 ;;; Code:
 
+(require 'fakir)
 (require 'mm-encode)
 (require 'mailcap)
 (require 'url-util)
@@ -58,6 +59,7 @@
 (require 'json)
 (require 'db)
 (require 'dired) ; needed for the setup
+(require 'tabulated-list)
 (require 'ert) ; we provide some assertions and need 'should'
 (eval-when-compile (require 'cl))
 
@@ -210,7 +212,7 @@ list.  Use it like this:
 
 Once used you can access the variable `my-app-dir' as the dirname
 of your module (which is useful for serving files and such)."
-  (declare (indent 2))
+  (declare (indent 1))
   `(progn
      (setq lexical-binding t)
      (defconst ,dir-var (file-name-directory
@@ -380,10 +382,8 @@ by elnode iteslf."
          (buffer-name (format "*%s-elnode-access*" logname))
          (filename (elnode--log-filename logname))
          (formatter
-          (assoc-default
-           logname
-           elnode-log-access-alist
-           'equal
+          (or
+           (aget elnode-log-access-alist "elnode")
            elnode-log-access-default-formatter-function))
          (formatted
           (when formatter
@@ -517,9 +517,11 @@ failure state which either the symbol `closed' or the symbol
               (loop for hook-func in elnode-defer-failure-hook
                  do
                    (funcall hook-func httpcon 'failed)))
+             ;; Not sure how to do connect... same as open?
+             ;; ... or just put it back?
              ('connect
               (push
-               (cons httpcon (cdr signal-value))
+               (cons httpcon handler)
                new-deferred)))))
     (elnode--deferred-log elnode-log-info "complete")
     ;; Set the correct queue
@@ -594,10 +596,22 @@ The function `elnode-send-status' also uses these."
   :type '(alist :key-type integer
                 :value-type string))
 
+(defconst elnode--default-response-groups
+  '((1 . "Informing you of something.")
+    (2 . "Ok.")
+    (3 . "")
+    (4 . "Bad.")
+    (5 . "Error."))
+  "Response codes for error code / 100.
+
+These are designed to be used when a specific code is not
+available.")
+
 (defun elnode--format-response (status &optional msg)
   "Format the STATUS and optionally MESSAGE as an HTML return."
   (format "<h1>%s</h1>%s\r\n"
           (cdr (or (assoc status elnode-default-response-table)
+                   (assoc (/ status 100) elnode--default-response-groups)
                    (assoc t elnode-default-response-table)))
           (if msg (format "<p>%s</p>" msg) "")))
 
@@ -788,6 +802,7 @@ Does any necessary encoding."
 Does any necessary encoding."
     (elnode--process-send-eof con)))
 
+
 (defun elnode--handler-call (handler process)
   "Simple function to wrap calling the HANDLER."
   (elnode-error "filter: calling handler on %s" process)
@@ -870,7 +885,9 @@ port number of the connection."
                       ('t
                        ;; FIXME: we need some sort of check to see if the
                        ;; header has been written
-                       (elnode-error "elnode--filter: default handling")
+                       (elnode-error
+                        "elnode--filter: default handling %S"
+                        signal-value)
                        (process-send-string
                         process
                         (elnode--format-response 500))))
@@ -916,7 +933,36 @@ routines."
 
 (defun elnode--alist-to-query (alist)
   "Turn an alist into a formdata/query string."
-  (web--to-query-string alist))
+  (flet ((web--key-value-encode (key value)
+           "Encode a KEY and VALUE for url encoding."
+           (cond
+             ((or
+               (numberp value)
+               (stringp value))
+              (format
+               "%s=%s"
+               (url-hexify-string (format "%s" key))
+               (url-hexify-string (format "%s" value))))
+             (t
+              (format "%s" (url-hexify-string (format "%s" key))))))
+         (web--to-query-string (object)
+           "Convert OBJECT (a hash-table or alist) to an HTTP query string."
+           ;; Stolen from web
+           (mapconcat
+            (lambda (pair)
+              (web--key-value-encode (car pair) (cdr pair)))
+            (cond
+              ((hash-table-p object)
+               (let (result)
+                 (maphash
+                  (lambda (key value)
+                    (setq result (append (list (cons key value)) result)))
+                  object)
+                 (reverse result)))
+              ((listp object)
+               object))
+            "&")))
+    (web--to-query-string alist)))
 
 (defun elnode--make-test-call (path method parameters headers)
   "Construct the HTTP request for a test call.
@@ -1033,7 +1079,7 @@ to external processes."
                  (funcall main-send-string httpcon str))
                (elnode--make-send-string ()
                  (lambda (httpcon str)
-                   (send-string-func httpcon str)))
+                   (funcall send-string-func httpcon str)))
                (elnode--make-send-eof ()
                  (lambda (httpcon)
                    ;; Flet everything in elnode--http-end
@@ -1173,27 +1219,58 @@ Serves only to connect the server process to the client processes"
   "List of all ports currently in use by elnode."
   (mapcar 'car elnode-server-socket))
 
-;;;###autoload
-(defun elnode-list ()
+(defun elnode--list-servers ()
+  "List the current Elnode servers for `elnode-list-mode'."
+  (loop for (port . socket-proc) in elnode-server-socket
+     collect
+       (list
+        port
+        (let* ((fn (process-get socket-proc :elnode-http-handler))
+               (doc (when (functionp fn)
+                      (documentation fn))))
+          (vector
+           (number-to-string port)
+           (symbol-name fn)
+           (or (if (and doc (string-match "^\\([^\n]+\\)" doc))
+                   (match-string 1 doc)
+                   "no documentation.")))))))
+
+(defun elnode-server-list-find-handler ()
+  "Find the handler mentioned in the handler list."
   (interactive)
-  "List the Elnode servers we have running."
+  (let ((line
+         (buffer-substring-no-properties
+          (line-beginning-position)
+          (line-end-position))))
+    (when (string-match "^[0-9]+ +\\([^ ]+\\) .*" line)
+      (let ((handler-name (intern (match-string 1 line))))
+        (with-current-buffer
+            (find-file
+             (or (symbol-file handler-name)
+                 (error "no such file")))
+          (find-function handler-name))))))
+
+(define-derived-mode
+    elnode-list-mode tabulated-list-mode "Elnode server list"
+    "Major mode for listing Elnode servers currently running."
+    (setq tabulated-list-entries 'elnode--list-servers)
+    (define-key elnode-list-mode-map (kbd "\r")
+      'elnode-server-list-find-handler)
+    (setq tabulated-list-format
+          [("Port" 10 nil)
+           ("Handler function" 40 nil)
+           ("Documentation" 80 nil)])
+    (tabulated-list-init-header))
+
+(defun elnode-server-list ()
+  "List the currently running Elnode servers."
+  (interactive)
   (with-current-buffer (get-buffer-create "*elnode servers*")
-    (setq buffer-read-only t)
-    (unwind-protect
-         (let ((inhibit-read-only t))
-           (erase-buffer)
-           (loop for server in elnode-server-socket
-              do
-                (destructuring-bind (port . socket-proc) server
-                  (let ((fn (process-get socket-proc :elnode-http-handler)))
-                    (princ
-                     (format
-                      "%s on %s\n%s\n\n"
-                      port
-                      (process-get socket-proc :elnode-http-handler)
-                      (or (documentation fn) "no documentation."))
-                   (current-buffer)))))
-           (switch-to-buffer (current-buffer))))))
+    (elnode-list-mode)
+    (tabulated-list-print)
+    (switch-to-buffer (current-buffer))))
+
+(defalias 'list-enode-servers 'elnode-server-list)
 
 ;;;###autoload
 (defun* elnode-start (request-handler
@@ -1216,9 +1293,8 @@ You can use functions such as `elnode-http-start' and
 Example:
 
   (defun nic-server (httpcon)
-    (elnode-http-start httpcon 200 '((\"Content-Type: text/html\")))
-    (elnode-http-return httpcon \"<html><b>BIG!</b></html>\")
-x  )
+    (elnode-http-start httpcon 200 '(\"Content-Type\" . \"text/html\"))
+    (elnode-http-return httpcon \"<html><b>BIG!</b></html>\"))
   (elnode-start 'nic-server)
 
 Now visit http://127.0.0.1:8000
@@ -1475,7 +1551,10 @@ If PROPERTY is non-nil, then return that property."
       (process-get httpcon property)))
 
 (defun elnode-http-pathinfo (httpcon)
-  "Get the PATHINFO of the request."
+  "Get the PATHINFO of the request.
+
+The PATHINFO is the CGI term for the part of the path that is not
+the hostname or the query; the part that relates to the path."
   (or
    (process-get httpcon :elnode-http-pathinfo)
    (elnode--http-parse-resource httpcon :elnode-http-pathinfo)))
@@ -1559,7 +1638,7 @@ A is considered the priority (it's elements go in first)."
   ;; cope with transfer encodings.
   (let ((postdata
          (with-current-buffer (process-buffer httpcon)
-           (buffer-substring (point-min) (point-max)) ;debug
+           ;; (buffer-substring (point-min) (point-max)) ;debug
            (buffer-substring
             ;; we might have to add 2 to this because of trailing \r\n
             (process-get httpcon :elnode-header-end)
@@ -1607,7 +1686,7 @@ which will be returned."
             (member (car pair) names))
      collect pair))
 
-(defun elnode-http-param (httpcon name)
+(defun elnode-http-param (httpcon name &optional default)
   "Get the named parameter from the request."
   (let* ((params (elnode-http-params httpcon))
          (param-pair
@@ -1615,8 +1694,9 @@ which will be returned."
            (if (symbolp name) (symbol-name name) name)
            params)))
     ;; Should we signal when we don't have a param?
-    (when param-pair
-      (cdr param-pair))))
+    (if param-pair
+        (cdr param-pair)
+        default)))
 
 (defun elnode-http-method (httpcon)
   "Get the PATHINFO of the request."
@@ -1767,10 +1847,7 @@ data.  This is done mainly for testing infrastructure."
     ;; Send the header
     (elnode-error "starting HTTP response on %s" httpcon)
     (let ((header-alist
-           (append
-            (process-get httpcon :elnode-headers-to-set)
-            (list (cons "Transfer-encoding" "chunked"))
-            header))
+           (append (process-get httpcon :elnode-headers-to-set) header))
           (status-code (if (stringp status)
                            (string-to-number status)
                            status)))
@@ -1799,8 +1876,16 @@ of a buffer."
   (elnode-error "elnode--http-end ending socket %s" httpcon)
   (let ((access-log-name (process-get httpcon :elnode-access-log-name)))
     (when access-log-name
-      (elnode-log-access access-log-name httpcon)))
-  (process-send-eof httpcon)
+      (condition-case err
+          (elnode-log-access access-log-name httpcon)
+        (error
+         (message
+          (concat
+           "elnode--http-end: an error occurred "
+           "processing the access log"))))))
+  (condition-case nil
+      (process-send-eof httpcon)
+    (error (message "elnode--http-endL could not send EOF")))
   (delete-process httpcon)
   (kill-buffer (process-buffer httpcon)))
 
@@ -1811,7 +1896,6 @@ HTTPCON is the http connection which must have had the headers
 sent with `elnode-http-start'
 
 DATA must be a string, it's just passed to `elnode-http-send'."
-  (declare (indent 1)) ; helpful indent hint
   (if (not (process-get httpcon :elnode-http-started))
       (elnode-error "Http not started")
     (progn
@@ -1824,7 +1908,14 @@ DATA must be a string, it's just passed to `elnode-http-send'."
             (elnode-http-send-string httpcon ""))))))
 
 (defun elnode-send-html (httpcon html)
-  "Simple send for HTML."
+  "Simple send for HTML.
+
+Use this for simple sending of a full HTML response:
+
+ (defun my-handler (httpcon)
+   (elnode-send-html httpcon \"<html><h1>Hello!</h1></html>\"))
+
+The data is sent with content type: text/html."
   (elnode-http-start httpcon 200 '("Content-Type" . "text/html"))
   (elnode-http-return httpcon html))
 
@@ -1897,7 +1988,7 @@ Optionally include MSG."
   "Sends a Bad Request error to the HTTPCON.
 
 Optionally include MSG."
-  (elnode-send-status httpcon 404 msg))
+  (elnode-send-status httpcon 400 msg))
 
 (defun elnode-send-500 (httpcon &optional msg)
   "Sends a Server Error to the HTTPCON.
@@ -1933,13 +2024,18 @@ Otherwise it calls HANDLER."
          (format "%s/" path))
       (funcall handler httpcon))))
 
+(defun elnode--mapper-find-match-func (match-path match-pair)
+  "Funtion to test MATCH-PATH against MATCH-PAIR."
+  (let ((m (string-match (car match-pair) match-path)))
+    (and m
+          (numberp m)
+         (>= m 0)
+         match-pair)))
+
 (defun elnode--mapper-find-mapping (match-path mapping-table)
   "Return the mapping that matches MATCH-PATH in MAPPING-TABLE."
   (loop for mapping in mapping-table
-     if (let ((m (string-match (car mapping) match-path)))
-          (and m
-               (numberp m)
-               (>= m 0)))
+     if (elnode--mapper-find-match-func match-path mapping)
      return mapping))
 
 (defun elnode--mapper-find (httpcon path mapping-table)
@@ -2030,28 +2126,58 @@ The resulting file is NOT checked for existance or safety."
             (or path pathinfo)))))
     targetfile))
 
+
+;; We need to declare this before the dispatcher stuff, which uses it.
+(defvar elnode--defined-authentication-schemes
+  (make-hash-table :test 'equal)
+  "The hash of defined authentication schemes.")
+
 (defvar elnode--do-access-logging-on-dispatch t
   "Needed to suppress logging in testing.")
+
+(defun elnode--auth-entry->dispatch-table (auth-scheme &optional hostpath)
+  "Make a dispatch table from the AUTH-SCHEME.
+
+If HOSTPATH is specified then the resulting match spec is of the
+`hostpath' type for use with `elnode-hostpath-dispatcher'."
+  (let* ((auth-scheme (gethash
+                       auth-scheme
+                       elnode--defined-authentication-schemes))
+         (redirect (plist-get auth-scheme :redirect))
+         (login-handler (plist-get auth-scheme :login-handler)))
+    (when redirect
+      (list
+       (cons
+        (concat (if hostpath "^.*/" "^") redirect "$")
+        login-handler)))))
 
 (defun* elnode--dispatch-proc (httpcon
                               path
                               url-mapping-table
                               &key
                               (function-404 'elnode-send-404)
-                              (log-name "elnode"))
+                              (log-name "elnode")
+                              extra-table)
   "Dispatch to the matched handler for the PATH on the HTTPCON.
-
 The handler for PATH is matched in the URL-MAPPING-TABLE via
 `elnode--mapper-find'.
 
 If no handler is found then a 404 is attempted via FUNCTION-404,
 it it's found to be a function, or as a last resort
-`elnode-send-404'."
+`elnode-send-404'.
+
+The function also supports the searching of the map provided by
+an EXTRA-TABLE.  This is useful for authentication and other
+wrappers.  If it is specified it is searched first."
   (let ((handler-func
-         (elnode--mapper-find
-          httpcon
-          path
-          url-mapping-table)))
+         (or
+          ;; Either a match from extra-table ...
+          (and extra-table
+               (elnode--mapper-find
+                httpcon path extra-table))
+          ;; ... or from the standard url-mapping-table
+          (elnode--mapper-find
+           httpcon path url-mapping-table))))
     (when elnode--do-access-logging-on-dispatch
       (process-put httpcon :elnode-access-log-name log-name))
     (cond
@@ -2063,7 +2189,9 @@ it it's found to be a function, or as a last resort
 
 (defun* elnode-dispatcher (httpcon
                            url-mapping-table
-                           &key (function-404 'elnode-send-404))
+                           &key
+                           (function-404 'elnode-send-404)
+                           auth-scheme)
   "Dispatch HTTPCON to the function mapped in URL-MAPPING-TABLE.
 
 URL-MAPPING-TABLE is an alist of:
@@ -2088,17 +2216,24 @@ An example server setup:
        (\"^/1/$\" . view-1))))
 
 If FUNCTION-404 is specified it is called when no regexp is
-matched, otherwise `elnode-send-404' is used."
+matched, otherwise `elnode-send-404' is used.
+
+AUTH-SCHEME is an optional authentication scheme, defined with
+`elnode-defauth', which specifies a redirect mapping for
+authentications."
   (elnode-normalize-path
    httpcon
    (lambda (httpcon)
      ;; Get pathinfo again because we may have redirected.
-     (let ((pathinfo (elnode-http-pathinfo httpcon)))
+     (let ((pathinfo (elnode-http-pathinfo httpcon))
+           (extra-table
+            (elnode--auth-entry->dispatch-table auth-scheme)))
        (elnode--dispatch-proc
         httpcon
         pathinfo
         url-mapping-table
-        :function-404 function-404)))))
+        :function-404 function-404
+        :extra-table extra-table)))))
 
 (defun elnode--hostpath (host path)
   "Turn the host and path into a hostpath."
@@ -2116,7 +2251,8 @@ matched, otherwise `elnode-send-404' is used."
                                    hostpath-mapping-table
                                    &key
                                    (function-404 'elnode-send-404)
-                                   (log-name "elnode"))
+                                   (log-name "elnode")
+                                   auth-scheme)
   "Dispatch HTTPCON to a handler based on the HOSTPATH-MAPPING-TABLE.
 
 HOSTPATH-MAPPING-TABLE has regexs of the host and the path double
@@ -2127,16 +2263,24 @@ slash separated, thus:
 FUNCTION-404 should be a 404 handling function, by default it's
 `elnode-send-404'.
 
-LOG-NAME is an optional log-name."
+LOG-NAME is an optional log-name.
+
+AUTH-SCHEME is an optional authentication scheme, defined with
+`elnode-defauth', which specifies a redirect mapping for
+authentications."
   (let ((hostpath (elnode--hostpath
                    (elnode-http-header httpcon "Host")
-                   (elnode-http-pathinfo httpcon))))
+                   (elnode-http-pathinfo httpcon)))
+        (extra-table
+         ;; Make sure it's a hostpath type
+         (elnode--auth-entry->dispatch-table auth-scheme t)))
     (elnode--dispatch-proc
      httpcon
      hostpath
      hostpath-mapping-table
      :function-404 function-404
-     :log-name log-name)))
+     :log-name log-name
+     :extra-table extra-table)))
 
 ;;;###autoload
 (defcustom elnode-hostpath-default-table
@@ -2400,20 +2544,6 @@ chunk encoding and to end the HTTP connection correctly."
              (t)))))
        ,procvar)))
 
-(defun elnode-worker-last-code ()
-  "Put the last worker code in a file for later use.
-
-When testing it's good to be able to capture the last lisp made
-by `elnode-worker-elisp' for manipulating manually."
-  (interactive)
-  (with-current-buffer "* elnode-worker-elisp *"
-    (goto-line -1)
-    (let ((last-line
-           (buffer-substring (line-beginning-position)
-                             (line-end-position))))
-      (with-temp-file "/tmp/elnode-worker-elisp-code.el"
-        (insert last-line)))))
-
 (defun elnode-wait-for-exit (process)
   "Wait for PROCESS status to go to 'exit."
   (while (not (eq (process-status process) 'exit))
@@ -2516,6 +2646,13 @@ certain types of debugging."
   :group 'elnode
   :type '(string))
 
+(defvar elnode-replacements-pattern "<!##E \\(.*?\\) E##!>"
+  "The regex used for replacing things.
+
+The default regex is rather baroque.  This is because it needs to
+be quite unique and there are a lot of different sorts of things
+like this to be unique from.")
+
 (defun elnode--buffer-template (file-buf replacements)
   "Template render a buffer and return a copy.
 
@@ -2545,7 +2682,7 @@ would result in the string:
 being returned."
   (with-current-buffer file-buf
     (replace-regexp-in-string
-     "<!##E \\(.*?\\) E##!>"
+     elnode-replacements-pattern
      (lambda (matched)
        (let ((match-var (match-string-no-properties 1 matched)))
          (cond
@@ -2698,7 +2835,8 @@ Optionally, use the specified TYPE as the status code, eg:
                                 &key
                                 preamble
                                 mime-types
-                                replacements)
+                                replacements
+                                replacements-pattern)
   "Make a handler that will serve a single FILENAME.
 
 If the FILENAME is relative then it is resolved against the
@@ -2711,14 +2849,20 @@ details.
 The REPLACEMENTS parameter can be a function that returns a
 hash-table or alist, this is very useful for this function
 because it allows dynamic variables to be defined.  Again, see
-`elnode-send-file' for full documentation of this feature."
+`elnode-send-file' for full documentation of this feature.
+
+The REPLACEMENTS-PATTERN can be used to set the regex used to
+match replacements.  See `elnode-replacements-pattern'."
   (lambda (httpcon)
-    (elnode-send-file
-     httpcon
-     filename
-     :mime-types mime-types
-     :preamble preamble
-     :replacements replacements)))
+    (let ((elnode-replacements-pattern
+           (or replacements-pattern
+               elnode-replacements-pattern)))
+      (elnode-send-file
+       httpcon
+       filename
+       :mime-types mime-types
+       :preamble preamble
+       :replacements replacements))))
 
 
 ;; Docroot protection
@@ -2976,7 +3120,10 @@ handlers."
                 (elnode-http-start httpcon 200 '("Content-type" . "text/html"))
                 (elnode-http-return httpcon index))))
         ;; Send a file.
-        (elnode-send-file httpcon targetfile)))))
+        (elnode-send-file
+         httpcon
+         targetfile
+         :mime-types mime-types)))))
 
 (defun elnode-webserver-handler-maker (&optional docroot extra-mime-types)
   "Make a webserver handler possibly with the DOCROOT and EXTRA-MIME-TYPES.
@@ -3040,157 +3187,6 @@ HTTPCON is the HTTP connection to the user agent."
                           elnode-webserver-docroot
                           elnode-webserver-extra-mimetypes)))
           (funcall webserver httpcon)))))
-
-
-;;; Elnode wrapper stuff
-
-(defun elnode--wrapper-make-handler-chain (base wrapper-list)
-  "Makes a chain of handlers doing WRAPPER-LIST ending in BASE.
-
-Any optional arguments attached to each wrapper are passed to the
-wrapper when it is called.
-
-The top most handler is returned."
-  (let ((next-handler base))
-    (loop for wrapper-spec in (reverse wrapper-list)
-       do
-         (destructuring-bind
-               (handler-name path-handler match-path &rest args) wrapper-spec
-           (let ((next next-handler))
-             (setq next-handler
-                   (lambda (httpcon)
-                     (elnode-dispatcher
-                      httpcon
-                      (list (cons
-                             match-path
-                             (lambda (httpcon)
-                               (if args
-                                   (funcall path-handler httpcon args)
-                                   (funcall path-handler httpcon)))))
-                      next))))))
-    next-handler))
-
-
-
-;; FIXME - thought of a way to avoid this... if wrappers worked with
-;; routers... if you define a wrapper and they go into an elnode wide
-;; wrapper variable and routers can check that variable... maybe that
-;; would work better?
-
-;;;###autoload
-(defmacro define-elnode-handler (name arglist &rest body)
-  "Define an Elnode handler function.
-
-This is just like `defun' but it allows Elnode handlers to be
-wrapped by other HTTP implementations."
-  (declare (debug (sexp sexp &rest form))
-           (indent defun))
-  (let ((procv (make-symbol "procv"))
-        (namev (make-symbol "namev")))
-    `(let ((,namev (quote ,name))
-           (,procv (lambda ,arglist
-                     ,@body)))
-       ;; Store the base function on a property on the symbol
-       (put ,namev '__elnode_wrapper_base ,procv)
-       (if (get ,namev '__elnode_wrapper_list)
-           (fset ,namev
-                 (elnode--wrapper-make-handler-chain
-                  ,procv
-                  (kvalist->values (get ,namev '__elnode_wrapper_list))))
-           (fset ,namev ,procv)))))
-
-(defmacro let-elnode-handlers (handlers &rest body)
-  (let ((fbinds ; capture the name, the function and the current sym-plist
-         (loop for bind in handlers
-            collect
-              (destructuring-bind (name args &rest body) bind
-                `(,name
-                  (lambda ,args ,@body)
-                  ,(copy-list (symbol-plist name)))))))
-    `(unwind-protect
-          (progn
-            (loop for fbind in (quote ,fbinds)
-               do
-                 (destructuring-bind (name proc plist) fbind
-                   ;; We're not saving anything - we need to??
-                   (put name '__elnode_wrapper_base proc)
-                   (if (get name '__elnode_wrapper_list)
-                       (fset name
-                             (elnode--wrapper-make-handler-chain
-                              name
-                              (kvalist->values
-                               (get name '__elnode_wrapper_list))))
-                       (fset name proc))))
-            ,@body)
-       ;; Put everything back the way it was
-       (loop for fbind in (quote ,fbinds)
-            do
-            (destructuring-bind (name proc plist) fbind
-              (fset name proc)
-              (setplist name plist))))))
-
-(defun elnode-set-wrapper (to-wrap match-handle path-match &rest args)
-  "Add or set a wrapper on TO-WRAP.
-
-Wrappers are a way of declaratively adding extra HTTP path
-handling to a handler.  For example, adding an authentication
-page /login/ to an existing handler.  Wrappers are an advanced
-feature, mainly useful only to Elnode library code (such as the
-Elnode authentication system)
-
-TO-WRAP is the function to be wrapped.  It must be a function
-defined by `define-elnode-handler', an error is raised if it is
-not.  TO-WRAP's function is altered to be the new chain of
-handlers.
-
-MATCH-HANDLE is the Elnode handler function that will be mapped
-to the added path mapping.  In the authentication example this
-might serve a username/password HTML FORM page on HTTP GET and
-process logins on HTTP POST.  MATCH-HANDLE should be a normal
-Elnode handler, accepting an HTTPCON as it's argument.
-Optionally MATCH-HANDLE may accept an ARGS argument which is a
-collection of any other arguments that were used to create the
-wrapper.
-
-PATH-MATCH is the extra path to be mapped.  In the authentication
-example this might be \"/login/\".  PATH-MATCH can only be a
-path, never a host-path mapping specification.  See
-`elnode-dispatcher' for more details.
-
-ARGS is an optional final part to the wrapper specification.  If
-ARGS exist they are passed to the MATCH-HANDLE as an additional
-argument when it is called.
-
-The wrappers are stored against the TO-WRAP by PATH-MATCH so that
-we can have multiple wrapper reasons, for example two different
-authentication mechanisms (using two different PATH-MATCH).
-Re-setting the same PATH-MATCH will replace the MATCH-HANDLER for
-that PATH-MATCH.
-
-TO-WRAP must be a function defined by `define-elnode-handler', an
-error is raised if it is not.  TO-WRAP's function is altered to
-be the new chain of handlers."
-  (unless (functionp (get to-wrap '__elnode_wrapper_base))
-    (error (format
-            "Elnode cannot set a wrapper for %s on %s"
-            path-match
-            (symbol-name to-wrap))))
-  (let ((wrapper-spec `(,to-wrap ,match-handle ,path-match . ,args))
-        (path-sym (intern path-match)))
-    (let* ((wrapper-list (get to-wrap '__elnode_wrapper_list))
-           (wrapper (assoc path-sym wrapper-list)))
-      ;; Setup the wrapper list correctly on the to-wrap symbol
-      (if wrapper
-          (setcdr wrapper wrapper-spec)
-          (put to-wrap
-               '__elnode_wrapper_list
-               (acons path-sym wrapper-spec wrapper-list)))
-      ;; Now fset the to-wrap with the chain handler
-      (fset to-wrap
-            (elnode--wrapper-make-handler-chain
-             (get to-wrap '__elnode_wrapper_base)
-             (kvalist->values (get to-wrap '__elnode_wrapper_list)))))))
-
 
 ;; Default elnode auth databases
 
@@ -3439,19 +3435,28 @@ This function sends the contents of the custom variable
       `(("target" . ,target)
         ("redirect" . ,redirect))))))
 
-(defun* elnode-auth--wrapping-login-handler (httpcon
-                                             sender target
-                                             &key
-                                             auth-test ; assert not nil?
-                                             (cookie-name "elnodeauth")
-                                             (loggedin-db elnode-loggedin-db))
-  "The implementation of the login handler for wrapping.
+(defun* elnode-auth--login-handler (httpcon
+                                    sender target
+                                    &key
+                                    auth-test ; assert not nil?
+                                    (cookie-name "elnodeauth")
+                                    (loggedin-db elnode-loggedin-db))
+  "The implementation of the login handler for auth testing.
 
-This receives the SENDER and the TARGET from the wrapper spec."
+This is the handler that is mapped to /login/ (which is the
+default login path) or whatever you want the login path to be.
+
+SENDER is the function which will send the login page to the
+user, it takes an HTTPCON.  It must send a 'username' and
+'password' HTTP parameters to this handler.
+
+TARGET is the path that will be used as the login handler
+path (the path to call this handler)."
   (elnode-method httpcon
       (GET
-       (let ((to (or (elnode-http-param httpcon "redirect")
-                     "/")))
+       (let ((to (or
+                  (elnode-http-param httpcon "redirect")
+                  "/")))
          (funcall sender httpcon target to)))
     (POST
      (let ((username (elnode-http-param httpcon "username"))
@@ -3468,94 +3473,45 @@ This receives the SENDER and the TARGET from the wrapper spec."
            httpcon
            (if (not logged-in)
                target
-               (format "%s?redirect=%s" target logged-in)))))))))
+               (format "%s?redirect=%s" target logged-in))))
+         (t (elnode-error
+             "elnode-auth--login-handler: unexpected error: %S"
+             err)))))))
 
 (defun elnode-auth-default-test (username database)
   "The default test function used for Elnode auth."
-  (db-get username (symbol-value database)))
+  (db-get username database))
 
-(defun* elnode-auth-make-login-wrapper (wrap-target
-                                         &key
-                                         (sender 'elnode-auth-login-sender)
-                                         (target "/login/"))
-  "Make an auth wrapper around WRAP-TARGET with content from SENDER.
+(defun* elnode-auth--make-login-handler
+    (&key
+     (sender 'elnode-auth-login-sender)
+     (target "/login/")
+     auth-test
+     (auth-db elnode-auth-db) ; only used if the auth-test is not present
+     (cookie-name "elnodeauth")
+     (loggedin-db elnode-loggedin-db))
+  "Make an `elnode-auth--login-handler', binding parameters."
+  (lambda (httpcon)
+    (elnode-auth--login-handler
+     httpcon
+     sender target
+     ;; Make a test function if we don't have one
+     :auth-test (if (functionp auth-test)
+                    auth-test
+                    (lambda (username)
+                      (elnode-auth-default-test username auth-db)))
+     :cookie-name cookie-name
+     :loggedin-db loggedin-db)))
 
-Wrappers are high level ways of specifying redirect targets for
-authentication.  A wrapper is a list with 2 or 3 elements:
-
-  a handler function name to wrap which must have been defined
-  with `define-elnode-handler'
-
-  a function to handle login (the wrapping handler function)
-
-  optionally a url for the wrap point, \"/login/\" by default.
-
-So if you have a handler `my-app-handler' and you make a wrapper
-with this function then you will change `my-app-handler' so that
-requests for \"/login/\" go to the authentication handler
-produced by this function.
-
-SENDER is a function that sends the login page to the client.
-The SENDER is passed the TARGET as well as the `to' parameter
-from the HTTPCON.  `to' is / by default (if it cannot be found in
-the HTTP request).  By default the SENDER is
-`elnode-auth-login-sender' which offers some customization, but
-you might want to specify your own SENDER to provide a custom
-login page.
-
-This function returns the wrapper spec as a list with the car
-being the symbol `:elnode-wrapper-spec'."
-  (list :elnode-wrapper-spec
-        wrap-target
-        (lambda (httpcon &optional args)
-          (destructuring-bind (&key (auth-db 'elnode-auth-db)
-                                    auth-test ; nil by default
-                                    (cookie-name "elnodeauth")) args
-            (let ((auth-test-fn
-                   (if auth-test
-                       auth-test
-                       ;; Else make a default one of the database
-                       (lambda (username)
-                         (elnode-auth-default-test username auth-db)))))
-              (elnode-auth--wrapping-login-handler
-               httpcon sender target
-               ;; FIXME - possibly have test function here
-               ;; as well as default test function
-               :auth-test auth-test-fn
-               :cookie-name cookie-name))))
-        target))
-
-(defvar elnode--defined-authentication-schemes
-  (make-hash-table :test 'equal)
-  "The hash of defined authentication schemes.")
-
-(defun* elnode--auth-define-scheme-do-wrap (wrapper-spec
-                                            &key
-                                            auth-test
-                                            (auth-db 'elnode-auth-db)
-                                            (cookie-name "elnodeauth"))
-  "Setup the auth wrapping.
-
-WRAPPER-SPEC was specified by the author of the auth declaration
-when defining the wrapper.
-
-The WRAPPER-SPEC is used to setup the wrapping.
-
-The AUTH-DB and the COOKIE-NAME are passed to the wrapper."
-  (destructuring-bind (func match-handler match-path) wrapper-spec
-    (elnode-set-wrapper func match-handler match-path
-                        :auth-test auth-test
-                        :auth-db auth-db
-                        :cookie-name cookie-name)))
-
-(defmacro* elnode-auth-define-scheme (scheme-name
-                                      &key
-                                      (test :cookie)
-                                      auth-test
-                                      (auth-db 'elnode-auth-db)
-                                      (cookie-name "elnodeauth")
-                                      (failure-type :redirect)
-                                      (redirect "/login/"))
+(defun* elnode-defauth (scheme-name
+                        &key
+                        (test :cookie)
+                        auth-test
+                        (auth-db 'elnode-auth-db)
+                        (cookie-name "elnodeauth")
+                        (failure-type :redirect)
+                        (redirect "/login/")
+                        (sender 'elnode-auth-login-sender))
   "Define an Elnode authentication scheme.
 
 An authentication scheme consists of the following attributes:
@@ -3583,43 +3539,56 @@ only `:redirect' is supported.  To redirect on failure means to
 send a 302 with a location to visit a login page.  :FAILURE-TYPE
 is `:redirect' by default.
 
-REDIRECT is where to redirect to if FAILURE-TYPE is
-`:redirect'.  This can be either a String (in which case it
-should indicate a path where a user can login, for example
-\"/login/\") or it can be a wrapper.  See
-`elnode-auth-make-login-wrapper' for a description of wrappers."
-  ;;      (let ((redirect-spec (elnode--with-auth-do-wrap redir)))
+REDIRECT is where to redirect to if FAILURE-TYPE is `:redirect'.
+By default this is \"/login/\".  If SENDER is not nil then a
+dispatcher told about this auth scheme will dispatch a path
+naming REDIRECT to SENDER.
+
+SENDER is an Elnode handler taking additional parameters of
+`target' and `redirect'.  By default this is the function
+`elnode-auth-login-sender'.  Specify a different function if you
+want to totally change the login page."
+  (let* ((login-handler (elnode-auth--make-login-handler
+                         :sender sender
+                         :target redirect
+                         :auth-test auth-test
+                         :auth-db auth-db
+                         :cookie-name cookie-name))
+         (auth-scheme (list
+                       :test test
+                       :cookie-name cookie-name
+                       :failure-type failure-type
+                       :redirect redirect
+                       :login-handler login-handler)))
+    (puthash scheme-name
+             auth-scheme
+             elnode--defined-authentication-schemes)))
+
+(defmacro elnode-auth-dispatcher (httpcon auth-scheme &rest body)
+  "Dispatch HTTPCON to AUTH-SCHEME's handler if it matches.
+
+Otherwise do BODY."
   (declare
-   (debug (sexp sexp &rest form)))
-  (let ((redirect-specv (make-symbol "redirectv"))
-        (scheme-namev (make-symbol "scheme-namev"))
-        (auth-schemev (make-symbol "auth-schemev"))
-        (cookie-namev (make-symbol "cookie-namev"))
-        (auth-dbv (make-symbol "auth-dbv")))
-    `(let* ((,scheme-namev ,scheme-name)
-            (,cookie-namev ,cookie-name)
-            (,auth-dbv (quote ,auth-db))
-            (,redirect-specv ,redirect))
-       ;; Do some type checking
-       (cond
-         ((and (listp ,redirect-specv)
-               (eq :elnode-wrapper-spec (car ,redirect-specv)))
-          (elnode--auth-define-scheme-do-wrap
-           (cdr ,redirect-specv)
-           :auth-test ,auth-test
-           :auth-db ,auth-dbv
-           :cookie-name ,cookie-namev))
-         ((not (stringp ,redirect-specv))
-          (error ":REDIRECT must be a string or a wrapper specification")))
-       ;; Now just add the scheme to the list of defined schemes
-       (let ((,auth-schemev
-              (list :test ,test
-                    :cookie-name ,cookie-namev
-                    :failure-type ,failure-type
-                    :redirect ,redirect-specv)))
-         (puthash ,scheme-namev
-                  ,auth-schemev
-                  elnode--defined-authentication-schemes)))))
+   (debug (sexp sexp &rest form))
+   (indent 2))
+  (let ((httpcon-v (make-symbol "httpcon-v"))
+        (auth-scheme-v (make-symbol "auth-scheme-v"))
+        (redirect-v (make-symbol "redirect-v"))
+        (handler-v (make-symbol "handler-v")))
+    `(let* ((,httpcon-v ,httpcon)
+            (,auth-scheme-v
+             (gethash
+              ,auth-scheme
+              elnode--defined-authentication-schemes))
+            (,redirect-v (plist-get ,auth-scheme-v :redirect))
+            (,handler-v (plist-get ,auth-scheme-v :login-handler)))
+       (if (elnode--mapper-find-match-func
+            (elnode-http-pathinfo ,httpcon-v)
+            (cons ,redirect-v ,handler-v))
+           ;; If the current path matches call the auth handler
+           (funcall ,handler-v ,httpcon-v)
+           ;; Else do whatever the body was
+           ,@body))))
 
 (defmacro if-elnode-auth (httpcon scheme authd &rest anonymous)
   "Check the HTTPCON for SCHEME auth and eval AUTHD.

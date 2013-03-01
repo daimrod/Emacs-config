@@ -4,7 +4,7 @@
 
 ;; Author: Julien Danjou <julien@danjou.info>
 ;; Keywords: faces
-;; Version: 0.6
+;; Version: 0.7
 
 ;; This file is part of GNU Emacs.
 
@@ -462,12 +462,20 @@ This will fontify with colors the string like \"#aabbcc\" or \"blue\"."
   (progn
     (if rainbow-mode
         (rainbow-turn-on)
-      (rainbow-turn-off))
-    ;; Turn on font lock
-    (font-lock-mode 1)))
+      (rainbow-turn-off))))
 
 ;;;; ChangeLog:
 
+;; 2013-02-26  Julien Danjou  <julien@danjou.info>
+;; 
+;; 	rainbow-mode: version 0.7
+;; 	
+;; 	* rainbow-mode.el: don't activate font-lock-mode
+;; 
+;; 2012-12-11  Julien Danjou  <julien@danjou.info>
+;; 
+;; 	* rainbow-mode: update to 0.6, add support for ANSI coloring
+;; 
 ;; 2012-11-26  Julien Danjou  <julien@danjou.info>
 ;; 
 ;; 	rainbow-mode: fix some LaTex docstrings
@@ -505,6 +513,11 @@ This will fontify with colors the string like \"#aabbcc\" or \"blue\"."
 ;; 	archive deployment respectively.
 ;; 	
 ;; 	Rewrite the admin/archive-contents.el script to handle these changes.
+;; 
+;; 2011-07-01  Chong Yidong  <cyd@stupidchicken.com>
+;; 
+;; 	Give every package its own directory in packages/
+;; 	including single-file packages.
 ;; 
 
 

@@ -3,7 +3,7 @@
 ;;; Code:
 
 
-;;;### (autoloads (creole-wiki) "creole" "creole.el" (20723 59811
+;;;### (autoloads (creole-wiki) "creole" "creole.el" (20784 44320
 ;;;;;;  0 0))
 ;;; Generated autoloads from creole.el
 
@@ -107,7 +107,7 @@ All, any or none of these keys may be specified.
 
 ;;;***
 
-;;;### (autoloads nil nil ("creole-pkg.el") (20723 59811 245820 478000))
+;;;### (autoloads nil nil ("creole-pkg.el") (20784 44320 579208 909000))
 
 ;;;***
 
