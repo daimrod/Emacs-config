@@ -30,16 +30,16 @@
 (setf w3m-init-file (concat dotfiles-dir "config-w3m")
       browse-url-browser-function 'browse-url-w3)
 
-(flet ((w3m-add-search-engine-with-quickshort
-        (search-engine)
-        (let ((name (elt search-engine 0))
-              (url (elt search-engine 1)))
-          (add-to-list 'w3m-search-engine-alist
-                       (list name url))
-          (add-to-list 'w3m-uri-replace-alist
-                       (list (concat "\\`" name ":")
-                             'w3m-search-uri-replace
-                             name)))))
+(cl-flet ((w3m-add-search-engine-with-quickshort
+           (search-engine)
+           (let ((name (elt search-engine 0))
+                 (url (elt search-engine 1)))
+             (add-to-list 'w3m-search-engine-alist
+                          (list name url))
+             (add-to-list 'w3m-uri-replace-alist
+                          (list (concat "\\`" name ":")
+                                'w3m-search-uri-replace
+                                name)))))
   (mapc #'w3m-add-search-engine-with-quickshort
         '(("enfr" "http://www.wordreference.com/enfr/%s")
           ("fren" "http://www.wordreference.com/fren/%s")
