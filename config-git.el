@@ -36,13 +36,16 @@
 (setq magit-diff-context-lines 5)
 
 (add-hook 'magit-log-edit-mode-hook 'change-log-mode)
+(defvar dmd/magit-changelog-mode-map
+  (let ((map (copy-keymap magit-log-edit-mode-map)))
+    (set-keymap-parent map change-log-mode-map)
+    map))
+
 (defadvice change-log-mode (after change-log-magit-setup (&rest args) activate)
   (when (string= (buffer-name)
                  "*magit-edit-log*")
+    (use-local-map dmd/magit-changelog-mode-map)
     (setf tab-width 4
-          left-margin 0)
-    (local-set-key (kbd "C-c c") 'magit-log-edit-commit)
-    (local-set-key (kbd "C-c k") 'magit-log-edit-cancel-log-message)
-    (local-set-key (kbd "C-c a") 'magit-log-edit-toggle-amending)))
+          left-margin 0)))
 
 (provide 'config-git)
