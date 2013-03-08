@@ -238,4 +238,19 @@ of text."
            (format-time-string "%A %d %B %Y (%H:%M)")
            (format-time-string "@%H%M"))))
 
+(defun dmd/window-width (&optional window)
+  "Like `window-width' except that it takes into account text
+scaling."
+  (setq window (or window (selected-window)))
+  (with-current-buffer (window-buffer window)
+    (let ((amount (if (boundp 'text-scale-mode-amount)
+                      (- text-scale-mode-amount)
+                    0))
+          (step (if (boundp 'text-scale-mode-step)
+                    text-scale-mode-step
+                  1)))
+      (truncate
+       (* (window-width window)
+          (expt step amount))))))
+
 (provide 'config-defuns)
