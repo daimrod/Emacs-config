@@ -217,7 +217,9 @@ If N is not set, use `comint-buffer-minimum-size'."
 (defun dmd/terminal-emulator ()
   "Open a terminal emulator using `terminal-emulator'."
   (interactive)
-  (async-shell-command
+  (start-process
+   "Terminal Emulator"
+   nil
    (etypecase terminal-emulator
      (string terminal-emulator)
      (function (funcall terminal-emulator))
