@@ -199,7 +199,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   (interactive "P")
   (let ((comint-buffer-maximum-size
          (or n
-             comint-buffer-minimum-size)))
+             (- (line-number-at-pos (point-max)) (line-number-at-pos)))))
     (comint-truncate-buffer)))
 
 (defun toggle-fullscreen ()
