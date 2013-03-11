@@ -5,7 +5,7 @@
 
 ;;;### (autoloads (elpakit-isearch-hook-jack-in elpakit-test elpakit-start-server
 ;;;;;;  elpakit-list-processes elpakit elpakit-eval elpakit-make-multi)
-;;;;;;  "elpakit" "elpakit.el" (20784 44310 0 0))
+;;;;;;  "elpakit" "elpakit.el" (20797 39419 0 0))
 ;;; Generated autoloads from elpakit.el
 
 (autoload 'elpakit-make-multi "elpakit" "\
@@ -82,10 +82,19 @@ Run tests on package INSTALL of the specified PACKAGE-LIST.
 
 TEST is an ERT test selector.
 
+If EXTRA-LISP is a list then that is passed into the test-process
+to be executed as extra initialization.  If EXTRA-LISP and TEST
+is specified then tests are done *after* EXTRA-LISP.  EXTRA-LISP
+must do the require in that case.
+
+If PRE-LISP is a list then it is passed into the test-process as
+Lisp to be executed before initialization.  This is where any
+customization that you need should go.
+
 You can manage running processes with the `elpakit-list-processes'
 command.
 
-\(fn PACKAGE-LIST INSTALL TEST)" t nil)
+\(fn PACKAGE-LIST INSTALL TEST &key PRE-LISP EXTRA-LISP)" t nil)
 
 (autoload 'elpakit-isearch-hook-jack-in "elpakit" "\
 Jack in Elpakit to isearch. Call from `elisp-mode-hook'.
@@ -102,7 +111,8 @@ in your configuration file to make it happen.
 
 ;;;***
 
-;;;### (autoloads nil nil ("elpakit-pkg.el") (20784 44311 4667 92000))
+;;;### (autoloads nil nil ("elpakit-pkg.el") (20797 39419 862417
+;;;;;;  326000))
 
 ;;;***
 

@@ -3,9 +3,9 @@
 ;;; Code:
 
 
-;;;### (autoloads (elnode-do-init elnode-init elnode-webserver elnode-make-webserver
+;;;### (autoloads (elnode-init elnode-webserver elnode-make-webserver
 ;;;;;;  elnode--webserver-handler-proc elnode-hostpath-default-table
-;;;;;;  elnode-start elnode-app) "elnode" "elnode.el" (20784 44314
+;;;;;;  elnode-start elnode-app) "elnode" "elnode.el" (20797 39422
 ;;;;;;  0 0))
 ;;; Generated autoloads from elnode.el
 
@@ -116,7 +116,7 @@ Make a webserver interactively, for DOCROOT on PORT.
 An easy way for a user to make a webserver for a particular
 directory.
 
-\(fn DOCROOT PORT)" t nil)
+\(fn DOCROOT PORT &optional HOST)" t nil)
 
 (autoload 'elnode-webserver "elnode" "\
 A simple webserver that serves documents out of `elnode-webserver-docroot'.
@@ -143,25 +143,37 @@ the handler and listening on `elnode-init-host'
 
 \(fn)" t nil)
 
-(defvar elnode-do-init 't "\
-Should elnode start a server on load?
-
-The server that is started is controlled by more elnode
-customizations.
-
-`elnode-hostpath-default-table' defines the mappings from
-hostpath regexs to handler functions. By default elnode ships
-with this customization setup to serve the document root defined
-in `elnode-webserver-docroot', which by default is ~/public_html.")
-
-(custom-autoload 'elnode-do-init "elnode" t)
-
 (eval-after-load 'elnode (if (and (boundp 'elnode-do-init) elnode-do-init (or (not (boundp 'elnode--inited)) (not elnode--inited))) (progn (elnode-init) (setq elnode--inited nil))))
 
 ;;;***
 
+;;;### (autoloads (elnode-server-list elnode-deferred-list elnode-deferred-queue)
+;;;;;;  "elnode-lists" "elnode-lists.el" (20797 39423 0 0))
+;;; Generated autoloads from elnode-lists.el
+
+(autoload 'elnode-deferred-queue "elnode-lists" "\
+Message the length of the deferred queue.
+
+\(fn ARG)" t nil)
+
+(autoload 'elnode-deferred-list "elnode-lists" "\
+List the currently deferred Elnode handlers.
+
+\(fn &optional PREFIX)" t nil)
+
+(defalias 'list-elnode-deferreds 'elnode-deferred-list)
+
+(autoload 'elnode-server-list "elnode-lists" "\
+List the currently running Elnode servers.
+
+\(fn &optional PREFIX)" t nil)
+
+(defalias 'list-elnode-servers 'elnode-server-list)
+
+;;;***
+
 ;;;### (autoloads (elnode-wikiserver elnode-wikiserver-test elnode-wikiserver-wikiroot)
-;;;;;;  "elnode-wiki" "elnode-wiki.el" (20784 44314 0 0))
+;;;;;;  "elnode-wiki" "elnode-wiki.el" (20797 39422 0 0))
 ;;; Generated autoloads from elnode-wiki.el
 
 (defconst elnode-wikiserver-wikiroot-default (expand-file-name (concat elnode-config-directory "wiki/")) "\
@@ -194,8 +206,8 @@ provided. Otherwise it will just error.
 
 ;;;***
 
-;;;### (autoloads nil nil ("elnode-pkg.el" "elnode-rle.el") (20784
-;;;;;;  44314 961441 300000))
+;;;### (autoloads nil nil ("elnode-pkg.el" "elnode-rle.el") (20797
+;;;;;;  39423 138673 780000))
 
 ;;;***
 

@@ -97,6 +97,20 @@ This is an alist of proc->server-process:
 
   (port . process)")
 
+
+(defcustom elnode-init-port 8000
+  "The port that `elnode-init' starts the default server on."
+  :group 'elnode)
+
+(defcustom elnode-init-host "localhost"
+  "The default host for the default webserver.
+
+Also used as the default host for `elnode-make-webserver'.
+
+See `elnode-init' for more details."
+  :group 'elnode)
+
+
 ;;;###autoload
 (defconst elnode-config-directory
   (expand-file-name (concat user-emacs-directory "elnode/"))
@@ -423,7 +437,7 @@ only be expanded where there is an inscope `httpcon'.
 
 Inside the macro the symbol `elnode-defer-guard-it' is bound to
 the value of the GUARD."
-  (declare (indent defun))
+  (declare (indent 1))
   (let ((bv (make-symbol "bv"))
         (gv (make-symbol "gv"))
         (fv (make-symbol "fv")))
@@ -481,6 +495,9 @@ The hook function is called with the http connection and the
 failure state which either the symbol `closed' or the symbol
 `failed'.")
 
+(defconst elnode--debug-with-backtraces nil
+  "Feature switch to include backtrace debugging support.")
+
 (defun elnode--deferred-processor ()
   "Process the deferred queue."
   (let ((run (random 5000)) ; use this to disambiguate runs in the logs
@@ -501,8 +518,12 @@ failure state which either the symbol `closed' or the symbol
                   (cons httpcon (cdr signal-value))
                   new-deferred))
                 (error
-                 (elnode--deferred-log elnode-log-critical
-                                       "error %s - %s" httpcon signal-value))))
+                 (elnode--deferred-log
+                  elnode-log-critical
+                  "error %s - %s %S" httpcon signal-value
+                  (if elnode--debug-with-backtraces
+                      debugger-previous-backtrace
+                      "")))))
              ('closed
               (elnode--deferred-log elnode-log-info
                                     "closed %s %s" httpcon handler)
@@ -545,17 +566,6 @@ This is initialized by `elnode--init-deferring'.")
 Necessary for running comet apps."
   (setq elnode--defer-timer
         (run-at-time "2 sec" 2 'elnode--deferred-processor)))
-
-(defun elnode-deferred-queue (arg)
-  "Message the length of the deferred queue."
-  (interactive "P")
-  (if (not arg)
-      (message
-       "elnode deferred queue: %d %s"
-       (length elnode--deferred)
-       elnode--defer-timer)
-    (setq elnode--deferred (list))
-    (message "elnode deferred queue reset!")))
 
 (defun elnode-deferred-queue-start ()
   "Start the deferred queue, unless it's running."
@@ -1219,58 +1229,6 @@ Serves only to connect the server process to the client processes"
   "List of all ports currently in use by elnode."
   (mapcar 'car elnode-server-socket))
 
-(defun elnode--list-servers ()
-  "List the current Elnode servers for `elnode-list-mode'."
-  (loop for (port . socket-proc) in elnode-server-socket
-     collect
-       (list
-        port
-        (let* ((fn (process-get socket-proc :elnode-http-handler))
-               (doc (when (functionp fn)
-                      (documentation fn))))
-          (vector
-           (number-to-string port)
-           (symbol-name fn)
-           (or (if (and doc (string-match "^\\([^\n]+\\)" doc))
-                   (match-string 1 doc)
-                   "no documentation.")))))))
-
-(defun elnode-server-list-find-handler ()
-  "Find the handler mentioned in the handler list."
-  (interactive)
-  (let ((line
-         (buffer-substring-no-properties
-          (line-beginning-position)
-          (line-end-position))))
-    (when (string-match "^[0-9]+ +\\([^ ]+\\) .*" line)
-      (let ((handler-name (intern (match-string 1 line))))
-        (with-current-buffer
-            (find-file
-             (or (symbol-file handler-name)
-                 (error "no such file")))
-          (find-function handler-name))))))
-
-(define-derived-mode
-    elnode-list-mode tabulated-list-mode "Elnode server list"
-    "Major mode for listing Elnode servers currently running."
-    (setq tabulated-list-entries 'elnode--list-servers)
-    (define-key elnode-list-mode-map (kbd "\r")
-      'elnode-server-list-find-handler)
-    (setq tabulated-list-format
-          [("Port" 10 nil)
-           ("Handler function" 40 nil)
-           ("Documentation" 80 nil)])
-    (tabulated-list-init-header))
-
-(defun elnode-server-list ()
-  "List the currently running Elnode servers."
-  (interactive)
-  (with-current-buffer (get-buffer-create "*elnode servers*")
-    (elnode-list-mode)
-    (tabulated-list-print)
-    (switch-to-buffer (current-buffer))))
-
-(defalias 'list-enode-servers 'elnode-server-list)
 
 ;;;###autoload
 (defun* elnode-start (request-handler
@@ -1354,7 +1312,7 @@ elnode servers on the same port on different hosts."
                       (string-to-number
                        (completing-read
                         "Port: "
-                        (mapcar (lambda (n) (format "%d" n))
+                        (mapcar (lambda (n) (format "%s" n))
                                 (elnode-ports))))))
                  (list prt)))
   (let ((server (assoc port elnode-server-socket)))
@@ -1362,17 +1320,17 @@ elnode servers on the same port on different hosts."
       (message "deleting server process")
       (delete-process (cdr server))
       (setq elnode-server-socket
-	    ;; remove-if
-	    (let ((test (lambda (elem)
-			  (= (car elem) port)))
-		  (l elnode-server-socket)
-		  result)
-	      (while (car l)
-		(let ((p (pop l))
-		      (r (cdr l)))
-		  (if (not (funcall test p))
-		      (setq result (cons p result)))))
-	      result)))))
+            ;; remove-if
+            (let ((test (lambda (elem)
+                          (= (car elem) port)))
+                  (l elnode-server-socket)
+                  result)
+              (while (car l)
+                (let ((p (pop l))
+                      (r (cdr l)))
+                  (if (not (funcall test p))
+                      (setq result (cons p result)))))
+              result)))))
 
 (defun elnode-find-free-service ()
   "Return a free (unused) TCP port.
@@ -2695,11 +2653,13 @@ being returned."
              "")))))
      (buffer-substring-no-properties (point-min)(point-max)))))
 
-(defvar elnode-webserver-visit-file nil
+(defcustom elnode-webserver-visit-file (eq system-type 'windows-nt)
   "Whether the webserver reads files by visiting buffers or not.
 
 When set to `t' files to be sent with the `elnode-send-file' are
-read into Emacs using `find-file'.")
+read into Emacs using `find-file'."
+  :group 'elnode
+  :type 'boolean)
 
 (defvar elnode-replacements-httpcon nil
   "This is bound by `elnode-send-file' when doing replacements.
@@ -2710,6 +2670,23 @@ It should not be used otherwise.")
   "This is bound by `elnode-send-file' when doing replacements.
 
 It should not be used otherwise.")
+
+(defun elnode--rfc1123-date (time)
+  (let* ((day-names '("Sun" "Mon" "Tue" "Wed" "Thu" "Fri" "Sat"))
+	 (month-names '("Jan" "Feb" "Mar" "Apr" "May" "Jun"
+			"Jul" "Aug" "Sep" "Oct" "Nov" "Dec"))
+	 (decoded-time (decode-time time))
+	 (day (nth (nth 6 decoded-time) day-names))
+	 (month (nth (- (nth 4 decoded-time) 1) month-names)))
+    (format "%s, %s %s %s"
+	    day 
+	    (format-time-string "%m" time t)
+	    month
+	    (format-time-string "%Y %H:%M:%S GMT" time t))))
+
+(defun elnode--file-modified-time (file)
+  "Get modification time for FILE."
+  (nth 5 (file-attributes file)))
 
 (defun* elnode-send-file (httpcon targetfile
                                   &key
@@ -2770,7 +2747,11 @@ delivered."
                          mime-types)))
                  (mm-default-file-encoding targetfile)
                   "application/octet-stream")))
-        (elnode-http-start httpcon 200 `("Content-type" . ,mimetype))
+        (elnode-http-start
+         httpcon 200
+         `("Content-type" . ,mimetype)
+         `("Last-Modified" . ,(elnode--rfc1123-date
+                               (elnode--file-modified-time targetfile))))
         (when preamble (elnode-http-send-string httpcon preamble))
         (if (or elnode-webserver-visit-file replacements)
             (let ((file-buf (find-file-noselect filename)))
@@ -2894,7 +2875,7 @@ default it just calls `elnode-send-404'."
     (and
      modified-since
      (time-less-p
-      (elt (file-attributes target-file) 5)
+      (elnode--file-modified-time target-file)
       modified-since))))
 
 (defun elnode-cached (httpcon)
@@ -3152,17 +3133,26 @@ request does not go above the DOCROOT."
 Stored as `docroot' . `webserver'.")
 
 ;;;###autoload
-(defun elnode-make-webserver (docroot port)
+(defun elnode-make-webserver (docroot port &optional host)
   "Make a webserver interactively, for DOCROOT on PORT.
 
 An easy way for a user to make a webserver for a particular
 directory."
-  (interactive "DServe files from: \nnTCP Port (try something over 8000):")
+  (interactive
+   (let ((docroot (read-directory-name "Docroot: " nil nil t))
+         (port (read-from-minibuffer "Port: "))
+         (host (if current-prefix-arg
+                   (read-from-minibuffer "Host: ")
+                   elnode-init-host)))
+     (list docroot port host)))
   (let ((webserver-proc (elnode-webserver-handler-maker docroot)))
     (add-to-list
      'elnode--make-webserver-store
      (cons docroot webserver-proc))
-    (elnode-start webserver-proc :port port)))
+    (elnode-start
+     webserver-proc
+     :port (string-to-number (format "%d" port))
+     :host host)))
 
 ;;;###autoload
 (defun elnode-webserver (httpcon)
@@ -3662,16 +3652,6 @@ SCHEME is the authentication scheme to use as defined by
    :parameters (list (cons "username" username)
                      (cons "password" password))))
 
-;;; Main customization stuff
-
-(defcustom elnode-init-port 8000
-  "The port that `elnode-init' starts the default server on."
-  :group 'elnode)
-
-(defcustom elnode-init-host "localhost"
-  "The host that `elnode-init' starts the default server listening on."
-  :group 'elnode)
-
 ;;;###autoload
 (defun elnode-init ()
   "Bootstraps the elnode environment when the Lisp is loaded.
@@ -3698,7 +3678,6 @@ the handler and listening on `elnode-init-host'"
       (if (not elnode--defer-timer)
           (elnode--init-deferring))))
 
-;;;###autoload
 (defcustom elnode-do-init 't
   "Should elnode start a server on load?
 
@@ -3710,8 +3689,7 @@ hostpath regexs to handler functions. By default elnode ships
 with this customization setup to serve the document root defined
 in `elnode-webserver-docroot', which by default is ~/public_html."
   :group 'elnode
-  :type '(boolean)
-  )
+  :type '(boolean))
 
 (defvar elnode--inited nil
   "Records when elnode is initialized.

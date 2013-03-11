@@ -5,7 +5,7 @@
 ;; Author: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Maintainer: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Created: 3 Aug 2012
-;; Version: 0.3.2
+;; Version: 0.3.5
 ;; Url: http://github.com/nicferrier/emacs-web
 ;; Keywords: lisp, http, hypermedia
 
@@ -44,6 +44,7 @@
   (require 'cl))
 
 (require 'url-parse)
+(require 'json)
 
 (defconst web/request-mimetype
   'application/x-www-form-urlencoded
@@ -235,7 +236,7 @@ by collecting it and then batching it to the CALLBACK."
     (t
      (format "%s" (url-hexify-string (format "%s" key))))))
 
-(defun web/to-query-string (object)
+(defun web-to-query-string (object)
   "Convert OBJECT (a hash-table or alist) to an HTTP query string.
 
 If OBJECT is of type `hash-table' then the keys and values of the
@@ -341,7 +342,7 @@ DATA is of MIME-TYPE.  We try to interpret DATA and MIME-TYPE
 usefully:
 
 If MIME-TYPE is `application/form-www-url-encoded' then
-`web/to-query-string' is used to to format the DATA into a POST
+`web-to-query-string' is used to to format the DATA into a POST
 body.
 
 When the request comes back the CALLBACK is called.  CALLBACK is
@@ -359,7 +360,8 @@ of the stream or `:done' when the stream ends.
 
 The default MODE is `batch' which collects all the data from the
 response before calling CALLBACK with all the data as a string."
-  (message "web-http-call %s" url)
+  (when logging
+    (message "web-http-call %s" url))
   (let* ((mode (or mode 'batch))
          (parsed-url (url-generic-parse-url
                       (if url url
@@ -387,7 +389,7 @@ response before calling CALLBACK with all the data as a string."
     (set-process-sentinel
      con
      (lambda (con evt)
-       (message "the logging is set to [%s] %s" evt logging)
+       ;;(message "the logging is set to [%s] %s" evt logging)
        (web/http-post-sentinel-with-logging con evt logging)))
     (set-process-filter
      con
@@ -402,7 +404,7 @@ response before calling CALLBACK with all the data as a string."
             ((eq
               (if (symbolp mime-type) mime-type (intern mime-type))
               web/request-mimetype)
-             (web/to-query-string data))))
+             (web-to-query-string data))))
          (headers
           (or
            (loop for hdr in
@@ -484,8 +486,42 @@ to `t'."
    :logging logging
    :mode mode))
 
-(defun* web-json-post (callback &key url data headers)
+(defvar web-json-expected-mimetypes-list
+  '("application/json"
+    "application/x-javascript"
+    "text/javascript"
+    "text/x-javascript"
+    "text/x-json")
+  "List of mimetypes that we use to accept JSON.")
+
+(defun web-json-default-expectation-failure (data http-con headers)
+  "Default expectation callback for JSON expectation errors."
+  (error "web-json failed to read %S as json" data))
+
+(defun* web/json-parse (json-candidate-data
+                       &key
+                       (json-array-type json-array-type)
+                       (json-object-type json-object-type)
+                       (json-key-type json-key-type))
+  "Parse DATA as JSON and return the result."
+  (json-read-from-string json-candidate-data))
+
+(defun* web-json-post (callback
+                       &key
+                       url data headers
+                       (json-array-type json-array-type)
+                       (json-object-type json-object-type)
+                       (json-key-type json-key-type)
+                       (expectation-failure-callback
+                        'web-json-default-expectation-failure))
   "POST DATA to URL expecting a JSON response sent to CALLBACK.
+
+See `web-json-expected-mimetypes-list' for the list of Mime Types
+we accept JSON for.  This may be let bound.  If the expectation
+is not met then EXPECTATION-FAILURE-CALLBACK is called being
+passed the CALLBACK parameters.  By default
+EXPECTATION-FAILURE-CALLBACK is
+`web-json-default-expectation-failure'.
 
 The CALLBACK is called as:
 
@@ -498,15 +534,31 @@ so the function may be defined like this:
 HEADERS may be specified, these are treated as extra-headers to
 be sent with the request.
 
-The DATA is sent as `application/x-www-form-urlencoded'."
-  (web-http-call
-   "POST"
-   (lambda (httpcon header data)
-     (let ((lisp-data (json-read-from-string data)))
-       (funcall callback lisp-data httpcon header)))
-   :url url
-   :data data
-   :extra-headers headers))
+The DATA is sent as `application/x-www-form-urlencoded'.
+
+JSON-ARRAY-TYPE, JSON-OBJECT-TYPE and JSON-KEY-TYPE, if present,
+are used to let bind the `json-read' variables of the same name
+affecting the resulting lisp structure."
+  (let ((closed-json-array-type json-array-type)
+        (closed-json-object-type json-object-type)
+        (closed-json-key-type json-key-type))
+    (web-http-post
+     (lambda (httpcon header http-data)
+       ;; Add a member test for the MIMETYPE expectation
+       (let ((lisp-data
+              (condition-case err
+                  (web/json-parse
+                   http-data
+                   :json-array-type closed-json-array-type
+                   :json-object-type closed-json-object-type
+                   :json-key-type closed-json-key-type)
+                (error
+                 (funcall expectation-failure-callback
+                          http-data httpcon header)))))
+         (funcall callback lisp-data httpcon header)))
+     :url url
+     :data data
+     :extra-headers headers)))
 
 (provide 'web)
 

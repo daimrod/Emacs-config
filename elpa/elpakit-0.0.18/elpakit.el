@@ -7,7 +7,7 @@
 ;; URL: http://github.com/nicferrier/elpakit
 ;; Keywords: lisp
 ;; Package-Requires: ((anaphora "0.0.6")(dash "1.0.3"))
-;; Version: 0.0.16
+;; Version: 0.0.18
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -199,7 +199,7 @@ The list is returned sorted and with absolute files."
     (if (file-directory-p dest)
         (delete-directory dest t)
         (delete-file dest)))
-  (message "elpakit/copy %s to %s" source dest)
+  ;;(message "elpakit/copy %s to %s" source dest)
   (copy-file source dest))
 
 (defun elpakit/file->package (file &rest selector)
@@ -527,7 +527,12 @@ the second item is the process type either `:daemon' or
   (let (res)
     (maphash
      (lambda (k v)
-       (setq res (append (list v) res)))
+       (destructuring-bind (proc-name proc-type &rest rest) v
+         (when (or
+                (eq proc-type :batch)
+                (and (eq proc-type :daemon)
+                     (server-running-p k)))
+           (setq res (append (list v) res)))))
      elpakit/processes)
     res))
 
@@ -589,9 +594,9 @@ the second item is the process type either `:daemon' or
                 (string-match-p "^\\(No such server\\|Make client process\\)"
                                 (cadr err)))
                ;; Rethrow if anything else
-               (signal (car err) (cdr err)))))
-        ;; Now safely delete the process from elpakit's list
-        (elpakit/process-del name))
+               (signal (car err) (cdr err))))))
+      ;; Now safely delete the process from elpakit's list
+      (elpakit/process-del name)
       ;; Update the list if necessary
       (when (equal (buffer-name (current-buffer))
                    "*elpakit-processes*")
@@ -599,11 +604,22 @@ the second item is the process type either `:daemon' or
 
 (defun elpakit/process-list-process-id ()
   "Get the process-id from the process-list buffer."
-  (buffer-substring-no-properties
-   (line-beginning-position)
-   (save-excursion
-     (goto-char (line-beginning-position))
-     (- (re-search-forward " " nil t) 1))))
+  (let ((process-id (buffer-substring-no-properties
+                     (line-beginning-position)
+                     (save-excursion
+                       (goto-char (line-beginning-position))
+                       (- (re-search-forward " " nil t) 1)))))
+    (let ((process (gethash process-id elpakit/processes)))
+       (destructuring-bind (proc-name proc-type &rest rest) process
+         (if (or
+              (eq proc-type :batch)
+              (and (eq proc-type :daemon)
+                   (server-running-p k)))
+             process-id
+             ;; Else...
+             (elpakit/process-del process-id)
+             (revert-buffer)
+             (error "Server no longer running"))))))
 
 (defun elpakit-process-open-emacsd (process-id)
   "Open the .emacs.d directory for the specified PROCESS-ID."
@@ -631,6 +647,17 @@ the second item is the process type either `:daemon' or
           ;; Else switch to the buffer
           (switch-to-buffer buf)))))
 
+(defun elpakit-process-open-shell (process-id)
+  (interactive (list (elpakit/process-list-process-id)))
+  (destructuring-bind (name type process &rest other)
+      (gethash process-id elpakit/processes)
+    (let ((errm "elpakit-procss-open-shell"))
+      (unless (eq type :daemon)
+        (error "%s needs a daemon - %s" errm process-id))
+      (unless (featurep 'isea)
+        (error "%s needs isea - M-x package-install isea ?" errm))
+      (isea process-id))))
+
 (define-derived-mode
     elpakit-process-list-mode tabulated-list-mode "Elpakit process list"
     "Major mode for listing Elpakit processes."
@@ -651,6 +678,9 @@ the second item is the process type either `:daemon' or
     (define-key
         elpakit-process-list-mode-map (kbd "f")
       'elpakit-process-open-emacs-init)
+    (define-key
+        elpakit-process-list-mode-map (kbd "I")
+      'elpakit-process-open-shell)
     (tabulated-list-init-header))
 
 ;;;###autoload
@@ -667,13 +697,18 @@ elpakit processes from batch tests and daemons."
 
 (defalias 'list-elpakit-processes 'elpakit-list-processes)
 
+
+;; Process spawning
+
 (defun elpakit/sentinel (process event)
   "Sentintel to kill the elpakit process when necessary."
   (if (or (string-equal event "finished\n")
           (string-equal event "exited abnormally with code exitcode\n"))
       (elpakit/process-del (process-name process))))
 
-(defun elpakit/emacs-process (archive-dir install test)
+(defun* elpakit/emacs-process (archive-dir
+                               install test
+                               &key extra-lisp pre-lisp)
   "Start an Emacs test process with the ARCHIVE-DIR repository.
 
 Install the package INSTALL and then run batch tests on TEST.
@@ -684,31 +719,42 @@ with the ARCHIVE-DIR being an additional repository called
 
 The ARCHIVE-DIR was presumably built with elpakit, though it
 could have come from anywhere."
-  (let* ((elpa-dir (make-temp-file ".emacs.elpa" t))
+  (let* ((unique (make-temp-name "elpakit-emacs-batchtests"))
+         (elpa-dir (concat "/tmp/" unique ".emacsd"))
          (emacs-bin (concat invocation-directory invocation-name))
+         (boot-file (concat "/tmp/" unique ".emacs-init.el"))
          (args
-          `("-batch"
-            "-Q"
-            "--eval"
-            ,(format
-              (concat
-               "(progn"
-               "(setq package-archives (quote %S))"
-               "(setq package-user-dir %S)"
-               "(package-initialize)"
-               "(package-refresh-contents)"
-               "(package-install (quote %S))"
-               "(load-library \"%S\")"
-               "(ert-run-tests-batch \"%s.*\"))")
-              (acons "local" archive-dir package-archives)
-              elpa-dir ;; where packages will be installed to
-              install
-              install
-              test)))
+          (progn
+            (with-temp-file boot-file
+              (insert (format
+                       (concat
+                        "(progn"
+                        "%s"
+                        "(setq package-archives (quote %S))"
+                        "(setq package-user-dir %S)"
+                        "(package-initialize)"
+                        "(package-refresh-contents)"
+                        "(package-install (quote %S))"
+                        "(load-library \"%S\")"
+                        "%s"
+                        "(ert-run-tests-batch \"%s.*\"))")
+                       (if pre-lisp (format "%S" pre-lisp) "")
+                       (acons "local" archive-dir package-archives)
+                       elpa-dir ;; where packages will be installed to
+                       install
+                       install
+                       (if extra-lisp
+                           (mapconcat
+                            (lambda (a) (format "%S" a))
+                            extra-lisp "\n")
+                           "")
+                       test)))
+            ;; And now the actual args
+            (list "--batch" "-Q" "-l" boot-file)))
          (name (generate-new-buffer-name
                 (concat "elpakit-" (symbol-name install))))
          (proc (apply 'start-process name (format "*%s*" name) emacs-bin args)))
-    (elpakit/process-add name :batch proc)
+    (elpakit/process-add name :batch proc boot-file)
     (set-process-sentinel proc 'elpakit/sentinel)
     (with-current-buffer (process-buffer proc)
       (compilation-mode))
@@ -771,7 +817,9 @@ presuming that you're trying to start it from the same user."
                        emacs-bin args)))
       (with-current-buffer (process-buffer proc)
         (compilation-mode))
-      (elpakit/process-add unique :daemon proc)
+      (elpakit/process-add
+       unique :daemon proc ; then the extra stuff
+       install :pre-lisp pre-lisp :extra-lisp extra-lisp)
       (cons proc unique))))
 
 ;;;###autoload
@@ -818,10 +866,19 @@ command."
   "History variable for `elpakit-test'.")
 
 ;;;###autoload
-(defun elpakit-test (package-list install test)
+(defun* elpakit-test (package-list install test &key pre-lisp extra-lisp)
   "Run tests on package INSTALL of the specified PACKAGE-LIST.
 
 TEST is an ERT test selector.
+
+If EXTRA-LISP is a list then that is passed into the test-process
+to be executed as extra initialization.  If EXTRA-LISP and TEST
+is specified then tests are done *after* EXTRA-LISP.  EXTRA-LISP
+must do the require in that case.
+
+If PRE-LISP is a list then it is passed into the test-process as
+Lisp to be executed before initialization.  This is where any
+customization that you need should go.
 
 You can manage running processes with the `elpakit-list-processes'
 command."
@@ -839,7 +896,9 @@ command."
   (let ((archive-dir (make-temp-file "elpakit-archive" t)))
     ;; First build the elpakit with tests
     (elpakit archive-dir package-list t)
-    (elpakit/emacs-process archive-dir install test)
+    (elpakit/emacs-process
+     archive-dir install test
+     :pre-lisp pre-lisp :extra-lisp extra-lisp)
     (when (called-interactively-p)
       (switch-to-buffer-other-window "*elpakit*"))))
 
