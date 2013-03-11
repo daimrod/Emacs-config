@@ -44,7 +44,6 @@
       slime-complete-symbol-function 'slime-fuzzy-complete-symbol
       slime-startup-animation t
       slime-complete-symbol*-fancy t
-      max-lisp-eval-depth 2000
       slime-net-coding-system 'utf-8-unix)
 
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
