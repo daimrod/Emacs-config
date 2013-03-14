@@ -49,25 +49,28 @@
   (dmd-pulse/pulse-region (point-at-bol) (point-at-eol)))
 
 (defun dmd-pulse/pulse-region (start end)
-  (let ((o (make-overlay start end))
-        (list-bg (loop with frame = (color-values (face-background 'default))
-                       with start = (color-values (face-background 'dmd-pulse/face))
-                       for it from 0 to dmd-pulse/iterations
+  (lexical-let ((overlay (make-overlay start end))
+                (list-bg (loop with frame = (color-values (face-background 'default))
+                               with start = (color-values (face-background 'dmd-pulse/face))
+                               for it from 0 to dmd-pulse/iterations
 
-                       for frac = (list (/ (- (nth 0 frame) (nth 0 start)) dmd-pulse/iterations)
-                                        (/ (- (nth 1 frame) (nth 1 start)) dmd-pulse/iterations)
-                                        (/ (- (nth 2 frame) (nth 2 start)) dmd-pulse/iterations))
+                               for frac = (list (/ (- (nth 0 frame) (nth 0 start)) dmd-pulse/iterations)
+                                                (/ (- (nth 1 frame) (nth 1 start)) dmd-pulse/iterations)
+                                                (/ (- (nth 2 frame) (nth 2 start)) dmd-pulse/iterations))
 
-                       collect (hexrgb-color-values-to-hex
-                                (list
-                                 (+ (nth 0 start) (* (nth 0 frac) it))
-                                 (+ (nth 1 start) (* (nth 1 frac) it))
-                                 (+ (nth 2 start) (* (nth 2 frac) it)))))))
-    (unwind-protect
-        (dolist (background list-bg)
-          (overlay-put o 'face (list :background background))
-          (sit-for dmd-pulse/delay))
-      (delete-overlay o))))
+                               collect (hexrgb-color-values-to-hex
+                                        (list
+                                         (+ (nth 0 start) (* (nth 0 frac) it))
+                                         (+ (nth 1 start) (* (nth 1 frac) it))
+                                         (+ (nth 2 start) (* (nth 2 frac) it))))))
+                timer)
+    (setq timer (run-with-timer 0 dmd-pulse/delay
+                                (lambda (&rest args)
+                                  (cond ((null list-bg)
+                                         (delete-overlay overlay)
+                                         (cancel-timer timer))
+                                        (t (overlay-put overlay 'face (list :background (pop list-bg)))
+                                           (redisplay))))))))
 
 (provide 'dmd-pulse)
 
