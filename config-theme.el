@@ -22,6 +22,7 @@
 
 (add-to-list 'default-frame-alist `(font . ,(find-if #'font-info *fonts-list*)))
 (setq initial-frame-alist (append initial-frame-alist (copy-alist default-frame-alist)))
+(set-fringe-style 0)
 
 ;; tab and indentation configuration
 (setq-default indent-tabs-mode nil)
