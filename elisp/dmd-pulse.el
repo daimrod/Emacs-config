@@ -44,9 +44,13 @@
   ""
   :group 'dmd-pulse)
 
-(defun dmd-pulse/pulse-line ()
-  (interactive)
-  (dmd-pulse/pulse-region (point-at-bol) (point-at-eol)))
+(defun dmd-pulse/pulse-line (&optional line)
+  (interactive "P")
+  (save-excursion
+    (when line
+      (goto-char (point-min))
+      (forward-line (1- line)))
+    (dmd-pulse/pulse-region (point-at-bol) (point-at-eol))))
 
 (defun dmd-pulse/pulse-region (start end)
   (lexical-let ((overlay (make-overlay start end))
