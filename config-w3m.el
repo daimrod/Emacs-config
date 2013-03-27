@@ -53,8 +53,9 @@
      (destructuring-bind (key &rest def)
          pair
        (define-key map (read-kbd-macro key) def)))
-   `(("g"               . dmd/w3m-browse-url)
-     ("G"               . dmd/w3m-browse-url-new-session)))
+   `(("g" . dmd/w3m-browse-url)
+     ("G" . dmd/w3m-browse-url-new-session)
+     ("F" . w3m-view-next-page)))
   (setf w3m-mode-map map))
 
 (defun dmd/w3m-browse-url (url prefix)
