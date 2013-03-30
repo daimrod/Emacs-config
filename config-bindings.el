@@ -107,7 +107,8 @@
 
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
 
-(global-set-key (kbd "<f5>") 'compile)
+(require 'compile-cache)
+(global-set-key (kbd "<f5>") 'compile-cache)
 (global-set-key (kbd "<f6>") 'recompile)
 
 (global-set-key (kbd "M-\\") 'execute-extended-command)
