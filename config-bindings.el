@@ -113,4 +113,6 @@
 
 (global-set-key (kbd "M-\\") 'execute-extended-command)
 
+(global-set-key (kbd "C-x k") 'dmd/ido-kill-buffer)
+
 (provide 'config-bindings)
