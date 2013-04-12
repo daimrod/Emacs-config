@@ -264,4 +264,24 @@ For details of keybindings, see `ido-switch-buffer'."
         (ido-buffer-internal nil nil "Kill buffer process: " (buffer-name (current-buffer)) nil 'ignore)))
     (ido-buffer-internal 'kill 'kill-buffer "Kill buffer: " (buffer-name (current-buffer)) nil 'ignore)))
 
+(defun dmd/switch-git<->https ()
+  "Switch the current remote from git to https or the other way
+around depending on the current value.
+
+It uses magit internal."
+  (interactive)
+  (let* ((remote (magit-get-current-remote))
+         (remote-url (magit-get "remote" remote "url")))
+    (magit-set
+     (cond ((string-match "^git@" remote-url)
+            (format
+             "https://%s"
+             (substitute ?/ ?: (substring remote-url 4) :count 1)))
+           ((string-match "^https://" remote-url)
+            (format
+             "git@%s"
+             (substitute ?: ?/ (substring remote-url 8) :count 1)))
+           (t (error "Unknown remote URL format `%s'" remote-url)))
+     "remote" remote "url")))
+
 (provide 'config-defuns)
