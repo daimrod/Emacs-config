@@ -115,4 +115,9 @@
 
 (global-set-key (kbd "C-x k") 'dmd/ido-kill-buffer)
 
+;;; EMMS
+(global-set-key (kbd "M-<f10>") 'emms-previous)
+(global-set-key (kbd "M-<f11>") 'emms-pause)
+(global-set-key (kbd "M-<f12>") 'emms-next)
+
 (provide 'config-bindings)
