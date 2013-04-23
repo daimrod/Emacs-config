@@ -117,7 +117,14 @@
 
 ;;; EMMS
 (global-set-key (kbd "M-<f10>") 'emms-previous)
-(global-set-key (kbd "M-<f11>") 'emms-pause)
+(global-set-key (kbd "M-<f11>")
+                '(lambda (&optional prefix)
+                   "Pause current track if PREFIX is nil,
+otherwise stop it."
+                   (interactive "P")
+                   (if prefix
+                       (emms-stop)
+                     (emms-pause))))
 (global-set-key (kbd "M-<f12>") 'emms-next)
 
 (provide 'config-bindings)
