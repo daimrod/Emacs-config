@@ -156,7 +156,7 @@ but still present in the background."
   (interactive)
   (require 'bytecomp)
   (let ((filename (buffer-file-name)))
-    (when (string-match "\\.el$" filename)
+    (when (eq major-mode 'emacs-lisp-mode)
       (byte-compile-file filename)
       (load-file filename))))
 
