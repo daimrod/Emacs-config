@@ -61,17 +61,22 @@
 (show-paren-mode 1)
 
 ;; enable ido-mode
-(ido-mode t)
+(require 'ido)
+(fni/add-to-load-path (concat src-dir "ido-ubiquitous/"))
+(require 'ido-ubiquitous)
+
 (setq ido-enable-flex-matching t
       ido-everywhere t
       ido-create-new-buffer 'always
       ido-use-filename-at-point 'guess
       ido-max-prospects 10
       ido-default-file-method 'selected-window
-      ido-default-buffer-method 'selected-window)
+      ido-default-buffer-method 'selected-window
+      ido-create-new-buffer 'always
+      ido-ubiquitous-enable-compatibility nil
 
-;; Display ido results vertically, rather than horizontally
-(setq ido-decorations '("\n-> "
+      ;; Display ido results vertically, rather than horizontally
+      ido-decorations '("\n-> "
                         ""
                         "\n   "
                         "\n   ..."
@@ -87,15 +92,12 @@
 (add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-truncation)
 (defun ido-define-keys ()
   ;; C-n/p is more intuitive in vertical layout
-
   (define-key ido-completion-map (kbd "C-n") 'ido-next-match)
   (define-key ido-completion-map (kbd "C-p") 'ido-prev-match))
 (add-hook 'ido-setup-hook 'ido-define-keys)
 
-(fni/add-to-load-path (concat src-dir "ido-ubiquitous/"))
-(require 'ido-ubiquitous)
-(ido-ubiquitous-mode t)
-(setq ido-ubiquitous-enable-compatibility nil)
+(ido-mode 1)
+(ido-ubiquitous-mode 1)
 
 (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 
@@ -122,9 +124,6 @@
 
 ;; do not ask confirmation to open a file or a buffer
 (setq confirm-nonexistent-file-or-buffer nil)
-
-;; never ask confirmation to create a new buffer
-(setq ido-create-new-buffer 'always)
 
 ;; undo-tree everywhere
 (global-undo-tree-mode)
