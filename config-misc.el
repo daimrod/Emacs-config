@@ -257,4 +257,7 @@
 ;;; Winner mode is a winner!
 (winner-mode 1)
 
+;;; Edebug
+(require 'edebug)
+
 (provide 'config-misc)
