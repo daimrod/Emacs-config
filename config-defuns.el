@@ -158,7 +158,7 @@ but still present in the background."
   (let ((filename (buffer-file-name)))
     (when (eq major-mode 'emacs-lisp-mode)
       (byte-compile-file filename)
-      (load-file filename))))
+      (load (file-name-sans-extension filename)))))
 
 (defvar *evince-extensions* nil
   "List of extentions supported by evince.")
