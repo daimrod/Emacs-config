@@ -35,15 +35,10 @@
   "A list of functions used to find the url at point."
   :type '(repeat function))
 
-(defcustom gu-first-browse-url-function
-  'browse-url-browser-function
-  "The default function used to browse an URL."
-  :type '(choices variable function))
-
-(defcustom gu-second-browse-url-function
-  'browse-url-generic
-  "The other function used to browse an URL."
-  :type '(choices variable function))
+(defcustom gu-browse-url-functions
+  '(browse-url-browser-function browse-url-generic)
+  "The functions used to browse an URL, the first one is the default."
+  :type '(repeat (choice variable function)))
 
 (defcustom gu-search-format
   "http://www.google.com/search?q=%s"
@@ -106,11 +101,11 @@ the terms searched."
                          (gu-find-url-at-point)))
         current-prefix-arg))
 
-(defun gu-get-browse-url-function (second-function?)
+(defun gu-get-browse-url-function (alternative)
   "Return the function selected."
-  (let* ((fun (if second-function?
-                  gu-second-browse-url-function
-                gu-first-browse-url-function))
+  (let* ((fun (elt gu-browse-url-functions (if (integerp alternative)
+                                               (truncate (log alternative 4))
+                                             0)))
          (fun (if
                   ;; `gu-****-browse-url-function' can be either a
                   ;; variable or a function, but we need a function.
@@ -121,15 +116,15 @@ the terms searched."
       (error "%s is not a valid function." fun))
     fun))
 
-(defun gu-browse-url (url &optional second-function?)
+(defun gu-browse-url (url &optional alternative)
   (interactive (gu-browse-url-interactive-arg "URL: "))
-  (funcall (gu-get-browse-url-function second-function?)
+  (funcall (gu-get-browse-url-function (car-safe alternative))
            url))
 
-(defun gu-search (term &optional second-function?)
+(defun gu-search (term &optional alternative)
   (interactive (list (read-string "Search: ")
                      current-prefix-arg))
-  (funcall (gu-get-browse-url-function second-function?)
+  (funcall (gu-get-browse-url-function (car-safe alternative))
            (format gu-search-format term)))
 
 (provide 'graze-url)
