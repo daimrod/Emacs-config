@@ -284,4 +284,9 @@ It uses magit internal."
            (t (error "Unknown remote URL format `%s'" remote-url)))
      "remote" remote "url")))
 
+(defun dmd/rename-buffer (&optional unique)
+  (interactive "P")
+  (let ((new-name (read-from-minibuffer "Rename buffer: " (buffer-name))))
+    (rename-buffer new-name unique)))
+
 (provide 'config-defuns)
