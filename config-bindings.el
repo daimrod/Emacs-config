@@ -125,6 +125,10 @@ otherwise stop it."
                    (if prefix
                        (emms-stop)
                      (emms-pause))))
-(global-set-key (kbd "M-<f12>") 'emms-next)
+(global-set-key (kbd "M-<f12>")
+                '(lambda () (interactive)
+                   (if emms-random-playlist
+                       (emms-random)
+                     (emms-next))))
 
 (provide 'config-bindings)
