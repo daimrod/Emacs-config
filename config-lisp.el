@@ -16,13 +16,6 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(autoload 'enable-paredit-mode "paredit"
-  "Turn on pseudo-structural editing of Lisp code."
-  t)
-(add-hook 'lisp-mode-hook 'enable-paredit-mode)
-(add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
-(add-hook 'ielm-mode-hook 'enable-paredit-mode)
-
 (require 'elisp-slime-nav)
 (add-hook 'emacs-lisp-mode-hook 'elisp-slime-nav-mode)
 (add-hook 'ielm-mode-hook 'elisp-slime-nav-mode)

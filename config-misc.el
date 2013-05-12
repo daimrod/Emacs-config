@@ -152,8 +152,7 @@
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;; Enable delete-selection-mode
-(eval-after-load "autopair"
-  '(delete-selection-mode t))
+(delete-selection-mode 1)
 
 ;; dired configuration
 (require 'dired)
@@ -194,16 +193,6 @@
         ("srm\\.conf\\'"    . apache-mode)
         ("access\\.conf\\'" . apache-mode)
         ("sites-\\(available\\|enabled\\)/" . apache-mode)))
-
-;;; autopair configuration
-(fni/add-to-load-path (concat src-dir "autopair/"))
-(require 'autopair)
-(autopair-global-mode 1)
-(add-hook 'minibuffer-inactive-mode-hook
-          (lambda ()
-            (if (boundp 'autopair-dont-activate)
-                (setq autopair-dont-activate t)
-              (autopair-mode -1))))
 
 ;;; browse-kill-ring configuration
 (require 'browse-kill-ring)

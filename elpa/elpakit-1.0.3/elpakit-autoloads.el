@@ -1,11 +1,11 @@
 ;;; elpakit-autoloads.el --- automatically extracted autoloads
 ;;
 ;;; Code:
-
+(add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
 ;;;### (autoloads (elpakit-isearch-hook-jack-in elpakit-test elpakit-start-server
 ;;;;;;  elpakit-list-processes elpakit elpakit-eval elpakit-make-multi)
-;;;;;;  "elpakit" "elpakit.el" (20868 53089 0 0))
+;;;;;;  "elpakit" "elpakit.el" (20880 5682 0 0))
 ;;; Generated autoloads from elpakit.el
 
 (autoload 'elpakit-make-multi "elpakit" "\
@@ -129,16 +129,13 @@ in your configuration file to make it happen.
 
 ;;;***
 
-;;;### (autoloads nil nil ("elpakit-pkg.el") (20868 53089 762633
-;;;;;;  259000))
+;;;### (autoloads nil nil ("elpakit-pkg.el") (20880 5682 419392 151000))
 
 ;;;***
 
-(provide 'elpakit-autoloads)
 ;; Local Variables:
 ;; version-control: never
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
-;; coding: utf-8
 ;; End:
 ;;; elpakit-autoloads.el ends here
