@@ -1,12 +1,12 @@
 ;;; php-extras-autoloads.el --- automatically extracted autoloads
 ;;
 ;;; Code:
-
+(add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
 ;;;### (autoloads (php-extras-autocomplete-setup php-extras-eldoc-documentation-function
 ;;;;;;  php-extras-insert-previous-variable php-extras-auto-complete-insert-parenthesis
 ;;;;;;  php-extras-insert-previous-variable-key) "php-extras" "php-extras.el"
-;;;;;;  (20868 53086 0 0))
+;;;;;;  (20876 58748 0 0))
 ;;; Generated autoloads from php-extras.el
 
 (defvar php-extras-insert-previous-variable-key [(control c) (control $)] "\
@@ -45,7 +45,7 @@ Get function arguments for core PHP function at point.
 ;;;***
 
 ;;;### (autoloads (php-extras-generate-eldoc) "php-extras-gen-eldoc"
-;;;;;;  "php-extras-gen-eldoc.el" (20868 53086 0 0))
+;;;;;;  "php-extras-gen-eldoc.el" (20876 58749 0 0))
 ;;; Generated autoloads from php-extras-gen-eldoc.el
 
 (autoload 'php-extras-generate-eldoc "php-extras-gen-eldoc" "\
@@ -56,15 +56,13 @@ Regenerate PHP function argument hash table from php.net. This is slow!
 ;;;***
 
 ;;;### (autoloads nil nil ("php-extras-eldoc-functions.el" "php-extras-pkg.el")
-;;;;;;  (20868 53087 26903 409000))
+;;;;;;  (20876 58749 346751 127000))
 
 ;;;***
 
-(provide 'php-extras-autoloads)
 ;; Local Variables:
 ;; version-control: never
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
-;; coding: utf-8
 ;; End:
 ;;; php-extras-autoloads.el ends here
