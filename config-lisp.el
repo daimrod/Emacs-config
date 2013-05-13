@@ -33,9 +33,4 @@
 (setq lisp-lambda-list-keyword-alignment t
       lisp-lambda-list-keyword-parameter-alignment t)
 
-;;; auto-compile elisp files
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (add-hook 'after-save-hook 'dmd/autocompile nil t)))
-
 (provide 'config-lisp)
