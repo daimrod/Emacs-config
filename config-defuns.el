@@ -289,4 +289,10 @@ It uses magit internal."
   (let ((new-name (read-from-minibuffer "Rename buffer: " (buffer-name))))
     (rename-buffer new-name unique)))
 
+(defun dmd/french-setup ()
+  "French settings."
+  (interactive)
+  (activate-input-method "french-postfix")
+  (ispell-change-dictionary "french"))
+
 (provide 'config-defuns)
