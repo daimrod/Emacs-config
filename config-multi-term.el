@@ -42,14 +42,8 @@
                   transient-mark-mode nil)
             (auto-fill-mode -1)
 
-            ;; autopair doesn't play well with term-mode
-            (when (boundp 'autopair-dont-activate)
-              (setq autopair-dont-activate t))
-            (autopair-mode -1)
-
             ;; awesome bindings available!
-            (compilation-shell-minor-mode t)
-            ))
+            (compilation-shell-minor-mode t)))
 
 (cl-flet ((set-color (pair)
                   (multiple-value-bind (face color)
