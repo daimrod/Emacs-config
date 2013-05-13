@@ -27,6 +27,21 @@
     (interactive)
     (quit-window t)))
 
+(defun xwidget-webkit-browse-url (url &optional new-session)
+  "Ask xwidget-webkit to browse URL.
+NEW-SESSION specifies whether to create a new xwidget-webkit session.  URL
+defaults to the string looking like a url around the cursor position."
+  (interactive (progn
+                 (require 'browse-url)
+                 (browse-url-interactive-arg "xwidget-webkit URL: "
+                                             (xwidget-webkit-current-url))))
+  (when (stringp url)
+    (setq url (url-tidy url))
+    (if new-session
+        (xwidget-webkit-new-session url)
+      (xwidget-webkit-goto-url url))))
+
+
 (provide 'config-xwdigets)
 
 ;;; config-xwdigets.el ends here
