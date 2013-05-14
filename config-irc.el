@@ -21,73 +21,33 @@
 
 ;;; Code:
 
-(fni/add-to-load-path (concat src-dir "erc/"))
-(require 'erc)
+(fni/add-to-load-path (concat src-dir "shoes-off/"))
+(require 'rcirc)
+(require 'shoes-off-log)
+(require 'shoes-off)
 
-(fni/add-to-load-path (concat src-dir "znc/"))
-(require 'znc)
-
-(setq erc-timestamp-format "[%H:%M] "
-      erc-fill-prefix      "        ")
-
-(make-variable-buffer-local 'erc-fill-column)
-(add-hook 'window-configuration-change-hook 
-          '(lambda ()
-             (save-excursion
-               (walk-windows
-                (lambda (w)
-                  (let ((buffer (window-buffer w)))
-                    (set-buffer buffer)
-                    (when (eq major-mode 'erc-mode)
-                      (setq erc-fill-column (- (window-width w) 2)))))))))
-
-(eval-after-load 'erc-track
-  '(progn
-     (defun erc-bar-move-back (n)
-       "Moves back n message lines. Ignores wrapping, and server
-messages."
-       (interactive "nHow many lines ? ")
-       (re-search-backward "^.*<.*>" nil t n))
-
-     (defun erc-bar-update-overlay ()
-       "Update the overlay for current buffer, based on the
-content of erc-modified-channels-alist. Should be executed on
-window change."
-       (interactive)
-       (let* ((info (assq (current-buffer) erc-modified-channels-alist))
-              (count (cadr info)))
-         (if (and info (> count erc-bar-threshold))
-             (save-excursion
-               (end-of-buffer)
-               (when (erc-bar-move-back count)
-                 (let ((inhibit-field-text-motion t))
-                   (move-overlay erc-bar-overlay
-                                 (line-beginning-position)
-                                 (line-end-position)
-                                 (current-buffer)))))
-           (delete-overlay erc-bar-overlay))))
-
-     (defvar erc-bar-threshold 1
-       "Display bar when there are more than erc-bar-threshold unread messages.")
-     (defvar erc-bar-overlay nil
-       "Overlay used to set bar")
-     (setq erc-bar-overlay (make-overlay 0 0))
-     (overlay-put erc-bar-overlay 'face '(:underline "light sky blue"))
-     ;;put the hook before erc-modified-channels-update
-     (defadvice erc-track-mode (after erc-bar-setup-hook
-                                      (&rest args) activate)
-       ;;remove and add, so we know it's in the first place
-       (remove-hook 'window-configuration-change-hook 'erc-bar-update-overlay)
-       (add-hook 'window-configuration-change-hook 'erc-bar-update-overlay))
-     (add-hook 'erc-send-completed-hook (lambda (str)
-                                          (erc-bar-update-overlay)))))
-
-(add-hook 'erc-mode-hook
-          (lambda ()
-            ;;; erc-truncate-mode should do that but it does not.
-            (add-hook 'erc-insert-post-hook 'erc-truncate-buffer)))
-
-(add-to-list 'global-mode-string '(t erc-modified-channels-object))
+(defun-rcirc-command reconnect (arg)
+  "Reconnect the server process."
+  (interactive "i")
+  (unless process
+    (error "There's no process for this target"))
+  (let* ((server (car (process-contact process)))
+         (port (process-contact process :service))
+         (nick (rcirc-nick process))
+         channels query-buffers)
+    (dolist (buf (buffer-list))
+      (with-current-buffer buf
+        (when (eq process (rcirc-buffer-process))
+          (remove-hook 'change-major-mode-hook
+                       'rcirc-change-major-mode-hook)
+          (if (rcirc-channel-p rcirc-target)
+              (setq channels (cons rcirc-target channels))
+            (setq query-buffers (cons buf query-buffers))))))
+    (delete-process process)
+    (rcirc-connect server port nick
+                   rcirc-default-user-name
+                   rcirc-default-full-name
+                   channels)))
 
 (provide 'config-irc)
 
