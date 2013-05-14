@@ -137,9 +137,6 @@
           '(lisp-mode
             slime-repl-mode)))
 
-;;; paredit
-(add-hook 'slime-repl-mode-hook 'enable-paredit-mode)
-
 ;;; bind C-c / to slime-selector
 (define-key slime-mode-map (kbd "C-c /") 'slime-selector)
 (define-key slime-repl-mode-map (kbd "C-c /") 'slime-selector)
