@@ -26,28 +26,22 @@
 (require 'shoes-off-log)
 (require 'shoes-off)
 
-(defun-rcirc-command reconnect (arg)
-  "Reconnect the server process."
-  (interactive "i")
-  (unless process
-    (error "There's no process for this target"))
-  (let* ((server (car (process-contact process)))
-         (port (process-contact process :service))
-         (nick (rcirc-nick process))
-         channels query-buffers)
-    (dolist (buf (buffer-list))
-      (with-current-buffer buf
-        (when (eq process (rcirc-buffer-process))
-          (remove-hook 'change-major-mode-hook
-                       'rcirc-change-major-mode-hook)
-          (if (rcirc-channel-p rcirc-target)
-              (setq channels (cons rcirc-target channels))
-            (setq query-buffers (cons buf query-buffers))))))
-    (delete-process process)
-    (rcirc-connect server port nick
-                   rcirc-default-user-name
-                   rcirc-default-full-name
-                   channels)))
+(defun rcirc-shoes-off-all ()
+  (interactive)
+  (rcirc-connect "localhost" 7000 "shoes-off@irc.freenode.net" nil nil nil "shoes-off")
+  (rcirc-connect "localhost" 7000 "shoes-off@irc.geeknode.org" nil nil nil "shoes-off"))
+
+(defun rcirc-stop-all()
+  (interactive)
+  (mapc 'kill-buffer
+        (loop for buffer in (remove-if-not (lambda (buffer)
+                                             (eq 'rcirc-mode
+                                                 (with-current-buffer buffer major-mode)))
+                                           (buffer-list))
+              if (null (get-buffer-process buffer))
+              collect buffer
+              else
+              do (kill-buffer buffer))))
 
 (provide 'config-irc)
 
