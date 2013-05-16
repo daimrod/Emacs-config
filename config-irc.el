@@ -28,8 +28,8 @@
 
 (defun rcirc-shoes-off-all ()
   (interactive)
-  (rcirc-connect "localhost" 7000 "shoes-off@irc.freenode.net" nil nil nil "shoes-off")
-  (rcirc-connect "localhost" 7000 "shoes-off@irc.geeknode.org" nil nil nil "shoes-off"))
+  (rcirc-connect "localhost" 7000 "daimrod" "shoes-off@irc.freenode.net" nil nil "shoes-off")
+  (rcirc-connect "localhost" 7000 "daimrod" "shoes-off@irc.geeknode.org" nil nil "shoes-off"))
 
 (defun rcirc-stop-all()
   (interactive)
