@@ -1,4 +1,4 @@
-;;; dmd-pulse.el ---
+ ;;; dmd-pulse.el ---
 
 ;; Copyright (C) 2013 Grégoire Jadi
 
@@ -53,28 +53,28 @@
     (dmd-pulse/pulse-region (point-at-bol) (point-at-eol))))
 
 (defun dmd-pulse/pulse-region (start end)
-  (lexical-let ((overlay (make-overlay start end))
-                (list-bg (loop with frame = (color-values (face-background 'default))
-                               with start = (color-values (face-background 'dmd-pulse/face))
-                               for it from 0 to dmd-pulse/iterations
-
-                               for frac = (list (/ (- (nth 0 frame) (nth 0 start)) dmd-pulse/iterations)
-                                                (/ (- (nth 1 frame) (nth 1 start)) dmd-pulse/iterations)
-                                                (/ (- (nth 2 frame) (nth 2 start)) dmd-pulse/iterations))
-
-                               collect (hexrgb-color-values-to-hex
-                                        (list
-                                         (+ (nth 0 start) (* (nth 0 frac) it))
-                                         (+ (nth 1 start) (* (nth 1 frac) it))
-                                         (+ (nth 2 start) (* (nth 2 frac) it))))))
+  (lexical-let* ((overlay (make-overlay start end))
+                 (iteration 0)
+                 (bg-end (color-values (face-background 'default)))
+                 (bg-start (color-values (face-background 'dmd-pulse/face)))
+                 (frac (list (/ (- (nth 0 bg-end) (nth 0 bg-start)) dmd-pulse/iterations)
+                             (/ (- (nth 1 bg-end) (nth 1 bg-start)) dmd-pulse/iterations)
+                             (/ (- (nth 2 bg-end) (nth 2 bg-start)) dmd-pulse/iterations)))
                 timer)
     (setq timer (run-with-timer 0 dmd-pulse/delay
                                 (lambda (&rest args)
-                                  (cond ((null list-bg)
+                                  (cond ((= iteration dmd-pulse/iterations)
                                          (delete-overlay overlay)
                                          (cancel-timer timer))
-                                        (t (overlay-put overlay 'face (list :background (pop list-bg)))
-                                           (redisplay))))))))
+                                        (t
+                                         (overlay-put overlay 'face
+                                                      (list :background
+                                                            (pulse-color-values-to-hex
+                                                             (list (+ (nth 0 bg-start) (* (nth 0 frac) iteration))
+                                                                   (+ (nth 1 bg-start) (* (nth 1 frac) iteration))
+                                                                   (+ (nth 2 bg-start) (* (nth 2 frac) iteration))))))
+                                         (incf iteration))))))
+    overlay))
 
 (provide 'dmd-pulse)
 
