@@ -21,7 +21,6 @@
 
 ;;; Code:
 
-(require 'hexrgb)
 (eval-when-compile (require 'cl))
 
 (defgroup dmd-pulse nil
