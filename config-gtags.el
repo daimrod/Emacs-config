@@ -26,6 +26,8 @@
   (error "global executable not found, be sure GNU Global is installed and in your PATH."))
 
 (require 'gtags)
+(define-key gtags-mode-map (kbd "M-,") 'gtags-pop-stack)
+
 (add-hook 'c-mode-hook '(lambda () (gtags-mode 1)))
 (add-hook 'c++-mode-hook '(lambda () (gtags-mode 1)))
 
