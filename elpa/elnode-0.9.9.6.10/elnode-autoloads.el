@@ -1,11 +1,11 @@
 ;;; elnode-autoloads.el --- automatically extracted autoloads
 ;;
 ;;; Code:
-
+(add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
 ;;;### (autoloads (elnode-init elnode-webserver elnode-make-webserver
 ;;;;;;  elnode--webserver-handler-proc elnode-hostpath-default-table
-;;;;;;  elnode-start elnode-app) "elnode" "elnode.el" (20868 53091
+;;;;;;  elnode-start elnode-app) "elnode" "elnode.el" (20888 54608
 ;;;;;;  0 0))
 ;;; Generated autoloads from elnode.el
 
@@ -23,7 +23,7 @@ be set, even when emacs is started with -Q.")
 A macro that sets up the boring boilerplate for Elnode apps.
 
 This sets up lexical binding, captures the module's parent
-directory in DIR-VAR, require's `cl' and any other features you
+directory in DIR-VAR, requires `cl' and any other features you
 list.  Use it like this:
 
  (elnode-app my-app-dir esxml mongo-elnode)
@@ -148,7 +148,7 @@ the handler and listening on `elnode-init-host'
 ;;;***
 
 ;;;### (autoloads (elnode-server-list elnode-deferred-list elnode-deferred-queue)
-;;;;;;  "elnode-lists" "elnode-lists.el" (20868 53091 0 0))
+;;;;;;  "elnode-lists" "elnode-lists.el" (20888 54609 0 0))
 ;;; Generated autoloads from elnode-lists.el
 
 (autoload 'elnode-deferred-queue "elnode-lists" "\
@@ -173,7 +173,7 @@ List the currently running Elnode servers.
 ;;;***
 
 ;;;### (autoloads (elnode-wikiserver elnode-wikiserver-test elnode-wikiserver-wikiroot)
-;;;;;;  "elnode-wiki" "elnode-wiki.el" (20868 53091 0 0))
+;;;;;;  "elnode-wiki" "elnode-wiki.el" (20888 54608 0 0))
 ;;; Generated autoloads from elnode-wiki.el
 
 (defconst elnode-wikiserver-wikiroot-default (expand-file-name (concat elnode-config-directory "wiki/")) "\
@@ -206,16 +206,14 @@ provided. Otherwise it will just error.
 
 ;;;***
 
-;;;### (autoloads nil nil ("elnode-pkg.el" "elnode-rle.el") (20868
-;;;;;;  53091 882233 723000))
+;;;### (autoloads nil nil ("elnode-pkg.el" "elnode-rle.el") (20888
+;;;;;;  54609 165281 558000))
 
 ;;;***
 
-(provide 'elnode-autoloads)
 ;; Local Variables:
 ;; version-control: never
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
-;; coding: utf-8
 ;; End:
 ;;; elnode-autoloads.el ends here
