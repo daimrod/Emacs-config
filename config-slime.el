@@ -122,6 +122,7 @@
 
 ;;; CLHS
 (load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
+(quicklisp-clhs-setup-hyperspec-root)
 (define-key slime-mode-map (kbd "C-c C-d f") 'common-lisp-hyperspec)
 (define-key slime-repl-mode-map (kbd "C-c C-d f") 'common-lisp-hyperspec)
 
