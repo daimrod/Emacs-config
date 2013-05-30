@@ -5,7 +5,7 @@
 
 ;;;### (autoloads (elpakit-isearch-hook-jack-in elpakit-test elpakit-start-server
 ;;;;;;  elpakit-list-processes elpakit elpakit-eval elpakit-make-multi)
-;;;;;;  "elpakit" "elpakit.el" (20880 5682 0 0))
+;;;;;;  "elpakit" "elpakit.el" (20902 32776 0 0))
 ;;; Generated autoloads from elpakit.el
 
 (autoload 'elpakit-make-multi "elpakit" "\
@@ -129,7 +129,8 @@ in your configuration file to make it happen.
 
 ;;;***
 
-;;;### (autoloads nil nil ("elpakit-pkg.el") (20880 5682 419392 151000))
+;;;### (autoloads nil nil ("elpakit-pkg.el") (20902 32776 424950
+;;;;;;  221000))
 
 ;;;***
 

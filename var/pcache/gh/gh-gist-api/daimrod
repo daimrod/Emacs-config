@@ -1,0 +1,384 @@
+;; Object gh/gh-gist-api/daimrod
+;; EIEIO PERSISTENT OBJECT
+(gh-cache "gh/gh-gist-api/daimrod"
+  :file "daimrod"
+  :entries #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8 data (("/users/daimrod/gists" "GET" "518961b9e53cab492b8a913ae8ba7382d4306545") [object pcache-entry "pcache-entry" 1369867461.5771406 nil nil] ("/gists/5674286" "GET" "6a707f0f53e06481008f5c5f75d5d0f5e24b51ef") [object pcache-entry "pcache-entry" 1369867480.3434234 nil [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "lazy.el" 11708 "https://gist.github.com/raw/5674286/848e643cbaa26650a91d06c3d2ccf88fb5235dbe/lazy.el" ";;; lazy.el - working out lazy stuff -*- lexical-binding: t -*-
+
+(defconst lazy-sullen-art
+  \"in my craft and sullen art
+exercised in the still night
+when only the moon rages
+and lovers lie abed 
+with all their griefs in the arms
+I pratice by singing light
+not for ambition or bread
+or the strut and trade of charms
+on the ivory stages 
+but for the common wages of their most secret heart.
+
+Not for the proud man apart
+From the raging moon I write
+On these spindrift pages
+Not for the towering dead
+With their nightingales psalms
+But for the lovers, their arms
+Round the griefs of the ages
+Who pay no praise nor wages
+Nor heed my craft or art.\"
+  \"'In my craft and sullen art' by Dylan Thomas.
+
+A useful piece of text for testing.\")
+
+(defun lazy-caller (fn &optional divisor)
+  \"Make something that can test FN receiving fractured data.
+
+This makes something that emulates Emacs' processes.  It returns
+a list of a buffer and a proc.  The buffer is a temporary data
+store and must be killed after the test.
+
+The returned proc delivers random amounts of text, in sequence,
+from the buffer, to FN.
+
+FN must accept 2 arguments: DATA and EOF-FUNCTION.  DATA is the
+fractured data and EOF-FUNCTION is a function to test EOF.  When
+EOF happens the function returns `t'.
+
+FN should use EOF to clear up the buffer returned by calling this
+function.\"
+  (let* ((databuf (get-buffer-create (generate-new-buffer-name \"*lazytemp*\")))
+         (r (/ (random
+                (with-current-buffer databuf
+                  ;; Insert the demo text, could be an argument?
+                  (insert lazy-sullen-art)
+                  (point-max))) (or divisor 2)))
+         (eof-fn (lambda ()
+                   (with-current-buffer databuf
+                     (= (point-max)(point-min))))))
+    (list databuf
+          (lambda ()
+            (with-current-buffer databuf
+              (if (= (point-max) (point-min))
+                  (throw :lazy-caller :eof) ;; maybe we could make this more generic?
+                  (let* ((pt
+                          (if (> r (point-max)) (point-max) r))
+                         (to-send
+                          (buffer-substring (point-min) pt)))
+                    (delete-region (point-min) pt)
+                    (funcall fn to-send eof-fn))))))))
+
+(defun lazy-caller-log (data eof-fn)
+  \"A simple fractured DATA tester.
+
+Use it like:
+
+ (lazy-test-log 'lazy-caller-test)
+
+And buffer *lazylog* will then show the data arriving in
+pieces.
+
+When it detects EOF through EOF-FN is throws `:eof' to `:lazy'.\"
+  (with-current-buffer (get-buffer-create \"*lazylog*\")
+    (goto-char (point-max))
+    (print data (current-buffer)))
+  (when (funcall eof-fn)
+    (throw :lazy :eof)))
+
+(defun lazy-test-run (fn)
+  \"Run a fractured data test over FN.
+
+FN is a function that takes one argument `data', the fractured
+data from some stream, as if it was the output stream from a
+process arriving in a filter function.\"
+  (destructuring-bind (buf lc) (lazy-caller fn 5)
+    (unwind-protect
+         (catch :lazy
+           (while t
+             (funcall lc)))
+      (kill-buffer buf))))
+
+(defun lazy-test-run-test ()
+  \"Show how the lazy test stuff works.\"
+  (lazy-test-run 'lazy-caller-log))
+
+(defun lazy/llp-work (buf data receive-line-fn)
+  (with-current-buffer buf
+    (let* ((ad (if (> (point-max) (point-min))
+                   (concat (buffer-string) data)
+                   data))
+           (strs (split-string ad \"\\n\")))
+      (erase-buffer)
+      ;;(unless (string-match-p \".*\\n$\" data))
+      (let* ((work-list (reverse strs))
+             (final (pop work-list)))
+        (insert final)
+        (setq strs (reverse work-list)))
+      (when strs
+        (dolist (item strs)
+          (funcall receive-line-fn (lambda () item)))))))
+
+(defun lazy/llp-eof (eof-fn buf receive-line-fn eof-target)
+  (when (funcall eof-fn)
+    (with-current-buffer buf
+      (when (> (point-max) (point-min))
+        (let ((data (buffer-string)))
+          (funcall receive-line-fn (lambda () data)))))
+    ;; And now eof
+    (when (buffer-live-p buf)
+      (kill-buffer buf))
+    (funcall receive-line-fn (lambda () (throw eof-target :eof)))))
+
+(defun lazy-line-producer (receive-line-fn eof-catcher)
+  \"Make a line producer to RECIEVE-LINE-FN from fractured data.
+
+When EOF occurs throw to EOF-CATCHER.
+
+The resulting proc takes 2 arguments, DATA and EOF-FN.  The proc
+collects the DATA into lines and pushes each new line, as it
+finds it, as a thunk, to RECEIVE-LINE-FN.  It calls EOF-FN to
+establish whether EOF has been reached and if it has to returns a
+thunk which will throw `:eof' to EOF-CATCHER.
+
+The resulting proc could form the basis of an Emacs process
+filter function, delivering lines from the output stream of a
+process to a list.
+
+This code:
+
+ (let (rl)
+   (catch :lazy
+     (lazy-test-run
+       (lazy-line-producer
+          (lambda (item) (push (funcall item) rl))
+          :lazy)))
+   (reverse rl))
+
+shows how a RECEIVE-LINE-FN may be constructed which receives the
+lines from the producer into a list.\"
+  (let ((llp/work-buf (generate-new-buffer \"*lazy-buf*\")))
+    (lambda (data eof-fn)
+      (lazy/llp-work llp/work-buf data receive-line-fn)
+      (lazy/llp-eof
+       eof-fn llp/work-buf receive-line-fn eof-catcher))))
+
+(defun lazy-line-producer-test-1 ()
+  \"Spit the lines into *lazylog*.\"
+  (let* ((buf (get-buffer-create \"*lazylog*\"))
+         (receive-line-func
+          (lambda (line-func)
+            (with-current-buffer buf
+              (goto-char (point-max))
+              (princ (concat (funcall line-func) \"\\n\") buf)))))
+    (catch :lazyplace
+      (lazy-test-run
+       (lazy-line-producer receive-line-func :lazyplace)))))
+
+(defun lazy-line-producer-test-2 ()
+  \"Simple test just collects the lines into a list.\"
+  (let (rl)
+   (catch :got-eof
+     (lazy-test-run
+       (lazy-line-producer
+          (lambda (item)
+            (push (funcall item) rl))
+          :got-eof)))
+   (reverse rl)))
+
+(defun lazy-line-producer-test-3 ()
+  \"Show how the whole thing is disassociated with concurrency.\"
+  (let (rl
+        (rlproc (lambda (line)
+                  (push line rl))))
+    (setq nic-timer (run-at-time
+                     \"5 sec\" nil
+                     (lambda ()
+                       (lazy-test-run
+                        (lazy-line-producer rlproc)))))
+    (catch :eof
+      (with-timeout (6 (throw :eof :timeout))
+        (while t
+          (discard-input)
+          (if (not rl)
+              (sit-for 1) 
+              (lazy-caller-log (pop rl))))))))
+
+(defun lazy/eof (process)
+  \"Is PROCESS at EOF?\"
+  ;; it's difficult to tell if Emacs processes are at EOF... this is
+  ;; the best way I can think of.
+  (memq 
+   (process-status process)
+   '(exit signal closed failed)))
+
+(defun qpopper (queue)
+  \"Return an iterator poping QUEUE.\"
+  (lambda ()
+    (when (and queue (listp queue))
+      (if (not (cdr queue))
+          (pop queue)
+          ;; Else find the point to pop
+          (let ((pt queue))
+            (while (cddr pt) (setq pt (cdr pt)))
+            (let ((popped (cadr pt)))
+              (setf (cdr pt) nil)
+              popped))))))
+
+(defun qpopper (&optional queue)
+  \"Return an proc that pops list QUEUE.
+
+Values are popped from the end of the list QUEUE.
+
+If QUEUE is not present then the queue is considered empty.
+
+The proc returned takes an optional argument TO-PUSH which, if
+present, is pushed onto the QUEUE.\"
+  (lambda (&optional to-push)
+    (if to-push
+        (push to-push queue)
+        (when (and queue (listp queue))
+          (if (not (cdr queue))
+              (pop queue)
+              ;; Else find the point to pop
+              (let ((pt queue))
+                (while (cddr pt) (setq pt (cdr pt)))
+                (let ((popped (cadr pt)))
+                  (setf (cdr pt) nil)
+                  popped)))))))
+
+(defun qpopper-test ()
+  (let ((lst '(1 2 3 4 5)))
+    (let (res (iter (qpopper lst)))
+      (funcall iter 6)       ; Push an extra value
+      (let-while (a (funcall iter)) (push a res))
+      lst ; Currently qpopper kills the source list
+      iter
+      res)))
+
+(defun qpopper-test2 ()
+  (let ((iter (qpopper nil)))
+    (funcall iter 10)
+    (funcall iter 20)
+    (funcall iter) ; => 10
+    ))
+
+(defun lazy/get-queue ()
+  \"Get an empty `qpopper' queue.\"
+  (qpopper '()))
+
+(defmacro case/catch (label body &rest handlers)
+  (declare (indent 1))
+  (let ((value (make-symbol \"valuev\")))
+    `(let ((,value
+            (catch ,label
+              ,body)))
+       (case ,value
+         ,@handlers
+         (t ,value)))))
+
+(defun case/catch-test ()
+  (case/catch :blah
+    (let (x)
+      (setq x :ended)
+      (throw :blah x))
+    (:ended (message \"whoops!\"))))
+
+(defun case/catch-test-2 ()
+  (case/catch :blah
+    (let ((x 10))
+      x)
+    (:ended (message \"whoops!\"))))
+
+(defun lazy/make-proc (process)
+  (let* (eof
+         (queue-iter (qpopper))
+         ;; we should a made symbol for the throw
+         (rl-proc (lazy-line-producer queue-iter :lazy/sp)))
+    (set-process-filter
+     process
+     (lambda (filters-proc data)
+       (funcall rl-proc data
+                (lambda () (lazy/eof filters-proc)))))
+    ;; Return the proc that will delay on process lines
+    (lambda ()
+      (when eof (throw :eof t))
+      (case/catch :lazy/sp
+        (let (line-thunk)
+          (while (not line-thunk)
+            (accept-process-output process 1)
+            (setq line-thunk (funcall queue-iter))
+            (message \"the thunk is: %S\" line-thunk))
+          ;; The while loop finished so call the thunk
+          (funcall line-thunk))
+        (:eof
+         (setq eof t)
+         (throw :eof t))))))
+
+
+(defun lazy-test-producer-proc (command)
+  \"Test a line producer with a real emacs process.\"
+  (let* (lines-thunk-lst
+         (rl-proc
+          (lazy-line-producer
+           (lambda (line-thunk)
+             (push line-thunk lines-thunk-lst))
+           :ll-test)))
+    (let* ((name \"thing\")
+           (buffer (generate-new-buffer name))
+           (process (start-process-shell-command
+                     name buffer command)))
+      (set-process-filter
+       process
+       (lambda (filters-proc data)
+         (funcall rl-proc data (lambda () (lazy/eof filters-proc)))))
+      ;; We have to force this
+      (accept-process-output process 1))
+    (qpopper lines-thunk-lst)))
+
+(defun lazy-test-producer-test ()
+  \"Test the `lazy-test-producer' function.\"
+  (let* ((line-generator (lazy-test-producer-proc
+                          \"ls /home/nferrier/.bashrc\")))
+    (let* ((line-thunk (funcall line-generator)))
+      ;; Get a line thunk - it should be ok
+      (funcall line-thunk)
+      ;; Call the iterator and get another line func and then force it
+      ;; - it should eval ll-test
+      (catch :ll-test
+        (funcall (funcall line-generator))))))
+
+
+;; Start proc stuff
+
+(defun lazy/start-proc (command)
+  (let* ((name \"thing\")
+         (buffer (generate-new-buffer name))
+         (process (start-process-shell-command
+                   name buffer command)))
+    (lazy/make-proc process)))
+
+(defun lazt/start-proc-test ()
+  (let (result
+        (proc (lazy/start-proc \"ls ~/.bashrc\")))
+    (catch :eof
+      (let-while (line (funcall proc))
+        (push line result)))
+    result))
+
+
+(defmacro* with-proc (command &rest body)
+  \"With the COMMAND do the BODY.\"
+  (let ((varv (make-symbol \"var\")))
+    `(let ((,varv (lazy/start-proc ,command)))
+       (fset 'get-line (lambda () (funcall ,varv)))
+       (unwind-protect
+            (progn ,@body)
+         (fmakunbound 'get-line)))))
+
+(defun lazy/with-proc-test ()
+  (with-proc \"ls -l /home/nferrier\"
+    (catch :eof
+      (let-while (line (get-line))
+        (message \"line: %s\" line)))))
+
+;;; lazy.el ends here
+"]) t "" "2013-05-29T22:17:00Z" "2013-05-29T22:17:00Z" "https://gist.github.com/5674286.git" "https://gist.github.com/5674286.git" "https://gist.github.com/5674286" 0 [object gh-user "gh-user" "nicferrier" 245513 nil "https://api.github.com/users/nicferrier"] "5674286" "https://api.github.com/gists/5674286" (((url . "https://api.github.com/gists/5674286/38e46fed9d047dc0fbc7900a9782c9ef9147b1a1") (change_status (deletions . 0) (additions . 378) (total . 378)) (committed_at . "2013-05-29T22:17:00Z") (version . "38e46fed9d047dc0fbc7900a9782c9ef9147b1a1") (user (type . "User") (received_events_url . "https://api.github.com/users/nicferrier/received_events") (events_url . "https://api.github.com/users/nicferrier/events{/privacy}") (repos_url . "https://api.github.com/users/nicferrier/repos") (organizations_url . "https://api.github.com/users/nicferrier/orgs") (subscriptions_url . "https://api.github.com/users/nicferrier/subscriptions") (starred_url . "https://api.github.com/users/nicferrier/starred{/owner}{/repo}") (gists_url . "https://api.github.com/users/nicferrier/gists{/gist_id}") (following_url . "https://api.github.com/users/nicferrier/following{/other_user}") (followers_url . "https://api.github.com/users/nicferrier/followers") (html_url . "https://github.com/nicferrier") (url . "https://api.github.com/users/nicferrier") (gravatar_id . "e94960f8e47c178e206a869c3b81165d") (avatar_url . "https://secure.gravatar.com/avatar/e94960f8e47c178e206a869c3b81165d?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png") (id . 245513) (login . "nicferrier")))) nil]]))
+  :timestamp 1369906123.1593673)
