@@ -3,9 +3,10 @@
 ;;; Code:
 (add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads (elpakit-isearch-hook-jack-in elpakit-test elpakit-start-server
-;;;;;;  elpakit-list-processes elpakit elpakit-eval elpakit-make-multi)
-;;;;;;  "elpakit" "elpakit.el" (20902 32776 0 0))
+;;;### (autoloads (elpakit-isearch-hook-jack-in elpakit-package-list-buf
+;;;;;;  elpakit-test elpakit-start-server elpakit-list-processes
+;;;;;;  elpakit elpakit-eval elpakit-make-multi) "elpakit" "elpakit.el"
+;;;;;;  (20907 31151 0 0))
 ;;; Generated autoloads from elpakit.el
 
 (autoload 'elpakit-make-multi "elpakit" "\
@@ -114,6 +115,11 @@ command.
 
 \(fn PACKAGE-LIST INSTALL TEST &key PRE-LISP EXTRA-LISP)" t nil)
 
+(autoload 'elpakit-package-list-buf "elpakit" "\
+Make a buffer with the package list in it.
+
+\(fn)" t nil)
+
 (autoload 'elpakit-isearch-hook-jack-in "elpakit" "\
 Jack in Elpakit to isearch. Call from `elisp-mode-hook'.
 
@@ -129,8 +135,7 @@ in your configuration file to make it happen.
 
 ;;;***
 
-;;;### (autoloads nil nil ("elpakit-pkg.el") (20902 32776 424950
-;;;;;;  221000))
+;;;### (autoloads nil nil ("elpakit-pkg.el") (20907 31151 89282 246000))
 
 ;;;***
 

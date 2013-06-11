@@ -1,10 +1,10 @@
-;;; noflet-autoloads.el --- automatically extracted autoloads
+;;; s-buffer-autoloads.el --- automatically extracted autoloads
 ;;
 ;;; Code:
 (add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads nil nil ("noflet-pkg.el" "noflet.el") (20888 54602
-;;;;;;  722367 942000))
+;;;### (autoloads nil nil ("s-buffer-pkg.el" "s-buffer.el") (20913
+;;;;;;  55872 350230 773000))
 
 ;;;***
 
@@ -13,4 +13,4 @@
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
 ;; End:
-;;; noflet-autoloads.el ends here
+;;; s-buffer-autoloads.el ends here

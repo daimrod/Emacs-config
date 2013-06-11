@@ -56,6 +56,9 @@
 (require 'mail-parse) ; for mail-header-parse-content-type
 (require 'url-util)
 (require 'kv)
+(require 'assoc) ; for aget - which we could move to kv?
+(require 's)
+(require 'dash)
 (require 'rx)
 (require 'web)
 (require 'json)
@@ -412,7 +415,7 @@ by elnode iteslf."
          (filename (elnode--log-filename logname))
          (formatter
           (or
-           (aget elnode-log-access-alist "elnode")
+           (aget elnode-log-access-alist "elnode") ;; shouldn't this look up the logname
            elnode-log-access-default-formatter-function))
          (formatted
           (when formatter
@@ -658,7 +661,7 @@ available.")
     (if (equal
 	 (process-buffer
 	  ;; Get the server process
-	  (cdr (assoc 
+	  (cdr (assoc
 		(process-contact process :service)
 		elnode-server-socket)))
 	 (process-buffer process))
@@ -672,7 +675,7 @@ available.")
     (when (process-buffer process)
       (kill-buffer (process-buffer process))
       (elnode-error "Elnode connection dropped %s" process)))
-   
+
    ((equal status "open\n") ;; this says "open from ..."
     (elnode-error "Elnode opened new connection"))
 
@@ -1341,14 +1344,17 @@ elnode servers on the same port on different hosts."
                         (mapcar (lambda (n) (format "%s" n))
                                 (elnode-ports))))))
                  (list prt)))
-  (let ((server (assoc port elnode-server-socket)))
+  (let* ((server
+          (or (assoc port elnode-server-socket)
+              (assoc (format "%d" port) elnode-server-socket)))
+         (port-to-kill (car-safe server)))
     (when server
       (message "deleting server process")
       (delete-process (cdr server))
       (setq elnode-server-socket
             ;; remove-if
             (let ((test (lambda (elem)
-                          (= (car elem) port)))
+                          (equal (car elem) port-to-kill)))
                   (l elnode-server-socket)
                   result)
               (while (car l)
@@ -1415,6 +1421,10 @@ The status-line and the header alist."
   (cons
    (process-get httpcon :elnode-http-status)
    (process-get httpcon :elnode-http-header)))
+
+(defun elnode-http-headers (httpcon)
+  "Return the alist of headers from HTTPCON."
+  (process-get httpcon :elnode-http-header))
 
 (defun elnode-http-header (httpcon name &optional convert)
   "Get the header specified by NAME from the HTTPCON.
@@ -1499,38 +1509,46 @@ cons is returned."
   "Parse the status line of HTTPCON.
 
 If PROPERTY is non-nil, then return that property."
-  (let ((http-line (process-get httpcon :elnode-http-status)))
-    (string-match
-     "\\(GET\\|POST\\|HEAD\\) \\(.*\\) HTTP/\\(1.[01]\\)"
-     http-line)
-    (process-put httpcon :elnode-http-method (match-string 1 http-line))
-    (process-put httpcon :elnode-http-resource (match-string 2 http-line))
-    (process-put httpcon :elnode-http-version (match-string 3 http-line))
+  (let* ((http-line (process-get httpcon :elnode-http-status))
+         (method-regex (mapconcat
+                        'identity
+                        (list "GET" "POST" "HEAD" "DELETE" "PUT")
+                        "\\|")))
+    (save-match-data
+      (string-match (format "\\(%s\\) \\(.*\\) HTTP/\\(1.[01]\\)"
+                            method-regex)
+                    http-line)
+      (process-put httpcon :elnode-http-method (match-string 1 http-line))
+      (process-put httpcon :elnode-http-resource (match-string 2 http-line))
+      (process-put httpcon :elnode-http-version (match-string 3 http-line)))
     (if property
         (process-get httpcon property))))
 
 (defun elnode--http-parse-resource (httpcon &optional property)
   "Convert the specified resource to a path and a query."
-  (save-match-data
-    (let ((resource
-           (or
-            (process-get httpcon :elnode-http-resource)
-            (elnode--http-parse-status httpcon :elnode-http-resource))))
-      (or
-       ;; root pattern
-       (string-match "^\\(/\\)\\(\\?.*\\)*$" resource)
-       ;; /somepath or /somepath/somepath
-       (string-match "^\\(/[^?]+\\)\\(\\?.*\\)*$" resource))
-      (let ((path (url-unhex-string (match-string 1 resource))))
-        (process-put httpcon :elnode-http-pathinfo path))
-      (if (match-string 2 resource)
-          (let ((query (match-string 2 resource)))
-            (string-match "\\?\\(.+\\)" query)
-            (if (match-string 1 query)
-                (process-put
-                 httpcon
-                 :elnode-http-query
-                 (match-string 1 query)))))))
+  (let ((resource
+         (or
+          (process-get httpcon :elnode-http-resource)
+          (elnode--http-parse-status
+           httpcon :elnode-http-resource))))
+    (save-match-data
+      (if (or
+           ;; root pattern with 
+           (string-match "^\\(/\\)\\(\\?.*\\)*$" resource)
+           ;; /somepath or /somepath/somepath
+           (string-match "^\\(/[^?]+\\)\\(\\?.*\\)*$" resource))
+          (let ((path (url-unhex-string (match-string 1 resource))))
+            (process-put httpcon :elnode-http-pathinfo path)
+            (when (match-string 2 resource)
+              (let ((query (match-string 2 resource)))
+                (string-match "\\?\\(.+\\)" query)
+                (if (match-string 1 query)
+                    (process-put
+                     httpcon
+                     :elnode-http-query
+                     (match-string 1 query))))))
+          ;; Else it might be a more exotic path
+          (process-put httpcon :elnode-http-pathinfo resource))))
   (if property
       (process-get httpcon property)))
 
@@ -1950,7 +1968,7 @@ of a buffer."
            "processing the access log"))))))
   (condition-case nil
       (process-send-eof httpcon)
-    (error (message "elnode--http-endL could not send EOF")))
+    (error (message "elnode--http-end could not send EOF")))
   (delete-process httpcon)
   (kill-buffer (process-buffer httpcon)))
 
@@ -2002,8 +2020,49 @@ The data is sent with content type: text/html."
                 (null list)))
            (json-encode data)))) json-to-send))
 
+(defun elnode-send-report (httpcon)
+  "Send back an HTML report on the request.
+
+This is often useful for debugging."
+  (flet ((alist->html
+             (alist)
+           (mapconcat
+            (lambda (hdr-pair)
+              (format
+               "%s %s"
+               (car hdr-pair)
+               (let ((v (cdr hdr-pair)))
+                 (if (and v (not (equal v "")))
+                     (format "%S" v) ""))))
+            alist
+            "\n")))
+    (let* ((method (elnode-http-method httpcon))
+           (paramters (alist->html
+                       (or (elnode-http-params httpcon)
+                           '(("None". "")))))
+           (headers (alist->html (elnode-http-headers httpcon)))
+           (page (s-lex-format "<html>
+<style>
+body { font-family: sans-serif;}
+td {
+vertical-align: top;
+}
+</style>
+<body>
+<table>
+<tr><td>method:</td><td>${method}</td></tr>
+<tr><td>parameters:</td><td><pre>${paramters}</pre></td><tr>
+<tr><td>headers:</td><td><pre>${headers}</pre></td><tr>
+</table>
+</body>
+</html>")))
+      (elnode-send-html httpcon page))))
+
+
 (defun* elnode-send-json (httpcon data &key content-type jsonp)
-  "Send a 200 OK to the HTTPCON along with DATA as JSON.
+  "Convert DATA to JSON and send to the HTTPCON with a 200 \"Ok\".
+
+DATA is some lisp object.
 
 If CONTENT-TYPE is specified then it is used as the HTTP Content
 Type of the response.
@@ -2691,11 +2750,12 @@ ARGS is a list of arguments to pass to the program.
 
 It is NOT POSSIBLE to run more than one process at a time
 directed at the same http connection."
-  (let* ((args `(,(format "%s-%s" (process-name httpcon) program)
-                 ,(format " %s-%s" (process-name httpcon) program)
-                 ,program
-                 ,@args
-                ))
+  (let* ((args
+          (append
+           (list
+            (format "%s-%s" (process-name httpcon) program)
+            (format " %s-%s" (process-name httpcon) program)
+            program) args))
          (p (let ((process-connection-type nil))
               (apply 'start-process args))))
     (set-process-coding-system p 'raw-text-unix)
@@ -2797,7 +2857,7 @@ It should not be used otherwise.")
 	 (day (nth (nth 6 decoded-time) day-names))
 	 (month (nth (- (nth 4 decoded-time) 1) month-names)))
     (format "%s, %s %s %s"
-	    day 
+	    day
 	    (format-time-string "%m" time t)
 	    month
 	    (format-time-string "%Y %H:%M:%S GMT" time t))))
@@ -3847,7 +3907,9 @@ in `elnode-webserver-docroot', which by default is ~/public_html."
 
 (defvar elnode--inited nil
   "Records when elnode is initialized.
-This is autoloading mechanics, see the eval-after-load for doing init.")
+
+This is autoloading mechanics, see the eval-after-load for doing
+init.")
 
 ;; Auto start elnode if we're ever loaded
 ;;;###autoload

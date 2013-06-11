@@ -4,7 +4,7 @@
 
 ;; Author: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Keywords: lisp
-;; Version: 0.0.1
+;; Version: 0.0.5
 ;; Url: https://github.com/nicferrier/emacs-noflet
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -29,6 +29,10 @@
 ;;; Code:
 
 (require 'cl-macs)
+
+(defun noflet|base ()
+  "A base function."
+  :noflet)
 
 (defun noflet|expand (bindings &rest forms)
   "Expand BINDINGS and evaluate FORMS.
@@ -73,18 +77,25 @@ name."
                  (let ((saved-func-namev
                         (intern (format "saved-func-%s"
                                         (symbol-name name)))))
-                   `(fset (quote ,name) ,saved-func-namev))))))
+                   `(if
+                        (eq (symbol-function (quote noflet|base))
+                            ,saved-func-namev)
+                        (fmakunbound (quote ,name))
+                        (fset (quote ,name) ,saved-func-namev)))))))
        (lets
         (cl-loop
            for i in bindings
            collect
-             (cl-destructuring-bind (name test-arg args &rest body) i
+             (cl-destructuring-bind (name args &rest body) i
                (let ((saved-func-namev (make-symbol "saved-func-name")))
                  (let ((saved-func-namev
                         (intern (format "saved-func-%s"
                                         (symbol-name name)))))
                    `(,saved-func-namev
-                     (symbol-function (quote ,name)))))))))
+                     (condition-case err
+                         (symbol-function (quote ,name))
+                       (void-function
+                        (symbol-function (quote noflet|base)))))))))))
     `(let ,lets
        (unwind-protect
             (progn
@@ -112,9 +123,42 @@ the name `this-fn':
           (funcall this-fn file-name default-dir))))
     (expand-file-name \"~/test\"))
 
-This is great for overriding in testing and such like."
+This is great for overriding in testing and such like.
+
+If new bindings are introduced the binding is discarded upon
+exit.  Even with new bindings there is still a `this-fn'.  It
+points to `noflet|base' for all new bindings."
+  (declare (debug ((&rest (cl-defun)) cl-declarations body))
+           (indent ((&whole 4 &rest (&whole 1 &lambda &body)) &body)))
   (apply 'noflet|expand bindings body))
 
-(provide 'noflet)
 
+(defmacro* let-while ((var expression) &rest body)
+  "A simple binding loop.
+
+VAR is bound to EXPRESSION repeatedly until `nil'.
+
+BODY is evaluated each time."
+  (declare
+   (debug (sexp sexp &rest form))
+   (indent 1))
+  (let ((expression-proc (make-symbol "exprp")))
+    `(let ((,expression-proc (lambda () ,expression)))
+       (let ((,var (funcall ,expression-proc)))
+         (while ,var
+           (progn ,@body)
+           (setq ,var (funcall ,expression-proc)))))))
+
+(defun let-while-test ()
+  (catch :io
+    (let ((lines '("line 1" "line 2")))
+      (flet ((get-line ()
+               (or
+                (pop lines)
+                (throw :io :eof))))
+        (let-while (line (get-line))
+          (message "the line is: %s" line))))))
+
+
+(provide 'noflet)
 ;;; noflet.el ends here

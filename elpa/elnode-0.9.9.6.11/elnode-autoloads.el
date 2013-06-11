@@ -5,7 +5,7 @@
 
 ;;;### (autoloads (elnode-init elnode-webserver elnode-make-webserver
 ;;;;;;  elnode--webserver-handler-proc elnode-hostpath-default-table
-;;;;;;  elnode-start elnode-app) "elnode" "elnode.el" (20888 54608
+;;;;;;  elnode-start elnode-app) "elnode" "elnode.el" (20919 19337
 ;;;;;;  0 0))
 ;;; Generated autoloads from elnode.el
 
@@ -148,7 +148,7 @@ the handler and listening on `elnode-init-host'
 ;;;***
 
 ;;;### (autoloads (elnode-server-list elnode-deferred-list elnode-deferred-queue)
-;;;;;;  "elnode-lists" "elnode-lists.el" (20888 54609 0 0))
+;;;;;;  "elnode-lists" "elnode-lists.el" (20919 19337 0 0))
 ;;; Generated autoloads from elnode-lists.el
 
 (autoload 'elnode-deferred-queue "elnode-lists" "\
@@ -172,8 +172,21 @@ List the currently running Elnode servers.
 
 ;;;***
 
+;;;### (autoloads ((quote elnode-log-mode)) "elnode-log-mode" "elnode-log-mode.el"
+;;;;;;  (20919 19337 0 0))
+;;; Generated autoloads from elnode-log-mode.el
+
+(autoload 'elnode-log-mode "elnode-log-mode" "\
+Elnode log viewing mode.
+
+For viewing access log files from Elnode.
+
+\(fn)" t nil)
+
+;;;***
+
 ;;;### (autoloads (elnode-wikiserver elnode-wikiserver-test elnode-wikiserver-wikiroot)
-;;;;;;  "elnode-wiki" "elnode-wiki.el" (20888 54608 0 0))
+;;;;;;  "elnode-wiki" "elnode-wiki.el" (20919 19337 0 0))
 ;;; Generated autoloads from elnode-wiki.el
 
 (defconst elnode-wikiserver-wikiroot-default (expand-file-name (concat elnode-config-directory "wiki/")) "\
@@ -206,8 +219,8 @@ provided. Otherwise it will just error.
 
 ;;;***
 
-;;;### (autoloads nil nil ("elnode-pkg.el" "elnode-rle.el") (20888
-;;;;;;  54609 165281 558000))
+;;;### (autoloads nil nil ("elnode-pkg.el" "elnode-rle.el") (20919
+;;;;;;  19337 307362 515000))
 
 ;;;***
 
