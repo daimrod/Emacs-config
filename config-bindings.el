@@ -131,4 +131,6 @@ otherwise stop it."
                        (emms-random)
                      (emms-next))))
 
+(global-set-key (kbd "C-;") 'newline-and-indent)
+
 (provide 'config-bindings)
