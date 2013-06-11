@@ -27,4 +27,6 @@
         (c-mode . "k&r")
         (other . "linux")))
 
+(require 'gtk-look)
+
 (provide 'config-cc-mode)
