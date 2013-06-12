@@ -133,4 +133,8 @@ otherwise stop it."
 
 (global-set-key (kbd "C-;") 'newline-and-indent)
 
+;; M-x
+(global-set-key (kbd "C-c m") 'execute-extended-command)
+(global-set-key (kbd "C-c C-m") 'execute-extended-command)
+
 (provide 'config-bindings)
