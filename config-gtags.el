@@ -34,8 +34,10 @@ otherwise use `gtags-find-with-grep'."
       (gtags-find-with-grep)
     (gtags-find-tag)))
 
-(define-key gtags-mode-map (kbd "M-,") 'gtags-pop-stack)
-(define-key gtags-mode-map (kbd "M-.") 'gtags-find)
+(eval-after-load 'gtags
+  '(progn 
+     (define-key gtags-mode-map (kbd "M-,") 'gtags-pop-stack)
+     (define-key gtags-mode-map (kbd "M-.") 'gtags-find)))
 
 (add-hook 'c-mode-hook '(lambda () (gtags-mode 1)))
 (add-hook 'c++-mode-hook '(lambda () (gtags-mode 1)))
