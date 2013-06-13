@@ -68,6 +68,12 @@
   :type 'boolean
   :group 'gtags)
 
+(defcustom gtags-kill-when-pop t
+  "Determine whether Gtags kill the buffers when emptying the
+stack."
+  :type 'boolean
+  :group 'gtags)
+
 ;; Variables
 (defvar gtags-current-buffer nil
   "Current buffer.")
@@ -87,6 +93,7 @@
   "Whether we are running XEmacs/Lucid Emacs")
 (defvar gtags-rootdir nil
   "Root directory of source tree.")
+
 ;
 ; New key assignment to avoid conflicting with ordinary assignments.
 ;
@@ -398,14 +405,14 @@
   (let (delete context buffer)
     (if (and (not (equal gtags-current-buffer nil))
              (not (equal gtags-current-buffer (current-buffer))))
-         (switch-to-buffer gtags-current-buffer)
+        (switch-to-buffer gtags-current-buffer)
       (if (not (gtags-exist-in-stack (current-buffer)))
-	  (setq delete t))
+          (setq delete t))
       (setq context (gtags-pop-context))
       (if (not context)
-	  (message "The tags stack is empty.")
-        (if delete
-	    (kill-buffer (current-buffer)))
+          (message "The tags stack is empty.")
+        (when (and gtags-kill-when-pop delete)
+          (kill-buffer (current-buffer)))
         (switch-to-buffer (nth 0 context))
         (setq gtags-current-buffer (current-buffer))
         (goto-char (nth 1 context))))))
