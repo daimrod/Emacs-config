@@ -4,14 +4,20 @@
 (add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
 ;;;### (autoloads (elisp-slime-nav-describe-elisp-thing-at-point
-;;;;;;  elisp-slime-nav-find-elisp-thing-at-point elisp-slime-nav-mode)
-;;;;;;  "elisp-slime-nav" "elisp-slime-nav.el" (20896 21161 0 0))
+;;;;;;  elisp-slime-nav-find-elisp-thing-at-point turn-on-elisp-slime-nav-mode
+;;;;;;  elisp-slime-nav-mode) "elisp-slime-nav" "elisp-slime-nav.el"
+;;;;;;  (20921 46594 0 0))
 ;;; Generated autoloads from elisp-slime-nav.el
 
 (autoload 'elisp-slime-nav-mode "elisp-slime-nav" "\
 Enable Slime-style navigation of elisp symbols using M-. and M-,
 
 \(fn &optional ARG)" t nil)
+
+(autoload 'turn-on-elisp-slime-nav-mode "elisp-slime-nav" "\
+Explicitly enable `elisp-slime-nav-mode'.
+
+\(fn)" nil nil)
 
 (autoload 'elisp-slime-nav-find-elisp-thing-at-point "elisp-slime-nav" "\
 Jump to the elisp thing at point, be it a function, variable, library or face.
@@ -30,8 +36,8 @@ Argument SYM-NAME thing to find.
 
 ;;;***
 
-;;;### (autoloads nil nil ("elisp-slime-nav-pkg.el") (20896 21161
-;;;;;;  514964 6000))
+;;;### (autoloads nil nil ("elisp-slime-nav-pkg.el") (20921 46594
+;;;;;;  491097 844000))
 
 ;;;***
 

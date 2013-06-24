@@ -5,7 +5,7 @@
 ;; Author: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Maintainer: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Keywords: hypermedia, wp
-;; Version: 0.0.4
+;; Version: 0.0.5
 ;; URL: https://github.com/nicferrier/creole-mode
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -58,20 +58,28 @@
 (defun creole-mode/fill-break-p ()
   "Fill computation for Creole.
 
-Basically just does not fill within links."
+Basically just does not fill within pre-formatted blocks or links
+or list items or titles."
   (or
    (memq 'link (text-properties-at (point)))
    (memq 'list-item (text-properties-at (point)))
    (memq 'info-title-1 (text-properties-at (point)))
    (memq 'info-title-2 (text-properties-at (point)))
    (memq 'info-title-3 (text-properties-at (point)))
-   (memq 'info-title-4 (text-properties-at (point)))))
+   (memq 'info-title-4 (text-properties-at (point)))
+   (save-excursion
+     (save-match-data
+       (re-search-backward
+        "^{{{\n"
+        (save-excursion
+          (re-search-backward "^}}}\n" (point-min) t))
+        t)))))
 
 ;;;###autoload
 (define-generic-mode 'creole-mode
   nil ; comments
   nil; keywords
-  '(("^\\(= \\)\\(.*?\\)\\($\\| =$\\)" . 'info-title-1)
+  `(("^\\(= \\)\\(.*?\\)\\($\\| =$\\)" . 'info-title-1)
     ("^\\(== \\)\\(.*?\\)\\($\\| ==$\\)" . 'info-title-2)
     ("^\\(=== \\)\\(.*?\\)\\($\\| ===$\\)" . 'info-title-3)
     ("^\\(====+ \\)\\(.*?\\)\\($\\| ====+$\\)" . 'info-title-4)
@@ -79,6 +87,7 @@ Basically just does not fill within links."
     ("\\[\\[.*?\\]\\]" . 'link)
     ("\\[\\[\\[.*?\\]\\]\\]" . 'link)
     ("\\[.*\\]" . 'link)
+    ;;("{{\\(.*\\)}}" . ,(list 'face 'image 'display nic-img-1))
     ("\\[b\\].*?\\[/b\\]" . 'bold)
     ("//.*?//" . 'italic)
     ("\\*\\*.*?\\*\\*" . 'bold)

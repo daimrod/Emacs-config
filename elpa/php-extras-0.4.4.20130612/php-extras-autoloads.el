@@ -3,10 +3,10 @@
 ;;; Code:
 (add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads (php-extras-autocomplete-setup php-extras-eldoc-documentation-function
-;;;;;;  php-extras-insert-previous-variable php-extras-auto-complete-insert-parenthesis
-;;;;;;  php-extras-insert-previous-variable-key) "php-extras" "php-extras.el"
-;;;;;;  (20876 58748 0 0))
+;;;### (autoloads (php-extras-completion-at-point php-extras-autocomplete-setup
+;;;;;;  php-extras-eldoc-documentation-function php-extras-insert-previous-variable
+;;;;;;  php-extras-auto-complete-insert-parenthesis php-extras-insert-previous-variable-key)
+;;;;;;  "php-extras" "php-extras.el" (20921 46589 0 0))
 ;;; Generated autoloads from php-extras.el
 
 (defvar php-extras-insert-previous-variable-key [(control c) (control $)] "\
@@ -31,7 +31,7 @@ Get function arguments for core PHP function at point.
 
 \(fn)" nil nil)
 
-(add-hook 'php-mode-hook #'(lambda nil (unless eldoc-documentation-function (set (make-local-variable 'eldoc-documentation-function) #'php-extras-eldoc-documentation-function))))
+(add-hook 'php-mode-hook #'(lambda nil (unless eldoc-documentation-function (set (make-local-variable 'eldoc-documentation-function) #'php-extras-eldoc-documentation-function)) (add-hook 'completion-at-point-functions #'php-extras-completion-at-point nil t)))
 
 (autoload 'php-extras-autocomplete-setup "php-extras" "\
 
@@ -40,12 +40,17 @@ Get function arguments for core PHP function at point.
 
 (add-hook 'php-mode-hook #'php-extras-autocomplete-setup)
 
+(autoload 'php-extras-completion-at-point "php-extras" "\
+
+
+\(fn)" nil nil)
+
 (eval-after-load 'php-mode `(let ((map php-mode-map) (key php-extras-insert-previous-variable-key)) (define-key map key 'php-extras-insert-previous-variable)))
 
 ;;;***
 
 ;;;### (autoloads (php-extras-generate-eldoc) "php-extras-gen-eldoc"
-;;;;;;  "php-extras-gen-eldoc.el" (20876 58749 0 0))
+;;;;;;  "php-extras-gen-eldoc.el" (20921 46589 0 0))
 ;;; Generated autoloads from php-extras-gen-eldoc.el
 
 (autoload 'php-extras-generate-eldoc "php-extras-gen-eldoc" "\
@@ -56,7 +61,7 @@ Regenerate PHP function argument hash table from php.net. This is slow!
 ;;;***
 
 ;;;### (autoloads nil nil ("php-extras-eldoc-functions.el" "php-extras-pkg.el")
-;;;;;;  (20876 58749 346751 127000))
+;;;;;;  (20921 46589 803770 679000))
 
 ;;;***
 

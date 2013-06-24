@@ -1,10 +1,10 @@
-;;; noflet-autoloads.el --- automatically extracted autoloads
+;;; kv-autoloads.el --- automatically extracted autoloads
 ;;
 ;;; Code:
 (add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads nil nil ("noflet-pkg.el" "noflet.el") (20919 19332
-;;;;;;  258720 937000))
+;;;### (autoloads nil nil ("kv-pkg.el" "kv.el") (20934 58642 303849
+;;;;;;  95000))
 
 ;;;***
 
@@ -13,4 +13,4 @@
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
 ;; End:
-;;; noflet-autoloads.el ends here
+;;; kv-autoloads.el ends here

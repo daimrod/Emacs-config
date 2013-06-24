@@ -4,7 +4,7 @@
 
 ;; Author: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Keywords: lisp
-;; Version: 0.0.5
+;; Version: 0.0.7
 ;; Url: https://github.com/nicferrier/emacs-noflet
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -29,6 +29,7 @@
 ;;; Code:
 
 (require 'cl-macs)
+(eval-when-compile (require 'cl))
 
 (defun noflet|base ()
   "A base function."
@@ -148,16 +149,6 @@ BODY is evaluated each time."
          (while ,var
            (progn ,@body)
            (setq ,var (funcall ,expression-proc)))))))
-
-(defun let-while-test ()
-  (catch :io
-    (let ((lines '("line 1" "line 2")))
-      (flet ((get-line ()
-               (or
-                (pop lines)
-                (throw :io :eof))))
-        (let-while (line (get-line))
-          (message "the line is: %s" line))))))
 
 
 (provide 'noflet)
