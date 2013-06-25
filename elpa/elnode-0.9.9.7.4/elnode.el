@@ -415,7 +415,7 @@ by elnode iteslf."
          (filename (elnode--log-filename logname))
          (formatter
           (or
-           (aget elnode-log-access-alist "elnode") ;; shouldn't this look up the logname
+           (kva logname elnode-log-access-alist)
            elnode-log-access-default-formatter-function))
          (formatted
           (when formatter
@@ -941,6 +941,36 @@ port number of the connection."
                     process
                     (elnode--format-response 500))
                    (delete-process process)))))))))))
+
+
+(defun elnode--ip-addr->string (ip-addr)
+  "Turn a vector IP-ADDR into a string form.
+
+The vector form is produced by `process-contact' and includes the
+port number."
+  (destructuring-bind (a b c d port)
+      (mapcar 'identity ip-addr)
+    (format "%s.%s.%s.%s:%s" a b c d port)))
+
+(defun elnode-get-remote-ipaddr (httpcon)
+  "Return the remote IP address from the HTTPCON."
+  (let* ((remote (plist-get
+                  (process-contact httpcon t)
+                  :remote)))
+    (elnode--ip-addr->string remote)))
+
+(defun elnode-server-info (httpcon)
+  "Returns a list of the server host and port for HTTPCON.
+
+The list is returned so that it can be destructured
+with `(hostname port)'.  The `hostname' is a symbol."
+  (elnode--ip-addr->string
+   (plist-get
+    (process-contact (process-get httpcon :server) t)
+    :local)))
+
+
+;;; Testing stuff
 
 (defvar elnode--cookie-store nil
   "Cookie store for test servers.
@@ -2850,6 +2880,7 @@ It should not be used otherwise.")
 It should not be used otherwise.")
 
 (defun elnode--rfc1123-date (time)
+  "Return TIME in RFC1123 format, suitable for HTTP dates."
   (let* ((day-names '("Sun" "Mon" "Tue" "Wed" "Thu" "Fri" "Sat"))
 	 (month-names '("Jan" "Feb" "Mar" "Apr" "May" "Jun"
 			"Jul" "Aug" "Sep" "Oct" "Nov" "Dec"))
@@ -2862,9 +2893,13 @@ It should not be used otherwise.")
 	    month
 	    (format-time-string "%Y %H:%M:%S GMT" time t))))
 
+(defalias 'elnode-rfc1123-date 'elnode--rfc1123-date)
+
 (defun elnode--file-modified-time (file)
   "Get modification time for FILE."
   (nth 5 (file-attributes file)))
+
+(defalias 'elnode-file-modified-time 'elnode--file-modified-time)
 
 (defun* elnode-send-file (httpcon targetfile
                                   &key
@@ -3048,15 +3083,24 @@ You can override this in tests to have interesting effects.  By
 default it just calls `elnode-send-404'."
   (elnode-send-404 httpcon))
 
-(defun elnode-cached-p (httpcon target-file)
-  "Is the specified TARGET-FILE older than the HTTPCON?"
-  (let ((modified-since
-         (elnode-http-header httpcon 'if-modified-since :time)))
+(defun elnode-modified-since (httpcon modified-time)
+  "Implement the HTTP If-Modified-Since test.
+
+MODIFIED-TIME is the time the resource was modified, for example
+a file modification time."
+  (let* ((modified-since
+          (elnode-http-header
+           httpcon 'if-modified-since :time)))
     (and
      modified-since
-     (time-less-p
-      (elnode--file-modified-time target-file)
-      modified-since))))
+     (time-less-p modified-time modified-since))))
+
+(defun elnode-cached-p (httpcon target-file)
+  "Is the specified TARGET-FILE older than the HTTPCON?
+
+This uses `elnode-modified-since'."
+  (elnode-modified-since
+   httpcon (elnode--file-modified-time target-file)))
 
 (defun elnode-cached (httpcon)
   "`elnode-docroot-for' calls this when the resources was cached.

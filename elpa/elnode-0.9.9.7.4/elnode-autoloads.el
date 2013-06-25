@@ -5,7 +5,7 @@
 
 ;;;### (autoloads (elnode-init elnode-webserver elnode-make-webserver
 ;;;;;;  elnode--webserver-handler-proc elnode-hostpath-default-table
-;;;;;;  elnode-start elnode-app) "elnode" "elnode.el" (20919 19337
+;;;;;;  elnode-start elnode-app) "elnode" "elnode.el" (20938 8159
 ;;;;;;  0 0))
 ;;; Generated autoloads from elnode.el
 
@@ -148,7 +148,7 @@ the handler and listening on `elnode-init-host'
 ;;;***
 
 ;;;### (autoloads (elnode-server-list elnode-deferred-list elnode-deferred-queue)
-;;;;;;  "elnode-lists" "elnode-lists.el" (20919 19337 0 0))
+;;;;;;  "elnode-lists" "elnode-lists.el" (20938 8159 0 0))
 ;;; Generated autoloads from elnode-lists.el
 
 (autoload 'elnode-deferred-queue "elnode-lists" "\
@@ -173,7 +173,7 @@ List the currently running Elnode servers.
 ;;;***
 
 ;;;### (autoloads ((quote elnode-log-mode)) "elnode-log-mode" "elnode-log-mode.el"
-;;;;;;  (20919 19337 0 0))
+;;;;;;  (20938 8159 0 0))
 ;;; Generated autoloads from elnode-log-mode.el
 
 (autoload 'elnode-log-mode "elnode-log-mode" "\
@@ -185,8 +185,56 @@ For viewing access log files from Elnode.
 
 ;;;***
 
+;;;### (autoloads (elnode-make-proxy-server elnode-make-proxy) "elnode-proxy"
+;;;;;;  "elnode-proxy.el" (20938 8159 0 0))
+;;; Generated autoloads from elnode-proxy.el
+
+(autoload 'elnode-make-proxy "elnode-proxy" "\
+Make a proxy handler sending requests to URL.
+
+What is returned is an elnode handler to send requests to the
+specified URL.  The URL may include `s-format' patterns for
+interpolation with any of these variables:
+
+ path - the path from the HTTP request
+ params - the params from the HTTP request
+ query - the params from the HTTP request as a query
+
+For example, \"http://myserver:8000${path}${query}\" would cause
+\"myserver\" on port 8000 to get the query from the user with the
+specified path and query.
+
+A client with a specified HTTP proxy sends the full request as
+the path, eg:
+
+  GET http://somehost:port/path?query HTTP/1.1
+
+So `elnode-make-proxy' can make (something like) a full proxy
+server with:
+
+  (elnode-make-proxy \"${path}${query}\")
+
+There may be many things that a full proxy does that this does
+not do however.
+
+Reverse proxying is a simpler and perhaps more useful.
+
+\(fn URL)" nil nil)
+
+(autoload 'elnode-make-proxy-server "elnode-proxy" "\
+Make a proxy server on the specified PORT.
+
+Optionally have requests go to URL.  If URL is not specified it
+is \"${path}${query}\".
+
+Interactively use C-u to specify the URL.
+
+\(fn PORT &optional URL)" t nil)
+
+;;;***
+
 ;;;### (autoloads (elnode-wikiserver elnode-wikiserver-test elnode-wikiserver-wikiroot)
-;;;;;;  "elnode-wiki" "elnode-wiki.el" (20919 19337 0 0))
+;;;;;;  "elnode-wiki" "elnode-wiki.el" (20938 8159 0 0))
 ;;; Generated autoloads from elnode-wiki.el
 
 (defconst elnode-wikiserver-wikiroot-default (expand-file-name (concat elnode-config-directory "wiki/")) "\
@@ -219,8 +267,8 @@ provided. Otherwise it will just error.
 
 ;;;***
 
-;;;### (autoloads nil nil ("elnode-pkg.el" "elnode-rle.el") (20919
-;;;;;;  19337 307362 515000))
+;;;### (autoloads nil nil ("elnode-pkg.el" "elnode-rle.el") (20938
+;;;;;;  8159 552686 603000))
 
 ;;;***
 
