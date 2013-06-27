@@ -29,8 +29,8 @@
 
 (add-hook 'magit-mode-hook 'magit-load-config-extensions)
 
-(require 'magit-topgit)
-(add-hook 'magit-mode-hook 'turn-on-magit-topgit)
+(require 'magit-stgit)
+(add-hook 'magit-mode-hook 'turn-on-magit-stgit)
 
 ;;; m0ar context for diff thunks
 (setq magit-diff-context-lines 5)
