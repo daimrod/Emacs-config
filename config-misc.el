@@ -249,4 +249,8 @@
 ;;; Edebug
 (require 'edebug)
 
+;; Compilation
+(require 'compilation-font)
+(add-hook 'compilation-start-hook 'compilation-font-lock-manager)
+
 (provide 'config-misc)
