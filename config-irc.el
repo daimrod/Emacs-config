@@ -43,6 +43,13 @@
               else
               do (kill-buffer buffer))))
 
+(add-hook 'rcirc-mode-hook
+          (lambda ()
+            (when (and (eq major-mode 'rcirc-mode)
+                       (null (get-buffer-process (current-buffer)))
+                       (not rcirc-omit-mode))
+              (rcirc-omit-mode))))
+
 (provide 'config-irc)
 
 ;;; config-irc.el ends here
