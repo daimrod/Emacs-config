@@ -1,0 +1,90 @@
+2013-07-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Bump version number to release the new tex-jp.el
+
+2013-06-14  Tassilo Horn  <tsdh@gnu.org>
+
+	Put coding cookie in elisp header line.
+
+2013-06-14  Tassilo Horn  <tsdh@gnu.org>
+
+	* packages/auctex/tex-jp.el: Add coding cookie.
+
+2012-12-05  Tassilo Horn  <tsdh@gnu.org>
+
+	Reverted commits 312, 313, and 315.
+
+2012-12-04  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* packages/auctex/tex-jp.el: Fix up copyright line.
+
+2012-12-04  Tassilo Horn  <tsdh@gnu.org>
+
+	Delete AUCTeX style files with unclear copyright status.
+
+2012-12-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* auctex: Shorten copyright year ranges.
+
+2012-12-02  Tassilo Horn  <tsdh@gnu.org>
+
+	Don't provide the features auto-loads and preview-latex included in tex-site.
+
+2012-12-02  Tassilo Horn  <tsdh@gnu.org>
+
+	Update AUCTeX ELPA package to the new 11.87 release.
+
+2012-10-30  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Clean up copyright notices.
+
+2012-10-30  Glenn Morris  <rgm@gnu.org>
+
+	Selective merge of trivial font-latex.el fix from AUCTeX CVS
+	
+	http://debbugs.gnu.org/11837
+	http://lists.gnu.org/archive/html/auctex-diffs/2012-07/msg00000.html
+	http://lists.gnu.org/archive/html/emacs-devel/2012-10/msg00752.html
+
+2011-07-30  Chong Yidong  <cyd@stupidchicken.com>
+
+	Add texi files to for auctex package.
+
+2011-07-01  Chong Yidong  <cyd@stupidchicken.com>
+
+	Remove version numbers from filenames in packages/ dir.
+
+2011-06-30  Chong Yidong  <cyd@stupidchicken.com>
+
+	Remove version numbers in packages/ directory
+
+2011-04-20  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* admin/archive-contents.el: New file.
+	* packages/rainbow-mode-readme.txt:
+	* packages/js2-mode-readme.txt: Auto-update from the commentary.
+	* packages/js2-mode-20090814.el: Capitalize the description.
+	* packages/debbugs-0.1/debbugs.el: Require cl since it uses `case'.
+	(debbugs-get-bugs): Fix up typo.
+	* packages/company-0.5/company-gtags.el
+	(company-gtags-gnu-global-program-name): Pass the "when" argument.
+	* packages/auctex-11.86/auctex-pkg.el: Capitalize the description.
+	* packages/archive-contents: Almost auto-regenerate.
+
+2010-11-20  Ted Zlatanov  <tzz@lifelogs.com>
+
+	* COPYING, ChangeLog, README, admin/org-synch.el,
+	admin/org-synch.sh, admin/package-update.sh: Initial import.
+	
+	* packages/archive-contents, packages/auctex-11.86,
+	packages/auctex-readme.txt, packages/company-0.5/,
+	packages/company-readme.txt, packages/elpa.rss,
+	packages/js2-mode-20090814.el, packages/js2-mode-readme.txt,
+	packages/muse-3.20/, packages/muse-readme.txt,
+	packages/org-readme.txt, packages/rainbow-mode-0.1.el,
+	packages/rainbow-mode-readme.txt: Renamed from the root directory.
+
+2010-11-18  ELPA admin
+
+	Initial repository contents
+

@@ -65,6 +65,7 @@
 (require 'db)
 (require 'dired) ; needed for the setup
 (require 'tabulated-list)
+(require 'noflet)
 (require 'ert) ; we provide some assertions and need 'should'
 (eval-when-compile (require 'cl))
 
@@ -201,7 +202,7 @@ filenames to copy to the DIR."
           (message "copying %s elnode wiki default page to %s" dir to)
           (dired-copy-file source-default-file to nil)
           (when other-files
-            (flet ((resolve-filename (file)
+            (noflet ((resolve-filename (file)
                      (if (file-name-absolute-p file)
                          file
                          (concat
@@ -798,7 +799,7 @@ A header pair with the key `body' can be used to make a content body:
 No other transformations are done on the body, no content type
 added or content length computed."
     (let (body)
-      (flet ((header-name (hdr)
+      (noflet ((header-name (hdr)
                (if (symbolp (car hdr))
                    (symbol-name (car hdr))
                    (car hdr))))
@@ -953,11 +954,16 @@ port number."
     (format "%s.%s.%s.%s:%s" a b c d port)))
 
 (defun elnode-get-remote-ipaddr (httpcon)
-  "Return the remote IP address from the HTTPCON."
+  "Return the remote IP address from the HTTPCON.
+
+Returned as a dotted ip address followed by a colon separated
+port number.  For example: \"127.0.0.1:8080\"."
   (let* ((remote (plist-get
                   (process-contact httpcon t)
                   :remote)))
     (elnode--ip-addr->string remote)))
+
+(defalias 'elnode-remote-ipaddr 'elnode-get-remote-ipaddr)
 
 (defun elnode-server-info (httpcon)
   "Returns a list of the server host and port for HTTPCON.
@@ -994,43 +1000,43 @@ routines."
    (indent 1)
    (debug t))
   `(let ((elnode--cookie-store (make-hash-table :test 'equal)))
-     (flet ((elnode--get-server-prop (proc key)
-              (cond
-                ((eq key :elnode-http-handler)
-                 ,handler))))
+     (noflet ((elnode--get-server-prop (proc key)
+                (cond
+                  ((eq key :elnode-http-handler)
+                   ,handler))))
        ,@body)))
 
 (defun elnode--alist-to-query (alist)
   "Turn an alist into a formdata/query string."
-  (flet ((web--key-value-encode (key value)
-           "Encode a KEY and VALUE for url encoding."
-           (cond
-             ((or
-               (numberp value)
-               (stringp value))
-              (format
-               "%s=%s"
-               (url-hexify-string (format "%s" key))
-               (url-hexify-string (format "%s" value))))
-             (t
-              (format "%s" (url-hexify-string (format "%s" key))))))
-         (web--to-query-string (object)
-           "Convert OBJECT (a hash-table or alist) to an HTTP query string."
-           ;; Stolen from web
-           (mapconcat
-            (lambda (pair)
-              (web--key-value-encode (car pair) (cdr pair)))
-            (cond
-              ((hash-table-p object)
-               (let (result)
-                 (maphash
-                  (lambda (key value)
+  (noflet ((web--key-value-encode (key value)
+             "Encode a KEY and VALUE for url encoding."
+             (cond
+               ((or
+                 (numberp value)
+                 (stringp value))
+                (format
+                 "%s=%s"
+                 (url-hexify-string (format "%s" key))
+                 (url-hexify-string (format "%s" value))))
+               (t
+                (format "%s" (url-hexify-string (format "%s" key))))))
+           (web--to-query-string (object)
+             "Convert OBJECT (a hash-table or alist) to an HTTP query string."
+             ;; Stolen from web
+             (mapconcat
+              (lambda (pair)
+                (web--key-value-encode (car pair) (cdr pair)))
+              (cond
+                ((hash-table-p object)
+                 (let (result)
+                   (maphash
+                    (lambda (key value)
                     (setq result (append (list (cons key value)) result)))
-                  object)
-                 (reverse result)))
-              ((listp object)
-               object))
-            "&")))
+                    object)
+                   (reverse result)))
+                ((listp object)
+                 object))
+              "&")))
     (web--to-query-string alist)))
 
 (defun elnode--make-test-call (path method parameters headers)
@@ -1143,7 +1149,7 @@ to external processes."
               (send-string-func (elnode--make-send-string))
               (the-end 0)
               (elnode-webserver-visit-file t))
-          (flet
+          (noflet
               ((elnode-http-send-string (httpcon str)
                  (funcall main-send-string httpcon str))
                (elnode--make-send-string ()
@@ -1152,14 +1158,12 @@ to external processes."
                (elnode--make-send-eof ()
                  (lambda (httpcon)
                    ;; Flet everything in elnode--http-end
-                   (flet ((process-send-eof (proc) ;; Signal the end
-                            (setq the-end 't))
-                          ;; Do nothing - we want the test proc
-                          (delete-process (proc))
-                          ;; Again, do nothing, we want this buffer
-                          (kill-buffer (buffer)
-                            ;; Return true, don't really kill the buffer
-                            t))
+                   ;; ... first signaling the end
+                   (noflet ((process-send-eof (proc) (setq the-end 't))
+                            ;; Do nothing - we want the test proc
+                            (delete-process (proc))
+                            ;; Again, do nothing, we want this buffer
+                            (kill-buffer (buffer) t))
                      ;; Now call the captured eof-func
                      (funcall eof-func httpcon)))))
             ;; FIXME - we should unwind protect this?
@@ -1755,7 +1759,9 @@ property :elnode-filename on them:
 
   (get-text-property 0 :elnode-filename
     (elnode-http-param httpcon \"myfile\")) => '/somefile.txt'
-"
+
+The value comes from the \"Content-Disposition\" header in the
+multipart upload."
   (loop for pair in
        (or
         (process-get httpcon :elnode-http-params)
@@ -2035,9 +2041,8 @@ The data is sent with content type: text/html."
 (defun elnode-json-fix (data)
   "Fix JSON "
   (let ((json-to-send
-         (flet
-             ((json-alist-p
-                  (list)
+         (noflet
+             ((json-alist-p (list)
                 "Proper check for ALIST."
                 (while (consp list)
                   (setq list
@@ -2054,18 +2059,17 @@ The data is sent with content type: text/html."
   "Send back an HTML report on the request.
 
 This is often useful for debugging."
-  (flet ((alist->html
-             (alist)
-           (mapconcat
-            (lambda (hdr-pair)
-              (format
-               "%s %s"
-               (car hdr-pair)
-               (let ((v (cdr hdr-pair)))
-                 (if (and v (not (equal v "")))
-                     (format "%S" v) ""))))
-            alist
-            "\n")))
+  (noflet ((alist->html (alist)
+             (mapconcat
+              (lambda (hdr-pair)
+                (format
+                 "%s %s"
+                 (car hdr-pair)
+                 (let ((v (cdr hdr-pair)))
+                   (if (and v (not (equal v "")))
+                       (format "%S" v) ""))))
+              alist
+              "\n")))
     (let* ((method (elnode-http-method httpcon))
            (paramters (alist->html
                        (or (elnode-http-params httpcon)

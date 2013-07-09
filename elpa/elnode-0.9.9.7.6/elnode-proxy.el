@@ -13,14 +13,16 @@
 
 (defun elnode--web->elnode-hdr (hdr httpcon)
   "Send the HDR from the web HTTP request to Elnode's HTTPCON."
-  (apply
-   'elnode-http-start
-   httpcon 200
-   (mapcar
-    (lambda (hdr-pair)
-      (cons (symbol-name (car hdr-pair))
-            (cdr hdr-pair)))
-    (kvhash->alist hdr))))
+  (let ((headers
+         (-filter
+          (lambda (hdr-pair)
+            (unless (member
+                     (downcase (symbol-name (car hdr-pair)))
+                     '("status-code" "status-string" "status-version"))
+              (cons (symbol-name (car hdr-pair))
+                    (cdr hdr-pair))))
+          (kvhash->alist hdr))))
+    (apply 'elnode-http-start  httpcon 200 headers)))
 
 (defun elnode--proxy-x-forwarded-for (httpcon)
   "Return an X-Forwaded-For header."
@@ -80,7 +82,7 @@ Reverse proxying is a simpler and perhaps more useful."
         (lambda (httpc hdr data)
           (unless hdr-sent
             (elnode--web->elnode-hdr hdr httpcon)
-            (setq hdr/sent t))
+            (setq hdr-sent t))
           (if (eq data :done)
               (elnode-http-return httpcon)
               (elnode-http-send-string httpcon data)))
@@ -153,6 +155,25 @@ for the location."
       (let* ((server (elnode-server-info httpcon))
              (url (format "http://%s%s" server location)))
         (funcall (elnode-make-proxy url) httpcon))))
+
+(defun* elnode-proxy-post (httpcon path
+                                   &key (mode 'batch)
+                                   callback data extra-headers)
+  "Make an HTTP call to localhost or the first upstream proxy."
+  
+  (let* ((hp-pair
+          (if (elnode-http-header httpcon "X-Forwarded-For")
+              (elnode-get-remote-ipaddr httpcon)
+              (elnode-server-info httpcon)))
+         (url (format "http://%s%s" hp-pair path)))
+    (web-http-post
+     (or callback
+         (lambda (httpc hdr data)
+           (elnode-error
+            "%s post response %S %s"
+            httpcon hdr data)))
+     :url url :mode mode :data data
+     :extra-headers extra-headers)))
 
 (provide 'elnode-proxy)
 

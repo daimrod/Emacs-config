@@ -5,7 +5,7 @@
 
 ;;;### (autoloads (elnode-init elnode-webserver elnode-make-webserver
 ;;;;;;  elnode--webserver-handler-proc elnode-hostpath-default-table
-;;;;;;  elnode-start elnode-app) "elnode" "elnode.el" (20938 8159
+;;;;;;  elnode-start elnode-app) "elnode" "elnode.el" (20953 3429
 ;;;;;;  0 0))
 ;;; Generated autoloads from elnode.el
 
@@ -148,7 +148,7 @@ the handler and listening on `elnode-init-host'
 ;;;***
 
 ;;;### (autoloads (elnode-server-list elnode-deferred-list elnode-deferred-queue)
-;;;;;;  "elnode-lists" "elnode-lists.el" (20938 8159 0 0))
+;;;;;;  "elnode-lists" "elnode-lists.el" (20953 3429 0 0))
 ;;; Generated autoloads from elnode-lists.el
 
 (autoload 'elnode-deferred-queue "elnode-lists" "\
@@ -173,7 +173,7 @@ List the currently running Elnode servers.
 ;;;***
 
 ;;;### (autoloads ((quote elnode-log-mode)) "elnode-log-mode" "elnode-log-mode.el"
-;;;;;;  (20938 8159 0 0))
+;;;;;;  (20953 3429 0 0))
 ;;; Generated autoloads from elnode-log-mode.el
 
 (autoload 'elnode-log-mode "elnode-log-mode" "\
@@ -186,7 +186,7 @@ For viewing access log files from Elnode.
 ;;;***
 
 ;;;### (autoloads (elnode-make-proxy-server elnode-make-proxy) "elnode-proxy"
-;;;;;;  "elnode-proxy.el" (20938 8159 0 0))
+;;;;;;  "elnode-proxy.el" (20953 3429 0 0))
 ;;; Generated autoloads from elnode-proxy.el
 
 (autoload 'elnode-make-proxy "elnode-proxy" "\
@@ -234,7 +234,7 @@ Interactively use C-u to specify the URL.
 ;;;***
 
 ;;;### (autoloads (elnode-wikiserver elnode-wikiserver-test elnode-wikiserver-wikiroot)
-;;;;;;  "elnode-wiki" "elnode-wiki.el" (20938 8159 0 0))
+;;;;;;  "elnode-wiki" "elnode-wiki.el" (20953 3429 0 0))
 ;;; Generated autoloads from elnode-wiki.el
 
 (defconst elnode-wikiserver-wikiroot-default (expand-file-name (concat elnode-config-directory "wiki/")) "\
@@ -267,8 +267,8 @@ provided. Otherwise it will just error.
 
 ;;;***
 
-;;;### (autoloads nil nil ("elnode-pkg.el" "elnode-rle.el") (20938
-;;;;;;  8159 552686 603000))
+;;;### (autoloads nil nil ("elnode-pkg.el" "elnode-rle.el" "elnode-testsupport.el")
+;;;;;;  (20953 3429 376758 695000))
 
 ;;;***
 

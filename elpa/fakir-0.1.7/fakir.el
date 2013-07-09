@@ -5,7 +5,7 @@
 ;; Maintainer: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; URL: http://github.com/nicferrier/emacs-fakir
 ;; Created: 17th March 2012
-;; Version: 0.1.5
+;; Version: 0.1.7
 ;; Keywords: lisp, tools
 ;; Package-Requires: ((noflet "0.0.3")(dash "1.3.2"))
 
@@ -47,6 +47,7 @@
 (require 'ert)
 (require 'dash)
 (require 'noflet)
+(require 'kv)
 (eval-when-compile (require 'cl))
 
 
@@ -288,6 +289,45 @@ In normal circumstances, we return what the BODY returned."
 	  (list a (process-get :fakeproc :othervar)))))))
 
 
+(defmacro fakir-mock-proc-properties (process-obj &rest body)
+  "Mock process property list functions.
+
+Within BODY the functions `process-get', `process-put' and
+`process-plist' are all mocked to use a hashtable if the process
+passed to them is `eq' to PROCESS-OBJ.
+
+Also provides an additional function `process-setplist' to set
+the plist of the specified PROCESS-OBJ.  If this function is
+called on anything but PROCESS-OBJ it will error."
+  (declare (indent 1)
+           (debug (sexp &rest form)))
+  (let ((proc-props (make-symbol "procpropsv")))
+    `(let ((,proc-props (make-hash-table :test 'equal)))
+       (noflet ((process-get (proc name)
+                  (if (eq proc ,process-obj)
+                      (gethash name ,proc-props)
+                      (funcall this-fn proc name)))
+                (process-put (proc name value)
+                  (if (eq proc ,process-obj)
+                      (puthash name value ,proc-props)
+                      (funcall this-fn proc name value)))
+                (process-plist (proc)
+                  (if (eq proc ,process-obj)
+                      (kvalist->plist
+                       (kvhash->alist ,proc-props))))
+                (process-setplist (proc &rest props)
+                  (if (eq proc ,process-obj)
+                      (mapc
+                       (lambda (pair)
+                         (puthash
+                          (car pair) (cdr pair)
+                          ,proc-props))
+                       (kvplist->alist props))
+                      ;; Will error?
+                      (funcall this-fn proc props))))
+         ,@body))))
+
+
 ;; Time utils
 
 (defun fakir-time-encode (time-str)
@@ -434,10 +474,13 @@ part."
 
 (defun fakir--find-file (fakir-file)
   "`find-file' implementation for FAKIR-FILE."
-  (let ((buf (get-buffer-create (fakir-file-filename fakir-file))))
-    (with-current-buffer buf
-      (insert (fakir-file-content fakir-file)))
-    buf))
+  (let ((buf (get-buffer (fakir-file-filename fakir-file))))
+    (if (bufferp buf)
+        buf
+        ;; Else make one and put the content in it
+        (with-current-buffer buf
+          (insert (fakir-file-content fakir-file))
+          (current-buffer)))))
 
 (defun fakir-file-path (fakir-file)
   "Make the path for FAKIR-FILE."
@@ -523,6 +566,8 @@ you have not explicitly declared as fake."
 
 FAKED-FILE must be a `fakir-file' object or a list of
 `fakir-file' objects."
+  (declare (indent 1)
+           (debug (sexp &rest form)))
   (let ((ffv (make-symbol "ff")))
     `(let* ((,ffv ,faked-file)
             (fakir-file-namespace
