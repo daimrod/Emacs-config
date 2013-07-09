@@ -253,4 +253,8 @@
 (require 'compilation-font)
 (add-hook 'compilation-start-hook 'compilation-font-lock-manager)
 
+;; Emacs Async
+(fni/add-to-load-path (concat src-dir "emacs-parallel/"))
+(require 'parallel)
+
 (provide 'config-misc)
