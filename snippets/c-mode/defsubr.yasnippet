@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: defsubr
+# key: defsubr
+# --
+DEFUN ("$1", ${1:$(concat "F" (replace-regexp-in-string "-" "_" (or (yas-text) "")))}, ${1:$(concat "S" (replace-regexp-in-string "-" "_" (or (yas-text) "")))},
+       $2, $3, $4,
+       doc: /* $5 */)
+  ($6)
+{
+  $0
+}
