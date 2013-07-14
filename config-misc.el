@@ -257,4 +257,7 @@
 (fni/add-to-load-path (concat src-dir "emacs-parallel/"))
 (require 'parallel)
 
+;; Use The Source Luke!
+(setq find-function-C-source-directory (expand-file-name "~/packages/xwidget-emacs/src")) ;
+
 (provide 'config-misc)
