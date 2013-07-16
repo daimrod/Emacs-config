@@ -25,7 +25,7 @@
        (concat src-dir "yasnippet/snippets/")))
 
 ;; Load the snippets
-(setq yas-trigger-key "C-c SPC"
+(setq yas-trigger-key "M-c SPC"
       yas-fallback-behavior 'call-other-command
       yas-prompt-functions '(yas-ido-prompt))
 
