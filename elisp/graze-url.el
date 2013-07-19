@@ -31,7 +31,8 @@
   '(gu-find-url-org-mode
     gu-find-url-w3m
     gu-find-url-text-property
-    gu-find-url-thing-at-point)
+    gu-find-url-thing-at-point
+    gu-find-url-from-filename)
   "A list of functions used to find the url at point."
   :type '(repeat function))
 
@@ -55,6 +56,19 @@ the terms searched."
     (if (org-at-regexp-p org-bracket-link-regexp)
         (org-link-unescape
          (org-match-string-no-properties 1)))))
+
+(defun gu-find-url-from-filename ()
+  "Convert filename at point to URL."
+  (when (eq major-mode 'dired-mode)
+    (catch 'filename-found
+      (let (ret)
+        (dolist (fun file-name-at-point-functions)
+          (when (functionp fun)
+            (setq filename (funcall fun))
+            (when filename
+              (throw 'filename-found (concat "file://"
+                                             (file-truename filename)))))))
+      nil)))
 
 (defun gu-find-url-w3m ()
   "Find URL using `emacs-w3m' helper functions."
