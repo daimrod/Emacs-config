@@ -151,4 +151,18 @@ The return is the `gtk-lookup-cache' list."
       (setq gtk-lookup-cache result)))
   gtk-lookup-cache)
 
+(defun gtk-lookup-prefer-gtk3 ()
+  "Remove duplicate entry in libgtk3 when an entry in Gtk3 exists."
+  (interactive)
+  (setq gtk-lookup-cache-backup gtk-lookup-cache
+        gtk-lookup-cache
+        (loop with gtk-3-cache = (loop for entry in gtk-lookup-cache-backup
+                                       if (string-match-p "gtk.?3" (third entry))
+                                       collect (first entry))
+
+              for entry in gtk-lookup-cache-backup
+              unless (and (string-match-p "gtk.?2" (third entry))
+                          (member (first entry) gtk-3-cache))
+              collect entry)))
+
 (provide 'config-cc-mode)
