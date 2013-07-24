@@ -159,10 +159,13 @@ The return is the `gtk-lookup-cache' list."
         (loop with gtk-3-cache = (loop for entry in gtk-lookup-cache-backup
                                        if (string-match-p "gtk.?3" (third entry))
                                        collect (first entry))
-
+              with progress-reporter = (make-progress-reporter "Updating GTK Lookup cache...")
+              for k upfrom 0
+              do (progress-reporter-update progress-reporter k)
               for entry in gtk-lookup-cache-backup
               unless (and (string-match-p "gtk.?2" (third entry))
                           (member (first entry) gtk-3-cache))
-              collect entry)))
+              collect entry
+              finally (progress-reporter-done progress-reporter))))
 
 (provide 'config-cc-mode)
