@@ -260,4 +260,10 @@
 ;; Use The Source Luke!
 (setq find-function-C-source-directory (expand-file-name "~/packages/xwidget-emacs/src")) ;
 
+;; Recutils
+(autoload 'rec-mode "rec-mode")
+
+;; Cflow
+(autoload 'cflow-mode "cflow-mode")
+
 (provide 'config-misc)
