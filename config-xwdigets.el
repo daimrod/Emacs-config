@@ -43,6 +43,8 @@ defaults to the string looking like a url around the cursor position."
         (xwidget-webkit-new-session url)
       (xwidget-webkit-goto-url url))))
 
+(require 'parallel)
+(require 'parallel-xwidget)
 
 (provide 'config-xwdigets)
 
