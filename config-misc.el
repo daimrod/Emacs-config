@@ -266,4 +266,8 @@
 ;; Cflow
 (autoload 'cflow-mode "cflow-mode")
 
+;; Creole
+(autoload 'creole-mode "creole-mode")
+(add-to-list 'auto-mode-alist '("\\.creole\\'" . creole-mode))
+
 (provide 'config-misc)
