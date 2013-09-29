@@ -295,4 +295,11 @@ It uses magit internal."
   (activate-input-method "french-postfix")
   (ispell-change-dictionary "french"))
 
+(defun dmd/text-properties (&optional start end)
+  "Add properties in the current active region."
+  (interactive "r")
+  (unless (use-region-p)
+    (error "No active region"))
+  (add-face-text-property start end (read (read-from-minibuffer "Property: "))))
+
 (provide 'config-defuns)
