@@ -100,10 +100,10 @@
 ;;; another frame should be an xterm or similar.
 (global-set-key (kbd "C-x 5 t") 'dmd/terminal-emulator)
 
-(key-chord-define-global "qw" 'ace-jump-word-mode)
-(key-chord-define-global "xs" 'ace-jump-char-mode)
-(key-chord-define-global "xc" 'ace-jump-line-mode)
-(key-chord-define-global "qd" 'ace-jump-mode-pop-mark)
+(key-chord-define-global "QP" 'ace-jump-word-mode)
+(key-chord-define-global "QO" 'ace-jump-char-mode)
+(key-chord-define-global "QL" 'ace-jump-line-mode)
+(key-chord-define-global "QD" 'ace-jump-mode-pop-mark)
 
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
 
