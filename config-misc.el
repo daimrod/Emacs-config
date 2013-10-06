@@ -160,9 +160,6 @@
 
 (setq sentence-end-double-space nil)
 
-(require 'key-chord)
-(key-chord-mode t)
-
 ;; enable rainbow-mode in css-mode
 (require 'rainbow-mode)
 (add-hook 'css-mode-hook 'rainbow-mode)
