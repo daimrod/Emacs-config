@@ -267,4 +267,10 @@
 (autoload 'creole-mode "creole-mode")
 (add-to-list 'auto-mode-alist '("\\.creole\\'" . creole-mode))
 
+;; ESS
+(require 'ess)
+
+;; LaTeX
+(require 'auctex)
+
 (provide 'config-misc)
