@@ -269,8 +269,6 @@
 
 ;; ESS
 (require 'ess)
-
-;; LaTeX
-(require 'auctex)
+(require 'ess-site)
 
 (provide 'config-misc)
