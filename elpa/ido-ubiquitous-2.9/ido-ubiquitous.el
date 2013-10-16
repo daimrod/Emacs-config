@@ -5,7 +5,7 @@
 
 ;; Author: Ryan C. Thompson
 ;; URL: https://github.com/DarwinAwardWinner/ido-ubiquitous
-;; Version: 2.7
+;; Version: 2.9
 ;; Created: 2011-09-01
 ;; Keywords: convenience
 ;; EmacsWiki: InteractivelyDoThings
@@ -41,7 +41,7 @@
 
 ;;; Code:
 
-(defconst ido-ubiquitous-version "2.7"
+(defconst ido-ubiquitous-version "2.9"
   "Currently running version of ido-ubiquitous.
 
 Note that when you update ido-ubiquitous, this variable may not
@@ -301,7 +301,11 @@ You can restore these using the command `ido-ubiquitous-restore-default-override
     (disable exact "org-completing-read")
     (disable exact "org-completing-read-no-i")
     (disable exact "org-iswitchb-completing-read")
-    (disable exact "org-icompleting-read"))
+    (disable exact "org-icompleting-read")
+    ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/38
+    (enable exact "read-char-by-name")
+    ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/39
+    (disable exact "Info-read-node-name"))
   "Default value of `ido-ubiquitous-function-overrides'.
 
 You can restore these using the command `ido-ubiquitous-restore-default-overrides'.")
