@@ -123,8 +123,10 @@
 otherwise stop it."
                    (interactive "P")
                    (if prefix
-                       (emms-stop)
-                     (emms-pause))))
+                       (progn (emms-stop)
+                              (message "Stopped"))
+                     (emms-pause)
+                     (message "Paused"))))
 (global-set-key (kbd "M-<f12>")
                 '(lambda () (interactive)
                    (if emms-random-playlist
