@@ -23,8 +23,8 @@
                                        "doc/")))
 
 (require 'org)
-(require 'org-latex)
-(require 'org-beamer)
+(require 'ox-latex)
+(require 'ox-beamer)
 (require 'org-list)
 (require 'org-drill)
 ;;; babel requirements
@@ -91,7 +91,7 @@
 
 ;; customize TODO keywords
 (setq org-todo-keywords
-      '((sequence "TODO(t@)" "STARTED(s!/@)" "WAIT(w@/!)" "TOSUBMIT(u@/!)" "|" "DONE(d@/!)" "CANCELLED(c@/!)" "DEFERRED(e@/!)")
+      '((sequence "TODO(t@)" "TOCOMPLETE(t@)" "STARTED(s!/@)" "WAIT(w@/!)" "TOSUBMIT(u@/!)" "|" "DONE(d@/!)" "CANCELLED(c@/!)" "DEFERRED(e@/!)")
         (sequence "REPORT(r@)" "BUG(b!/@)" "KNOWNCAUSE(k!/@)" "|" "FIXED(f@/!)" "CANCELLED(c@/!)")
         (sequence "TOREAD(o@)" "|" "READ(a!/@)" "CANCELLED(c@/!)")
         (sequence "MEMO(m@)")))
@@ -111,6 +111,10 @@
 
 ;;; export Latex
 (add-to-list 'org-latex-default-packages-alist '("" "listings" t))
+(add-to-list 'org-latex-default-packages-alist '("" "minted" t))
+(setq org-latex-listings 'minted)
+
+(add-to-list 'org-latex-minted-langs '(R "r"))
 
 ;;; config org-annotate (contrib)
 (require 'org-annotate-file)
