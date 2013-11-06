@@ -1,3 +1,7 @@
+2013-10-11  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Regenerate "dir" in English.
+
 2013-09-30  Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	Load tex-site from autoloads.

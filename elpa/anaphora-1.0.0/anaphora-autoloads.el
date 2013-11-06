@@ -1,15 +1,9 @@
 ;;; anaphora-autoloads.el --- automatically extracted autoloads
 ;;
 ;;; Code:
-
+(add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads (anaphoric-setf-experimental anaphoric-setq anaphoric-set
-;;;;;;  anaphoric-/ anaphoric-* anaphoric-- anaphoric-+ anaphoric-let
-;;;;;;  anaphoric-etypecase anaphoric-typecase anaphoric-ecase anaphoric-case
-;;;;;;  anaphoric-block anaphoric-lambda anaphoric-cond anaphoric-and
-;;;;;;  anaphoric-while anaphoric-when anaphoric-prog2 anaphoric-prog1
-;;;;;;  anaphoric-if anaphora-use-long-names-only anaphora) "anaphora"
-;;;;;;  "anaphora.el" (20723 59952 0 0))
+;;;### (autoloads nil "anaphora" "anaphora.el" (21114 7472 0 0))
 ;;; Generated autoloads from anaphora.el
 
 (let ((loads (get 'anaphora 'custom-loads))) (if (member '"anaphora" loads) nil (put 'anaphora 'custom-loads (cons '"anaphora" loads))))
@@ -247,31 +241,11 @@ likely to find frequent use.
 
 \(fn &rest ARGS)" nil t)
 
-(autoload 'anaphoric-setf-experimental "anaphora" "\
-Like `setf', except that the value of PLACE is bound to `it'.
-
-The variable `it' is available within VAL.
-
-ARGS in the form [PLACE VAL] ... are otherwise as documented for `setf'.
-
-No alias `asetf' is provided, because it would be easily mistaken
-for the pre-existing `aset', and because `anaphoric-setf' is not
-likely to find frequent use.
-
-\(fn &rest ARGS)" nil t)
-
 ;;;***
 
-;;;### (autoloads nil nil ("anaphora-pkg.el") (20723 59952 343657
-;;;;;;  955000))
-
-;;;***
-
-(provide 'anaphora-autoloads)
 ;; Local Variables:
 ;; version-control: never
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
-;; coding: utf-8
 ;; End:
 ;;; anaphora-autoloads.el ends here

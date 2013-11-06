@@ -1,45 +1,114 @@
-2012-10-31  Michael Albinus  <michael.albinus@gmx.de
+2013-10-25  Michael Albinus  <michael.albinus@gmx.de>
+
+	* debbugs-org.el: New file.
+
+	* debbugs.el:
+	* debbugs-gnu.el: Increase Version to 0.5.
+
+	* README: Add commands `debbugs-org', `debbugs-org-search' and
+	`debbugs-org-bugs'.
+
+2013-10-14  Michael Albinus  <michael.albinus@gmx.de>
+
+	Fix typo.
+
+2013-10-02  Michael Albinus  <michael.albinus@gmx.de>
+
+	* debbugs-gnu.el (debbugs-gnu-default-packages): Add packages.
+
+2013-10-02  Michael Albinus  <michael.albinus@gmx.de>
+
+	Fix GPL.  debbugs is NOT part of Emacs.
+
+2013-09-25  Michael Albinus  <michael.albinus@gmx.de>
+
+	* README: Add command `debbugs-gnu-bugs'.
+
+2013-08-22  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Only keep the strictly necessary *-pkg.el files
+
+2013-01-07  Michael Albinus  <michael.albinus@gmx.de>
+
+	* debbugs-gnu.el : Require wid-edit.el.
+
+2013-01-07  Michael Albinus  <michael.albinus@gmx.de>
+
+	Adapt copyright years.
+
+	* debbugs-gnu.el (debbugs-gnu-default-packages): Extend list of
+	packages.
+	(debbugs-gnu-get-bugs): Support 'bugs query.
+	(debbugs-gnu-usertags): Simplify implementation.
+	(debbugs-gnu-bugs): New defun.
+
+2012-12-23  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	Revert the previous copyright change.
+
+	GNU ELPA things are part of Emacs.
+
+2012-12-23  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	Don't explicitly bind mouse-1.
+
+	As Michael Heerdegen <michael_heerdegen@web.de> says:
+
+	However, also binding mouse-1 is not necessary.	 Depending on the 
+	setting of `mouse-1-click-follows-link', which is non-nil by default, 
+	mouse-1 already follows links - see its doc.  We should leave it up to 
+	the user if he wants to use mouse-1 for following or not.
+
+2012-12-23  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	Fix the copyright section to point out that it's not part of Emacs.
+
+2012-10-31  Michael Albinus  <michael.albinus@gmx.de>
 
 	* debbugs.texi: Add 2012 to copyright years.
 
-2012-10-31  Michael Albinus  <michael.albinus@gmx.de
+2012-10-31  Michael Albinus  <michael.albinus@gmx.de>
 
 	* debbugs.el:
 	* debbugs-gnu.el:
 	* debbugs-pkg.el: Change version to 0.4.
-	
+
 	* README: Extend list of implemented functions.
 
-2012-10-29  Michael Albinus  <michael.albinus@gmx.de
+2012-10-29  Michael Albinus  <michael.albinus@gmx.de>
 
 	* debbugs-gnu.el (debbugs-gnu-usertags): Rename argument to USERS
-	
+
 	* debbugs-gnu.el (debbugs-gnu-get-bugs):
-	* debbugs.el (debbugs-get-usertag): Use keyword :user instead of :package.
-	
+	* debbugs.el (debbugs-get-usertag): Use keyword :user instead of
+	:package.
+
 	* debbugs.texi (Requesting user tags): New node.
-	
+
 	* Debbugs.wsdl (search_estRequest): Remove superfluous arguments.
 
-2012-10-26  Michael Albinus  <michael.albinus@gmx.de
+2012-10-26  Michael Albinus  <michael.albinus@gmx.de>
 
 	* debbugs-gnu.el (debbugs-gnu-usertags): Show also local tags.
 
-2012-10-25  Michael Albinus  <michael.albinus@gmx.de
+2012-10-25  Michael Albinus  <michael.albinus@gmx.de>
 
 	* debbugs.el (debbugs-get-usertag): Fix comments.
-	
-	* debbugs-gnu.el: New command `debbugs-gnu-usertags' and helper functions.
 
-2012-10-18  Michael Albinus  <michael.albinus@gmx.de
+	* debbugs-gnu.el: New command `debbugs-gnu-usertags' and helper
+	functions.
 
-	* debbugs.el (debbugs-get-usertag): Change parameters to a KEY-VALUE sequence.
-	
+2012-10-18  Michael Albinus  <michael.albinus@gmx.de>
+
+	* debbugs.el (debbugs-get-usertag): Change parameters to a KEY-VALUE
+	sequence.
+
 	* debbugs-gnu.el (debbugs-gnu): Rename USERTAGS to TAGS.
-	(debbugs-gnu-get-bugs): Adapt to new interface of `debbugs-get-usertag'.
+	(debbugs-gnu-get-bugs): Adapt to new interface of
+	`debbugs-get-usertag'.
 	(debbugs-gnu-display-status): Use `special-mode'.
 	(debbugs-gnu-send-control-message): Implement "usertag" message.
-	
+
 	* README: "get_usertag" is implemented now.
 
 2012-10-17  Michael Albinus  <michael.albinus@gmx.de>
@@ -49,17 +118,18 @@
 2012-10-17  Michael Albinus  <michael.albinus@gmx.de>
 
 	* Debbugs.wsdl: Add get_usertag specification.
-	
+
 	* debbugs.el (debbugs-get-usertag): New defun.
-	
+
 	* debbugs-gnu.el (debbugs-gnu-all-severities)
 	(debbugs-gnu-all-packages): New defconst.
 	(debbugs-gnu-search, debbugs-gnu): Use them.
 	(debbugs-gnu, debbugs-gnu-get-bugs): Handle user tags.
-	(debbugs-gnu-show-reports): Kill buffer initially, in order to
-	get rid of old local variables.
+	(debbugs-gnu-show-reports): Kill buffer initially, in order to get rid
+	of old local variables.
 	(debbugs-gnu-current-query): New defun.
-	(debbugs-gnu-display-status): Display also the query.  Use `special-mode'.
+	(debbugs-gnu-display-status): Display also the query.  Use
+	`special-mode'.
 
 2012-10-10  Michael Albinus  <michael.albinus@gmx.de>
 
@@ -74,7 +144,7 @@
 2012-04-12  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	Clear up the current limit when narrowing.
-	
+
 	Also used `inhibit-read-only' instead of `buffer-read-only'.
 
 2012-04-11  Lars Magne Ingebrigtsen  <larsi@gnus.org>
@@ -99,26 +169,27 @@
 
 2012-03-22  Michael Albinus  <michael.albinus@gmx.de>
 
-	* debbugs-gnu.el (debbugs-gnu-default-severities). Add "serious" to
+	* debbugs-gnu.el (debbugs-gnu-default-severities). Add "serious" to 
 	initial value.
 	(debbugs-gnu-default-packages): Add further, new packages.
 
 2012-03-11  Michael Albinus  <michael.albinus@gmx.de>
 
-	Change default value of `debbugs-gnu-default-severities' to '("important" "normal")
+	Change default value of `debbugs-gnu-default-severities' to
+	'("important" "normal")
 
 2012-01-07  Chong Yidong  <cyd@gnu.org>
 
 	Update the README for the debbugs package.
 
-2011-09-27  Michael Albinus  <michael.albinus@gmx.de>
+2011-09-27  Evgeny M. Zubok  <zoubok@mail.ru>
 
 	* debbugs.texi: Update documentation.
 
-2011-09-27  Michael Albinus  <michael.albinus@gmx.de>
+2011-09-27  Evgeny M. Zubok  <zoubok@mail.ru>
 
-	* debbugs.el (debbugs-get-mbox, debbugs-get-bugs): Fix typos in
-	the docstrings.
+	* debbugs.el (debbugs-get-mbox, debbugs-get-bugs): Fix typos in the
+	docstrings.
 
 2011-09-25  Stefan Monnier  <monnier@iro.umontreal.ca>
 
@@ -130,13 +201,14 @@
 
 2011-09-18  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	* debbugs-gnu.el (debbugs-gnu-show-reports): Only list merged bugs once.
+	* debbugs-gnu.el (debbugs-gnu-show-reports): Only list merged bugs
+	once.
 
 2011-09-11  Michael Albinus  <michael.albinus@gmx.de>
 
 	* debbugs-gnu.el (debbugs-gnu-phrase-prompt): New defconst.
-	(debbugs-gnu-search): Use it.  Use `unwind-protect'.  Apply
-	default values for "status".
+	(debbugs-gnu-search): Use it.  Use `unwind-protect'.  Apply default
+	values for "status".
 	(debbugs-gnu): Fix `unwind-protect' form.
 	(debbugs-gnu-mode-map): Do not define "q", it is derived from
 	`special-mode'.
@@ -161,9 +233,9 @@
 	(ArrayOfArrayOfArrayOfAnyType): New types.
 	(search_estRequest, search_estResponse): New messages.
 	(search_est): New operation.
-	
+
 	* debbugs.el (debbugs-search-est): New defun.
-	
+
 	* debbugs-pkg.el (top): Upgrade package version to 0.2.
 
 2011-07-29  Michael Albinus  <michael.albinus@gmx.de>
@@ -178,7 +250,7 @@
 	(debbugs-gnu-calendar-read): New defun.
 	(debbugs-gnu-current-severities, debbugs-gnu-current-packages)
 	(debbugs-gnu-current-archive): Removed.
-	(debbugs-gnu-search): Autoloaded.  Remove arguments.  Extend
+	(debbugs-gnu-search): Autoloaded.  Remove arguments.  Extend 
 	interactive queries.
 	(debbugs-gnu): Autoloaded.  Use `debbugs-gnu-current-query'.  Set
 	:filter in widgets.
@@ -212,18 +284,18 @@
 2011-07-19  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	Allow sending bug control messages from random modes.
-	
+
 	* debbugs-gnu.el (debbugs-guess-current-id): New function.
 	(debbugs-gnu-send-control-message): Use it.
 
 2011-07-19  Michael Albinus  <michael.albinus@gmx.de>
 
-	* debbugs-gnu.el (debbugs-gnu-default-suppress-bugs): New customer
+	* debbugs-gnu.el (debbugs-gnu-default-suppress-bugs): New customer 
 	option.
 	(debbugs-gnu-pending): Fix docstring.
 	(debbugs-gnu-current-query): New defvar.
 	(debbugs-gnu-search): New command.
-	(debbugs-gnu): Rename SUPPRESS-DONE to SUPPRESS.  Fix interactive
+	(debbugs-gnu): Rename SUPPRESS-DONE to SUPPRESS.  Fix interactive 
 	query.
 	(debbugs-gnu-print-entry): Filter according to
 	`debbugs-gnu-default-suppress-bugs' and `debbugs-gnu-current-query'.
@@ -236,18 +308,19 @@
 
 2011-07-17  Michael Albinus  <michael.albinus@gmx.de>
 
-	* debbugs-gnu.el (debbugs-gnu-get-bugs): It is sufficient to have
-	just one `debbugs-get-bugs' call.
+	* debbugs-gnu.el (debbugs-gnu-get-bugs): It is sufficient to have just
+	one `debbugs-get-bugs' call.
 
 2011-07-17  Michael Albinus  <michael.albinus@gmx.de>
 
 	* debbugs.el (debbugs-get-bugs): Add search keywords :src :maint
-	:correspondent :affects and :status.  Improvement of docstring,
+	:correspondent :affects and :status.  Improvement of docstring, 
 	document the new keywords and multiple values for one keyword.
 
 2011-07-17  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	* debbugs-gnu.el (debbugs-gnu-show-reports): Add packages to the status bar.
+	* debbugs-gnu.el (debbugs-gnu-show-reports): Add packages to the status
+	bar.
 
 2011-07-16  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
@@ -263,7 +336,7 @@
 2011-07-15  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	Sort pending bugs towards the end
-	
+
 	* debbugs-gnu.el (debbugs-gnu-pending): New face.
 	(debbugs-gnu-state-preference): Sort pending towards the end.
 
@@ -279,34 +352,34 @@
 
 2011-07-13  Michael Albinus  <michael.albinus@gmx.de>
 
-	* debbugs.el (debbugs-get-bugs): Weaken syntax for packages (and
+	* debbugs.el (debbugs-get-bugs): Weaken syntax for packages (and 
 	severities and tags).
 
 2011-07-13  Michael Albinus  <michael.albinus@gmx.de>
 
-	* debbugs.el (debbugs-get-bugs): Extend syntax for packages (and
+	* debbugs.el (debbugs-get-bugs): Extend syntax for packages (and 
 	severities and tags) by "-".  Fix error messages.
 
 2011-07-12  Michael Albinus  <michael.albinus@gmx.de>
 
-	* debbugs-gnu.el (debbugs-gnu-get-bugs): Reinsert sorting of ids.
-	This is needed when several sets of bugs are retrieved in a loop.
-	Allow empty packages or severities.
-	(debbugs-gnu-show-reports): Erase buffer on entry.  Initialize
-	header line, move from ...
+	* debbugs-gnu.el (debbugs-gnu-get-bugs): Reinsert sorting of ids. This
+	is needed when several sets of bugs are retrieved in a loop. Allow
+	empty packages or severities.
+	(debbugs-gnu-show-reports): Erase buffer on entry.  Initialize header
+	line, move from ...
 	(debbugs-gnu-mode): ... here.
 	(debbugs-gnu-state-preference): Make it a defconst.
 	(debbugs-gnu-severity-preference): New defconst.
 	(debbugs-gnu-get-state-preference)
 	(debbugs-gnu-get-severity-preference): New defuns.
-	(debbugs-gnu-sort-state): When two bugs have the same age, sort
-	per serverity.
+	(debbugs-gnu-sort-state): When two bugs have the same age, sort per
+	serverity.
 
 2011-07-11  Michael Albinus  <michael.albinus@gmx.de>
 
-	* debbugs-gnu.el (debbugs-gnu-sort-state): Give tagged bugs
-	priority 20.  In case there is just the severity list '("tagged"),
-	do not use that priority.
+	* debbugs-gnu.el (debbugs-gnu-sort-state): Give tagged bugs priority
+	20.  In case there is just the severity list '("tagged"), do not use
+	that priority.
 	(debbugs-gnu-sort-title): Fix silly bug.
 
 2011-07-11  Michael Albinus  <michael.albinus@gmx.de>
@@ -318,11 +391,11 @@
 	(debbugs-gnu-show-reports): Move inserting of text to ...
 	(debbugs-gnu-print-entry): New defun.
 	(debbugs-gnu-mode-map): Set parent map to `tabulated-list-mode-map'.
-	(debbugs-gnu-mode): Derive from `tabulated-list-mode'.  Initialize
+	(debbugs-gnu-mode): Derive from `tabulated-list-mode'.	Initialize
 	`tabulated-list-*' objects.
 	(debbugs-gnu-sort-id, debbugs-gnu-sort-state)
-	(debbugs-gnu-sort-title): New defuns.  Sort functions for
-	respective columns.
+	(debbugs-gnu-sort-title): New defuns.  Sort functions for respective
+	columns.
 	(debbugs-gnu-toggle-sort): Use `tabulated-list' functions.
 	(debbugs-gnu-toggle-suppress-done): Renamed from
 	`debbugs-gnu-suppress-done'.  Use `tabulated-list' functions.
@@ -354,7 +427,7 @@
 2011-07-07  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	(debbugs-toggle-tag): Save the list of tagged articles immediately.
-	
+
 	Waiting until exit is too brittle.
 
 2011-07-07  Michael Albinus  <michael.albinus@gmx.de>
@@ -365,15 +438,16 @@
 	(debbugs-current-severities, debbugs-current-packages)
 	(debbugs-current-archive): Renamed from `debbugs-severities',
 	`debbugs-package', `debbugs-archive'.
-	(debbugs-emacs): Reorder arguments.  If called interactively with
-	prefix, ask for optional arguments values.  Loop also for several
+	(debbugs-emacs): Reorder arguments.  If called interactively with 
+	prefix, ask for optional arguments values.  Loop also for several 
 	packages.
 	(debbugs-show-reports): Let-bind `debbugs-port'.
 	(debbugs-rescan): Loop also for several packages.
 
 2011-07-07  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	(debbugs-summary-mode): Remove quiet@debbugs.gnu.org from the list, too.
+	(debbugs-summary-mode): Remove quiet@debbugs.gnu.org from the list,
+	too.
 
 2011-07-07  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
@@ -391,7 +465,8 @@
 
 2011-07-06  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	(debbugs-dump-persistency-file): Don't destroy the list while saving it.
+	(debbugs-dump-persistency-file): Don't destroy the list while saving
+	it.
 
 2011-07-06  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
@@ -399,19 +474,19 @@
 
 2011-07-06  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	* debbugs-gnu.el (debbugs-toggle-sort): Sort the tagged bugs at
-	the end.
+	* debbugs-gnu.el (debbugs-toggle-sort): Sort the tagged bugs at the
+	end.
 
 2011-07-05  Michael Albinus  <michael.albinus@gmx.de>
 
-	* debbugs-gnu.el (debbugs-owner): Removed.  We use `debbugs-tagged'
+	* debbugs-gnu.el (debbugs-owner): Removed.  We use `debbugs-tagged' 
 	uniquely.
 	(debbugs-widgets, debbugs-package, debbugs-severities)
 	(debbugs-archive): New defvars.
 	(debbugs-local-tags, debbugs-persistency-file)
 	(debbugs-dump-persistency-file): Add docstring.
 	(debbugs-emacs): Use new defvars.
-	(debbugs-show-reports):  Remove widgets from arguments.  Mark bugs
+	(debbugs-show-reports):	 Remove widgets from arguments.	 Mark bugs 
 	submitted by user.
 	(debbugs-mode-map): Add "x" (for purge "done" bugs).
 	(debbugs-rescan): On the last page, check also for new arrived bugs.
@@ -420,27 +495,26 @@
 2011-07-04  Michael Albinus  <michael.albinus@gmx.de>
 
 	* debbugs-gnu.el (debbugs-tagged): New face.
-	(debbugs-persistency-file): New defvar.  Read and eval its
-	contents during loading.
+	(debbugs-persistency-file): New defvar.	 Read and eval its contents
+	during loading.
 	(debbugs-dump-persistency-file): New defun.  Add it to
 	`kill-emacs-hook'.
 	(debbugs-local-tags): New defvar.
 	(debbugs-show-reports): Code cleanup.  Show tagged bugs.
-	(debbugs-mode-map): Add "t" (for toggle tag) and "C" (for send
-	control message).
+	(debbugs-mode-map): Add "t" (for toggle tag) and "C" (for send control
+	message).
 	(debbugs-toggle-tag): New defun.
 	(debbugs-display-status): Remove superfluous let-binding.
 	(debbugs-send-control-message): Read id also via `debbugs-current-id'.
 
 2011-07-04  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	* debbugs-gnu.el (debbugs-select-report): Fetch all merged
-	reports.
+	* debbugs-gnu.el (debbugs-select-report): Fetch all merged reports.
 
 2011-07-04  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	Make the "g" command work.
-	
+
 	I apparently forgot to save the buffer before I checked in last time.
 
 2011-07-03  Lars Magne Ingebrigtsen  <larsi@gnus.org>
@@ -450,19 +524,18 @@
 2011-07-03  Michael Albinus  <michael.albinus@gmx.de>
 
 	* debbugs-gnu.el (debbugs-owner): New face.
-	(debbugs-show-reports): Mark subject if the user is the bug's
-	owner.  Add mouse-face.
+	(debbugs-show-reports): Mark subject if the user is the bug's owner. 
+	Add mouse-face.
 	(debbugs-mode-map): Add [mouse-1] and [mouse-2].
 	(debbugs-send-control-message): Add "owner" and "noowner" messages.
 
 2011-07-03  Michael Albinus  <michael.albinus@gmx.de>
 
 	* debbugs-gnu.el (debbugs-widget-map): Add [mouse-1] and [mouse-2].
-	(debbugs-emacs): Add :help-echo and :suppress-done for report
-	pages' widgets.
-	(debbugs-show-reports): Remove suppress-done from arguments. It
-	must be read from the widget anyway. Tune inserting of bottom line
+	(debbugs-emacs): Add :help-echo and :suppress-done for report pages'
 	widgets.
+	(debbugs-show-reports): Remove suppress-done from arguments. It must be
+	read from the widget anyway. Tune inserting of bottom line widgets.
 
 2011-07-03  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
@@ -496,13 +569,13 @@
 
 2011-07-03  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	* debbugs-gnu.el (debbugs-emacs): Don't use widgets to provide
-	clickable links, since that requires you to select certain parts
-	of the line, which is annoying.
+	* debbugs-gnu.el (debbugs-emacs): Don't use widgets to provide 
+	clickable links, since that requires you to select certain parts of the
+	line, which is annoying.
 
 2011-07-03  Michael Albinus  <michael.albinus@gmx.de>
 
-	* debbugs-gnu.el (debbugs-emacs, debbugs-show-reports): Rewrite in
+	* debbugs-gnu.el (debbugs-emacs, debbugs-show-reports): Rewrite in 
 	order to use widgets exclusively.
 	(debbugs-widget-format-handler): New defun.
 	(debbugs-mode-map): Derive from `special-mode-map'. Use
@@ -516,7 +589,7 @@
 2011-07-03  Michael Albinus  <michael.albinus@gmx.de>
 
 	* debbugs-gnu.el (debbugs-emacs): Move reporting lines to
-	`debbugs-show-reports'.  Create widgets for every report page.
+	`debbugs-show-reports'.	 Create widgets for every report page.
 	(debbugs-show-reports): New defun.
 	(debbugs-select-report): Handle also page links.
 
@@ -526,9 +599,9 @@
 
 2011-07-03  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	(debbugs-send-control-message): Record the bug number on group
-	entry, so that we don't have to rely on subject header mangling,
-	which is fragile.
+	(debbugs-send-control-message): Record the bug number on group entry,
+	so that we don't have to rely on subject header mangling, which is
+	fragile.
 
 2011-07-03  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
@@ -540,7 +613,8 @@
 
 2011-07-02  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	* debbugs-gnu.el (debbugs-summary-mode): Make sure we don't Cc both bug-gnu-emacs (etc) and debbugs.
+	* debbugs-gnu.el (debbugs-summary-mode): Make sure we don't Cc both
+	bug-gnu-emacs (etc) and debbugs.
 
 2011-07-02  Michael Albinus  <michael.albinus@gmx.de>
 
@@ -549,7 +623,8 @@
 
 2011-07-02  Michael Albinus  <michael.albinus@gmx.de>
 
-	* debbugs-gnu.el (debbugs-send-control-message): Prompt for version number for
+	* debbugs-gnu.el (debbugs-send-control-message): Prompt for version
+	number for
 	"close" and "done" control messages.
 
 2011-07-02  Michael Albinus  <michael.albinus@gmx.de>
@@ -575,9 +650,9 @@
 
 2011-07-02  Michael Albinus  <michael.albinus@gmx.de>
 
-	* debbugs.el (debbugs-emacs): Let-bind `debbugs-port' to "gnu.org".
-	Ask how many reports to retrieve, when `debbugs-get-bugs' returns
-	more than 400 hits.
+	* debbugs.el (debbugs-emacs): Let-bind `debbugs-port' to "gnu.org". Ask
+	how many reports to retrieve, when `debbugs-get-bugs' returns more than
+	400 hits.
 
 2011-07-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
@@ -589,53 +664,14 @@
 
 2011-07-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	(debbugs-select-report): Set the minor summary mode in the right buffer.
+	(debbugs-select-report): Set the minor summary mode in the right
+	buffer.
 
 2011-07-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* debbugs.el (debbugs-send-control-message): Add severity and "done".
 
-2011-07-01  Chong Yidong  <cyd@stupidchicken.com>
-
-	Remove version numbers from filenames in packages/ dir.
-
 2011-06-30  Chong Yidong  <cyd@stupidchicken.com>
 
 	Remove version numbers in packages/ directory
-
-2011-07-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
-
-	(debbugs-emacs): New function and modes for listing the Emacs bugs, reading them and updating them.
-
-2011-06-30  Michael Albinus  <michael.albinus@gmx.de>
-
-	* debbugs.el (top): Pacify byte compiler.
-	(debbugs): New custom group.
-	(debbugs-servers): New defcustom.
-	(debbugs-port): Allow user defined ports.
-	(debbugs-get-mbox): New defun.
-
-2011-04-20  Stefan Monnier  <monnier@iro.umontreal.ca>
-
-	* admin/archive-contents.el: New file.
-	* packages/rainbow-mode-readme.txt:
-	* packages/js2-mode-readme.txt: Auto-update from the commentary.
-	* packages/js2-mode-20090814.el: Capitalize the description.
-	* packages/debbugs-0.1/debbugs.el: Require cl since it uses `case'.
-	(debbugs-get-bugs): Fix up typo.
-	* packages/company-0.5/company-gtags.el
-	(company-gtags-gnu-global-program-name): Pass the "when" argument.
-	* packages/auctex-11.86/auctex-pkg.el: Capitalize the description.
-	* packages/archive-contents: Almost auto-regenerate.
-
-2011-03-07  Chong Yidong  <cyd@stupidchicken.com>
-
-	Add debbugs-0.1 package.
-	
-	Update admin/package-update.sh script so it does a bzr export of the
-	current bzr repository, instead of grabbing from Savannah.
-
-2011-03-07  Chong Yidong  <cyd@stupidchicken.com>
-
-	Add debbugs-0.1 package.
 

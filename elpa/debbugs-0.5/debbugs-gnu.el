@@ -1,20 +1,21 @@
 ;;; debbugs-gnu.el --- interface for the GNU bug tracker
 
-;; Copyright (C) 2011, 2012 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2013 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
+;;         Michael Albinus <michael.albinus@gmx.org>
 ;; Keywords: comm, hypermedia, maint
 ;; Package: debbugs
-;; Version: 0.4
+;; Version: 0.5
 
-;; This file is part of GNU Emacs.
+;; This file is not part of GNU Emacs.
 
-;; GNU Emacs is free software: you can redistribute it and/or modify
+;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 
-;; GNU Emacs is distributed in the hope that it will be useful,
+;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
@@ -35,6 +36,7 @@
 ;;   (autoload 'debbugs-gnu "debbugs-gnu" "" 'interactive)
 ;;   (autoload 'debbugs-gnu-search "debbugs-gnu" "" 'interactive)
 ;;   (autoload 'debbugs-gnu-usertags "debbugs-gnu" "" 'interactive)
+;;   (autoload 'debbugs-gnu-bugs "debbugs-gnu" "" 'interactive)
 
 ;; The bug tracker is called interactively by
 ;;
@@ -51,8 +53,8 @@
 ;; function will ask for user tags (a comma separated list), and shows
 ;; just the bugs which are tagged with them.  In general, user tags
 ;; shall be strings denoting to subprojects of the package, like
-;; "cedet" or "tramp" of the package "emacs.  If no user tag is given,
-;; locally tagged bugs are shown.
+;; "cedet" or "tramp" of the package "emacs".  If no user tag is
+;; given, locally tagged bugs are shown.
 
 ;; If a prefix is given to the command, more search parameters are
 ;; asked for, like packages (also a comma separated list, "emacs" is
@@ -125,14 +127,21 @@
 ;; all users who have tagged bugs.  This list can be retrieved via
 ;; <http://debbugs.gnu.org/cgi/pkgindex.cgi?indexon=users>.
 
+;; Finally, if you simply want to list some bugs with known bug
+;; numbers, call the command
+;;
+;;   M-x debbugs-gnu-bugs
+
+;; The bug numbers to be shown shall be entered as comma separated list.
+
 ;;; Code:
 
 (require 'debbugs)
 (require 'widget)
+(require 'wid-edit)
 (require 'tabulated-list)
 (eval-when-compile (require 'cl))
 
-(autoload 'widget-convert "wid-edit.el")
 (autoload 'gnus-read-ephemeral-emacs-bug-group "gnus-group")
 (autoload 'mail-header-subject "nnheader")
 (autoload 'gnus-summary-article-header "gnus-sum")
@@ -163,18 +172,28 @@
 (defcustom debbugs-gnu-default-packages '("emacs")
   "*The list of packages to be searched for."
   ;; <http://debbugs.gnu.org/Packages.html>
+  ;; <http://debbugs.gnu.org/cgi/pkgindex.cgi>
   :group 'debbugs-gnu
   :type '(set (const "automake")
+	      (const "cc-mode")
 	      (const "coreutils")
 	      (const "debbugs.gnu.org")
+	      (const "diffutils")
 	      (const "emacs")
 	      (const "emacs-xwidgets")
 	      (const "fm")
 	      (const "gnus")
+	      (const "grep")
 	      (const "guile")
+	      (const "guix")
+	      (const "gzip")
 	      (const "libtool")
+	      (const "ns")
+	      (const "org-mode")
+	      (const "parted")
+	      (const "w32")
 	      (const "woodchuck"))
-  :version "24.1")
+  :version "24.4")
 
 (defconst debbugs-gnu-all-packages
   (mapcar 'cadr (cdr (get 'debbugs-gnu-default-packages 'custom-type)))
@@ -220,7 +239,6 @@ suppressed bugs is toggled by `debbugs-gnu-toggle-suppress'."
 (defvar debbugs-gnu-widget-map
   (let ((map (make-sparse-keymap)))
     (define-key map "\r" 'widget-button-press)
-    (define-key map [mouse-1] 'widget-button-press)
     (define-key map [mouse-2] 'widget-button-press)
     map))
 
@@ -341,8 +359,8 @@ marked as \"client-side filter\"."
 	       val1
 	       (completing-read "Enter status: " '("done" "forwarded" "open")))
 	      (when (not (zerop (length val1)))
-	    (add-to-list
-	     'debbugs-gnu-current-query (cons (intern key) val1))))
+		(add-to-list
+		 'debbugs-gnu-current-query (cons (intern key) val1))))
 
 	     ;; Client-side filters.
 	     ((member key '("date" "log_modified" "last_modified"
@@ -508,6 +526,7 @@ marked as \"client-side filter\"."
 (defun debbugs-gnu-get-bugs (query)
   "Retrieve bugs numbers from debbugs.gnu.org according search criteria."
   (let* ((debbugs-port "gnu.org")
+	 (bugs (assoc 'bugs query))
 	 (tags (assoc 'tag query))
 	 (local-tags (and (member '(severity . "tagged") query) (not tags)))
 	 (phrase (assoc 'phrase query))
@@ -536,6 +555,8 @@ marked as \"client-side filter\"."
 
     (sort
      (cond
+      ;; If the query is just a list of bug numbers, we return them.
+      (bugs (cdr bugs))
       ;; If the query contains the pseudo-severity "tagged", we return
       ;; just the local tagged bugs.
       (local-tags (copy-sequence debbugs-gnu-local-tags))
@@ -555,8 +576,6 @@ marked as \"client-side filter\"."
 
 (defvar debbugs-gnu-current-widget nil)
 (defvar debbugs-gnu-current-limit nil)
-
-(defvar widget-mouse-face)
 
 (defun debbugs-gnu-show-reports (widget)
   "Show bug reports as given in WIDGET property :bug-ids."
@@ -1154,16 +1173,15 @@ The following commands are available:
   (setq buffer-read-only t))
 
 ;;;###autoload
-(defun debbugs-gnu-usertags (&optional users)
-  "List all outstanding Emacs bugs."
+(defun debbugs-gnu-usertags (&rest users)
+  "List all user tags for USERS, which is \(\"emacs\"\) by default."
   (interactive
-   (list
-    (if current-prefix-arg
-	(completing-read-multiple
-	 "Package name(s) or email address: "
-	 (append debbugs-gnu-all-packages (list user-mail-address)) nil nil
-	 (mapconcat 'identity debbugs-gnu-default-packages ","))
-      debbugs-gnu-default-packages)))
+   (if current-prefix-arg
+       (completing-read-multiple
+	"Package name(s) or email address: "
+	(append debbugs-gnu-all-packages (list user-mail-address)) nil nil
+	(mapconcat 'identity debbugs-gnu-default-packages ","))
+     debbugs-gnu-default-packages))
 
   (unwind-protect
       (let ((inhibit-read-only t)
@@ -1222,6 +1240,17 @@ The following commands are available:
   ;; We open the bug reports.
   (let ((args (get-text-property (line-beginning-position) 'tabulated-list-id)))
     (when args (apply 'debbugs-gnu args))))
+
+;;;###autoload
+(defun debbugs-gnu-bugs (&rest bugs)
+  "List all BUGS, a list of bug numbers."
+  (interactive
+   (mapcar 'string-to-number
+	   (completing-read-multiple "Bug numbers: " nil 'natnump)))
+  (dolist (elt bugs)
+    (unless (natnump elt) (signal 'wrong-type-argument (list 'natnump elt))))
+  (add-to-list 'debbugs-gnu-current-query (cons 'bugs bugs))
+  (debbugs-gnu nil))
 
 (provide 'debbugs-gnu)
 

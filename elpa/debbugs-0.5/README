@@ -2,7 +2,12 @@ This package lets you access the GNU Bug Tracker from within Emacs.
 
 It defines the command `M-x debbugs-gnu' for listing bugs, and the
 command `M-x debbugs-gnu-search' for bug searching.  The command
-`debbugs-gnu-usertags' shows existing user tags on bugs.
+`M-x debbugs-gnu-usertags' shows existing user tags on bugs.  In order
+to show bugs with known numbers, `M-x debbugs-gnu-bugs' could be used.
+
+If you prefer the listing of bugs as TODO items of `org-mode', you
+could use the commands `debbugs-org', `debbugs-org-search' and
+`debbugs-org-bugs' instead.
 
 This package works by implementing basic functions to access a Debbugs
 SOAP server (see <http://wiki.debian.org/DebbugsSoapInterface>).  It

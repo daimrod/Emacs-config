@@ -1,20 +1,20 @@
 ;;; debbugs.el --- SOAP library to access debbugs servers
 
-;; Copyright (C) 2011, 2012 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2013 Free Software Foundation, Inc.
 
 ;; Author: Michael Albinus <michael.albinus@gmx.de>
 ;; Keywords: comm, hypermedia
 ;; Package: debbugs
-;; Version: 0.4
+;; Version: 0.5
 
-;; This file is part of GNU Emacs.
+;; This file is not part of GNU Emacs.
 
-;; GNU Emacs is free software: you can redistribute it and/or modify
+;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 
-;; GNU Emacs is distributed in the hope that it will be useful,
+;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
@@ -236,6 +236,8 @@ Every returned entry is an association list with the following attributes:
   `originator': Submitter of the bugreport.
 
   `mergedwith': A list of bug numbers this bug was merged with.
+  If it is a single bug, then this attribute contains just a
+  number.
 
   `source': Source package name of the bug report.
 
