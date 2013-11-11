@@ -112,6 +112,8 @@
 ;;; export Latex
 (add-to-list 'org-latex-default-packages-alist '("" "listings" t))
 (add-to-list 'org-latex-default-packages-alist '("" "minted" t))
+;; xcolor needs to be *after* minted
+(add-to-list 'org-latex-default-packages-alist '("table" "xcolor" t))
 (setq org-latex-listings 'minted)
 
 (add-to-list 'org-latex-minted-langs '(R "r"))
