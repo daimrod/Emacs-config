@@ -29,6 +29,7 @@
                slime-editing-commands
                slime-fancy-inspector
                slime-fancy
+               slime-snapshot
                slime-fontifying-fu
                slime-fuzzy
                slime-indentation
