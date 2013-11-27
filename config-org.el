@@ -146,4 +146,9 @@
 (setq org-latex-preview-ltxpng-directory "/tmp/ltxpng/")
 (make-directory org-latex-preview-ltxpng-directory t)
 
+;; Remove annoying bindings
+(mapc (lambda (key)
+        (dmd/remove-key key org-mode-map))
+      '("<S-left>" "<S-right>" "<S-up>" "<S-down>"))
+
 (provide 'config-org)
