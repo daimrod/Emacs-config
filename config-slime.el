@@ -143,4 +143,20 @@
 (define-key slime-mode-map (kbd "C-c /") 'slime-selector)
 (define-key slime-repl-mode-map (kbd "C-c /") 'slime-selector)
 
+(defun dmd/dump-slime ()
+  "Dump current SLIME instance to PWD/slime.img"
+  (interactive)
+  (save-excursion
+    (switch-to-buffer-other-window "*inferior-lisp*")
+    (goto-char (point-min))
+    (insert (format "(trivial-dump-core::sbcl-dump-image-slime %S)" (expand-file-name "slime.img")))
+    (inferior-slime-return)))
+
+(defun dmd/load-slime ()
+  "Load a previously saved SLIME image (see `dmd/dump-slime') named PWD/slime.img."
+  (interactive)
+  (slime-start :program "~/bin/sbcl"
+               :program-args '("--core" "slime.img")
+               :directory default-directory))
+
 (provide 'config-slime)
