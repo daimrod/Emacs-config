@@ -271,4 +271,9 @@
 (require 'ess)
 (require 'ess-site)
 
+;; Saveplace
+(require 'saveplace)
+(setq-default save-place t)
+(setq save-place-file "~/.emacs.d/places")
+
 (provide 'config-misc)
