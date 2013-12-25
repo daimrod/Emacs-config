@@ -152,4 +152,7 @@
         (dmd/remove-key key org-mode-map))
       '("<S-left>" "<S-right>" "<S-up>" "<S-down>"))
 
+(fni/add-to-load-path (concat src-dir "org-reveal/"))
+(require 'ox-reveal)
+(setq org-reveal-root "file:///home/daimrod/packages/reveal/")
 (provide 'config-org)
