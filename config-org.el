@@ -114,7 +114,7 @@
 (add-to-list 'org-latex-default-packages-alist '("" "listings" t))
 (add-to-list 'org-latex-default-packages-alist '("" "minted" t))
 ;; xcolor needs to be *after* minted
-(add-to-list 'org-latex-default-packages-alist '("table" "xcolor" t))
+(add-to-list 'org-latex-default-packages-alist '("usenames,dvipsnames,svgnames,table" "xcolor" t))
 (add-to-list 'org-latex-packages-alist '("" "tikz" t))
 (setq org-latex-create-formula-image-program 'imagemagick)
 (setq org-latex-listings 'minted)
