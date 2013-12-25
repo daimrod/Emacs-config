@@ -94,7 +94,8 @@
       '((sequence "TODO(t@)" "TOCOMPLETE(t@)" "STARTED(s!/@)" "WAIT(w@/!)" "TOSUBMIT(u@/!)" "|" "DONE(d@/!)" "CANCELLED(c@/!)" "DEFERRED(e@/!)")
         (sequence "REPORT(r@)" "BUG(b!/@)" "KNOWNCAUSE(k!/@)" "|" "FIXED(f@/!)" "CANCELLED(c@/!)")
         (sequence "TOREAD(o@)" "|" "READ(a!/@)" "CANCELLED(c@/!)")
-        (sequence "MEMO(m@)")))
+        (sequence "MEMO(m@)")
+        (sequence "HOWTO(m@)")))
 
 ;; fontify src code
 (setq org-src-fontify-natively t)
