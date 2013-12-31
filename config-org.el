@@ -155,4 +155,8 @@
 (fni/add-to-load-path (concat src-dir "org-reveal/"))
 (require 'ox-reveal)
 (setq org-reveal-root "file:///home/daimrod/packages/reveal/")
+
+;; Export to markdown
+(require 'ox-md)
+
 (provide 'config-org)
