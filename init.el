@@ -54,12 +54,13 @@ Do it recursively if the third argument is not nil."
   ".emacs.d location.")
 (defvar elisp-dir (concat dotfiles-dir "elisp/"))
 (defvar elpa-dir (concat dotfiles-dir "elpa/"))
+(defvar config-dir (concat dotfiles-dir "config/"))
 
 (defcustom src-dir (concat (getenv "HOME") "/src/elisp/")
   "The source directory where third-part modules are located."
   :group 'dmd/config)
 
-(fni/add-to-load-path dotfiles-dir)
+(fni/add-to-load-path config-dir t)
 (fni/add-to-load-path elisp-dir t)
 (fni/add-to-load-path elpa-dir t)
 
@@ -85,7 +86,7 @@ Do it recursively if the third argument is not nil."
 
 ;; Load my configuration
 (defvar dmd/modules
-  (loop for config-file in (directory-files dotfiles-dir nil "^config-.*.el$")
+  (loop for config-file in (directory-files config-dir nil "^config-.*.el$")
         collect (subseq config-file 0 (- (length config-file) 3)))
   "List of available configuration modules.")
 
