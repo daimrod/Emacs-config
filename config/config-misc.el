@@ -276,4 +276,9 @@
 (setq-default save-place t)
 (setq save-place-file "~/.emacs.d/places")
 
+;; Info configuration
+(require 'info)
+(add-to-list 'Info-directory-list
+             "~/.local/share/info")
+
 (provide 'config-misc)
