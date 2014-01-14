@@ -538,7 +538,7 @@ Advances point just past JSON object."
 (defun json-read-file (file)
   "Read the first JSON object contained in FILE and return it."
   (with-temp-buffer
-    (insert-file file)
+    (insert-file-contents file)
     (goto-char (point-min))
     (json-read)))
 
