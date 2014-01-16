@@ -4,7 +4,7 @@
 
 ;; Author: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Keywords: lisp
-;; Version: 0.0.16
+;; Version: 0.0.19
 ;; Maintainer: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Created: 7th September 2012
 
@@ -31,6 +31,7 @@
 ;;; Code:
 
 (eval-when-compile (require 'cl))
+
 
 (defun kvalist->hash (alist &rest hash-table-args)
   "Convert ALIST to a HASH.
@@ -62,6 +63,15 @@ key."
                (setq store (acons key value store)))))
        hash)
       store)))
+
+(defun kvfa (key alist receive)
+  "Call RECEIVE with whatever comes out of ALIST for KEY.
+
+RECEIVE can do whatever destructuring you want, the first
+argument is always the car of the alist pair."
+  (apply receive (let ((a (assoc key alist)))
+                   (append (list (car a))
+                           (if (listp (cdr a))(cdr a)(list (cdr a)))))))
 
 (defun kva (key alist)
   "Retrieve the value assigned to KEY in ALIST.
@@ -169,20 +179,27 @@ expression is true."
      if (equal (plist-get plist keyword) value)
      return plist))
 
+(defun kvthing->keyword (str-or-symbol)
+  "Convert STR-OR-SYMBOL into a keyword symbol."
+  (let ((str
+         (cond
+           ((symbolp str-or-symbol) (symbol-name str-or-symbol))
+           ((stringp str-or-symbol) str-or-symbol))))
+    (intern
+     (if (eq (aref str 0) ?:) str (concat ":" str)))))
+
 (defun kvalist->plist (alist)
   "Convert an alist to a plist."
   ;; Why doesn't elisp provide this?
   (loop for pair in alist
      append (list
-             (intern
-              (concat
-               ":"
-               (cond
-                 ((symbolp (car pair))
-                  (symbol-name (car pair)))
-                 ((stringp (car pair))
-                  (car pair)))))
+             (kvthing->keyword
+              (car pair))
              (cdr pair))))
+
+(defun kvacons (&rest args)
+  "Make an alist from the plist style args."
+  (kvplist->alist args))
 
 (defun keyword->symbol (keyword)
   "A keyword is a symbol leading with a :.
@@ -192,14 +209,20 @@ Converting to a symbol means dropping the :."
       (intern (substring (symbol-name keyword) 1))
     keyword))
 
-(defun kvplist->alist (plist)
+(defun kvplist->alist (plist &optional keys-are-keywords)
   "Convert PLIST to an alist.
 
-The keys are expected to be :prefixed and the colons are removed.
-The keys in the resulting alist are symbols."
+The keys are expected to be :prefixed and the colons are removed
+unless KEYS-ARE-KEYWORDS is `t'.
+
+The keys in the resulting alist are always symbols."
   (when plist
     (loop for (key value . rest) on plist by 'cddr
-    collect (cons (keyword->symbol key) value))))
+       collect
+         (cons (if keys-are-keywords
+                   key
+                   (keyword->symbol key))
+               value))))
 
 (defun kvalist2->plist (alist2)
   "Convert a list of alists too a list of plists."

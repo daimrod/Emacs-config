@@ -3,15 +3,21 @@
 ;;; Code:
 (add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads nil "dflet" "dflet.el" (21078 19734 0 0))
+;;;### (autoloads nil "dflet" "dflet.el" (21207 43429 675111 281000))
 ;;; Generated autoloads from dflet.el
 
 (autoload 'dflet "dflet")
 
+(autoload 'adflet "dflet" "\
+Anaphoric version of `dflet'. Binds `this-fn' to the original
+definition of the function.
+
+\(fn BINDINGS &rest BODY)" nil t)
+
 ;;;***
 
 ;;;### (autoloads nil nil ("el-x-pkg.el" "el-x.el" "subr-compat.el")
-;;;;;;  (21078 19734 193445 904000))
+;;;;;;  (21207 43430 79304 866000))
 
 ;;;***
 

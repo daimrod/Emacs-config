@@ -5,9 +5,9 @@
 ;; Maintainer: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; URL: http://github.com/nicferrier/emacs-fakir
 ;; Created: 17th March 2012
-;; Version: 0.1.7
+;; Version: 0.1.8
 ;; Keywords: lisp, tools
-;; Package-Requires: ((noflet "0.0.3")(dash "1.3.2"))
+;; Package-Requires: ((noflet "0.0.8")(dash "1.3.2")(kv "0.0.19"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -51,71 +51,54 @@
 (eval-when-compile (require 'cl))
 
 
-;; A little support code - not sure I can be bothered to package this
-;; seperately
+(defun fakir-make-unix-socket (&optional name)
+  "Make a unix socket server process optionally based on NAME.
 
-(defmacro* flet-overrides (predicate
-			   bindings
-			   &rest form)
-  "Override functions only when an argument tests true.
+Returns a list of the processes socket file and the process object."
+  (let* ((socket-file
+          (concat "/tmp/" (apply 'make-temp-name
+                                 (list (or name "fakir-make-unix-socket")))))
+         (myproc (make-network-process
+                  :name socket-file
+                  :family 'local :server t
+                  :service socket-file)))
+    (list socket-file myproc)))
 
-PREDICATE is some test to be applied to a specified argument
-of each bound FUNC to decide whether to execute the overridden
-code or the existing code.
+(defmacro* fakir-with-unix-socket ((socket-sym &optional socket-name) &rest body)
+  "Execute BODY with a Unix socket server bound to SOCKET-SYM.
 
-For each function, TEST-ARG specifies the name of the argument in
-the ARGLIST which will be passed to the PREDICATE.
+Optionally the socket is created with SOCKET-NAME which means
+that the file used to back the socket is named after SOCKET-NAME.
 
-BODY defines the code to be run for the specified FUNC when the
-PREDICATE is `t' for the TEST-ARG.
+The socket process is closed on completion and the associated
+file is deleted."
+  (declare (indent 1))
+  (let ((spv (make-symbol "spv"))
+        (sockfilev (make-symbol "sockfilev")))
+    `(let* ((,spv (fakir-make-unix-socket ,socket-name))
+            (,sockfilev (car ,spv))
+            (,socket-sym (cadr ,spv)))
+       (unwind-protect
+            (progn
+              ,@body)
+         (delete-process ,socket-sym)
+         (delete-file ,sockfilev)))))
 
-This is really useful when you want to mock a set of functions
-that operate on a particular type, processes for example:
+(defmacro fakir-with-file-buffer (buffer-var &rest body)
+  "Make a buffer visiting a file and assign it to BUFFER-VAR.
 
-  (flet-overrides fake-process-p
-     ((process-buffer process (process)
-        (get-buffer-create \"\"))
-      (process-status process (process)
-        \"run\")
-      (delete-process process (process)
-        t)
-      (set-process-buffer process (process buffer)
-        nil))
-    ;; Code under test
-    ...)
-
-\(fn PREDICATE ((FUNC TEST-ARG ARGLIST BODY...) ...) FORM...)"
-  (declare (debug (sexp sexp &rest form))
-           (indent defun))
-  (let*
-      ((flets
-        (loop
-         for i in bindings
-         collect
-         (destructuring-bind (name test-arg args &rest body) i
-           (let ((saved-func-namev (make-symbol "saved-func-name")))
-             (let ((saved-func-namev
-                    (intern (format "saved-func-%s"
-                                    (symbol-name name)))))
-               `(,name ,args
-                       (if (not (,predicate ,test-arg))
-                           (funcall ,saved-func-namev ,@args)
-                         ,@body)))))))
-       (lets
-        (loop
-         for i in bindings
-         collect
-         (destructuring-bind (name test-arg args &rest body) i
-           (let ((saved-func-namev (make-symbol "saved-func-name")))
-             (let ((saved-func-namev
-                    (intern (format "saved-func-%s"
-                                    (symbol-name name)))))
-               `(,saved-func-namev
-                 (symbol-function (quote ,name)))))))))
-    `(let ,lets
-       (flet ,flets
-         ,@form))))
-
+The file only exists for the scope of the macro.  Both the file
+and the buffer visiting it are destroyed when the scope exits."
+  (declare (indent 1))
+  (let ((filev (make-symbol "filev")))
+    `(let* ((,filev (make-temp-file  "filebuf"))
+            (,buffer-var (find-file-noselect ,filev)))
+       (unwind-protect
+            (progn ,@body)
+         (with-current-buffer ,buffer-var
+           (set-buffer-modified-p nil))
+         (kill-buffer ,buffer-var)
+         (delete-file ,filev)))))
 
 ;; Mocking processes
 
@@ -128,7 +111,7 @@ directly, they can just expect it to be there. `elnode--filter',
 though, needs to set the process-buffer to work properly.")
 
 
-(defun fakir--make-hash-table (alist)
+(defun fakir/make-hash-table (alist) ; possible redundant now.
   "Make a hash table from the ALIST.
 
 The ALIST looks like a let-list."
@@ -144,13 +127,13 @@ The ALIST looks like a let-list."
             (puthash f nil bindings))))
     bindings))
 
-(defun fakir--get-or-create-buf (pvbuf pvvar &optional specified-buf)
+(defun fakir/get-or-create-buf (pvbuf pv-alist &optional specified-buf)
   "Special get or create to support the process mocking.
 
 PVBUF is a, possibly existing, buffer reference.  If nil then we
 create the buffer.
 
-PVVAR is a hashtable of properties, possibly containing the
+PV-ALIST is an alist of properties, possibly containing the
 `:buffer' property which specifies a string to be used as the
 content of the buffer.
 
@@ -168,11 +151,52 @@ created one."
 		 (generate-new-buffer-name
 		  "* fakir mock proc buf *")))))
     ;; If we've got a buffer value then insert it.
-    (when (gethash :buffer pvvar)
+    (when (kva :buffer pv-alist)
       (with-current-buffer pvbuf
-	(insert (gethash :buffer pvvar))))
+	(insert (kva :buffer pv-alist))))
     pvbuf))
 
+
+(defmacro fakir-mock-proc-properties (process-obj &rest body)
+  "Mock process property list functions.
+
+Within BODY the functions `process-get', `process-put' and
+`process-plist' and `set-process-plist' are all mocked to use a
+hashtable if the process passed to them is `eq' to PROCESS-OBJ."
+  (declare (indent 1)
+           (debug (sexp &rest form)))
+  (let ((proc-props (make-symbol "procpropsv")))
+    `(let ((,proc-props (make-hash-table :test 'equal)))
+       (macrolet ((or-args (form &rest args)
+                    `(if (eq proc ,,process-obj)
+                         ,form
+                         (apply this-fn ,@args))))
+         (noflet ((process-get (proc name)
+                    (or-args (gethash name ,proc-props) proc name))
+                  (process-put (proc name value)
+                    (or-args (puthash name value ,proc-props) proc name value))
+                  (process-plist (proc)
+                    (or-args
+                     (kvalist->plist (kvhash->alist ,proc-props))
+                     proc))
+                  (set-process-plist (proc props)
+                    (or-args
+                     (setq ,proc-props (kvalist->hash (kvplist->alist props t)))
+                     proc props)))
+           ,@body)))))
+
+(defun fakir/let-bindings->alist (bindings)
+  "Turn let like BINDINGS into an alist.
+
+Makes sure the resulting alist has `consed' pairs rather than
+lists.
+
+Generally useful macro helper should be elsewhere."
+  (loop for p in bindings
+     collect
+       (if (and p (listp p))
+           (list 'cons `(quote ,(car p)) (cadr p))
+           (list 'cons `,p nil))))
 
 (defmacro fakir-mock-process (process-symbol process-bindings &rest body)
   "Allow easier testing by mocking the process functions.
@@ -209,123 +233,64 @@ In normal circumstances, we return what the BODY returned."
   (declare
    (debug (sexp sexp &rest form))
    (indent defun))
-  (let ((predfunc (make-symbol "predfunc"))
-	(get-or-create-buf-func (make-symbol "getorcreatebuffunc"))
+  (let ((get-or-create-buf (make-symbol "get-or-create-buf"))
+        (fakir-kill-buffer (make-symbol "fakir-kill-buffer"))
 	(pvvar (make-symbol "pv"))
         (pvoutbuf (make-symbol "pvoutbuf"))
         (pvbuf (make-symbol "buf"))
         (result (make-symbol "result")))
-    `(let
-         ((,pvvar
-           (fakir--make-hash-table
-            (list ,@(loop for p in process-bindings
-                       collect
-                         (if (and p (listp p))
-                             (list 'list `(quote ,(car p)) (cadr p))
-                             (list 'cons `,p nil))))))
-          ;; This is a buffer for the output
-          (,pvoutbuf (progn
-                       (and (get-buffer "*fakir-outbuf*")
-                            (kill-buffer "*fakir-outbuf*"))
-                       (get-buffer-create "*fakir-outbuf*")))
-          ;; For assigning the result of the body
-          ,result
-          ;; Dummy buffer variable for the process - we fill this in
-          ;; dynamically in 'process-buffer
-          ,pvbuf)
-       (flet ((,predfunc (object) (eq object ,process-symbol))
-	      (,get-or-create-buf-func
-	       (proc &optional specified-buf)
-	       (setq ,pvbuf (fakir--get-or-create-buf
-			     ,pvbuf
-			     ,pvvar
-			     specified-buf))))
-	 ;; Rebind the process function interface
-	 (flet-overrides ,predfunc
-	   ((process-get proc (proc key) (gethash key ,pvvar))
-	    (process-put proc (proc key value) (puthash key value ,pvvar))
-	    (processp proc (proc) t)
-	    (process-send-eof proc (proc) t)
-	    (process-status proc (proc) 'fake)
-	    (process-buffer proc (proc) (,get-or-create-buf-func proc))
-	    (process-contact
-	     proc (proc &optional arg)
-	     (list "localhost" 8000)) ; FIXME - elnode specific
-	    (process-send-string
-	     proc (proc str)
-	     (with-current-buffer ,pvoutbuf
-	       (save-excursion
-		 (goto-char (point-max))
-		 (insert str))))
-	    (delete-process
-	     proc (proc)
-	     (throw
-	      :mock-process-finished :mock-process-finished))
-	    (set-process-buffer
-	     proc (proc buffer)
-	     (,get-or-create-buf-func proc buffer)))
-           (flet ((fakir-get-output-buffer () ,pvoutbuf))
-             (unwind-protect
-                  (setq ,result
-                        (catch :mock-process-finished
-                          ,@body))
-               ;; Now clean up
-               (when (bufferp ,pvbuf)
-                 (with-current-buffer ,pvbuf
-                   (set-buffer-modified-p nil)
-                   (kill-buffer ,pvbuf))))))))))
-
-(defun fakir-test-mock-process ()
-  "A very quick function to test mocking process macro."
-  (let ((somevalue 30))
-    (fakir-mock-process
-        :fakeproc
-        ((a 20)
-         (:somevar 15)
-         (:othervar somevalue))
-      (let ((z 10))
-	(let ((a "my string!!!"))
-	  (setq a (process-get :fakeproc :somevar))
-	  (list a (process-get :fakeproc :othervar)))))))
-
-
-(defmacro fakir-mock-proc-properties (process-obj &rest body)
-  "Mock process property list functions.
-
-Within BODY the functions `process-get', `process-put' and
-`process-plist' are all mocked to use a hashtable if the process
-passed to them is `eq' to PROCESS-OBJ.
-
-Also provides an additional function `process-setplist' to set
-the plist of the specified PROCESS-OBJ.  If this function is
-called on anything but PROCESS-OBJ it will error."
-  (declare (indent 1)
-           (debug (sexp &rest form)))
-  (let ((proc-props (make-symbol "procpropsv")))
-    `(let ((,proc-props (make-hash-table :test 'equal)))
-       (noflet ((process-get (proc name)
-                  (if (eq proc ,process-obj)
-                      (gethash name ,proc-props)
-                      (funcall this-fn proc name)))
-                (process-put (proc name value)
-                  (if (eq proc ,process-obj)
-                      (puthash name value ,proc-props)
-                      (funcall this-fn proc name value)))
-                (process-plist (proc)
-                  (if (eq proc ,process-obj)
-                      (kvalist->plist
-                       (kvhash->alist ,proc-props))))
-                (process-setplist (proc &rest props)
-                  (if (eq proc ,process-obj)
-                      (mapc
-                       (lambda (pair)
-                         (puthash
-                          (car pair) (cdr pair)
-                          ,proc-props))
-                       (kvplist->alist props))
-                      ;; Will error?
-                      (funcall this-fn proc props))))
-         ,@body))))
+    `(let ((,pvvar (list ,@(fakir/let-bindings->alist process-bindings)))
+           ;; This is a buffer for the output
+           (,pvoutbuf (get-buffer-create "*fakir-outbuf*"))
+           ;; For assigning the result of the body
+           ,result
+           ;; Dummy buffer variable for the process - we fill this in
+           ;; dynamically in 'process-buffer
+           ,pvbuf)
+       (fakir-mock-proc-properties ,process-symbol
+         (flet ((fakir-get-output-buffer () ,pvoutbuf)
+                (,get-or-create-buf (proc &optional specified-buf)
+                  (setq ,pvbuf (fakir/get-or-create-buf
+                                ,pvbuf
+                                ,pvvar
+                                specified-buf)))
+                (,fakir-kill-buffer (buf)
+                  (when (bufferp buf)
+                    (with-current-buffer buf (set-buffer-modified-p nil))
+                    (kill-buffer buf))))
+           (unwind-protect
+                (macrolet ((or-args (form &rest args)
+                             `(if (eq proc ,,process-symbol)
+                                  ,form
+                                  (apply this-fn (list ,@args)))))
+                  ;; Rebind the process function interface
+                  (noflet
+                      ((processp (proc) (or-args t proc))
+                       (process-send-eof (proc) (or-args t proc))
+                       (process-status (proc) (or-args 'fake proc))
+                       (process-buffer (proc) (or-args (,get-or-create-buf proc) proc))
+                       (process-contact (proc &optional arg) ; FIXME - elnode specific
+                         (or-args (list "localhost" 8000) proc))
+                       (process-send-string (proc str)
+                         (or-args
+                          (with-current-buffer ,pvoutbuf
+                            (save-excursion
+                              (goto-char (point-max))
+                              (insert str)))
+                          proc))
+                       (delete-process (proc)
+                         (or-args 
+                          (throw :mock-process-finished :mock-process-finished)
+                          proc))
+                       (set-process-buffer (proc buffer)
+                         (or-args (,get-or-create-buf proc buffer) proc)))
+                    (set-process-plist ,process-symbol (kvalist->plist ,pvvar))
+                    (setq ,result
+                          (catch :mock-process-finished
+                            ,@body))))
+             ;; Now clean up
+             (,fakir-kill-buffer ,pvbuf)
+             (,fakir-kill-buffer ,pvoutbuf)))))))
 
 
 ;; Time utils
@@ -478,7 +443,8 @@ part."
     (if (bufferp buf)
         buf
         ;; Else make one and put the content in it
-        (with-current-buffer buf
+        (with-current-buffer
+            (get-buffer-create (fakir-file-filename fakir-file))
           (insert (fakir-file-content fakir-file))
           (current-buffer)))))
 
@@ -620,6 +586,8 @@ FAKED-FILE must be a `fakir-file' object or a list of
          ,@body))))
 
 (defmacro fakir-mock-file (faked-file &rest body)
+  (declare (debug (sexp &rest form))
+           (indent 1))
   `(fakir-fake-file ,faked-file ,@body))
 
 (provide 'fakir)

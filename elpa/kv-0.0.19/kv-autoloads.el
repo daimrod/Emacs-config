@@ -3,8 +3,7 @@
 ;;; Code:
 (add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads nil nil ("kv-pkg.el" "kv.el") (20921 46593 790769
-;;;;;;  142000))
+;;;### (autoloads nil nil ("kv.el") (21207 43420 791507 305000))
 
 ;;;***
 
