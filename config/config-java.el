@@ -25,7 +25,7 @@
 (add-hook 'java-mode-hook (lambda () (local-set-key (kbd "C-h j") 'javadoc-lookup)))
 (require 'javadoc-lookup)
 (require 'maven-fetch)
-(javadoc-add-roots "/usr/share/doc/openjdk-6-jdk/api")
+(javadoc-add-roots "/usr/share/doc/openjdk-7-jdk/api")
 
 (provide 'config-java)
 
