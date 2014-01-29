@@ -283,4 +283,27 @@
 (add-to-list 'Info-directory-list
              "~/.local/share/info")
 
+;;; Ansi Color
+;; These colors are used in (async-)shell-command buffers
+(setq ansi-color-map
+      [default bold default italic underline success warning error nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil
+        (foreground-color . "#242424")
+        (foreground-color . "#e5786d")
+        (foreground-color . "#95e454")
+        (foreground-color . "#cae682")
+        (foreground-color . "#8ac6f2")
+        (foreground-color . "#4682b4")  ; was #333366
+        (foreground-color . "#ccaa8f")
+        (foreground-color . "#f6f3e8")
+        nil nil
+        (background-color . "#242424")
+        (background-color . "#e5786d")
+        (background-color . "#95e454")
+        (background-color . "#cae682")
+        (background-color . "#8ac6f2")
+        (background-color . "#4682b4")  ; was #333366
+        (background-color . "#ccaa8f")
+        (background-color . "#f6f3e8")
+        nil nil])
+
 (provide 'config-misc)
