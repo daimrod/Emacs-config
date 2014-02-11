@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; config-defuns.el
 ;; Copyright (C) 2011, 2012 Grégoire Jadi
 
@@ -90,20 +91,20 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 (defun dmd/small-scroll-up-command (&optional arg)
   (interactive "^P")
   (let ((fun-scroll-up (if (fboundp 'scroll-up-command)
-                       'scroll-up-command
-                     'scroll-up)))
-   (if arg
-       (funcall fun-scroll-up arg)
-     (funcall fun-scroll-up 5))))
+                           'scroll-up-command
+                         'scroll-up)))
+    (if arg
+        (funcall fun-scroll-up arg)
+      (funcall fun-scroll-up 5))))
 
 (defun dmd/small-scroll-down-command (&optional arg)
   (interactive "^P")
   (let ((fun-scroll-down (if (fboundp 'scroll-down-command)
                              'scroll-down-command
                            'scroll-down)))
-   (if arg
-       (funcall fun-scroll-down arg)
-     (funcall fun-scroll-down 5))))
+    (if arg
+        (funcall fun-scroll-down arg)
+      (funcall fun-scroll-down 5))))
 
 (defun dmd/show-big-text (text &optional size font)
   (interactive "sText to show: ")
@@ -146,8 +147,8 @@ If not, use the classic save-buffers-and-kill-emacs function."
   "Delete zombie clients, that is, emacsclient that are finished
 but still present in the background."
   (when (fboundp 'server-delete-client)
-   (dolist (process dmd/dead-clients)
-     (server-delete-client process))))
+    (dolist (process dmd/dead-clients)
+      (server-delete-client process))))
 
 (add-hook 'after-make-frame-functions #'dmd/delete-zombie-clients)
 
@@ -306,5 +307,18 @@ It uses magit internal."
   "Remove KEY from KEYMAP."
   (setf keymap (or keymap (current-global-map)))
   (substitute-key-definition (lookup-key keymap key) nil keymap))
+
+(defun youtube-dl (url)
+  (interactive "MURL: ")
+  (let* ((buffer (get-buffer-create (format "*Youtube DL %s*" url)))
+         (proc (start-process "youtube-dl"
+                              buffer
+                              "/bin/bash"
+                              "-c"
+                              (format "source ~/.python-virtualenvs/youtube-dl/bin/activate && youtube-dl %s" url))))
+    (set-process-sentinel proc (lambda (proc event)
+                                 (if (string= event "finished\n")
+                                     (kill-buffer buffer)
+                                   (user-error "A problem occured in %s" (buffer-name buffer)))))))
 
 (provide 'config-defuns)
