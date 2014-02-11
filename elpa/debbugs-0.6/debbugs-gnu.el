@@ -1,12 +1,12 @@
 ;;; debbugs-gnu.el --- interface for the GNU bug tracker
 
-;; Copyright (C) 2011-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2014 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;;         Michael Albinus <michael.albinus@gmx.org>
 ;; Keywords: comm, hypermedia, maint
 ;; Package: debbugs
-;; Version: 0.5
+;; Version: 0.6
 
 ;; This file is not part of GNU Emacs.
 
@@ -177,6 +177,7 @@
   :type '(set (const "automake")
 	      (const "cc-mode")
 	      (const "coreutils")
+	      (const "cppi")
 	      (const "debbugs.gnu.org")
 	      (const "diffutils")
 	      (const "emacs")
@@ -187,10 +188,12 @@
 	      (const "guile")
 	      (const "guix")
 	      (const "gzip")
+	      (const "idutils")
 	      (const "libtool")
 	      (const "ns")
 	      (const "org-mode")
 	      (const "parted")
+	      (const "vc-dwim")
 	      (const "w32")
 	      (const "woodchuck"))
   :version "24.4")
@@ -425,7 +428,7 @@ marked as \"client-side filter\"."
 
 ;;;###autoload
 (defun debbugs-gnu (severities &optional packages archivedp suppress tags)
-  "List all outstanding Emacs bugs."
+  "List all outstanding bugs."
   (interactive
    (let (severities archivedp)
      (list
@@ -464,6 +467,9 @@ marked as \"client-side filter\"."
       (add-to-list 'debbugs-gnu-current-query (cons 'package package))))
   (when archivedp
     (add-to-list 'debbugs-gnu-current-query '(archive . "1")))
+  (when suppress
+    (add-to-list 'debbugs-gnu-current-query '(status . "open"))
+    (add-to-list 'debbugs-gnu-current-query '(status . "forwarded")))
   (dolist (tag (if (consp tags) tags (list tags)))
     (when (not (zerop (length tag)))
       (add-to-list 'debbugs-gnu-current-query (cons 'tag tag))))

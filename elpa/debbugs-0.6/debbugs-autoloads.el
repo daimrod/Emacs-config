@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads nil "debbugs-gnu" "debbugs-gnu.el" (21114 7425
-;;;;;;  0 0))
+;;;### (autoloads nil "debbugs-gnu" "debbugs-gnu.el" (21229 10753
+;;;;;;  666932 662000))
 ;;; Generated autoloads from debbugs-gnu.el
 
 (autoload 'debbugs-gnu-search "debbugs-gnu" "\
@@ -18,7 +18,7 @@ marked as \"client-side filter\".
 \(fn)" t nil)
 
 (autoload 'debbugs-gnu "debbugs-gnu" "\
-List all outstanding Emacs bugs.
+List all outstanding bugs.
 
 \(fn SEVERITIES &optional PACKAGES ARCHIVEDP SUPPRESS TAGS)" t nil)
 
@@ -34,8 +34,8 @@ List all BUGS, a list of bug numbers.
 
 ;;;***
 
-;;;### (autoloads nil "debbugs-org" "debbugs-org.el" (21114 7425
-;;;;;;  0 0))
+;;;### (autoloads nil "debbugs-org" "debbugs-org.el" (21229 10753
+;;;;;;  246932 677000))
 ;;; Generated autoloads from debbugs-org.el
 
 (autoload 'debbugs-org-search "debbugs-org" "\
@@ -50,7 +50,14 @@ returned.
 (autoload 'debbugs-org "debbugs-org" "\
 List all outstanding bugs.
 
-\(fn SEVERITIES &optional PACKAGES ARCHIVEDP TAGS)" t nil)
+\(fn SEVERITIES &optional PACKAGES ARCHIVEDP SUPPRESS TAGS)" t nil)
+
+(autoload 'debbugs-org-mode "debbugs-org" "\
+Minor mode for providing a debbugs interface in org-mode buffers.
+
+\\{debbugs-org-mode-map}
+
+\(fn &optional ARG)" t nil)
 
 (autoload 'debbugs-org-bugs "debbugs-org" "\
 List all BUGS, a list of bug numbers.
@@ -59,8 +66,8 @@ List all BUGS, a list of bug numbers.
 
 ;;;***
 
-;;;### (autoloads nil nil ("debbugs-pkg.el" "debbugs.el") (21114
-;;;;;;  7425 102454 700000))
+;;;### (autoloads nil nil ("debbugs-pkg.el" "debbugs.el") (21229
+;;;;;;  10753 926465 579000))
 
 ;;;***
 

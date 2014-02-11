@@ -6,8 +6,8 @@ command `M-x debbugs-gnu-search' for bug searching.  The command
 to show bugs with known numbers, `M-x debbugs-gnu-bugs' could be used.
 
 If you prefer the listing of bugs as TODO items of `org-mode', you
-could use the commands `debbugs-org', `debbugs-org-search' and
-`debbugs-org-bugs' instead.
+could use the commands `M-x debbugs-org', `M-x debbugs-org-search' and
+`M-x debbugs-org-bugs' instead.
 
 This package works by implementing basic functions to access a Debbugs
 SOAP server (see <http://wiki.debian.org/DebbugsSoapInterface>).  It

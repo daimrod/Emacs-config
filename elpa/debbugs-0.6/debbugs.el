@@ -1,11 +1,11 @@
 ;;; debbugs.el --- SOAP library to access debbugs servers
 
-;; Copyright (C) 2011-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2014 Free Software Foundation, Inc.
 
 ;; Author: Michael Albinus <michael.albinus@gmx.de>
 ;; Keywords: comm, hypermedia
 ;; Package: debbugs
-;; Version: 0.5
+;; Version: 0.6
 
 ;; This file is not part of GNU Emacs.
 

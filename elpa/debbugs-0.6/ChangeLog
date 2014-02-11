@@ -1,3 +1,72 @@
+2014-01-28  Michael Albinus  <michael.albinus@gmx.de>
+
+	* README: Fix command invocation.
+
+2014-01-28  Michael Albinus  <michael.albinus@gmx.de>
+
+	* debbugs.el:
+	* debbugs-gnu.el:
+	* debbugs-org.el: Increase Version to 0.6.
+
+2014-01-12  Michael Albinus  <michael.albinus@gmx.de>
+
+	* debbugs-org.el (debbugs-org-show-next-reports): Use `org-sbe' if
+	available.
+
+2014-01-10  Michael Albinus  <michael.albinus@gmx.de>
+
+	* debbugs-org.el (debbugs-org-ids): Declare it buffer-local.
+	(debbugs-org-show-buffer-name): New defun.  Apply it everywhere the 
+	respective variable has been used.
+	(debbugs-org): Protect the whole code.
+	(debbugs-org-show-reports): Let `debbugs-org-ids' survive mode setting.
+	 Do not insert header line.  Do not format buffer.
+	(debbugs-org-show-next-reports): Add file local variables.
+
+2014-01-09  Michael Albinus  <michael.albinus@gmx.de>
+
+	* debbugs-gnu.el (debbugs-gnu-default-packages): Add new packages.
+	(debbugs-gnu): Fix docstring.
+
+2014-01-09  Michael Albinus  <michael.albinus@gmx.de>
+
+	* debbugs-org.el (debbugs-org-show-buffer-name): New defvar.
+	(debbugs-org, debbugs-org-show-reports)
+	(debbugs-org-show-next-reports, debbugs-org-mode): Use it.
+	(debbugs-org-regenerate-status): Fix docstring.
+
+2014-01-08  Michael Albinus  <michael.albinus@gmx.de>
+
+	* debbugs-gnu.el (debbugs-gnu): Handle SUPPRESS properly.
+
+	* debbugs-org.el (debbugs-org): Add SUPPRESS argument.
+
+2014-01-08  Michael Albinus  <michael.albinus@gmx.de>
+
+	* debbugs-org.el (debbugs-org-show-reports): Add a minor mode header
+	line.
+	(debbugs-org-regenerate-status): Remove (interactive).	Not needed
+	anymore.
+	(debbugs-org-mode-map): Remove "C-c # g" key binding.  Not needed
+	anymore.
+	(debbugs-org-mode): Autoload it.  Apply
+	`debbugs-org-regenerate-status'.
+
+2014-01-07  bastien1  <bzg@gnu.org>
+
+	New command `debbugs-org-regenerate-status'
+
+	* debbugs-org.el: Mention `debbugs-org-regenerate-status' in the
+	comment section.
+
+	* debbugs-org.el (debbugs-org-show-reports): Fix typo.
+	(debbugs-org-regenerate-status): New command.
+	(debbugs-org-mode-map): Bind it to `C-c # g'.
+
+2014-01-07  Michael Albinus  <michael.albinus@gmx.de>
+
+	Update copyright years.
+
 2013-10-25  Michael Albinus  <michael.albinus@gmx.de>
 
 	* debbugs-org.el: New file.
