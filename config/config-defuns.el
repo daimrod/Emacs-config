@@ -260,7 +260,7 @@ The buffer name is selected interactively by typing a substring.
 For details of keybindings, see `ido-switch-buffer'."
   (interactive "P")
   (if kill-process
-      (kill-process
+      (delete-process
        (get-buffer-process
         (ido-buffer-internal nil nil "Kill buffer process: " (buffer-name (current-buffer)) nil 'ignore)))
     (ido-buffer-internal 'kill 'kill-buffer "Kill buffer: " (buffer-name (current-buffer)) nil 'ignore)))
