@@ -321,4 +321,8 @@ It uses magit internal."
                                      (kill-buffer buffer)
                                    (user-error "A problem occured in %s" (buffer-name buffer)))))))
 
+(defun dmd/dired-exec-lisp (function)
+  (interactive "XExec: ")
+  (funcall function (dired-get-marked-files)))
+
 (provide 'config-defuns)
