@@ -139,8 +139,10 @@ otherwise stop it."
 (global-set-key (kbd "C-c m") 'execute-extended-command)
 (global-set-key (kbd "C-c C-m") 'execute-extended-command)
 
+(require 'dired)
 (define-key dired-mode-map (kbd "e") 'dmd/dired-exec-lisp)
 
+(require 'comint)
 (define-key comint-mode-map (kbd "C-c C-l") 'dmd/comint-truncate-buffer)
 
 (provide 'config-bindings)
