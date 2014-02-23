@@ -160,6 +160,7 @@
  '(diff-removed ((t (:foreground "#f57900"))))
  '(diff-context ((t (:foreground "#888a85"))))
  '(diff-refine-change ((t (:bold t :background "gray30"))))
+ '(diff-refine-added ((t (:inherit diff-refine-change :background "blue"))))
  '(ediff-current-diff-A ((t (:background "#555753"))))
  '(ediff-current-diff-Ancestor ((t (:background "#555753"))))
  '(ediff-current-diff-B ((t (:background "#555753"))))
@@ -226,6 +227,8 @@
  '(magit-log-head-label-default ((t (:box nil :background "Grey11"))))
  '(magit-log-head-label-patches ((t (:background "Grey11" :foreground "IndianRed4" :box 1))))
  '(magit-log-head-label-bisect-bad ((t (:background "Grey11" :foreground "IndianRed4" :box (:line-width 1 :color "IndianRed4")))))
- '(magit-log-head-label-bisect-good ((t (:background "Grey11" :foreground "light green" :box (:line-width 1 :color "light green"))))))
+ '(magit-log-head-label-bisect-good ((t (:background "Grey11" :foreground "light green" :box (:line-width 1 :color "light green")))))
+ '(hi-edebug-x-debug-line ((t (:underline "light green"))))
+ '(hi-edebug-x-stop ((t (:box (:line-width 2 :color "grey75" :style released-button))))))
 
 (provide-theme 'tangotango)
