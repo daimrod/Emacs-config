@@ -293,7 +293,7 @@ It uses magit internal."
 (defun dmd/french-setup ()
   "French settings."
   (interactive)
-  (activate-input-method "french-postfix")
+  (activate-input-method "latin-postfix")
   (ispell-change-dictionary "french"))
 
 (defun dmd/text-properties (&optional start end)
