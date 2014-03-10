@@ -25,6 +25,7 @@
 (fni/add-to-load-path ebib-dir)
 (require 'ebib)
 (add-to-list 'Info-directory-list ebib-dir)
+(define-key mode-specific-map (kbd "e") 'ebib)
 
 (provide 'config-bib)
 
