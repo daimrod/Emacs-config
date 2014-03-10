@@ -145,4 +145,7 @@ otherwise stop it."
 (require 'comint)
 (define-key comint-mode-map (kbd "C-c C-l") 'dmd/comint-truncate-buffer)
 
+(require 'doc-view)
+(define-key doc-view-mode-map (kbd "C-c C-i") 'dmd/doc-view-info)
+
 (provide 'config-bindings)

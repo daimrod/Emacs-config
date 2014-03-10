@@ -325,4 +325,17 @@ It uses magit internal."
   (interactive "XExec: ")
   (funcall function (dired-get-marked-files)))
 
+(defun dmd/doc-view-info ()
+  "Open a buffer with the current doc's info as text."
+  (interactive)
+  (let ((buffer (concat "*Info of "
+                        (file-name-nondirectory buffer-file-name)
+                        "*")))
+    (if (get-buffer buffer)
+        (kill-buffer buffer))
+    (call-process "/usr/bin/pdfinfo" nil buffer nil buffer-file-name)
+    (switch-to-buffer buffer)
+    (read-only-mode 1)
+    (goto-char (point-min))))
+
 (provide 'config-defuns)
