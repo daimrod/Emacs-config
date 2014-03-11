@@ -99,7 +99,12 @@
 (ido-mode 1)
 (ido-ubiquitous-mode 1)
 
+;; Text-mode Hook
 (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
+(add-hook 'text-mode-hook (lambda () (activate-input-method "latin-postfix")))
+
+;; Prog-mode Hook
+(add-hook 'prog-mode-hook (lambda () (activate-input-method "ucs")))
 
 ;; workgroups configuration
 (workgroups-mode)
