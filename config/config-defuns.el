@@ -332,4 +332,10 @@ It uses magit internal."
     (read-only-mode 1)
     (goto-char (point-min))))
 
+(defun dmd/doc-view-external ()
+  "Open the current document using an external program."
+  (interactive)
+  (start-process "doc-view external" (generate-new-buffer " *DocView External Viewer*")
+                 "/usr/bin/evince" buffer-file-name))
+
 (provide 'config-defuns)

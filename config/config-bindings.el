@@ -147,5 +147,6 @@ otherwise stop it."
 
 (require 'doc-view)
 (define-key doc-view-mode-map (kbd "C-c C-i") 'dmd/doc-view-info)
+(define-key doc-view-mode-map (kbd "C-c C-v") 'dmd/doc-view-external)
 
 (provide 'config-bindings)
