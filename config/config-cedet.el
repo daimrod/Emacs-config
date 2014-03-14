@@ -22,6 +22,11 @@
 ;;; Code:
 
 ;; http://alexott.net/en/writings/emacs-devenv/EmacsCedet.html
+(require 'semantic)
+(require 'semantic/ia)
+(require 'semantic/bovine/gcc)
+(require 'semantic/imenu)
+(require 'cedet-global)
 
 (setf semantic-default-submodes
       '(global-semanticdb-minor-mode
@@ -29,21 +34,24 @@
         global-semantic-highlight-func-mode
         global-semantic-stickyfunc-mode
         global-semantic-idle-scheduler-mode
-        global-semantic-idle-summary-mode))
+        global-semantic-idle-summary-mode
+        global-semantic-idle-completions-mode
+        global-semantic-decoration-mode))
 
 (semantic-mode 1)
-(require 'semantic/ia)
-(require 'semantic/bovine/gcc)
-(require 'semantic/imenu)
 
 (setq-mode-local c-mode semanticdb-find-default-throttle
                  '(project unloaded system recursive))
 
-(add-hook 'mode-hook
+(add-hook 'prog-mode-hook
           (lambda ()
             (setq imenu-create-index-function 'semantic-create-imenu-index)))
 
 (setf semantic-idle-scheduler-idle-time 1)
+
+(when (cedet-gnu-global-version-check t)
+  (semanticdb-enable-gnu-global-databases 'c-mode)
+  (semanticdb-enable-gnu-global-databases 'c++-mode))
 
 (provide 'config-cedet)
 
