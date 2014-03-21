@@ -311,7 +311,4 @@
         (background-color . "#f6f3e8")
         nil nil])
 
-;; El Dispatcher
-(fni/add-to-load-path (concat src-dir "el-dispatcher/"))
-
 (provide 'config-misc)

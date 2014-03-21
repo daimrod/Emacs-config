@@ -338,4 +338,20 @@ It uses magit internal."
   (start-process "doc-view external" (generate-new-buffer " *DocView External Viewer*")
                  "/usr/bin/evince" buffer-file-name))
 
+(require 'el-dispatcher)
+(defun dmd/open-pdf (file)
+  (interactive "fFile: ")
+  (list file))
+
+(el-dispatcher-make 'dmd/open-pdf
+                    '(("doc-view" . find-file)
+                      ("mupdf" . (lambda (file)
+                                 (start-process (format "mupdf %S" file)
+                                                nil
+                                                "mupdf" file)))
+                      ("evince" . (lambda (file)
+                                  (start-process (format "evince %S" file)
+                                                 nil
+                                                 "evince" file)))))
+
 (provide 'config-defuns)

@@ -84,6 +84,10 @@ Do it recursively if the third argument is not nil."
 (require 'undo-tree)
 (require 'info)
 
+;; El Dispatcher
+(fni/add-to-load-path (concat src-dir "el-dispatcher/"))
+(require 'el-dispatcher)
+
 ;; Load my configuration
 (defvar dmd/modules
   (loop for config-file in (directory-files config-dir nil "^config-.*.el$")

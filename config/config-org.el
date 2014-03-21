@@ -160,4 +160,16 @@
 ;; Export to markdown
 (require 'ox-md)
 
+;; Org File Apps
+(add-function :filter-args (symbol-function 'org-open-at-point)
+              ;; Filter out any parameters
+              (lambda (&optional arg reference-buffer)
+                nil)
+              '((name . org-open-at-point-del-args)))
+
+(setf org-file-apps
+      '(("\\.x?html?\\'" . (let ((dispatcher-prefix-arg current-prefix-arg)) (gu-browse-url file)))
+        ("\\.pdf\\'" . (let ((dispatcher-prefix-arg current-prefix-arg)) (dmd/open-pdf file)))
+        (t . emacs)))
+
 (provide 'config-org)
