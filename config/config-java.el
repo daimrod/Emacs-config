@@ -22,7 +22,9 @@
 ;;; Code:
 
 (fni/add-to-load-path (concat src-dir "javadoc-lookup/"))
-(add-hook 'java-mode-hook (lambda () (local-set-key (kbd "C-h j") 'javadoc-lookup)))
+(require 'cc-mode)
+(define-key java-mode-map (kbd "C-h j") 'javadoc-lookup)
+
 (require 'javadoc-lookup)
 (require 'maven-fetch)
 (javadoc-add-roots "/usr/share/doc/openjdk-7-jdk/api")
