@@ -22,6 +22,7 @@
 ;;; Code:
 
 (require 'cl)
+(require 'dispatcher)
 
 (defgroup graze-url nil
   "Browse URL"
@@ -37,9 +38,11 @@
   :type '(repeat function))
 
 (defcustom gu-browse-url-functions
-  '(browse-url-browser-function browse-url-generic)
+  '(("browser" . browse-url-browser-function)
+    ("generic" . browse-url-generic))
   "The functions used to browse an URL, the first one is the default."
-  :type '(repeat (choice variable function)))
+  :type '(alist :key-type (string :tag "Name")
+                :value-type (choice function variable)))
 
 (defcustom gu-search-format
   "http://www.google.com/search?q=%s"
@@ -103,44 +106,23 @@ the terms searched."
       (kill-new url)
       (message "%s" url))))
 
-(defun gu-browse-url-interactive-arg (prompt)
-  "Ask an URL with the given PROMPT."
-  (list (read-string prompt
+(defun gu-browse-url ()
+  (interactive)
+  (list (read-string "URL: "
                      (or (and transient-mark-mode mark-active
                               ;; rfc2396 Appendix E.
                               (replace-regexp-in-string
                                "[\t\r\f\n ]+" ""
                                (buffer-substring-no-properties
                                 (region-beginning) (region-end))))
-                         (gu-find-url-at-point)))
-        current-prefix-arg))
+                         (gu-find-url-at-point)))))
 
-(defun gu-get-browse-url-function (alternative)
-  "Return the function selected."
-  (let* ((fun (elt gu-browse-url-functions (if (integerp alternative)
-                                               (truncate (log alternative 4))
-                                             0)))
-         (fun (if
-                  ;; `gu-****-browse-url-function' can be either a
-                  ;; variable or a function, but we need a function.
-                  (functionp fun)
-                  fun
-                (symbol-value fun))))
-    (unless (functionp fun)
-      (error "%s is not a valid function." fun))
-    fun))
+(defun gu-search ()
+  (interactive)
+  (list (format gu-search-format (read-string "Search: "))))
 
-(defun gu-browse-url (url &optional alternative)
-  (interactive (gu-browse-url-interactive-arg "URL: "))
-  (funcall (gu-get-browse-url-function (car-safe alternative))
-           url))
-
-(defun gu-search (term &optional alternative)
-  (interactive (list (read-string "Search: ")
-                     current-prefix-arg))
-  (funcall (gu-get-browse-url-function (car-safe alternative))
-           (format gu-search-format term)))
-
+(dispatcher-make 'gu-browse-url gu-browse-url-functions)
+(dispatcher-make 'gu-search gu-browse-url-functions)
 (provide 'graze-url)
 
 ;;; graze-url.el ends here
