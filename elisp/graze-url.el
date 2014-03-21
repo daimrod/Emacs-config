@@ -22,7 +22,7 @@
 ;;; Code:
 
 (require 'cl)
-(require 'dispatcher)
+(require 'el-dispatcher)
 
 (defgroup graze-url nil
   "Browse URL"
@@ -121,8 +121,9 @@ the terms searched."
   (interactive)
   (list (format gu-search-format (read-string "Search: "))))
 
-(dispatcher-make 'gu-browse-url gu-browse-url-functions)
-(dispatcher-make 'gu-search gu-browse-url-functions)
+(el-dispatcher-make 'gu-browse-url gu-browse-url-functions)
+(el-dispatcher-make 'gu-search gu-browse-url-functions)
+
 (provide 'graze-url)
 
 ;;; graze-url.el ends here
