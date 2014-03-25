@@ -121,8 +121,8 @@ the terms searched."
   (interactive)
   (list (format gu-search-format (read-string "Search: "))))
 
-(el-dispatcher-make 'gu-browse-url gu-browse-url-functions)
-(el-dispatcher-make 'gu-search gu-browse-url-functions)
+(el-dispatcher-make 'gu-browse-url 'gu-browse-url-functions)
+(el-dispatcher-make 'gu-search 'gu-browse-url-functions)
 
 (provide 'graze-url)
 
