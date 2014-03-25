@@ -22,9 +22,15 @@
              (expand-file-name (concat org-dir
                                        "doc/")))
 
+(fni/add-to-load-path (concat src-dir "org-reveal/"))
+(setq org-reveal-root "file:///home/daimrod/packages/reveal/")
+
 (require 'org)
 (require 'ox-latex)
 (require 'ox-beamer)
+(require 'ox-md)
+(require 'ox-reveal)
+
 (require 'org-list)
 (require 'org-drill)
 (require 'org-ebib)
@@ -112,11 +118,27 @@
 (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
 
 ;;; export Latex
-(add-to-list 'org-latex-default-packages-alist '("" "listings" t))
-(add-to-list 'org-latex-default-packages-alist '("" "minted" t))
-;; xcolor needs to be *after* minted
-(add-to-list 'org-latex-default-packages-alist '("usenames,dvipsnames,svgnames,table" "xcolor" t))
-(add-to-list 'org-latex-packages-alist '("" "tikz" t))
+(setq org-latex-default-packages-alist nil
+      org-latex-packages-alist
+      '(("AUTO" "inputenc" t)
+        ("" "listings" t)
+        ("" "minted" t)
+        ("" "tikz" t)
+        ("T1" "fontenc" t)
+        ("" "fixltx2e" nil)
+        ("" "graphicx" t)
+        ("" "longtable" nil)
+        ("" "float" nil)
+        ("" "wrapfig" nil)
+        ("normalem" "ulem" t)
+        ("" "textcomp" t)
+        ("" "marvosym" t)
+        ("" "wasysym" t)
+        ("" "latexsym" t)
+        ("" "amssymb" t)
+        ("" "amstext" nil)
+        ("" "hyperref" nil)
+        "\\tolerance=1000"))
 (setq org-latex-create-formula-image-program 'imagemagick)
 (setq org-latex-listings 'minted)
 
@@ -152,13 +174,6 @@
 (mapc (lambda (key)
         (dmd/remove-key key org-mode-map))
       '("<S-left>" "<S-right>" "<S-up>" "<S-down>"))
-
-(fni/add-to-load-path (concat src-dir "org-reveal/"))
-(require 'ox-reveal)
-(setq org-reveal-root "file:///home/daimrod/packages/reveal/")
-
-;; Export to markdown
-(require 'ox-md)
 
 ;; Org File Apps
 (add-function :filter-args (symbol-function 'org-open-at-point)
