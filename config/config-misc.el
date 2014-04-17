@@ -50,7 +50,7 @@
 
 ;; some configuration (C-h v)
 (setq require-final-newline t
-      uniquify-buffer-name-style 'forward
+      uniquify-buffer-name-style 'post-forward
       fringe-mode (cons 4 0)
       save-place-file (concat dotfiles-dir "places"))
 
@@ -105,6 +105,9 @@
 
 ;; Prog-mode Hook
 (add-hook 'prog-mode-hook (lambda () (activate-input-method "ucs")))
+
+(require 'hideshow)
+(add-hook 'prog-mode-hook 'hs-minor-mode)
 
 ;; workgroups configuration
 (workgroups-mode)
