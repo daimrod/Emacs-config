@@ -29,7 +29,7 @@
       (find-file file))))
 
 (defun sudo-edit (&optional arg)
-  (interactive "p")
+  (interactive "P")
   (if (or arg (not buffer-file-name))
       (find-file (concat "/sudo:localhost:" (ido-read-file-name "File: ")))
     (find-alternate-file (concat "/sudo:localhost:" buffer-file-name))))
