@@ -149,4 +149,10 @@ otherwise stop it."
 (define-key doc-view-mode-map (kbd "C-c C-i") 'dmd/doc-view-info)
 (define-key doc-view-mode-map (kbd "C-c C-v") 'dmd/doc-view-external)
 
+(require 'hideshow)
+(define-key hs-minor-mode-map (kbd "C-c -") 'hs-hide-block)
+(define-key hs-minor-mode-map (kbd "C-c _") 'hs-hide-all)
+(define-key hs-minor-mode-map (kbd "C-c =") 'hs-show-block)
+(define-key hs-minor-mode-map (kbd "C-c +") 'hs-show-all)
+
 (provide 'config-bindings)
