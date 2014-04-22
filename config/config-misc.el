@@ -314,4 +314,10 @@
         (background-color . "#f6f3e8")
         nil nil])
 
+;; Adaptive Visual
+(require 'adaptive-wrap)
+(add-hook 'text-mode-hook (lambda ()
+                            (visual-line-mode 1)
+                            (adaptive-wrap-prefix-mode 1)))
+
 (provide 'config-misc)
