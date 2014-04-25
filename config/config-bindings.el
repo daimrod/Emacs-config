@@ -155,4 +155,7 @@ otherwise stop it."
 (define-key hs-minor-mode-map (kbd "C-c =") 'hs-show-block)
 (define-key hs-minor-mode-map (kbd "C-c +") 'hs-show-all)
 
+(require 'config-company)
+(global-set-key (kbd "C-SPC") 'company-complete)
+
 (provide 'config-bindings)
