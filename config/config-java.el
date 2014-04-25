@@ -29,6 +29,16 @@
 (require 'maven-fetch)
 (javadoc-add-roots "/usr/share/doc/openjdk-7-jdk/api")
 
+(fni/add-to-load-path (concat src-dir "emacs-eclim/"))
+(require 'eclim)
+(require 'eclimd)
+(global-eclim-mode)
+
+(require 'config-company)
+(require 'company-emacs-eclim)
+(company-emacs-eclim-setup)
+
+
 (provide 'config-java)
 
 ;;; config-java.el ends here
