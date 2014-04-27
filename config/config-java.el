@@ -34,11 +34,6 @@
 (require 'eclimd)
 (global-eclim-mode)
 
-(require 'config-company)
-(require 'company-emacs-eclim)
-(company-emacs-eclim-setup)
-
-
 (provide 'config-java)
 
 ;;; config-java.el ends here
