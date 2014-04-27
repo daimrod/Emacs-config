@@ -25,6 +25,10 @@
 (require 'projectile)
 (projectile-global-mode)
 
+(fni/add-to-load-path (concat src-dir "ag"))
+(require 'ag)
+(define-key projectile-mode-map (kbd "C-c p a") 'projectile-ag)
+
 (provide 'config-projectile)
 
 ;;; config-projectile.el ends here
