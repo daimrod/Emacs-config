@@ -39,9 +39,9 @@ otherwise use `gtags-find-with-grep'."
      (define-key gtags-mode-map (kbd "M-,") 'gtags-pop-stack)
      (define-key gtags-mode-map (kbd "M-.") 'gtags-find)))
 
-(add-hook 'c-mode-hook (lambda () (gtags-mode 1)))
-(add-hook 'c++-mode-hook (lambda () (gtags-mode 1)))
-(add-hook 'java-mode-hook (lambda() (gtags-mode 1)))
+(add-hook 'c-mode-hook 'gtags-mode)
+(add-hook 'c++-mode-hook 'gtags-mode)
+(add-hook 'java-mode-hook 'gtags-mode)
 
 (provide 'config-gtags)
 
