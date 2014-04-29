@@ -36,6 +36,7 @@
 (define-key eclim-mode-map (kbd "C-c C-e p r") 'eclim-run-class)
 
 (add-hook 'java-mode-hook 'subword-mode)
+(add-hook 'java-mode-hook 'glasses-mode)
 
 (provide 'config-java)
 
