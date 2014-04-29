@@ -176,7 +176,7 @@
       '("<S-left>" "<S-right>" "<S-up>" "<S-down>"))
 
 ;; Org File Apps
-(add-function :filter-args (symbol-function 'org-open-at-point)
+(advice-add 'org-open-at-point :filter-args
               ;; Filter out any parameters
               (lambda (&optional arg reference-buffer)
                 nil)
