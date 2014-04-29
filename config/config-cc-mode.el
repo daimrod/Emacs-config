@@ -16,6 +16,8 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+(require 'gtk-lookup)
+
 (setq-default c-basic-offset 4
               tab-width 4 ; or any other preferred value
               cua-auto-tabify-rectangles nil
@@ -26,7 +28,5 @@
         (awk-mode . "awk")
         (c-mode . "k&r")
         (other . "linux")))
-
-(require 'gtk-lookup)
 
 (provide 'config-cc-mode)
