@@ -25,6 +25,7 @@
 (require 'company)
 (require 'company-emacs-eclim)
 (company-emacs-eclim-setup)
+(global-set-key (kbd "C-SPC") 'company-complete)
 
 (require 'company-yasnippet)
 (global-set-key (kbd "M-C") 'company-yasnippet)
