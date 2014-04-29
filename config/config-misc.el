@@ -106,6 +106,9 @@
 ;; Prog-mode Hook
 (add-hook 'prog-mode-hook (lambda () (activate-input-method "ucs")))
 
+(require' fic-ext-mode)
+(add-hook 'prog-mode-hook 'fic-ext-mode)
+
 (require 'hideshow)
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 
