@@ -112,6 +112,9 @@
 (require 'hideshow)
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 
+(add-hook 'prog-mode-hook 'subword-mode)
+(add-hook 'prog-mode-hook 'glasses-mode)
+
 ;; workgroups configuration
 (workgroups-mode)
 (setq wg-morph-on nil
