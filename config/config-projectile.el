@@ -29,6 +29,24 @@
 (require 'ag)
 (define-key projectile-mode-map (kbd "C-c p a") 'projectile-ag)
 
+(add-function :around (symbol-function 'compilation-find-file)
+              (lambda(oldfun &rest args)
+                (destructuring-bind (marker filename directory &rest formats) args
+                  ;; Try to find the filename using projectile
+                  (let ((root (ignore-errors (projectile-project-root)))
+                        file
+                        buffer)
+                    (when root
+                      (dolist (dir (projectile-current-project-dirs))
+                        (setq dir (expand-file-name dir root))
+                        (setq file (expand-file-name filename dir))
+                        (if (file-exists-p file)
+                            (setq buffer (find-file-noselect file)))))
+                    (or buffer
+                        ;; Fall back to the old function `compilation-find-file'
+                        (apply oldfun marker filename directory formats)))))
+              '(name compilation-with-projectile-dirs))
+
 (provide 'config-projectile)
 
 ;;; config-projectile.el ends here
