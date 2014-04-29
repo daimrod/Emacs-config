@@ -33,6 +33,7 @@
 (require 'eclim)
 (require 'eclimd)
 (global-eclim-mode)
+(define-key eclim-mode-map (kbd "C-c C-e p r") 'eclim-run-class)
 
 (provide 'config-java)
 
