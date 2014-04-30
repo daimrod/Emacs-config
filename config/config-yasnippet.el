@@ -16,9 +16,6 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(fni/add-to-load-path (concat src-dir "yasnippet/"))
-
-(require 'yasnippet)
 (setq yas-snippet-dirs
       (list
        (concat dotfiles-dir "snippets/")

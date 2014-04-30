@@ -21,8 +21,6 @@
 
 ;;; Code:
 
-(require 'tidy-autoloads)
-
 (provide 'config-html)
 
 ;;; config-html.el ends here

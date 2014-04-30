@@ -21,16 +21,9 @@
 
 ;;; Code:
 
-(fni/add-to-load-path (concat src-dir "company-mode/"))
-(require 'company)
-(require 'company-emacs-eclim)
-(company-emacs-eclim-setup)
+(global-company-mode 1)
 (global-set-key (kbd "C-SPC") 'company-complete)
-
-(require 'company-yasnippet)
 (global-set-key (kbd "M-C") 'company-yasnippet)
-
-(add-hook 'after-init-hook 'global-company-mode)
 
 (provide 'config-company)
 

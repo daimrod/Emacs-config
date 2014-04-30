@@ -21,18 +21,9 @@
 
 ;;; Code:
 
-(fni/add-to-load-path (concat src-dir "xml/"))
-
-(require 'rng-auto)
 (setq auto-mode-alist
       (cons '("\\.\\(xml\\|xsl\\|rng\\|xhtml\\)\\'" . nxml-mode)
             auto-mode-alist))
-
-(require 'xmlgen)
-(require 'sgml-mode)
-
-(fni/add-to-load-path (concat src-dir "sxml<->xml/"))
-(require 'sxml<->xml)
 
 (provide 'config-xml)
 

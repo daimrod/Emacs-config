@@ -21,12 +21,8 @@
 
 ;;; Code:
 
-(fni/add-to-load-path (concat src-dir "projectile/"))
-(require 'projectile)
 (projectile-global-mode)
 
-(fni/add-to-load-path (concat src-dir "ag"))
-(require 'ag)
 (define-key projectile-mode-map (kbd "C-c p a") 'projectile-ag)
 
 (advice-add 'compilation-find-file :around

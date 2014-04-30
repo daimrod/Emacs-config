@@ -21,7 +21,6 @@
 
 ;;; Code:
 
-(require 'xwidget)
 (define-key xwidget-webkit-mode-map (kbd "Q")
   (lambda ()
     (interactive)
@@ -34,7 +33,6 @@
 NEW-SESSION specifies whether to create a new xwidget-webkit session.  URL
 defaults to the string looking like a url around the cursor position."
   (interactive (progn
-                 (require 'browse-url)
                  (browse-url-interactive-arg "xwidget-webkit URL: "
                                              (xwidget-webkit-current-url))))
   (when (stringp url)
@@ -42,9 +40,6 @@ defaults to the string looking like a url around the cursor position."
     (if new-session
         (xwidget-webkit-new-session url)
       (xwidget-webkit-goto-url url))))
-
-(require 'parallel)
-(require 'parallel-xwidget)
 
 (provide 'config-xwdigets)
 

@@ -16,20 +16,14 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-;; ELPA configuration
-(setq package-archives
-	  '(("ELPA" . "http://tromey.com/elpa/") 
-        ("gnu" . "http://elpa.gnu.org/packages/")
-        ("marmalade" . "http://marmalade-repo.org/packages/")))
-(package-initialize)
-
+(require 'workgroups)
+(require 'scratch)
+(require 'undo-tree)
+(require 'el-dispatcher)
 (require 'linum)
 
 ;; disable line number everywhere
 (global-linum-mode -1)
-
-;; answer by y and n instead of yes and no
-(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; every backup files'll store in ~/backup directory
 (setq backup-directory-alist
@@ -62,7 +56,6 @@
 
 ;; enable ido-mode
 (require 'ido)
-(fni/add-to-load-path (concat src-dir "ido-ubiquitous/"))
 (require 'ido-ubiquitous)
 
 (setq ido-enable-flex-matching t
@@ -158,12 +151,10 @@
 (setq-default major-mode 'text-mode)
 
 ;; enable Zaps mode everywhere
-(fni/add-to-load-path (concat src-dir "markit/"))
 (require 'markit)
 (global-markit-mode t)
 
 ;; yaml-mode configuration
-(fni/add-to-load-path (concat src-dir "yaml-mode/"))
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
@@ -241,34 +232,20 @@
 
 (setf ace-jump-mode-scope 'frame)
 
-;;; manual-tagging
-(fni/add-to-load-path (concat src-dir "manual-tagging/"))
-(require 'manual-tagging)
-
 ;;; Emacs-wget
 ;;; Set downoad directory to current dir
-(require 'w3m-wget)
 (setf wget-download-directory "./")
 
 ;;; Smart Tab
 ;;; http://www.emacswiki.org/emacs/TabsAreEvil
 ;;; http://www.emacswiki.org/emacs/SmartTabs
-(require 'smart-tab)
 (add-hook 'prog-mode-hook 'smart-tab-mode)
 
 ;;; Winner mode is a winner!
 (winner-mode 1)
 
-;;; Edebug
-(require 'edebug)
-
 ;; Compilation
-(require 'compilation-font)
 (add-hook 'compilation-start-hook 'compilation-font-lock-manager)
-
-;; Emacs Async
-(fni/add-to-load-path (concat src-dir "emacs-parallel/"))
-(require 'parallel)
 
 ;; Use The Source Luke!
 (setq find-function-C-source-directory (expand-file-name "~/packages/xwidget-emacs/src")) ;
@@ -283,17 +260,10 @@
 (autoload 'creole-mode "creole-mode")
 (add-to-list 'auto-mode-alist '("\\.creole\\'" . creole-mode))
 
-;; ESS
-(require 'ess)
-(require 'ess-site)
-
-;; Saveplace
-(require 'saveplace)
 (setq-default save-place t)
 (setq save-place-file "~/.emacs.d/places")
 
 ;; Info configuration
-(require 'info)
 (add-to-list 'Info-directory-list
              "~/.local/share/info")
 
@@ -321,7 +291,6 @@
         nil nil])
 
 ;; Adaptive Visual
-(require 'adaptive-wrap)
 (add-hook 'text-mode-hook (lambda ()
                             (visual-line-mode 1)
                             (adaptive-wrap-prefix-mode 1)))

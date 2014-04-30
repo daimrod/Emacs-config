@@ -16,8 +16,6 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(require 'multi-term)
-
 (eval-after-load "multi-term"
                  '(setq multi-term-program "/bin/bash"
                    term-unbind-key-list '("C-x"

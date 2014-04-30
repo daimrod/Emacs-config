@@ -21,9 +21,6 @@
 
 ;;; Code:
 
-(fni/add-to-load-path (concat src-dir "multiple-cursors/") t t)
-(require 'multiple-cursors)
-
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)

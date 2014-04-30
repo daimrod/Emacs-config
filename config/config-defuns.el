@@ -17,10 +17,6 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(require 'http-post-simple)
-(require 'thingatpt)
-(require 'imenu)
-
 (defun recentf-ido-find-file ()
   "Find a recent file using ido."
   (interactive)
@@ -155,7 +151,6 @@ but still present in the background."
 (defun dmd/autocompile ()
   "Byte compile an elisp and reload it."
   (interactive)
-  (require 'bytecomp)
   (let ((filename (buffer-file-name)))
     (when (eq major-mode 'emacs-lisp-mode)
       (byte-compile-file filename)

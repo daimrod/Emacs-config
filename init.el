@@ -60,47 +60,49 @@ Do it recursively if the third argument is not nil."
   "The source directory where third-part modules are located."
   :group 'dmd/config)
 
-(fni/add-to-load-path config-dir t)
 (fni/add-to-load-path elisp-dir t)
-(fni/add-to-load-path elpa-dir t)
+(fni/add-to-load-path config-dir)
 
 (setq custom-file (concat dotfiles-dir "custom.el"))
-
-;; These should be loaded on startup rahter than autoloaded on demande
-;; since they are likely to be used in every session
+(load custom-file 'noerror)
 
 (require 'bytecomp)
 (byte-compile-disable-warning 'cl-functions)
-
 (require 'cl)
-(require 'saveplace)
-(require 'ffap)
-(require 'uniquify)
-(require 'ansi-color)
-(require 'recentf)
-(require 'workgroups)
-(require 'scratch)
-(require 'verbiste)
-(require 'undo-tree)
-(require 'info)
 
-;; El Dispatcher
-(fni/add-to-load-path (concat src-dir "el-dispatcher/"))
-(require 'el-dispatcher)
+;; ELPA configuration
+(setq package-archives
+	  '(("ELPA" . "http://tromey.com/elpa/") 
+        ("gnu" . "http://elpa.gnu.org/packages/")
+        ("marmalade" . "http://marmalade-repo.org/packages/")))
 
 ;; Load my configuration
 (defvar dmd/modules
   (loop for config-file in (directory-files config-dir nil "^config-.*.el$")
-        collect (subseq config-file 0 (- (length config-file) 3)))
+        collect (intern (subseq config-file 0 (- (length config-file) 3))))
   "List of available configuration modules.")
 
-(mapc (lambda (module)
-        (message "Loading %s" module)
-        (unless (ignore-errors (require (intern module)))
-          (warn "Failed to load module `%s'" module)))
-      dmd/modules)
+(add-hook 'after-init-hook
+          (lambda ()
+            ;; This needs to be done in `after-init-hook' to override
+            ;; packages provided by ELPA.
+            (fni/add-to-load-path src-dir t t)
 
-(load custom-file 'noerror)
+            (load (expand-file-name "~/quicklisp/slime-helper.el"))
+            (load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
+            ;; All required definitions go here
+            (require 'config-require)
+
+            (mapc (lambda (module)
+                    (message "Loading %s" module)
+                    ;; (require module)
+                    (unless (ignore-errors (require module))
+                      (warn "Failed to load module `%s'" module))
+                    )
+                  dmd/modules)
+
+            (when (fboundp 'org-agenda-list)
+              (org-agenda-list))))
 
 ;; enabled/disabled commands
 (put 'upcase-region 'disabled nil)
@@ -109,7 +111,5 @@ Do it recursively if the third argument is not nil."
 (put 'downcase-region 'disabled nil)
 (put 'scroll-left 'disabled nil)
 
-;;; Init stuff
+;; Init stuff
 (setf inhibit-startup-screen t)
-(when (fboundp 'org-agenda-list)
-  (org-agenda-list))

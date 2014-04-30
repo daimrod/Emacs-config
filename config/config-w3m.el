@@ -21,12 +21,6 @@
 
 ;;; Code:
 
-(fni/add-to-load-path (concat src-dir "emacs-w3m/") t t)
-(require 'w3m-load)
-(require 'w3m)
-(require 'w3m-search)
-(require 'browse-url)
-
 (setf w3m-init-file (concat dotfiles-dir "config-w3m")
       browse-url-browser-function 'browse-url-w3)
 

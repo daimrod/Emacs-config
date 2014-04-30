@@ -21,8 +21,6 @@
 
 ;;; Code:
 
-(require 'view)
-
 (define-minor-mode centerize-mode
   "Centerize a buffer.
 

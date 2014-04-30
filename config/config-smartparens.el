@@ -21,9 +21,6 @@
 
 ;;; Code:
 
-(fni/add-to-load-path (concat src-dir "smartparens/"))
-(require 'smartparens)
-(require 'smartparens-config)
 (smartparens-global-mode 1)
 
 ;; pair management

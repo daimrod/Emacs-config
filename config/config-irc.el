@@ -21,11 +21,6 @@
 
 ;;; Code:
 
-(fni/add-to-load-path (concat src-dir "shoes-off/"))
-(require 'rcirc)
-(require 'shoes-off-log)
-(require 'shoes-off)
-
 (defun rcirc-shoes-off-all ()
   (interactive)
   (rcirc-connect "localhost" 7000 "daimrod" "shoes-off@irc.freenode.net" nil nil "shoes-off")

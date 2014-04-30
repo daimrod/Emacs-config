@@ -15,7 +15,6 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
-(require 'key-chord)
 
 ;; Align your code in a pretty way.
 (global-set-key (kbd "C-x \\") 'align-regexp)
@@ -72,7 +71,6 @@
 (global-set-key (kbd "C-x C-c") 'dmd/quit-or-hide)
 
 ;; manage url at point
-(require 'graze-url nil t)
 (eval-after-load "graze-url"
   '(progn
      (global-set-key (kbd "C-c y") 'gu-copy-url-at-point)
@@ -107,7 +105,6 @@
 
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
 
-(require 'compile-cache)
 (global-set-key (kbd "<f5>") 'compile-cache)
 (global-set-key (kbd "<f6>") 'recompile)
 
@@ -139,17 +136,13 @@ otherwise stop it."
 (global-set-key (kbd "C-c m") 'execute-extended-command)
 (global-set-key (kbd "C-c C-m") 'execute-extended-command)
 
-(require 'dired)
 (define-key dired-mode-map (kbd "e") 'dmd/dired-exec-lisp)
 
-(require 'comint)
 (define-key comint-mode-map (kbd "C-c C-l") 'dmd/comint-truncate-buffer)
 
-(require 'doc-view)
 (define-key doc-view-mode-map (kbd "C-c C-i") 'dmd/doc-view-info)
 (define-key doc-view-mode-map (kbd "C-c C-v") 'dmd/doc-view-external)
 
-(require 'hideshow)
 (define-key hs-minor-mode-map (kbd "C-c -") 'hs-hide-block)
 (define-key hs-minor-mode-map (kbd "C-c _") 'hs-hide-all)
 (define-key hs-minor-mode-map (kbd "C-c =") 'hs-show-block)

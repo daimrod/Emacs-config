@@ -21,10 +21,7 @@
 
 ;;; Code:
 
-(defvar ebib-dir (expand-file-name (concat src-dir "ebib")))
-(fni/add-to-load-path ebib-dir)
-(require 'ebib)
-(add-to-list 'Info-additional-directory-list ebib-dir)
+(add-to-list 'Info-additional-directory-list (expand-file-name (concat src-dir "ebib")))
 (define-key mode-specific-map (kbd "e") 'ebib)
 
 (provide 'config-bib)

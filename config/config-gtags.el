@@ -25,7 +25,6 @@
 (when (null (ignore-errors (call-process "global" nil nil nil "--help")))
   (error "global executable not found, be sure GNU Global is installed and in your PATH."))
 
-(require 'gtags)
 (defun gtags-find (&optional with-grep?)
   "Find a tag with `gtags-find-tag' if WITH-GREP? is nil,
 otherwise use `gtags-find-with-grep'."

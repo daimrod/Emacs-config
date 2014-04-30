@@ -21,19 +21,13 @@
 
 ;;; Code:
 
-(fni/add-to-load-path (concat src-dir "javadoc-lookup/"))
-(require 'cc-mode)
 (define-key java-mode-map (kbd "C-h j") 'javadoc-lookup)
 
-(require 'javadoc-lookup)
-(require 'maven-fetch)
 (javadoc-add-roots "/usr/share/doc/openjdk-7-jdk/api")
 
-(fni/add-to-load-path (concat src-dir "emacs-eclim/"))
-(require 'eclim)
-(require 'eclimd)
 (global-eclim-mode)
 (define-key eclim-mode-map (kbd "C-c C-e p r") 'eclim-run-class)
+(company-emacs-eclim-setup)
 
 (provide 'config-java)
 

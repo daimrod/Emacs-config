@@ -16,20 +16,13 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(defvar magit-dir  (concat src-dir "magit/"))
-(fni/add-to-load-path magit-dir t)
 (add-to-list 'Info-default-directory-list
-             (expand-file-name magit-dir))
-
-(require 'magit)
-(require 'magit-svn)
-(require 'magit-blame)
+             (expand-file-name (concat src-dir "magit/")))
 
 (define-key mode-specific-map (kbd "g") 'magit-status)
 
 (add-hook 'magit-mode-hook 'magit-load-config-extensions)
 
-(require 'magit-stgit)
 (add-hook 'magit-mode-hook 'turn-on-magit-stgit)
 
 ;;; m0ar context for diff thunks

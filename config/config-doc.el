@@ -21,8 +21,6 @@
 
 ;;; Code:
 
-(require 'doctags)
-
 (provide 'config-doc)
 
 ;;; config-doc.el ends here

@@ -16,11 +16,6 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(fni/add-to-load-path (concat src-dir "js2-mode/"))
-
-(require 'js2-mode)
-(require 'moz)
-
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
 (defun javascript-moz-setup ()

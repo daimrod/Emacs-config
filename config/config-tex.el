@@ -21,9 +21,6 @@
 
 ;;; Code:
 
-(require 'latex)
-(require 'preview)
-
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq-default TeX-PDF-mode t)

@@ -16,7 +16,6 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(require 'elisp-slime-nav)
 (add-hook 'emacs-lisp-mode-hook 'elisp-slime-nav-mode)
 (add-hook 'ielm-mode-hook 'elisp-slime-nav-mode)
 
@@ -24,8 +23,6 @@
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 
 ;;; redshank configuration
-(fni/add-to-load-path (concat src-dir "redshank/"))
-(require 'redshank-loader)
 (eval-after-load "redshank-loader"
   (redshank-setup '(lisp-mode-hook
                     slime-repl-mode-hook) t))

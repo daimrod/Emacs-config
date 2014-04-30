@@ -22,11 +22,6 @@
 ;;; Code:
 
 ;; http://alexott.net/en/writings/emacs-devenv/EmacsCedet.html
-(require 'semantic)
-(require 'semantic/ia)
-(require 'semantic/bovine/gcc)
-(require 'semantic/imenu)
-(require 'cedet-global)
 
 (setf semantic-default-submodes
       '(global-semanticdb-minor-mode

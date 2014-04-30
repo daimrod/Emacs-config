@@ -16,57 +16,11 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(defvar org-dir (concat src-dir "org-mode/"))
-(fni/add-to-load-path org-dir t t)
 (add-to-list 'Info-directory-list
-             (expand-file-name (concat org-dir
-                                       "doc/")))
+             (expand-file-name (concat src-dir
+                                       "org-mode/doc")))
 
-(fni/add-to-load-path (concat src-dir "org-reveal/"))
 (setq org-reveal-root "file:///home/daimrod/packages/reveal/")
-
-(require 'org)
-(require 'ox-latex)
-(require 'ox-beamer)
-(require 'ox-md)
-(require 'ox-reveal)
-
-(require 'org-list)
-(require 'org-drill)
-(require 'org-ebib)
-;;; babel requirements
-(require 'ob-asymptote)
-(require 'ob-awk)
-(require 'ob-calc)
-(require 'ob-C)
-(require 'ob-clojure)
-(require 'ob-css)
-(require 'ob-ditaa)
-(require 'ob-dot)
-(require 'ob-emacs-lisp)
-(require 'ob-gnuplot)
-(require 'ob-haskell)
-(require 'ob-java)
-(require 'ob-js)
-(require 'ob-latex)
-(require 'ob-ledger)
-(require 'ob-lisp)
-(require 'ob-lilypond)
-(require 'ob-matlab)
-(require 'ob-mscgen)
-(require 'ob-ocaml)
-(require 'ob-octave)
-(require 'ob-org)
-(require 'ob-perl)
-(require 'ob-python)
-(require 'ob-R)
-(require 'ob-ruby)
-(require 'ob-sass)
-(require 'ob-scheme)
-(require 'ob-screen)
-(require 'ob-sh)
-(require 'ob-sql)
-(require 'ob-sqlite)
 
 ;; Subcommands for org global keymap
 (define-prefix-command 'mode-specific-org-map)
@@ -109,8 +63,6 @@
 
 ;;; Calendar/Diary
 (setq org-agenda-include-diary t)
-(require 'calendar)
-(require 'diary-lib)
 
 (setq diary-file "~/.diary"
       org-agenda-diary-file "~/org/diary.org")
@@ -145,23 +97,8 @@
 (add-to-list 'org-latex-minted-langs '(R "r"))
 
 ;;; config org-annotate (contrib)
-(require 'org-annotate-file)
 (setq org-annotate-file-storage-file (concat org-directory "annotated.org"))
 (define-key mode-specific-org-map (kbd "n") 'org-annotate-file)
-
-;;; Org Sync
-(fni/add-to-load-path (concat src-dir "org-sync/"))
-(require 'os)
-(require 'os-bb)
-(require 'os-github)
-(require 'os-rmine)
-
-;;; Org Contacts
-(require 'org-contacts)
-
-;;; Org Magit
-(fni/add-to-load-path (concat src-dir "org-magit/"))
-(require 'org-magit)
 
 ;;; see (info "(org) Speed keys")
 (setq org-use-speed-commands t)

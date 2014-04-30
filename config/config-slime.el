@@ -16,11 +16,6 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(load (expand-file-name "~/quicklisp/slime-helper.el"))
-
-(require 'slime-autoloads)
-(require 'slime)
-
 (slime-setup '(slime-repl
                inferior-slime
                slime-asdf
@@ -122,13 +117,11 @@
 (setq slime-enable-evaluate-in-emacs t)
 
 ;;; CLHS
-(load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
 (quicklisp-clhs-setup-hyperspec-root)
 (define-key slime-mode-map (kbd "C-c C-d f") 'common-lisp-hyperspec)
 (define-key slime-repl-mode-map (kbd "C-c C-d f") 'common-lisp-hyperspec)
 
 ;;; dpans
-(require 'info-look)
 (flet ((ansicl-lookup (major-mode)
                       (info-lookup-add-help
                        :mode major-mode

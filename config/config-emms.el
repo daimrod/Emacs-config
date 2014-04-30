@@ -21,12 +21,8 @@
 
 ;;; Code:
 
-(defvar emms-dir (concat src-dir "emms/"))
-(fni/add-to-load-path (concat emms-dir "lisp/"))
-(require 'emms-setup)
 (emms-standard)
 (emms-default-players)
-(require 'emms-player-mplayer-quiet)
 (add-to-list 'emms-player-list 'emms-player-mplayer-quiet)
 (add-to-list 'emms-player-list 'emms-player-mplayer-quiet-playlist)
 

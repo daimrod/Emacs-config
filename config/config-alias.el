@@ -18,7 +18,7 @@
 
 (defalias 'renb 'dmd/rename-buffer)
 (defalias 'srepl 'slime-repl)
-
+(defalias 'yes-or-no-p 'y-or-n-p)
 (defalias 'isp 'ispell-change-dictionary)
 
 (provide 'config-alias)

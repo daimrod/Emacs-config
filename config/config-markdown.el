@@ -16,8 +16,6 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(require 'markdown-mode)
-
 (define-key markdown-mode-map (kbd "M-TAB") 'yas/expand)
 
 (provide 'config-markdown)

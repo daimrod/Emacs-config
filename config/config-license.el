@@ -21,9 +21,6 @@
 
 ;;; Code:
 
-(require 'xlicense)
-
-(require 'skeleton)
 ;;; redefined skeleton (original in copyright.el)
 (define-skeleton copyright
   "Insert a copyright by $ORGANIZATION notice at cursor."

@@ -21,9 +21,6 @@
 
 ;;; Code:
 
-(fni/add-to-load-path "~/packages/rust/rust/src/etc/emacs")
-(require 'rust-mode)
-
 (provide 'config-rust)
 
 ;;; config-rust.el ends here

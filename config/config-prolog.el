@@ -16,11 +16,8 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(require 'prolog)
-
 (setq prolog-system 'swi)
 
-(require 'ediprolog)
 (global-set-key [f10] 'ediprolog-dwim)
 
 (setf auto-mode-alist

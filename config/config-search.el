@@ -21,10 +21,6 @@
 
 ;;; Code:
 
-(fni/add-to-load-path (concat src-dir "moccur"))
-(require 'color-moccur)
-(require 'moccur-edit)
-
 ;;; Keymap for characters following M-o.
 (define-prefix-command 'moccur-map)
 (define-key global-map (kbd "M-o") 'moccur-map)
@@ -33,7 +29,6 @@
 (define-key moccur-map (kbd "m") 'moccur)
 (define-key moccur-map (kbd "d") 'dmoccur)
 
-(require 'dired)
 (define-key dired-mode-map (kbd "M-o") 'moccur-map)
 
 (defalias 'mgrep 'moccur-grep)
