@@ -20,5 +20,7 @@
 (defalias 'srepl 'slime-repl)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (defalias 'isp 'ispell-change-dictionary)
+(defalias 'mgrep 'moccur-grep)
+(defalias 'mrgrep 'moccur-grep-find)
 
 (provide 'config-alias)

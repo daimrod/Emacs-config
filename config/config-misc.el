@@ -295,4 +295,6 @@
                             (visual-line-mode 1)
                             (adaptive-wrap-prefix-mode 1)))
 
+(global-company-mode 1)
+
 (provide 'config-misc)

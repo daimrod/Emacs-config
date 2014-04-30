@@ -18,8 +18,6 @@
 
 (setq prolog-system 'swi)
 
-(global-set-key [f10] 'ediprolog-dwim)
-
 (setf auto-mode-alist
       (mapcar (lambda (pair)
                 (if (equal (cdr pair) 'perl-mode)

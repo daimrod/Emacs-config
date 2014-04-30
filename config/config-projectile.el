@@ -23,8 +23,6 @@
 
 (projectile-global-mode)
 
-(define-key projectile-mode-map (kbd "C-c p a") 'projectile-ag)
-
 (advice-add 'compilation-find-file :around
             (lambda(oldfun &rest args)
               "Try to use `projectile.el' to find a buffer for file FILENAME.

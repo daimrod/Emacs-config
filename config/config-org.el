@@ -16,10 +16,6 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(add-to-list 'Info-directory-list
-             (expand-file-name (concat src-dir
-                                       "org-mode/doc")))
-
 (setq org-reveal-root "file:///home/daimrod/packages/reveal/")
 
 ;; Subcommands for org global keymap

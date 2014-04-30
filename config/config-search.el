@@ -21,19 +21,6 @@
 
 ;;; Code:
 
-;;; Keymap for characters following M-o.
-(define-prefix-command 'moccur-map)
-(define-key global-map (kbd "M-o") 'moccur-map)
-
-(define-key moccur-map (kbd "s") 'occur-by-moccur)
-(define-key moccur-map (kbd "m") 'moccur)
-(define-key moccur-map (kbd "d") 'dmoccur)
-
-(define-key dired-mode-map (kbd "M-o") 'moccur-map)
-
-(defalias 'mgrep 'moccur-grep)
-(defalias 'mrgrep 'moccur-grep-find)
-
 (setq dmoccur-list
       '(
         ;;name    directory            mask                option

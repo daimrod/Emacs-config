@@ -333,7 +333,6 @@ It uses magit internal."
   (start-process "doc-view external" (generate-new-buffer " *DocView External Viewer*")
                  "/usr/bin/evince" buffer-file-name))
 
-(require 'el-dispatcher)
 (defun dmd/open-pdf (file)
   (interactive "fFile: ")
   (list file))
@@ -348,5 +347,8 @@ It uses magit internal."
                                   (start-process (format "evince %S" file)
                                                  nil
                                                  "evince" file)))))
+
+(defadvice emms-start (after emms-show-track (&rest args) activate)
+  (emms-show))
 
 (provide 'config-defuns)

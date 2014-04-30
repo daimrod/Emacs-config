@@ -21,6 +21,16 @@
 
 ;;; Code:
 
+(add-to-list 'Info-additional-directory-list
+             (expand-file-name (concat src-dir "ebib")))
+
+(add-to-list 'Info-default-directory-list
+             (expand-file-name (concat src-dir "magit/")))
+
+(add-to-list 'Info-directory-list
+             (expand-file-name (concat src-dir
+                                       "org-mode/doc")))
+
 (provide 'config-doc)
 
 ;;; config-doc.el ends here

@@ -148,4 +148,37 @@ otherwise stop it."
 (define-key hs-minor-mode-map (kbd "C-c =") 'hs-show-block)
 (define-key hs-minor-mode-map (kbd "C-c +") 'hs-show-all)
 
+(define-key mode-specific-map (kbd "e") 'ebib)
+
+(global-set-key (kbd "C-SPC") 'company-complete)
+(global-set-key (kbd "M-C") 'company-yasnippet)
+
+(define-key mode-specific-map (kbd "g") 'magit-status)
+
+(define-key java-mode-map (kbd "C-h j") 'javadoc-lookup)
+(define-key eclim-mode-map (kbd "C-c C-e p r") 'eclim-run-class)
+
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(global-set-key (kbd "C-c C->") 'mc/mark-all-in-region)
+
+(global-set-key (kbd "C-c t") 'multi-term-next)
+(global-set-key (kbd "C-c T") 'multi-term)
+(global-set-key (kbd "C-x 4 t") 'multi-term-dedicated-toggle)
+
+(define-key projectile-mode-map (kbd "C-c p a") 'projectile-ag)
+
+(global-set-key [f10] 'ediprolog-dwim)
+
+(define-prefix-command 'moccur-map)
+(define-key global-map (kbd "M-o") 'moccur-map)
+
+(define-key moccur-map (kbd "s") 'occur-by-moccur)
+(define-key moccur-map (kbd "m") 'moccur)
+(define-key moccur-map (kbd "d") 'dmoccur)
+
+(define-key dired-mode-map (kbd "M-o") 'moccur-map)
+
 (provide 'config-bindings)

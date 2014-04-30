@@ -26,9 +26,6 @@
 (add-to-list 'emms-player-list 'emms-player-mplayer-quiet)
 (add-to-list 'emms-player-list 'emms-player-mplayer-quiet-playlist)
 
-(defadvice emms-start (after emms-show-track (&rest args) activate)
-  (emms-show))
-
 (provide 'config-emms)
 
 ;;; config-emms.el ends here

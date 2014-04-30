@@ -21,8 +21,6 @@
 
 ;;; Code:
 
-(defvar ensime-dir (concat src-dir "ensime/dist_2.9.2/"))
-(fni/add-to-load-path (concat ensime-dir "elisp/"))
 (setq-default scala-inf-buffer-name ensime-inf-buffer-name)
 
 ;; This step causes the ensime-mode to be started whenever

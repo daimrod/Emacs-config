@@ -21,12 +21,9 @@
 
 ;;; Code:
 
-(define-key java-mode-map (kbd "C-h j") 'javadoc-lookup)
-
 (javadoc-add-roots "/usr/share/doc/openjdk-7-jdk/api")
 
 (global-eclim-mode)
-(define-key eclim-mode-map (kbd "C-c C-e p r") 'eclim-run-class)
 (company-emacs-eclim-setup)
 
 (provide 'config-java)

@@ -16,8 +16,6 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(autoload 'smerge-mode "smerge-mode" nil t)
-
 (defun sm-try-smerge ()
   (save-excursion
     (goto-char (point-min))
