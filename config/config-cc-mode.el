@@ -27,4 +27,6 @@
         (c-mode . "k&r")
         (other . "linux")))
 
+(add-hook 'c-mode-common-hook 'ggtags-mode)
+
 (provide 'config-cc-mode)

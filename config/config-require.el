@@ -51,7 +51,6 @@
 (require 'magit-svn)
 (require 'magit-blame)
 (require 'magit-stgit)
-(require 'gtags)
 (require 'tidy-autoloads)
 (require 'rcirc)
 (require 'shoes-off-log)
