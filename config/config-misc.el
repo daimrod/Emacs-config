@@ -297,4 +297,7 @@
 
 (global-company-mode 1)
 
+;; gnuplot
+(add-to-list 'auto-mode-alist '("\\.gp\\'" . gnuplot-mode))
+
 (provide 'config-misc)
