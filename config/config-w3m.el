@@ -21,8 +21,7 @@
 
 ;;; Code:
 
-(setf w3m-init-file (concat dotfiles-dir "config-w3m")
-      browse-url-browser-function 'browse-url-w3)
+(setf w3m-init-file (concat dotfiles-dir "config-w3m"))
 
 (cl-flet ((w3m-add-search-engine-with-quickshort
            (search-engine)
