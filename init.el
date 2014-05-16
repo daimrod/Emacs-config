@@ -82,16 +82,177 @@ Do it recursively if the third argument is not nil."
         collect (intern (subseq config-file 0 (- (length config-file) 3))))
   "List of available configuration modules.")
 
+(defvar dmd/required
+  '(saveplace
+    ffap
+    uniquify
+    ansi-color
+    recentf
+    verbiste
+    info
+    ebib
+    key-chord
+    graze-url
+    compile-cache
+    dired
+    comint
+    doc-view
+    hideshow
+    gtk-lookup
+    semantic
+    semantic/ia
+    semantic/bovine/gcc
+    semantic/imenu
+    cedet-global
+    company
+    company-yasnippet
+    http-post-simple
+    thingatpt
+    imenu
+    bytecomp
+    el-dispatcher
+    doctags
+    ediff
+    emms-setup
+    emms-player-mplayer-quiet
+    magit
+    magit-svn
+    magit-blame
+    magit-stgit
+    tidy-autoloads
+    rcirc
+    shoes-off-log
+    shoes-off
+    cc-mode
+    javadoc-lookup
+    maven-fetch
+    eclim
+    eclimd
+    company-emacs-eclim
+    js2-mode
+    moz
+    xlicense
+    skeleton
+    elisp-slime-nav
+    redshank-loader
+    markdown-mode
+    workgroups
+    scratch
+    undo-tree
+    linum
+    ido
+    ido-ubiquitous
+    fic-ext-mode
+    markit
+    yaml-mode
+    dired-x
+    rainbow-mode
+    chm-view
+    cursor-chg
+    woman
+    browse-kill-ring
+    manual-tagging
+    w3m-wget
+    smart-tab
+    smerge-mode
+    edebug
+    compilation-font
+    parallel
+    ess
+    ess-site
+    adaptive-wrap
+    multiple-cursors
+    multi-term
+    tuareg
+    ocamldebug
+    org
+    ox-latex
+    ox-beamer
+    ox-md
+    ox-reveal
+    org-list
+    org-drill
+    org-ebib
+    ob-asymptote
+    ob-awk
+    ob-calc
+    ob-C
+    ob-clojure
+    ob-css
+    ob-ditaa
+    ob-dot
+    ob-emacs-lisp
+    ob-gnuplot
+    ob-haskell
+    ob-java
+    ob-js
+    ob-latex
+    ob-ledger
+    ob-lisp
+    ob-lilypond
+    ob-matlab
+    ob-mscgen
+    ob-ocaml
+    ob-octave
+    ob-org
+    ob-perl
+    ob-python
+    ob-R
+    ob-ruby
+    ob-sass
+    ob-scheme
+    ob-screen
+    ob-sh
+    ob-sql
+    ob-sqlite
+    calendar
+    diary-lib
+    org-annotate-file
+    os
+    os-bb
+    os-github
+    os-rmine
+    org-contacts
+    org-magit
+    plantuml-mode
+    ob-plantuml
+    projectile
+    ag
+    prolog
+    ediprolog
+    view
+    rust-mode
+    scala-mode-auto
+    ensime
+    color-moccur
+    moccur-edit
+    slime-autoloads
+    slime
+    info-look
+    smartparens
+    smartparens-config
+    latex
+    preview
+    w3m-load
+    w3m
+    w3m-search
+    browse-url
+    xmlgen
+    sgml-mode
+    sxml<->xml
+    xwidget
+    parallel-xwidget
+    yasnippet)
+  "List of required modules")
+
 (add-hook 'after-init-hook
           (lambda ()
             ;; This needs to be done in `after-init-hook' to override
             ;; packages provided by ELPA.
             (fni/add-to-load-path src-dir t t)
-
+            
             (load (expand-file-name "~/quicklisp/slime-helper.el"))
             (load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
-            ;; All required definitions go here
-            (require 'config-require)
 
             (mapc (lambda (module)
                     (message "Loading %s" module)
@@ -99,7 +260,7 @@ Do it recursively if the third argument is not nil."
                     (unless (ignore-errors (require module))
                       (warn "Failed to load module `%s'" module))
                     )
-                  dmd/modules)
+                  (append dmd/required dmd/modules))
 
             (when (fboundp 'org-agenda-list)
               (org-agenda-list))))
