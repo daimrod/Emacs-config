@@ -203,7 +203,8 @@
 (global-set-key (kbd "C-M-y") 'browse-kill-ring)
 
 (setq-default user-mail-address "daimrod@gmail.com"
-              user-full-name "Grégoire Jadi")
+              user-full-name "Grégoire Jadi"
+              user-email-address user-mail-address)
 
 ;;; column-number in the modeline
 (column-number-mode 1)
