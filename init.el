@@ -239,6 +239,7 @@ Do it recursively if the third argument is not nil."
     w3m-search
     browse-url
     xmlgen
+    buffer-switch
     sgml-mode
     sxml<->xml
     xwidget
