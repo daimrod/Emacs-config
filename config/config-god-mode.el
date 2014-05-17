@@ -40,6 +40,13 @@
 (add-hook 'god-mode-enabled-hook 'dmd/update-cursor)
 (add-hook 'god-mode-disabled-hook 'dmd/update-cursor)
 
+(defun dmd/update-mode-line ()
+  (let ((limited-colors-p (< (length (defined-colors)) 256)))
+    (cond (god-local-mode (progn
+                            (set-face-background 'mode-line (if limited-colors-p "blue" "RoyalBlue4"))))
+          (t (progn
+               (set-face-background 'mode-line (if limited-colors-p "black" "#222222")))))))
+
 (provide 'config-god-mode)
 
 ;;; config-god-mode.el ends here
