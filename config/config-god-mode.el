@@ -47,6 +47,10 @@
           (t (progn
                (set-face-background 'mode-line (if limited-colors-p "black" "#222222")))))))
 
+(add-hook 'after-buffer-switch-hook 'dmd/update-mode-line)
+(add-hook 'god-mode-enabled-hook 'dmd/update-mode-line)
+(add-hook 'god-mode-disabled-hook 'dmd/update-mode-line)
+
 (provide 'config-god-mode)
 
 ;;; config-god-mode.el ends here
