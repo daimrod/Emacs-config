@@ -165,7 +165,6 @@ Do it recursively if the third argument is not nil."
     multi-term
     tuareg
     ocamldebug
-    god-mode
     org
     ox-latex
     ox-beamer
