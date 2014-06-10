@@ -106,7 +106,7 @@ the terms searched."
       (kill-new url)
       (message "%s" url))))
 
-(defun gu-browse-url ()
+(defun gu-browse-url (&rest _)
   (interactive)
   (list (read-string "URL: "
                      (or (and transient-mark-mode mark-active
