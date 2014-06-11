@@ -47,6 +47,9 @@
          pair
        (define-key map (read-kbd-macro key) def)))
    `(("g" . dmd/w3m-browse-url)
+     ("q" . w3m-delete-buffer)
+     ("n" . w3m-next-buffer)
+     ("p" . w3m-previous-buffer)
      ("G" . dmd/w3m-browse-url-new-session)
      ("F" . w3m-view-next-page)))
   (setf w3m-mode-map map))
