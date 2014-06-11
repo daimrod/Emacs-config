@@ -23,24 +23,6 @@
 
 (projectile-global-mode)
 
-(advice-add 'compilation-find-file :around
-            (lambda(oldfun &rest args)
-              "Try to use `projectile.el' to find a buffer for file FILENAME.
-If we cannot find it, fallback to the original function."
-              (destructuring-bind (marker filename directory &rest formats) args
-                (or
-                 ;; Try to find the filename using projectile
-                 (and (projectile-project-p)
-                      (loop with root = (projectile-project-root)
-                            for dir in (projectile-current-project-dirs)
-                            for file = (expand-file-name filename
-                                                         (expand-file-name dir root))
-                            if (file-exists-p file)
-                            return (find-file-noselect file)))
-                 ;; Fall back to the old function `compilation-find-file'
-                 (apply oldfun marker filename directory formats))))
-            '((name . compilation-with-projectile-dirs)))
-
 (provide 'config-projectile)
 
 ;;; config-projectile.el ends here
