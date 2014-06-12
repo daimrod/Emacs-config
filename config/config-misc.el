@@ -301,4 +301,7 @@
 ;; gnuplot
 (add-to-list 'auto-mode-alist '("\\.gp\\'" . gnuplot-mode))
 
+;; Ace Window
+(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+
 (provide 'config-misc)

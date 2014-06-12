@@ -243,6 +243,7 @@ Do it recursively if the third argument is not nil."
     sxml<->xml
     xwidget
     parallel-xwidget
+    ace-window
     yasnippet)
   "List of required modules")
 
@@ -259,8 +260,7 @@ Do it recursively if the third argument is not nil."
                     (message "Loading %s" module)
                     ;; (require module)
                     (unless (ignore-errors (require module))
-                      (warn "Failed to load module `%s'" module))
-                    )
+                      (warn "Failed to load module `%s'" module)))
                   (append dmd/required dmd/modules))
 
             (when (fboundp 'org-agenda-list)
