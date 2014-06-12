@@ -304,4 +304,7 @@
 ;; Ace Window
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
+;; ws-trim
+(global-ws-trim-mode 1)
+
 (provide 'config-misc)
