@@ -98,10 +98,12 @@
 ;;; another frame should be an xterm or similar.
 (global-set-key (kbd "C-x 5 t") 'dmd/terminal-emulator)
 
-(key-chord-define-global "QP" 'ace-jump-word-mode)
-(key-chord-define-global "QO" 'ace-jump-char-mode)
-(key-chord-define-global "QL" 'ace-jump-line-mode)
-(key-chord-define-global "QD" 'ace-jump-mode-pop-mark)
+(define-key global-map (kbd "M-s") 'ace-map)
+(define-prefix-command 'ace-map)
+(define-key ace-map (kbd "w") 'ace-jump-word-mode)
+(define-key ace-map (kbd "l") 'ace-jump-line-mode)
+(define-key ace-map (kbd "c") 'ace-jump-char-mode)
+(define-key ace-map (kbd "p") 'ace-jump-mode-pop-mark)
 
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
 
