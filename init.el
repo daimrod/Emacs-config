@@ -245,6 +245,7 @@ Do it recursively if the third argument is not nil."
     parallel-xwidget
     ace-window
     ws-trim
+    marmalade-upload
     yasnippet)
   "List of required modules")
 
