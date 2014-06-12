@@ -103,10 +103,11 @@
 (setq org-latex-preview-ltxpng-directory "/tmp/ltxpng/")
 (make-directory org-latex-preview-ltxpng-directory t)
 
-;; Remove annoying bindings
-(mapc (lambda (key)
-        (dmd/remove-key key org-mode-map))
-      '("<S-left>" "<S-right>" "<S-up>" "<S-down>"))
+;; Make windmove work in org-mode:
+(add-hook 'org-shiftup-final-hook 'windmove-up)
+(add-hook 'org-shiftleft-final-hook 'windmove-left)
+(add-hook 'org-shiftdown-final-hook 'windmove-down)
+(add-hook 'org-shiftright-final-hook 'windmove-right)
 
 ;; Org File Apps
 (advice-add 'org-open-at-point :filter-args
