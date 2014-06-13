@@ -16,16 +16,15 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(eval-after-load "multi-term"
-                 '(setq multi-term-program "/bin/bash"
-                   term-unbind-key-list '("C-x"
-                                          "C-h"
-                                          "M-x"
-                                          "C-z")
-                   ;; required to configure properly the environment
-                   ;; with AnSiT? variables in .bashrc
-                   ;; TERM is restored to xterm-256-color after that.
-                   term-term-name "xterm-256color"))
+(setq multi-term-program "/bin/bash"
+      term-unbind-key-list '("C-x"
+                             "C-h"
+                             "M-x"
+                             "C-z")
+      ;; required to configure properly the environment
+      ;; with AnSiT? variables in .bashrc
+      ;; TERM is restored to xterm-256-color after that.
+      term-term-name "xterm-256color")
 
 (add-hook 'term-mode-hook
           (lambda ()
