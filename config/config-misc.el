@@ -248,9 +248,6 @@
 ;; Compilation
 (add-hook 'compilation-start-hook 'compilation-font-lock-manager)
 
-;; Use The Source Luke!
-(setq find-function-C-source-directory (expand-file-name "~/packages/xwidget-emacs/src")) ;
-
 ;; Recutils
 (autoload 'rec-mode "rec-mode")
 

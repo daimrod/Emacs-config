@@ -109,6 +109,8 @@
 (add-hook 'org-shiftdown-final-hook 'windmove-down)
 (add-hook 'org-shiftright-final-hook 'windmove-right)
 
+(setq-default org-element-use-cache nil)
+
 ;; Org File Apps
 (advice-add 'org-open-at-point :filter-args
               ;; Filter out any parameters
