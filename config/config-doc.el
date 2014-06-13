@@ -24,10 +24,10 @@
 (add-to-list 'Info-additional-directory-list
              (expand-file-name (concat src-dir "ebib")))
 
-(add-to-list 'Info-default-directory-list
+(add-to-list 'Info-additional-directory-list
              (expand-file-name (concat src-dir "magit/")))
 
-(add-to-list 'Info-directory-list
+(add-to-list 'Info-additional-directory-list
              (expand-file-name (concat src-dir
                                        "org-mode/doc")))
 
