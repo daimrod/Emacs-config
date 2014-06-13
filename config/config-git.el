@@ -18,22 +18,7 @@
 
 (add-hook 'magit-mode-hook 'magit-load-config-extensions)
 
-(add-hook 'magit-mode-hook 'turn-on-magit-stgit)
-
 ;;; m0ar context for diff thunks
 (setq magit-diff-context-lines 5)
-
-(add-hook 'magit-log-edit-mode-hook 'change-log-mode)
-(defvar dmd/magit-changelog-mode-map
-  (let ((map (copy-keymap magit-log-edit-mode-map)))
-    (set-keymap-parent map change-log-mode-map)
-    map))
-
-(defadvice change-log-mode (after change-log-magit-setup (&rest args) activate)
-  (when (string= (buffer-name)
-                 "*magit-edit-log*")
-    (use-local-map dmd/magit-changelog-mode-map)
-    (setf tab-width 4
-          left-margin 0)))
 
 (provide 'config-git)
