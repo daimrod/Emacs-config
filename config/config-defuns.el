@@ -292,11 +292,6 @@ It uses magit internal."
     (error "No active region"))
   (add-face-text-property start end (read (read-from-minibuffer "Property: "))))
 
-(defun dmd/remove-key (key &optional keymap)
-  "Remove KEY from KEYMAP."
-  (setf keymap (or keymap (current-global-map)))
-  (substitute-key-definition (lookup-key keymap key) nil keymap))
-
 (defun youtube-dl (url)
   (interactive "MURL: ")
   (let* ((buffer (get-buffer-create (format "*Youtube DL %s*" url)))

@@ -184,6 +184,4 @@ otherwise stop it."
 
 (define-key dired-mode-map (kbd "M-o") 'moccur-map)
 
-(dmd/remove-key (kbd "M-s") gnus-summary-mode-map)
-
 (provide 'config-bindings)
