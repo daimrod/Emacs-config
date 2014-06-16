@@ -160,6 +160,16 @@ Do it recursively if the third argument is not nil."
     parallel
     ess
     ess-site
+    gnus
+    gnus-msg
+    sendmail
+    message
+    mm-decode
+    mail-utils
+    nnir
+    epg
+    epa-mail
+    ido-gnus
     adaptive-wrap
     multiple-cursors
     multi-term
