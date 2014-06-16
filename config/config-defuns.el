@@ -55,14 +55,6 @@
                        (- (point) 1)
                      (+ (point) 1))))))
 
-(defun dmd/recompile-config ()
-  (interactive)
-  (map nil (lambda (file)
-             (if (file-exists-p file)
-                 (byte-compile-file file)))
-       '("~/.gnus.el"))
-  (byte-recompile-directory dotfiles-dir 0))
-
 (defun move-to-window-line-top ()
   (interactive)
   (move-to-window-line 0))
