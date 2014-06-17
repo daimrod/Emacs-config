@@ -92,12 +92,23 @@
 (ido-mode 1)
 (ido-ubiquitous-mode 1)
 
+;; Prefer text-mode over fundamental-mode
+(setq-default major-mode 'text-mode)
+
 ;; Text-mode Hook
-(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
-(add-hook 'text-mode-hook (lambda () (activate-input-method "latin-postfix")))
+(add-hook 'text-mode-hook (lambda ()
+                            (activate-input-method "latin-postfix")
+                            (visual-line-mode 1)
+                            (adaptive-wrap-prefix-mode 1)))
 
 ;; Prog-mode Hook
 (add-hook 'prog-mode-hook (lambda () (activate-input-method "ucs")))
+
+;; Gnus Article Mode
+(add-hook 'gnus-article-mode-hook
+          (lambda ()
+            (visual-line-mode 1)
+            (adaptive-wrap-prefix-mode 1)))
 
 (require' fic-ext-mode)
 (add-hook 'prog-mode-hook 'fic-ext-mode)
@@ -146,9 +157,6 @@
 
 ;; hide the cursor in the others windows
 (setq-default cursor-in-non-selected-windows nil)
-
-;; Prefer text-mode over fundamental-mode
-(setq-default major-mode 'text-mode)
 
 ;; enable Zaps mode everywhere
 (require 'markit)
@@ -287,11 +295,6 @@
         (background-color . "#ccaa8f")
         (background-color . "#f6f3e8")
         nil nil])
-
-;; Adaptive Visual
-(add-hook 'text-mode-hook (lambda ()
-                            (visual-line-mode 1)
-                            (adaptive-wrap-prefix-mode 1)))
 
 (global-company-mode 1)
 
