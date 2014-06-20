@@ -32,16 +32,10 @@
     (let ((limited-colors-p (< (length (defined-colors)) 256)))
       (cond (god-local-mode
              (set-face-background 'mode-line (if limited-colors-p "blue" "RoyalBlue4"))
-
-             (setq cursor-type 'box)
-
              (setq-local dmd/input-method (or current-input-method dmd/input-method))
              (activate-input-method "ucs"))
             (t
              (set-face-background 'mode-line (if limited-colors-p "black" "#222222"))
-
-             (setq cursor-type 'bar)
-
              (activate-input-method dmd/input-method))))))
 
 (provide 'config-god-mode)

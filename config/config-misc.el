@@ -307,4 +307,9 @@
 ;; ws-trim
 (global-ws-trim-mode 1)
 
+(add-hook 'buffer-list-update-hook
+          (lambda ()
+            (with-current-buffer (window-buffer)
+              (setq cursor-type (if buffer-read-only 'box 'bar)))))
+
 (provide 'config-misc)
