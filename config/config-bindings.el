@@ -184,4 +184,7 @@ otherwise stop it."
 
 (define-key dired-mode-map (kbd "M-o") 'moccur-map)
 
+(global-set-key (kbd "s-f") 'god-mode-all)
+(global-set-key (kbd "s-c") 'god-local-mode)
+
 (provide 'config-bindings)
