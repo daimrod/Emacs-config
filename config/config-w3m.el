@@ -51,7 +51,8 @@
      ("n" . w3m-next-buffer)
      ("p" . w3m-previous-buffer)
      ("G" . dmd/w3m-browse-url-new-session)
-     ("F" . w3m-view-next-page)))
+     ("F" . w3m-view-next-page)
+     ("M-s" . nil)))
   (setf w3m-mode-map map))
 
 (defun dmd/w3m-browse-url (url prefix)
