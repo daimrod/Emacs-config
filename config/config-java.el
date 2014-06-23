@@ -23,8 +23,7 @@
 
 (javadoc-add-roots "/usr/share/doc/openjdk-7-jdk/api")
 
-(global-eclim-mode)
-(company-emacs-eclim-setup)
+(add-hook 'global-eclim-mode-hook 'company-emacs-eclim-setup)
 
 (provide 'config-java)
 
