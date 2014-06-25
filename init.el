@@ -70,6 +70,11 @@ Do it recursively if the third argument is not nil."
 (byte-compile-disable-warning 'cl-functions)
 (require 'cl)
 
+;; Allow SIGUSR2 to "unfreeze" emacs when it blocks in jit-lock
+(advice-add 'jit-lock--debug-fontify :around
+            (lambda (fun &rest args)
+              (with-local-quit (apply fun args))))
+
 ;; ELPA configuration
 (setq package-archives
 	  '(("ELPA" . "http://tromey.com/elpa/") 
