@@ -28,7 +28,7 @@
 (add-hook 'god-mode-disabled-hook 'dmd/god-mode-setup)
 
 (defun dmd/god-mode-setup ()
-  (with-current-buffer (window-buffer)
+  (when (eq (current-buffer) (window-buffer))
     (let ((limited-colors-p (< (length (defined-colors)) 256)))
       (cond (god-local-mode
              (set-face-background 'mode-line (if limited-colors-p "blue" "RoyalBlue4"))
