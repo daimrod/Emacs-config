@@ -55,6 +55,9 @@
      ("M-s" . nil)))
   (setf w3m-mode-map map))
 
+(add-hook 'w3m-mode-hook (lambda ()
+                           (adaptive-wrap-prefix-mode 1)))
+
 (defun dmd/w3m-browse-url (url prefix)
   "Ask emacs-w3m to browse URL."
   (interactive
