@@ -21,7 +21,7 @@
 
 ;;; Code:
 
-(defvar dmd/input-method nil)
+(defvar-local dmd/input-method nil)
 
 (add-hook 'buffer-list-update-hook 'dmd/god-mode-setup)
 (add-hook 'god-mode-enabled-hook 'dmd/god-mode-setup)
@@ -33,10 +33,12 @@
       (cond (god-local-mode
              (set-face-background 'mode-line (if limited-colors-p "blue" "RoyalBlue4"))
              (setq-local dmd/input-method (or current-input-method dmd/input-method))
+             (setf dmd/input-method current-input-method)
              (activate-input-method "ucs"))
             (t
              (set-face-background 'mode-line (if limited-colors-p "black" "#222222"))
-             (activate-input-method dmd/input-method))))))
+             (when dmd/input-method
+               (activate-input-method dmd/input-method)))))))
 
 (provide 'config-god-mode)
 
