@@ -344,4 +344,9 @@ It uses magit internal."
     (insert-file-contents filename visit beg end replace)
     (split-string (buffer-string) "\n" t)))
 
+(defsubst /. (dividend &rest divisors)
+  "Like `/' but uses floating number by coercing the DIVIDEND to
+float."
+  (apply #'/ (coerce dividend 'float) divisors))
+
 (provide 'config-defuns)
