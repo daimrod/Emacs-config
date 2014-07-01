@@ -338,4 +338,10 @@ It uses magit internal."
 (defadvice emms-start (after emms-show-track (&rest args) activate)
   (emms-show))
 
+(defun dmd/read-lines (filename &optional visit beg end replace)
+  "Return a list of lines in FILENAME."
+  (with-temp-buffer
+    (insert-file-contents filename visit beg end replace)
+    (split-string (buffer-string) "\n" t)))
+
 (provide 'config-defuns)
