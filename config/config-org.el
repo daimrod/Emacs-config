@@ -123,4 +123,7 @@
         ("\\.pdf\\'" . (let ((dispatcher-prefix-arg current-prefix-arg)) (dmd/open-pdf file)))
         (t . emacs)))
 
+(add-to-list 'org-export-filter-headline-functions
+             'org-latex-ignore-heading-filter-headline)
+
 (provide 'config-org)
