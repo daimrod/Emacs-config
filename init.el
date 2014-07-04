@@ -182,6 +182,7 @@ Do it recursively if the third argument is not nil."
     ocamldebug
     god-mode
     org
+    ox
     ox-latex
     ox-beamer
     ox-md
