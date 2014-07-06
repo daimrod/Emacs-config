@@ -68,7 +68,8 @@
 ;;; export Latex
 (setq org-latex-default-packages-alist nil
       org-latex-packages-alist
-      '(("AUTO" "inputenc" t)
+      '(("table" "xcolor" nil)
+        ("AUTO" "inputenc" t)
         ("" "listings" t)
         ("" "minted" t)
         ("" "tikz" t)
