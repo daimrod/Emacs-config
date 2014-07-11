@@ -33,7 +33,7 @@
         global-semantic-idle-completions-mode
         global-semantic-decoration-mode))
 
-(semantic-mode 1)
+;; (semantic-mode 1)
 
 (setq-mode-local c-mode semanticdb-find-default-throttle
                  '(project unloaded system recursive))
