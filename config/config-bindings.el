@@ -67,8 +67,8 @@
 ;; remove C-x C-z
 (global-unset-key (kbd "C-x C-z"))
 
-;; never quit emacs daemon
-(global-set-key (kbd "C-x C-c") 'dmd/quit-or-hide)
+;; remove C-x C-c
+(global-unset-key (kbd "C-x C-c"))
 
 ;; manage url at point
 (eval-after-load "graze-url"
