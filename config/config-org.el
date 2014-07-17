@@ -124,6 +124,13 @@
         ("\\.pdf\\'" . (let ((dispatcher-prefix-arg current-prefix-arg)) (dmd/open-pdf file)))
         (t . emacs)))
 
+;;; Nicolas Goaziou, http://article.gmane.org/gmane.emacs.orgmode/67692
+(defun org-latex-ignore-heading-filter-headline (headline backend info)
+  "Strip headline from HEADLINE. Ignore BACKEND and INFO."
+  (when (and (org-export-derived-backend-p backend 'latex)
+             (string-match "\\`.*ignoreheading.*\n" headline))
+    (replace-match "" nil nil headline)))
+
 (add-to-list 'org-export-filter-headline-functions
              'org-latex-ignore-heading-filter-headline)
 
