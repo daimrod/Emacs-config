@@ -134,4 +134,6 @@
 (add-to-list 'org-export-filter-headline-functions
              'org-latex-ignore-heading-filter-headline)
 
+(setq org-export-async-init-file (expand-file-name "init-org-async.el" dotfiles-dir))
+
 (provide 'config-org)
