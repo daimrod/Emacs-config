@@ -46,18 +46,6 @@
 (add-hook 'mail-mode-hook 'turn-on-orgstruct)
 (add-hook 'mail-mode-hook 'turn-on-orgstruct++)
 
-;; customize TODO keywords
-(setq org-todo-keywords
-      '((sequence "TODO" "|" "DONE(@)")
-        (sequence "WAIT(w@/!)" "|" "CANCELLED(@)")
-        (sequence "TOREAD" "|" "READ")
-        (sequence "TOREPORT" "|" "DONE(@)")
-        (sequence "TOSUBMIT" "|" "DONE(@)")
-        (sequence "TOANSWER" "|" "ANSWERED")
-        (sequence "BUG" "|" "FIXED(@)")
-        (sequence "FEATURE" "|" "IMPLEMENTED(@)")
-        (sequence "|" "MEMO" "HOWTO")))
-
 ;; fontify src code
 (setq org-src-fontify-natively t)
 
