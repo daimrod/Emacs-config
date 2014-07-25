@@ -123,7 +123,6 @@ Do it recursively if the third argument is not nil."
     magit
     magit-svn
     magit-blame
-    magit-stgit
     tidy-autoloads
     rcirc
     shoes-off-log
