@@ -362,6 +362,6 @@ float."
   (activate-input-method "latin-postfix")
   (visual-line-mode 1)
   (adaptive-wrap-prefix-mode 1)
-  (flyspell-mode-on))
+  (flyspell-mode 1))
 
 (provide 'config-defuns)
