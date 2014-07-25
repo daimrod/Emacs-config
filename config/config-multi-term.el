@@ -39,6 +39,9 @@
                   transient-mark-mode nil)
             (auto-fill-mode -1)
 
+            ;; Disable yasnippet
+            (yas-minor-mode -1)
+
             ;; awesome bindings available!
             (compilation-shell-minor-mode t)))
 
