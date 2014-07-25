@@ -99,10 +99,13 @@
 (add-hook 'text-mode-hook (lambda ()
                             (activate-input-method "latin-postfix")
                             (visual-line-mode 1)
-                            (adaptive-wrap-prefix-mode 1)))
+                            (adaptive-wrap-prefix-mode 1)
+                            (flyspell-mode-on)))
 
 ;; Prog-mode Hook
-(add-hook 'prog-mode-hook (lambda () (activate-input-method "ucs")))
+(add-hook 'prog-mode-hook (lambda ()
+                            (activate-input-method "ucs")
+                            (flyspell-prog-mode)))
 
 ;; Gnus Article Mode
 (add-hook 'gnus-article-mode-hook
@@ -306,10 +309,5 @@
 
 ;; ws-trim
 (global-ws-trim-mode 1)
-
-(add-hook 'buffer-list-update-hook
-          (lambda ()
-            (with-current-buffer (window-buffer)
-              (setq cursor-type (if buffer-read-only 'box 'bar)))))
 
 (provide 'config-misc)
