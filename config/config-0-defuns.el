@@ -349,4 +349,19 @@ It uses magit internal."
 float."
   (apply #'/ (coerce dividend 'float) divisors))
 
+(defun ido-disable-line-truncation ()
+  (set (make-local-variable 'truncate-lines) nil))
+
+(defun ido-define-keys ()
+  ;; C-n/p is more intuitive in vertical layout
+  (define-key ido-completion-map (kbd "C-n") 'ido-next-match)
+  (define-key ido-completion-map (kbd "C-p") 'ido-prev-match))
+
+(defun dmd/text-mode-setup ()
+  (interactive)
+  (activate-input-method "latin-postfix")
+  (visual-line-mode 1)
+  (adaptive-wrap-prefix-mode 1)
+  (flyspell-mode-on))
+
 (provide 'config-defuns)
