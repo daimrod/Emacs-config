@@ -5,7 +5,7 @@
 ;; Author: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Maintainer: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Created: 27th October 2011
-;; Version: 1.0.3
+;; Version: 1.0.5
 ;; Package-requires: ((noflet "0.0.3")(kv "0.0.17"))
 ;; Keywords: lisp, creole, wiki
 
@@ -43,10 +43,21 @@
 
 (require 'htmlfontify)
 (require 'org-table)
+(require 'calc)
 (require 'rx)
 (require 'noflet)
 (require 'cl)
 (require 'kv)
+
+(defmacro when1 (expr &rest body)
+  "Evaluate BODY when EXPR but return EXPR."
+  (declare (debug (form &rest form))
+           (indent 1))
+  (let ((expr-val (make-symbol "expr-val")))
+    `(let ((,expr-val ,expr))
+       (when ,expr-val
+         ,@body)
+       ,expr-val)))
 
 (defgroup creole nil
   "A WikiCreole parser and associated tools."
@@ -657,8 +668,12 @@ Returns a list of parsed elements."
                (setq res (append res (list (cons 'preformatted str))))
                (goto-char end)))
             (;; Lisp-plugin
-             (looking-at
-              (rx bol "\n" "<<(" eol))
+             (or (looking-at (rx bol "\n" "<<(" eol))
+                 (and (looking-at "^<<(")
+                      (when1 (save-excursion
+                               (previous-line)
+                               (looking-at (rx bol "\n" "<<(")))
+                        (previous-line))))
              (if (not
                   (re-search-forward
                    (rx bol
@@ -680,14 +695,21 @@ Returns a list of parsed elements."
                (setq res (append res plugin-fragment)))
              (forward-line))
             (;; HTML-plugin
-             (looking-at "^\n<<html$")
+             (or (looking-at "^\n<<html\n")
+                 (and
+                  (looking-at "<<html\n")
+                  (when1
+                      (save-excursion
+                        (previous-line)
+                        (looking-at "\n<<html\n"))
+                    (previous-line))))
              (if (not
                   (re-search-forward
                    (rx bol
                        "\n"
                        "<<html"
                        "\n"
-                       (group (*? anything))
+                       (group-n 1 (*? anything))
                        "\n"
                        "html>>"
                        eol) nil t))
@@ -698,6 +720,7 @@ Returns a list of parsed elements."
              (forward-line))
             (;; Paragraph line
              (and (looking-at (rx bol (not (any "=*"))))
+                  (not (looking-at (rx bol "<<html")))
                   (not (looking-at (rx bol eol))))
              (let* ((start (point))
                     (end
@@ -706,13 +729,15 @@ Returns a list of parsed elements."
                                ;; Find the end - the end is actually BEFORE this
                                (re-search-forward
                                 (rx (or (group bol eol)
-                                        (group bol (in "=*"))))
+                                        (group bol (in "=*"))
+                                        (group eol "\nhtml>>\n")))
                                 nil 't))
                               (matched (if matched-end (match-string 0))))
                          (cond
                            ((equal matched "") (- matched-end 1))
                            ((equal matched "*") (- matched-end 2))
                            ((equal matched "=") (- matched-end 2))
+                           ((equal matched "\n<<html") (- matched-end 8))
                            (t
                             (point-max)))))))
                (setq res
@@ -1076,7 +1101,7 @@ an anchor is added automatically."
                      &optional html-buffer
                      &key result-mode
                      (erase-existing t)
-                     do-font-lock
+                     (do-font-lock t)
                      switch-to
                      structure-transform-fn)
   "Export DOCBUF as HTML to HTML-BUFFER.
@@ -1094,7 +1119,8 @@ If ERASE-EXISTING is not nil then any existing content in the
 HTML-BUFFER is erased before rendering.  By default this is true.
 
 If DO-FONT-LOCK is not nil then any pre-formatted areas tested
-for fontification with `creole-htmlize/mode-func'.
+for fontification with `creole-htmlize/mode-func'.  It is `t' by
+default.
 
 If SWITCH-TO is not nil then the HTML-BUFFER is switched to when
 the export is done.

@@ -1,3 +1,22 @@
+2014-07-22  Tassilo Horn  <tsdh@gnu.org>
+
+	release 11.87.7
+
+2014-07-22  Tassilo Horn  <tsdh@gnu.org>
+
+	Highlighting fix for bib-cite.el
+
+	* bib-cite.el (bib-highlight-mouse): Change regexp to cope with 
+	multiple optional arguments of a macro.
+
+2014-07-14  Tassilo Horn  <tsdh@gnu.org>
+
+	Release 11.87.6
+
+2014-07-14  Tassilo Horn  <tsdh@gnu.org>
+
+	Fix date format.
+
 2014-05-23  Tassilo Horn  <tsdh@gnu.org>
 
 	Release 11.87.5.
