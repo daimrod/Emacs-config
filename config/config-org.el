@@ -44,6 +44,7 @@
 ;; enable silent org-mode within mail
 (add-hook 'mail-mode-hook 'turn-on-orgstruct)
 (add-hook 'mail-mode-hook 'turn-on-orgstruct++)
+(add-hook 'mail-mode-hook 'turn-on-orgtbl)
 
 ;; fontify src code
 (setq org-src-fontify-natively t)
