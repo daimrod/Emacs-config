@@ -187,4 +187,6 @@ otherwise stop it."
 (global-set-key (kbd "s-f") 'god-mode-all)
 (global-set-key (kbd "s-c") 'god-local-mode)
 
+(define-key org-mode-map (kbd "C-c )") 'reftex-citation)
+
 (provide 'config-bindings)

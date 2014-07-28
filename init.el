@@ -180,6 +180,7 @@ Do it recursively if the third argument is not nil."
     tuareg
     ocamldebug
     god-mode
+    reftex
     org
     ox
     ox-latex

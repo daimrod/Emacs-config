@@ -359,8 +359,14 @@ float."
 
 (defun dmd/text-mode-setup ()
   (interactive)
-  (activate-input-method "latin-postfix")
+  (activate-input-method "latin-post fix")
   (visual-line-mode 1)
   (adaptive-wrap-prefix-mode 1))
+
+(defun dmd/org-mode-reftext-setup ()
+  (interactive)
+  (and (buffer-file-name)
+       (file-exists-p (buffer-file-name))
+       (reftex-parse-all))))
 
 (provide 'config-defuns)

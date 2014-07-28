@@ -127,4 +127,6 @@
 
 (setq org-export-async-init-file (expand-file-name "init-org-async.el" dotfiles-dir))
 
+(add-hook 'org-mode-hook 'dmd/org-mode-reftext-setup)
+
 (provide 'config-org)
