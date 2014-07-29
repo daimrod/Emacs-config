@@ -42,9 +42,9 @@
 (setq-default org-reverse-note-order t)
 
 ;; enable silent org-mode within mail
-(add-hook 'mail-mode-hook 'turn-on-orgstruct)
-(add-hook 'mail-mode-hook 'turn-on-orgstruct++)
-(add-hook 'mail-mode-hook 'turn-on-orgtbl)
+(add-hook 'message-mode-hook 'turn-on-orgstruct)
+(add-hook 'message-mode-hook 'turn-on-orgstruct++)
+(add-hook 'message-mode-hook 'turn-on-orgtbl)
 
 ;; fontify src code
 (setq org-src-fontify-natively t)

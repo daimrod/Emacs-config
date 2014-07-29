@@ -189,4 +189,6 @@ otherwise stop it."
 
 (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
 
+(define-key message-mode-map (kbd "C-c C-c") nil)
+
 (provide 'config-bindings)
