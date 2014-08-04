@@ -130,4 +130,11 @@
 
 (add-hook 'org-mode-hook 'dmd/org-mode-reftext-setup)
 
+;; Prompt for a date for CAPTURE_TIME properties
+(add-to-list 'org-property-set-functions-alist
+             (cons "CAPTURE_TIME" '(lambda (prompt collection
+                                                   &optional predicate require-match initial-input
+                                                   hist def inherit-input-method)
+                                     (format-time-string "[%Y-%m-%d %a]" (org-read-date nil 'totime nil prompt nil def nil)))))
+
 (provide 'config-org)
