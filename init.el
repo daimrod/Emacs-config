@@ -182,6 +182,7 @@ Do it recursively if the third argument is not nil."
     god-mode
     reftex
     org
+    org-agenda
     ox
     ox-latex
     ox-beamer
