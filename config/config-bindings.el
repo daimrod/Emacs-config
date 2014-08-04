@@ -191,4 +191,6 @@ otherwise stop it."
 
 (define-key message-mode-map (kbd "C-c C-c") nil)
 
+(define-key org-agenda-mode-map (kbd "x") nil)
+
 (provide 'config-bindings)
