@@ -135,6 +135,6 @@
              (cons "CAPTURE_TIME" '(lambda (prompt collection
                                                    &optional predicate require-match initial-input
                                                    hist def inherit-input-method)
-                                     (format-time-string "[%Y-%m-%d %a]" (org-read-date nil 'totime nil prompt nil def nil)))))
+                                     (format-time-string "[%Y-%m-%d %a %H:%M]" (org-read-date nil 'totime nil prompt nil def nil)))))
 
 (provide 'config-org)
