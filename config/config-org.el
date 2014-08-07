@@ -104,13 +104,6 @@
 
 (setq-default org-element-use-cache nil)
 
-;; Org File Apps
-(advice-add 'org-open-at-point :filter-args
-              ;; Filter out any parameters
-              (lambda (&optional arg reference-buffer)
-                nil)
-              '((name . org-open-at-point-del-args)))
-
 (setf org-file-apps
       '(("\\.x?html?\\'" . (let ((dispatcher-prefix-arg current-prefix-arg)) (gu-browse-url file)))
         ("\\.pdf\\'" . (let ((dispatcher-prefix-arg current-prefix-arg)) (dmd/open-pdf file)))
@@ -136,5 +129,7 @@
                                                    &optional predicate require-match initial-input
                                                    hist def inherit-input-method)
                                      (format-time-string "[%Y-%m-%d %a %H:%M]" (org-read-date nil 'totime nil prompt nil def nil)))))
+
+(org-add-link-type "http" 'gu-browse-url)
 
 (provide 'config-org)
