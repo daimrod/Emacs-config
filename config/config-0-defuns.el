@@ -287,11 +287,12 @@ It uses magit internal."
 (defun youtube-dl (url)
   (interactive "MURL: ")
   (let* ((buffer (get-buffer-create (format "*Youtube DL %s*" url)))
+         (default-directory "~/Music/Random/")
          (proc (start-process "youtube-dl"
                               buffer
                               "/bin/bash"
                               "-c"
-                              (format "source ~/.python-virtualenvs/youtube-dl/bin/activate && youtube-dl %s" url))))
+                              (format "source ~/.python-virtualenvs/youtube-dl/bin/activate && youtube-dl --no-part --extract-audio --audio-format mp3 --audio-quality 128K %s" url))))
     (set-process-sentinel proc (lambda (proc event)
                                  (if (string= event "finished\n")
                                      (kill-buffer buffer)
