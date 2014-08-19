@@ -232,6 +232,7 @@ Do it recursively if the third argument is not nil."
     os-rmine
     org-contacts
     org-magit
+    org-man
     plantuml-mode
     ob-plantuml
     projectile
