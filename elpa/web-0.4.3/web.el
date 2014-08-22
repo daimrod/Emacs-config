@@ -5,7 +5,7 @@
 ;; Author: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Maintainer: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Created: 3 Aug 2012
-;; Version: 0.4.2
+;; Version: 0.4.3
 ;; Url: http://github.com/nicferrier/emacs-web
 ;; Keywords: lisp, http, hypermedia
 ;; Package-requires: ((dash "2.3.0"))
@@ -30,7 +30,8 @@
 ;; This is an HTTP client using lexical scope.  This makes coding with
 ;; callbacks easier than with `url'.  This package also provides a
 ;; streaming mode where the callback is continually called whenever
-;; chunk encoding chunks are completed.
+;; data arrives. This is particularly useful for chunked encoding
+;; scenarios.
 
 ;;; Code:
 
@@ -156,17 +157,45 @@ CON is used to store state with the process property
     (delete-process proc)
     (kill-buffer buf)))
 
-(defun web/content-length-filter (callback con header data)
+(defun web/chunked-filter (callback con mode header data)
+  "Filter for the client when we're doing chunking."
+  (cond
+    ((eq mode 'stream)
+     (funcall callback con header data)
+     (when (eq data :done)
+       (web/cleanup-process con)))
+    ((and (eq mode 'batch)
+          (eq data :done))
+     (funcall callback con header (process-get con :web-buffer))
+     (web/cleanup-process con))
+    (t
+     (process-put
+      con :web-buffer
+      (concat (or (process-get con :web-buffer) "")
+              data)))))
+
+(defun web/content-length-filter (callback con mode header data)
   "Does the content-length filtering."
-  (let ((so-far (concat (process-get con :web-buffer) data))
-        (content-len (string-to-number
-                      (gethash 'content-length header))))
-    (if (> content-len (length so-far))
-        (process-put con :web-buffer so-far)
-        ;; We have all the data, callback and then kill the process
-        (unwind-protect
-             (funcall callback con header so-far)
-          (web/cleanup-process con)))))
+  (let ((content-len (string-to-number (gethash 'content-length header))))
+    (if (eq mode 'batch)
+        (let ((so-far (concat (process-get con :web-buffer) data)))
+          (if (> content-len (length so-far))
+              (process-put con :web-buffer so-far)
+              ;; We have all the data, callback and then kill the process
+              (unwind-protect
+                   (funcall callback con header so-far)
+                (web/cleanup-process con))))
+        ;; Else we're in stream mode so deliver the bits
+        (let ((collected (+ (or (process-get con :web-len) 0)
+                            (length data))))
+          (if (> content-len collected)
+              (progn
+                (process-put con :web-len collected)
+                (funcall callback con header data))
+              ;; Else we're done
+              (funcall callback con header data)
+              (funcall callback con header :done)
+              (web/cleanup-process con))))))
 
 (defun web/http-post-filter (con data callback mode)
   "Filter function for HTTP POST.
@@ -216,24 +245,10 @@ by collecting it and then batching it to the CALLBACK."
               con data
               ;; FIXME we still need the callback to know if this is completion
               (lambda (con data)
-                (cond
-                  ((eq mode 'stream)
-                   (funcall callback con header data)
-                   (when (eq data :done)
-                     (web/cleanup-process con)))
-                  ((and (eq mode 'batch)
-                        (eq data :done))
-                   (funcall callback con header
-                            (process-get con :web-buffer))
-                   (web/cleanup-process con))
-                  (t
-                   (process-put
-                    con :web-buffer
-                    (concat (or (process-get con :web-buffer) "")
-                            data)))))))
+                (web/chunked-filter callback con mode header data))))
             ;; We have a content-length header so just buffer that much data
             ((gethash 'content-length header)
-             (web/content-length-filter callback con header data)))))))
+             (web/content-length-filter callback con mode header data)))))))
 
 (defun web/key-value-encode (key value)
   "Encode a KEY and VALUE for url encoding."
