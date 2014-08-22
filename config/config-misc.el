@@ -187,10 +187,6 @@
 ;;; column-number in the modeline
 (column-number-mode 1)
 
-;;; recursive minibuffer
-(setf enable-recursive-minibuffers t)
-(minibuffer-depth-indicate-mode 1)
-
 ;;; ace-jump-mode configuration
 (autoload
   'ace-jump-mode
