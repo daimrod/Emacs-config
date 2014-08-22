@@ -55,31 +55,6 @@
 (show-paren-mode 1)
 
 ;; enable ido-mode
-(require 'ido)
-(require 'ido-ubiquitous)
-
-(setq ido-enable-flex-matching t
-      ido-everywhere t
-      ido-create-new-buffer 'always
-      ido-use-filename-at-point 'guess
-      ido-max-prospects 10
-      ido-default-file-method 'selected-window
-      ido-default-buffer-method 'selected-window
-      ido-create-new-buffer 'always
-      ido-ubiquitous-enable-compatibility nil
-
-      ;; Display ido results vertically, rather than horizontally
-      ido-decorations '("\n-> "
-                        ""
-                        "\n   "
-                        "\n   ..."
-                        "[" "]"
-                        " [No match]"
-                        " [Matched]"
-                        " [Not readable]"
-                        " [Too big]"
-                        " [Confirm]"))
-
 (add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-truncation)
 (add-hook 'ido-setup-hook 'ido-define-keys)
 
