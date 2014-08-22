@@ -183,6 +183,7 @@ Do it recursively if the third argument is not nil."
     reftex
     org
     org-agenda
+    org-agenda-check
     ox
     ox-latex
     ox-beamer
