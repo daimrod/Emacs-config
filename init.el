@@ -265,6 +265,7 @@ Do it recursively if the third argument is not nil."
     xwidget
     parallel-xwidget
     ace-window
+    ispell
     ws-trim
     marmalade-upload
     yasnippet)
