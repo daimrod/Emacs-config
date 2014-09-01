@@ -374,8 +374,4 @@ float."
        (file-exists-p (buffer-file-name))
        (reftex-parse-all)))
 
-(advice-add 'jit-lock--debug-fontify :around
-            (lambda (fun &rest args)
-              (with-local-quit (apply fun args))))
-
 (provide 'config-defuns)
