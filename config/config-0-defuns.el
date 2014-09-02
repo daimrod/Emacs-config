@@ -374,4 +374,35 @@ float."
        (file-exists-p (buffer-file-name))
        (reftex-parse-all)))
 
+(defun dmd-html-to-org (&optional prefix)
+  (interactive "P")
+  (let ((buffer (if prefix
+                    (read-buffer "Buffer: " (current-buffer) 'require-match)
+                  (current-buffer))))
+    (with-current-buffer buffer
+      (dmd--format-to-org (buffer-substring (point-min) (point-max)) nil 2))
+    (switch-to-buffer pandoc--output-buffer)
+    (org-mode)
+    (goto-char (point-min))))
+
+(defun dmd--format-to-org (string &optional mode base-header-level)
+  (message "%s" string)
+  (setq base-header-level (or base-header-level 1))
+  (setq mode (or mode 'html-mode))
+  (ignore-errors (kill-buffer (get-buffer-create "*Pandoc output*")))
+  (ignore-errors (kill-buffer (get-buffer-create "*Pandoc input*")))
+  (with-current-buffer (get-buffer-create "*Pandoc input*")
+    (setq pandoc--output-buffer (get-buffer-create "*Pandoc output*"))
+    (insert string)
+    (funcall mode)
+    (turn-on-pandoc)
+    (pandoc--set 'write "org")
+    (pandoc--set 'columns 9001)
+    (pandoc--set 'base-header-level base-header-level)
+    (pandoc--set 'mathml t)
+    (pandoc--set 'latexmathml t)
+    (pandoc--call-external (current-buffer) nil)
+    (with-current-buffer pandoc--output-buffer
+      (buffer-substring (point-min) (point-max)))))
+
 (provide 'config-defuns)
