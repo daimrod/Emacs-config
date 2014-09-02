@@ -72,9 +72,9 @@ Do it recursively if the third argument is not nil."
 (require 'cl)
 
 ;; Allow SIGUSR2 to "unfreeze" emacs when it blocks in jit-lock
-(advice-add 'jit-lock--debug-fontify :around
-            (lambda (fun &rest args)
-              (with-local-quit (apply fun args))))
+;; (advice-add 'jit-lock--debug-fontify :around
+;;             (lambda (fun &rest args)
+;;               (with-local-quit (apply fun args))))
 
 ;; ELPA configuration
 (setq package-archives
@@ -259,6 +259,7 @@ Do it recursively if the third argument is not nil."
     w3m
     w3m-search
     browse-url
+    pandoc-mode
     xmlgen
     sgml-mode
     sxml<->xml
