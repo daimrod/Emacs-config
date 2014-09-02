@@ -25,3 +25,4 @@ javadoc-cache/*
 predictive/*
 /kkcrc
 /projectile-bookmarks.eld
+debug.el
