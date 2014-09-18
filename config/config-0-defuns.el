@@ -418,4 +418,30 @@ float."
 (defun dmd--org-feed-parse-html-entry (entry)
   (dmd--format-to-org (plist-get entry :item-full-text)))
 
+(defun dmd--sanitize-org-regexp-matcher (regexp)
+  (replace-regexp-in-string "[|/!]" "." regexp))
+
+(defun dmd-bibtex-jump-to-org-entry ()
+  (interactive)
+  (let ((bib-buffer "bib.org")
+        (label (cdr (assoc "=key="
+                           (save-excursion
+                             (bibtex-beginning-of-entry)
+                             (bibtex-parse-entry)))))
+        position)
+    (setq todo-only nil)                ; required by org-make-tags-matcher
+    (if (not label)
+        (user-error "Could not find any bibtex entry")
+      (with-current-buffer bib-buffer
+        (setq position (first
+                        (org-scan-tags '(lambda () (point))
+                                       (cdr (org-make-tags-matcher
+                                             (format "BIBTEX={%s}"
+                                                     (dmd--sanitize-org-regexp-matcher label))))
+                                       todo-only))))
+      (if (not position)
+          (user-error "Could not find any matching entry in bib.org for %s" label)
+        (switch-to-buffer-other-window bib-buffer)
+        (goto-char position)))))
+
 (provide 'config-defuns)

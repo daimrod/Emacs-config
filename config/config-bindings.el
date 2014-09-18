@@ -193,4 +193,6 @@ otherwise stop it."
 
 (define-key org-agenda-mode-map (kbd "x") nil)
 
+(define-key bibtex-mode-map (kbd "C-c C-o") 'dmd-bibtex-jump-to-org-entry)
+
 (provide 'config-bindings)
