@@ -122,6 +122,7 @@
 (setq org-export-async-init-file (expand-file-name "init-org-async.el" dotfiles-dir))
 
 (add-hook 'org-mode-hook 'dmd/org-mode-reftext-setup)
+(add-hook 'org-export-filter-link-functions 'dmd--latex-bib-link-filter)
 
 ;; Prompt for a date for CREATED properties
 (add-to-list 'org-property-set-functions-alist

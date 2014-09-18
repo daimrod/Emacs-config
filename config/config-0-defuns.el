@@ -370,9 +370,19 @@ float."
 
 (defun dmd/org-mode-reftext-setup ()
   (interactive)
-  (and (buffer-file-name)
-       (file-exists-p (buffer-file-name))
-       (reftex-parse-all)))
+  (when (and (eq major-mode 'org-mode)
+             (buffer-file-name)
+             (file-exists-p (buffer-file-name)))
+    (reftex-set-cite-format "[[bib:%l][%2a (%y)]]")
+    (setq-local reftex-cite-punctuation '(", " " and " " et al."))
+    (reftex-parse-all)))
+
+(defun dmd--latex-bib-link-filter (data backend info)
+  "Convert a bib link to a citation (e.g. bib:foo93 -> \cite{foo93})."
+  (let ((link (org-element-map (plist-get info :parse-tree) 'link 'identity nil t)))
+    (when (and link (org-export-derived-backend-p backend 'latex)
+               (string= (org-element-property :type link) "bib"))
+      (format "\\cite{%s}" (org-element-property :path link)))))
 
 (defun dmd-html-to-org (&optional prefix)
   (interactive "P")
@@ -386,13 +396,13 @@ float."
     (goto-char (point-min))))
 
 (defun dmd--format-to-org (string &optional mode base-header-level)
-  (message "%s" string)
   (setq base-header-level (or base-header-level 1))
   (setq mode (or mode 'html-mode))
   (ignore-errors (kill-buffer (get-buffer-create "*Pandoc output*")))
   (ignore-errors (kill-buffer (get-buffer-create "*Pandoc input*")))
   (with-current-buffer (get-buffer-create "*Pandoc input*")
     (setq pandoc--output-buffer (get-buffer-create "*Pandoc output*"))
+    (goto-char (point-min))
     (insert string)
     (funcall mode)
     (turn-on-pandoc)
@@ -404,5 +414,8 @@ float."
     (pandoc--call-external (current-buffer) nil)
     (with-current-buffer pandoc--output-buffer
       (buffer-substring (point-min) (point-max)))))
+
+(defun dmd--org-feed-parse-html-entry (entry)
+  (dmd--format-to-org (plist-get entry :item-full-text)))
 
 (provide 'config-defuns)
