@@ -441,7 +441,7 @@ float."
                                        todo-only))))
       (if (not position)
           (user-error "Could not find any matching entry in bib.org for %s" label)
-        (switch-to-buffer-other-window bib-buffer)
+        (switch-to-buffer bib-buffer)
         (goto-char position)))))
 
 (provide 'config-defuns)
