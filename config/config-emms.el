@@ -23,8 +23,8 @@
 
 (emms-standard)
 (emms-default-players)
-(add-to-list 'emms-player-list 'emms-player-mplayer-quiet)
-(add-to-list 'emms-player-list 'emms-player-mplayer-quiet-playlist)
+(add-to-list 'emms-player-list 'emms-player-mpv-quiet)
+(add-to-list 'emms-player-list 'emms-player-mpv-quiet-playlist)
 
 (provide 'config-emms)
 

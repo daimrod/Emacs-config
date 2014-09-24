@@ -120,7 +120,7 @@ Do it recursively if the third argument is not nil."
     doctags
     ediff
     emms-setup
-    emms-player-mplayer-quiet
+    emms-player-mpv-quiet
     magit
     magit-svn
     magit-blame
