@@ -95,8 +95,6 @@
       wg-query-for-save-on-emacs-exit nil
       wg-query-for-save-on-workgroups-mode-exit nil)
 
-(setq browse-url-browser-function '(lambda (url) (w3m-browse-url url 'new-session)))
-
 ;; markdown configuration
 (autoload 'markdown-mode "markdown-mode"
           "Major mode for editing Markdown files" t)
