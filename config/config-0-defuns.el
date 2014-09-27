@@ -368,7 +368,7 @@ float."
   (visual-line-mode 1)
   (adaptive-wrap-prefix-mode 1))
 
-(defun dmd/org-mode-reftext-setup ()
+(defun dmd-org-mode-reftext-setup ()
   (interactive)
   (when (and (eq major-mode 'org-mode)
              (buffer-file-name)
