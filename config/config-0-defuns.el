@@ -368,7 +368,7 @@ float."
   (visual-line-mode 1)
   (adaptive-wrap-prefix-mode 1))
 
-(defun dmd-org-mode-reftext-setup ()
+(defun dmd-org-mode-reftex-setup ()
   (interactive)
   (when (and (eq major-mode 'org-mode)
              (buffer-file-name)
@@ -379,10 +379,14 @@ float."
 
 (defun dmd--latex-bib-link-filter (data backend info)
   "Convert a bib link to a citation (e.g. bib:foo93 -> \cite{foo93})."
+  (message "info: %S" (plist-get info :parse-tree))
   (let ((link (org-element-map (plist-get info :parse-tree) 'link 'identity nil t)))
-    (when (and link (org-export-derived-backend-p backend 'latex)
-               (string= (org-element-property :type link) "bib"))
-      (format "\\cite{%s}" (org-element-property :path link)))))
+    (cond ((and link (org-export-derived-backend-p backend 'latex)
+                (string= (org-element-property :type link) "bib"))
+           (format "\\cite{%s}" (org-element-property :path link)))
+          ((and (string= (org-element-property :type link) "file")
+                (string= (org-element-property :path link) "~/.bib.bib"))
+           (format "\\cite{%s}" (org-element-property :search-option link))))))
 
 (defun dmd-html-to-org (&optional prefix)
   (interactive "P")
