@@ -448,4 +448,8 @@ float."
         (switch-to-buffer bib-buffer)
         (goto-char position)))))
 
+(defun dmd-scanimage (filename)
+  (interactive "FOutputFile: ")
+  (async-shell-command (format "scanimage -p -vvv --format=tiff > %s.tiff" filename)))
+
 (provide 'config-defuns)
