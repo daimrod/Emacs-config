@@ -452,4 +452,9 @@ float."
   (interactive "FOutputFile: ")
   (async-shell-command (format "scanimage -p -vvv --format=tiff > %s.tiff" filename)))
 
+(advice-add 'org-contacts-remove-ignored-property-values :filter-return
+            (lambda (list)
+              (cl-remove-duplicates (nreverse list) :test #'string-match-p))
+            '(name remove-duplicates))
+
 (provide 'config-defuns)
