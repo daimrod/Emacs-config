@@ -379,7 +379,6 @@ float."
 
 (defun dmd--latex-bib-link-filter (data backend info)
   "Convert a bib link to a citation (e.g. bib:foo93 -> \cite{foo93})."
-  (message "info: %S" (plist-get info :parse-tree))
   (let ((link (org-element-map (plist-get info :parse-tree) 'link 'identity nil t)))
     (cond ((and link (org-export-derived-backend-p backend 'latex)
                 (string= (org-element-property :type link) "bib"))
