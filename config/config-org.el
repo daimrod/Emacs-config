@@ -105,8 +105,8 @@
 (setq-default org-element-use-cache nil)
 
 (setf org-file-apps
-      '(("\\.x?html?\\'" . (let ((dispatcher-prefix-arg current-prefix-arg)) (gu-browse-url file)))
-        ("\\.pdf\\'" . (let ((dispatcher-prefix-arg current-prefix-arg)) (dmd/open-pdf file)))
+      '(("\\.pdf\\'" . "evince %s")
+        ("\\.pdf::\\(\\d+\\)\\'" . "evince -p %1 %s")
         (t . emacs)))
 
 ;;; Nicolas Goaziou, http://article.gmane.org/gmane.emacs.orgmode/67692
