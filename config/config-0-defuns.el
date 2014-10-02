@@ -379,13 +379,17 @@ float."
 
 (defun dmd--latex-bib-link-filter (data backend info)
   "Convert a bib link to a citation (e.g. bib:foo93 -> \cite{foo93})."
-  (let ((link (org-element-map (plist-get info :parse-tree) 'link 'identity nil t)))
-    (cond ((and link (org-export-derived-backend-p backend 'latex)
+  (let* ((beg (next-property-change 0 data))
+         (link (if beg (get-text-property beg :parent data))))
+    (cond ((and link
+                (org-export-derived-backend-p backend 'latex)
                 (string= (org-element-property :type link) "bib"))
            (format "\\cite{%s}" (org-element-property :path link)))
-          ((and (string= (org-element-property :type link) "file")
+          ((and link
+                (string= (org-element-property :type link) "file")
                 (string= (org-element-property :path link) "~/.bib.bib"))
-           (format "\\cite{%s}" (org-element-property :search-option link))))))
+           (format "\\cite{%s}" (org-element-property :search-option link)))
+          (t data))))
 
 (defun dmd-html-to-org (&optional prefix)
   (interactive "P")
