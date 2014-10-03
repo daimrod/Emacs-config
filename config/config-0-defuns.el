@@ -386,6 +386,7 @@ float."
                 (string= (org-element-property :type link) "bib"))
            (format "\\cite{%s}" (org-element-property :path link)))
           ((and link
+                (org-export-derived-backend-p backend 'latex)
                 (string= (org-element-property :type link) "file")
                 (string= (org-element-property :path link) "~/.bib.bib"))
            (format "\\cite{%s}" (org-element-property :search-option link)))
@@ -459,5 +460,13 @@ float."
             (lambda (list)
               (cl-remove-duplicates (nreverse list) :test #'string-match-p))
             '(name remove-duplicates))
+
+(defun dmd--org-link-to-name ()
+  (when (eq major-mode 'org-mode)
+    (let* ((el (org-element-at-point))
+           (name (org-element-property :name el)))
+      (when name
+        (org-store-link-props
+         :link name)))))
 
 (provide 'config-defuns)

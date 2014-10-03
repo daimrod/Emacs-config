@@ -133,4 +133,6 @@
 
 (org-add-link-type "http" 'gu-browse-url)
 
+(add-hook 'org-store-link-functions 'dmd--org-link-to-name)
+
 (provide 'config-org)
