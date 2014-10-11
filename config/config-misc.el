@@ -91,9 +91,6 @@
 
 ;; workgroups configuration
 (workgroups-mode)
-(setq wg-morph-on nil
-      wg-query-for-save-on-emacs-exit nil
-      wg-query-for-save-on-workgroups-mode-exit nil)
 
 ;; markdown configuration
 (autoload 'markdown-mode "markdown-mode"
