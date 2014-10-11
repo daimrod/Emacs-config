@@ -103,10 +103,6 @@
 (add-to-list 'auto-mode-alist
              '("\\.mkd" . markdown-mode))
 
-;; TRAMP configuration
-(setq tramp-default-proxies-alist
-      '(("\\.\\(org\\|fr\\|com\\|net\\)\\'" "root" "/ssh:daimrod@%h:")))
-
 ;; waf config
 (setq auto-mode-alist (cons '("wscript" . python-mode) auto-mode-alist))
 
