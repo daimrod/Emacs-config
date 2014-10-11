@@ -462,6 +462,9 @@ float."
             '(name remove-duplicates))
 
 (defun dmd--org-link-to-name ()
+  "Create an org-link to the named block at point.
+
+Blocks are named with #+NAME."
   (when (eq major-mode 'org-mode)
     (let* ((el (org-element-at-point))
            (name (org-element-property :name el)))
