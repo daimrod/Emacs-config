@@ -43,10 +43,7 @@
 (ansi-color-for-comint-mode-on)
 
 ;; some configuration (C-h v)
-(setq require-final-newline t
-      uniquify-buffer-name-style 'post-forward
-      fringe-mode (cons 4 0)
-      save-place-file (concat dotfiles-dir "places"))
+(setq save-place-file (concat dotfiles-dir "places"))
 
 ;; Save a list of recent files visited.
 (recentf-mode 1)
