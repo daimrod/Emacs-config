@@ -150,10 +150,6 @@
 (require 'woman)
 (add-to-list 'woman-manpath "~/.local/share/man")
 
-;;; disable fringes
-;;; look at fringe.el::138 defconst fringe-styles
-(set-fringe-style 0)
-
 ;;; apache-mode configuration
 (autoload 'apache-mode "apache-mode" nil t)
 (mapc (lambda (pair)
