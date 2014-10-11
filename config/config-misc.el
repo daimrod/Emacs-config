@@ -104,7 +104,7 @@
              '("\\.mkd" . markdown-mode))
 
 ;; waf config
-(setq auto-mode-alist (cons '("wscript" . python-mode) auto-mode-alist))
+(add-to-list 'auto-mode-alist '("wscript" . python-mode))
 
 ;; do not ask confirmation to open a file or a buffer
 (setq confirm-nonexistent-file-or-buffer nil)
