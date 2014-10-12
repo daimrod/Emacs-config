@@ -1,5 +1,5 @@
 ;; -*- lexical-binding: t; -*-
-;; config-defuns.el
+;; config-0-defuns.el
 ;; Copyright (C) 2011, 2012 Grégoire Jadi
 
 ;; Author: Grégoire Jadi <gregoire.jadi@gmail.com>
@@ -472,4 +472,4 @@ Blocks are named with #+NAME."
         (org-store-link-props
          :link name)))))
 
-(provide 'config-defuns)
+(provide 'config-0-defuns)
