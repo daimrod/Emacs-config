@@ -364,7 +364,7 @@ float."
 
 (defun dmd/text-mode-setup ()
   (interactive)
-  (activate-input-method "latin-postfix")
+  (activate-input-method default-input-method)
   (visual-line-mode 1)
   (adaptive-wrap-prefix-mode 1))
 
