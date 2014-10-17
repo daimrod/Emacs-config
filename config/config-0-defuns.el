@@ -379,21 +379,6 @@ float."
     (setq-local reftex-cite-punctuation '(", " " and " " et al."))
     (reftex-parse-all)))
 
-(defun dmd--latex-bib-link-filter (data backend info)
-  "Convert a bib link to a citation (e.g. bib:foo93 -> \cite{foo93})."
-  (let* ((beg (next-property-change 0 data))
-         (link (if beg (get-text-property beg :parent data))))
-    (cond ((and link
-                (org-export-derived-backend-p backend 'latex)
-                (string= (org-element-property :type link) "bib"))
-           (format "\\cite{%s}" (org-element-property :path link)))
-          ((and link
-                (org-export-derived-backend-p backend 'latex)
-                (string= (org-element-property :type link) "file")
-                (string= (org-element-property :path link) "~/.bib.bib"))
-           (format "\\cite{%s}" (org-element-property :search-option link)))
-          (t data))))
-
 (defun dmd-html-to-org (&optional prefix)
   (interactive "P")
   (let ((buffer (if prefix
@@ -473,5 +458,19 @@ Blocks are named with #+NAME."
       (when name
         (org-store-link-props
          :link name)))))
+
+(defun dmd--org-latex-link (link desc info)
+  "Convert a bib link to a citation (e.g. bib:foo93 -> \cite{foo93})."
+  (let* ((type (org-element-property :type link))
+         (path (org-element-property :path link)))
+    (when (or (string= type "bib")
+              (and (string= type "file")
+                   (string= path "~/.bib.bib")))
+      (format "\\cite{%s}" (org-element-property :search-option link)))))
+
+(advice-add 'org-latex-link :around (lambda (oldfun &rest args)
+                                     (or (apply #'dmd--org-latex-link args)
+                                         (apply oldfun args)))
+            '(name dmd--org-latex-link))
 
 (provide 'config-0-defuns)
