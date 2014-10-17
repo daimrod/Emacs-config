@@ -135,4 +135,6 @@
 
 (add-hook 'org-store-link-functions 'dmd--org-link-to-name)
 
+(add-hook 'org-after-refile-insert-hook 'basic-save-buffer)
+
 (provide 'config-org)
