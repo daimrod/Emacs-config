@@ -58,32 +58,7 @@
 (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
 
 ;;; export Latex
-(setq org-latex-default-packages-alist nil
-      org-latex-packages-alist
-      '(("table" "xcolor" nil)
-        ("AUTO" "inputenc" t)
-        ("" "listings" t)
-        ("" "minted" t)
-        ("" "tikz" t)
-        ("T1" "fontenc" t)
-        ("" "fixltx2e" nil)
-        ("" "graphicx" t)
-        ("" "longtable" nil)
-        ("" "float" nil)
-        ("" "wrapfig" nil)
-        ("normalem" "ulem" t)
-        ("" "textcomp" t)
-        ("" "marvosym" t)
-        ("" "wasysym" t)
-        ("" "latexsym" t)
-        ("" "amssymb" t)
-        ("" "amstext" nil)
-        ("" "hyperref" nil)
-        "\\tolerance=1000"))
 (setq org-latex-create-formula-image-program 'imagemagick)
-(setq org-latex-listings 'minted)
-
-(add-to-list 'org-latex-minted-langs '(R "r"))
 
 ;;; config org-annotate (contrib)
 (setq org-annotate-file-storage-file (concat org-directory "annotated.org"))
