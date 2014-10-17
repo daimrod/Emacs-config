@@ -133,7 +133,7 @@
 
 (org-add-link-type "http" 'gu-browse-url)
 
-(add-hook 'org-store-link-functions 'dmd--org-link-to-name)
+(add-hook 'org-store-link-functions 'dmd--org-link-to-named-block)
 
 (add-hook 'org-after-refile-insert-hook 'basic-save-buffer)
 

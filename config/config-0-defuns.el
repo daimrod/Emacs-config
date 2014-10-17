@@ -463,7 +463,7 @@ float."
               (cl-remove-duplicates (nreverse list) :test #'string-match-p))
             '(name remove-duplicates))
 
-(defun dmd--org-link-to-name ()
+(defun dmd--org-link-to-named-block ()
   "Create an org-link to the named block at point.
 
 Blocks are named with #+NAME."
