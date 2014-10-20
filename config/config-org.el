@@ -79,11 +79,6 @@
 
 (setq-default org-element-use-cache nil)
 
-(setf org-file-apps
-      '(("\\.pdf\\'" . "evince %s")
-        ("\\.pdf::\\(\\d+\\)\\'" . "evince -p %1 %s")
-        (t . emacs)))
-
 ;;; Nicolas Goaziou, http://article.gmane.org/gmane.emacs.orgmode/67692
 (defun org-latex-ignore-heading-filter-headline (headline backend info)
   "Strip headline from HEADLINE. Ignore BACKEND and INFO."
