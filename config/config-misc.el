@@ -257,4 +257,8 @@
 ;; ws-trim
 (global-ws-trim-mode 1)
 
+;; Diary mode
+(add-to-list 'auto-mode-alist
+             '("\\.diary" . diary-mode))
+
 (provide 'config-misc)
