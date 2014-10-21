@@ -4,7 +4,7 @@
 
 ;; Author: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Keywords: lisp
-;; Version: 0.0.11
+;; Version: 0.0.12
 ;; Url: https://github.com/nicferrier/emacs-noflet
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -65,9 +65,10 @@ name."
                         (intern (format "saved-func-%s"
                                         (symbol-name name)))))
                    `(fset (quote ,name)
-                          (lambda ,args
-                            (let ((this-fn ,saved-func-namev))
-                              ,@body))))))))
+                          (cl-function
+                           (lambda ,args
+                             (let ((this-fn ,saved-func-namev))
+                               ,@body)))))))))
        (fresets
         (cl-loop
              for i in bindings

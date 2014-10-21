@@ -3,7 +3,7 @@
 ;;; Code:
 (add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads nil "web" "web.el" (21491 20300 54074 377000))
+;;;### (autoloads nil "web" "web.el" (21574 43413 458185 803000))
 ;;; Generated autoloads from web.el
 
 (autoload 'web-http-call "web" "\
@@ -20,8 +20,15 @@ PORT is 80 by default.  Even if SECURE it `t'.  If you manually
 specify SECURE you should manually specify PORT to be 443.  Using
 URL negates the need for that, an SSL URL will work correctly.
 
+The URL connected to (whether specified by URL or by the HOST and
+PORT) is recorded on the resulting connection as the process
+property `:web-url'.
+
 EXTRA-HEADERS is an alist or a hash-table of extra headers to
 send to the server.
+
+The full set of headers sent to the server is recorded on the
+connection with the process property `:web-headers'.
 
 DATA is of MIME-TYPE.  We try to interpret DATA and MIME-TYPE
 usefully:
@@ -32,6 +39,9 @@ body.
 
 If MIME-TYPE is `multipart/form-data' then `web-to-multipart' is
 called to get a POST body.
+
+Any data sent to the server is recorded on the connection with
+the process property `:web-sent'.
 
 When the request comes back the CALLBACK is called.  CALLBACK is
 always passed 3 arguments: the HTTP connection which is a process

@@ -3,7 +3,7 @@
 ;; Copyright (C) 2013-2014  Free Software Foundation, Inc.
 
 ;; Author: Leo Liu <sdl.web@gmail.com>
-;; Version: 0.8.5
+;; Version: 0.8.6
 ;; Keywords: tools, convenience
 ;; Created: 2013-01-29
 ;; URL: https://github.com/leoliu/ggtags
@@ -114,7 +114,7 @@ limit, only files edited in Ggtags mode are updated (via `global
   :group 'ggtags)
 
 (defcustom ggtags-include-pattern
-  '("^\\s-*#\\(?:include\\|import\\)\\s-*[\"<]\\(?:[./]*\\)?\\(.*?\\)[\">]" . 1)
+  '("^\\s-*#\\s-*\\(?:include\\|import\\)\\s-*[\"<]\\(?:[./]*\\)?\\(.*?\\)[\">]" . 1)
   "Pattern used to detect #include files.
 Value can be (REGEXP . SUB) or a function with no arguments.
 REGEXP should match from the beginning of line."
@@ -1897,9 +1897,29 @@ When finished invoke CALLBACK in BUFFER with process exit status."
     (set-process-sentinel proc sentinel)
     proc))
 
+(cl-defun ggtags-fontify-code (code &optional (mode major-mode))
+  (cl-check-type mode function)
+  (cl-typecase code
+    ((not string) code)
+    (string (cl-labels ((prepare-buffer ()
+                          (with-current-buffer
+                              (get-buffer-create " *Code-Fontify*")
+                            (delay-mode-hooks (funcall mode))
+                            (setq font-lock-mode t)
+                            (funcall font-lock-function font-lock-mode)
+                            (current-buffer))))
+              (with-current-buffer (prepare-buffer)
+                (let ((inhibit-read-only t))
+                  (erase-buffer)
+                  (insert code)
+                  (font-lock-default-fontify-region
+                   (point-min) (point-max) nil))
+                (buffer-string))))))
+
 (defun ggtags-get-definition-default (defs)
   (and (caar defs)
-       (concat (caar defs) (and (cdr defs) " [guess]"))))
+       (concat (ggtags-fontify-code (caar defs))
+               (and (cdr defs) " [guess]"))))
 
 (defun ggtags-show-definition (name)
   (interactive (list (ggtags-read-tag 'definition current-prefix-arg)))
@@ -2206,6 +2226,10 @@ to nil disables displaying this information.")
 
 ;;;; ChangeLog:
 
+;; 2014-09-12  Leo Liu  <sdl.web@gmail.com>
+;; 
+;; 	Merge branch 'master' of github.com:leoliu/ggtags
+;; 
 ;; 2014-06-22  Leo Liu  <sdl.web@gmail.com>
 ;; 
 ;; 	Merge branch 'master' of github.com:leoliu/ggtags
