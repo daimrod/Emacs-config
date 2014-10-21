@@ -446,7 +446,7 @@ float."
 (advice-add 'org-contacts-remove-ignored-property-values :filter-return
             (lambda (list)
               (cl-remove-duplicates (nreverse list) :test #'string-match-p))
-            '(name remove-duplicates))
+            '((name . remove-duplicates)))
 
 (defun dmd--org-link-to-named-block ()
   "Create an org-link to the named block at point.
