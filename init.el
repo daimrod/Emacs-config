@@ -147,6 +147,9 @@ Do it recursively if the third argument is not nil."
     linum
     ido
     ido-ubiquitous
+    rw-hunspell
+    rw-ispell
+    rw-language-and-country-codes
     fic-ext-mode
     markit
     yaml-mode
