@@ -469,8 +469,9 @@ Blocks are named with #+NAME."
       (format "\\cite{%s}" (org-element-property :search-option link)))))
 
 (advice-add 'org-latex-link :around (lambda (oldfun &rest args)
-                                     (or (apply #'dmd--org-latex-link args)
-                                         (apply oldfun args)))
-            '(name dmd--org-latex-link))
+                                      "Run `dmd--org-latex-link'"
+                                      (or (apply 'dmd--org-latex-link args)
+                                          (apply oldfun args)))
+            '((name . dmd--org-latex-link)))
 
 (provide 'config-0-defuns)
