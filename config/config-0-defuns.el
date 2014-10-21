@@ -372,9 +372,8 @@ float."
 
 (defun dmd-org-mode-reftex-setup ()
   (interactive)
-  (when (and (eq major-mode 'org-mode)
-             (buffer-file-name)
-             (file-exists-p (buffer-file-name)))
+  (when (and (derived-mode-p 'org-mode)
+             (buffer-file-name))
     (reftex-set-cite-format "[[bib:%l][%2a (%y)]]")
     (setq-local reftex-cite-punctuation '(", " " and " " et al."))
     (reftex-parse-all)))
