@@ -195,4 +195,7 @@ otherwise stop it."
 
 (define-key bibtex-mode-map (kbd "C-c C-o") 'dmd-bibtex-jump-to-org-entry)
 
+(define-key gnus-summary-mode-map (kbd "i") (kbd "L S"))
+(define-key gnus-summary-mode-map (kbd "y") (kbd "I S"))
+
 (provide 'config-bindings)
