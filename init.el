@@ -78,9 +78,8 @@ Do it recursively if the third argument is not nil."
 
 ;; ELPA configuration
 (setq package-archives
-	  '(("ELPA" . "http://tromey.com/elpa/") 
-        ("gnu" . "http://elpa.gnu.org/packages/")
-        ("marmalade" . "http://marmalade-repo.org/packages/")))
+      '(("ELPA" . "https://elpa.gnu.org/packages/")
+        ("marmalade" . "https://marmalade-repo.org/packages/")))
 
 ;; Load my configuration
 (defvar dmd/modules
