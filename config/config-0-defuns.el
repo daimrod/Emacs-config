@@ -473,4 +473,16 @@ Blocks are named with #+NAME."
                                           (apply oldfun args)))
             '((name . dmd--org-latex-link)))
 
+(defun dmd--get-title (url)
+  (w3m-decode-entities-string
+   (mm-decode-string
+    (with-current-buffer (url-retrieve-synchronously url)
+      (goto-char (point-min))
+      (search-forward "<title>")
+      (buffer-substring-no-properties (point)
+                                      (progn
+                                        (search-forward "</title>")
+                                        (search-backward "<"))))
+    (symbol-name (w3m-url-coding-system url)))))
+
 (provide 'config-0-defuns)
