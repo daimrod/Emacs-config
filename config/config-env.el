@@ -28,16 +28,23 @@
       (dmd--update-env-from-file file))))
 
 (defun dmd--update-env-from-file (file)
-  (with-current-buffer (find-file-noselect file)
-    (goto-char (point-min))
-    (loop for line = (buffer-substring-no-properties
-                      (point-at-bol)
-                      (point-at-eol))
-          while (string-match "\\([^=]*\\)=\\(.*\\)" line)
-          for var = (match-string 1 line)
-          for val = (match-string 2 line)
-          do (setenv var val)
-          while (zerop (forward-line)))))
+  (let ((file-open-p (get-file-buffer file))
+        (buffer (find-file-noselect file)))
+    (setenv "ftp_proxy")
+    (setenv "http_proxy")
+    (setenv "https_proxy")
+    (with-current-buffer buffer
+      (goto-char (point-min))
+      (loop for line = (buffer-substring-no-properties
+                        (point-at-bol)
+                        (point-at-eol))
+            while (string-match "\\([^=]*\\)=\\(.*\\)" line)
+            for var = (match-string 1 line)
+            for val = (match-string 2 line)
+            do (setenv var val)
+            while (zerop (forward-line))))
+    (unless file-open-p
+      (kill-buffer buffer))))
 
 (file-notify-add-watch "/etc/environment"
                        '(change)
