@@ -22,17 +22,20 @@
 ;;; Code:
 
 (defun dmd--autoset-virtualenv ()
-  (let ((virtualenv-path (if (projectile-project-p)
-                             (concat (projectile-project-root) ".virtualenv")
-                           (concat (file-name-directory (buffer-file-name)) ".virtualenv"))))
-    (setq python-shell-virtualenv-path
-          (if (file-exists-p virtualenv-path)
-              virtualenv-path
-            (when (yes-or-no-p
-                   (format "No virtualenv found, would you like to create one? (%s)"
-                           virtualenv-path))
-              (call-process "virtualenv" nil nil nil "--no-site-packages"
-                            virtualenv-path))))))
+  (when (and (derived-mode-p 'python-mode)
+             (buffer-file-name))
+    (let ((virtualenv-path (if (projectile-project-p)
+                               (concat (projectile-project-root) ".virtualenv")
+                             (concat (file-name-directory (buffer-file-name)) ".virtualenv"))))
+      (setq python-shell-virtualenv-path
+            (if (file-exists-p virtualenv-path)
+                virtualenv-path
+              (when (yes-or-no-p
+                     (format "No virtualenv found, would you like to create one? (%s)"
+                             virtualenv-path))
+                (call-process "virtualenv" nil nil nil "--no-site-packages"
+                              virtualenv-path)
+                virtualenv-path))))))
 
 (add-hook 'python-mode-hook 'dmd--autoset-virtualenv)
 
