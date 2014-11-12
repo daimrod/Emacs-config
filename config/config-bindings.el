@@ -198,4 +198,6 @@ otherwise stop it."
 (define-key gnus-summary-mode-map (kbd "i") (kbd "L S"))
 (define-key gnus-summary-mode-map (kbd "y") (kbd "I S"))
 
+(global-set-key (kbd "C-x #") 'delete-frame)
+
 (provide 'config-bindings)
