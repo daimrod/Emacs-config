@@ -27,3 +27,6 @@ predictive/*
 debug.el
 /ido.last
 /ido.last~
+/.emacs.desktop
+/.emacs.desktop.lock
+/projectile.cache
