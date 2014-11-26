@@ -1,9 +1,9 @@
-;;; noflet-autoloads.el --- automatically extracted autoloads
+;;; shadchen-autoloads.el --- automatically extracted autoloads
 ;;
 ;;; Code:
 (add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads nil nil ("noflet.el") (21574 43418 100747 432000))
+;;;### (autoloads nil nil ("shadchen.el") (21621 38261 726643 301000))
 
 ;;;***
 
@@ -12,4 +12,4 @@
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
 ;; End:
-;;; noflet-autoloads.el ends here
+;;; shadchen-autoloads.el ends here

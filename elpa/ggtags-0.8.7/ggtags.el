@@ -3,7 +3,7 @@
 ;; Copyright (C) 2013-2014  Free Software Foundation, Inc.
 
 ;; Author: Leo Liu <sdl.web@gmail.com>
-;; Version: 0.8.6
+;; Version: 0.8.7
 ;; Keywords: tools, convenience
 ;; Created: 2013-01-29
 ;; URL: https://github.com/leoliu/ggtags
@@ -35,6 +35,13 @@
 ;; for more details.
 ;;
 ;; All commands are available from the `Ggtags' menu in `ggtags-mode'.
+
+;;; NEWS 0.8.7 (2014-11-10):
+
+;; - New navigation command `ggtags-navigation-start-file'.
+;; - New variable `ggtags-use-sqlite3' to enable sqlite3 storage.
+;;
+;; See full NEWS on https://github.com/leoliu/ggtags#news
 
 ;;; Code:
 
@@ -186,6 +193,14 @@ If an integer abbreviate only names longer than that number."
 (defcustom ggtags-use-idutils (and (executable-find "mkid") t)
   "Non-nil to also generate the idutils DB."
   :type 'boolean
+  :group 'ggtags)
+
+(defcustom ggtags-use-sqlite3 nil
+  "Use sqlite3 for storage instead of Berkeley DB.
+This feature requires GNU Global 6.3.3+ and is ignored if `gtags'
+isn't built with sqlite3 support."
+  :type 'boolean
+  :safe 'booleanp
   :group 'ggtags)
 
 (defcustom ggtags-global-output-format 'grep
@@ -391,6 +406,14 @@ Nil means using the value of `completing-read-function'."
       (expand-file-name name ggtags-executable-directory)
     name))
 
+(defun ggtags-process-succeed-p (program &rest args)
+  "Return non-nil if successfully running PROGRAM with ARGS."
+  (let ((program (ggtags-program-path program)))
+    (condition-case err
+        (zerop (apply #'process-file program nil nil nil args))
+      (error (message "`%s' failed: %s" program (error-message-string err))
+             nil))))
+
 (defun ggtags-process-string (program &rest args)
   (with-temp-buffer
     (let ((exit (apply #'process-file
@@ -431,19 +454,11 @@ Nil means using the value of `completing-read-function'."
                     'has-refs)))
             ;; http://thread.gmane.org/gmane.comp.gnu.global.bugs/1518
             (has-path-style
-             (with-demoted-errors "ggtags-make-project: %S"
-               ;; in case `global' not found
-               (and (zerop (process-file (ggtags-program-path "global")
-                                         nil nil nil
-                                         "--path-style" "shorter" "--help"))
-                    'has-path-style)))
+             (and (ggtags-process-succeed-p "global" "--path-style" "shorter" "--help")
+                  'has-path-style))
             ;; http://thread.gmane.org/gmane.comp.gnu.global.bugs/1542
-            (has-color
-             (with-demoted-errors "ggtags-make-project: %S"
-               (and (zerop (process-file (ggtags-program-path "global")
-                                         nil nil nil
-                                         "--color" "--help"))
-                    'has-color))))
+            (has-color (and (ggtags-process-succeed-p "global" "--color" "--help")
+                            'has-color)))
        (puthash default-directory
                 (ggtags-project--make :root default-directory
                                       :tag-size tag-size
@@ -676,10 +691,14 @@ source trees. See Info node `(global)gtags' for details."
           (setenv "GTAGSLABEL" "ctags"))
         (ggtags-with-temp-message "`gtags' in progress..."
           (let ((default-directory (file-name-as-directory root))
-                (args (cl-remove-if #'null
-                                    (list (and ggtags-use-idutils "--idutils")
-                                          (and conf "--gtagsconf")
-                                          (and conf (ggtags-ensure-localname conf))))))
+                (args (cl-remove-if
+                       #'null
+                       (list (and ggtags-use-idutils "--idutils")
+                             (and ggtags-use-sqlite3
+                                  (ggtags-process-succeed-p "gtags" "--sqlite3" "--help")
+                                  "--sqlite3")
+                             (and conf "--gtagsconf")
+                             (and conf (ggtags-ensure-localname conf))))))
             (condition-case err
                 (apply #'ggtags-process-string "gtags" args)
               (error (if (and ggtags-use-idutils
@@ -711,10 +730,13 @@ Do nothing if GTAGS exceeds the oversize limit unless FORCE."
         (setf (ggtags-project-mtime (ggtags-find-project)) (float-time))))))
 
 (defun ggtags-update-tags-single (file &optional nowait)
+  ;; NOTE: NOWAIT is ignored if file is remote file; see
+  ;; `tramp-sh-handle-process-file'.
   (cl-check-type file string)
-  (ggtags-with-current-project
-    (process-file (ggtags-program-path "global") nil (and nowait 0) nil
-                  "--single-update" (ggtags-project-relative-file file))))
+  (let ((nowait (unless (file-remote-p file) nowait)))
+    (ggtags-with-current-project
+      (process-file (ggtags-program-path "global") nil (and nowait 0) nil
+                    "--single-update" (ggtags-project-relative-file file)))))
 
 (defun ggtags-delete-tags ()
   "Delete file GTAGS, GRTAGS, GPATH, ID etc. generated by gtags."
@@ -827,6 +849,7 @@ Do nothing if GTAGS exceeds the oversize limit unless FORCE."
 ;; Can be three values: nil, t and a marker; t means start marker has
 ;; been saved in the tag ring.
 (defvar ggtags-global-start-marker nil)
+(defvar ggtags-global-start-file nil)
 (defvar ggtags-tag-ring-index nil)
 (defvar ggtags-global-search-history nil)
 
@@ -846,6 +869,8 @@ Do nothing if GTAGS exceeds the oversize limit unless FORCE."
          (env ggtags-process-environment))
     (unless (markerp ggtags-global-start-marker)
       (setq ggtags-global-start-marker (point-marker)))
+    ;; Record the file name for `ggtags-navigation-start-file'.
+    (setq ggtags-global-start-file buffer-file-name)
     (setq ggtags-auto-jump-to-match-target
           (nth 4 (assoc (ggtags-global-search-id command default-directory)
                         ggtags-global-search-history)))
@@ -1001,6 +1026,20 @@ When called interactively with a prefix, ask for the directory."
 
 (defvar ggtags-navigation-mode)
 
+(defun ggtags-foreach-file (fn)
+  "Invoke FN with each file found.
+FN is invoked while *ggtags-global* buffer is current."
+  (ggtags-ensure-global-buffer
+    (save-excursion
+      (goto-char (point-min))
+      (while (with-demoted-errors "compilation-next-error: %S"
+               (compilation-next-error 1 'file)
+               t)
+        (funcall fn (caar
+                     (compilation--loc->file-struct
+                      (compilation--message->loc
+                       (get-text-property (point) 'compilation-message)))))))))
+
 (defun ggtags-query-replace (from to &optional delimited)
   "Query replace FROM with TO on files in the Global buffer.
 If not in navigation mode, do a grep on FROM first.
@@ -1020,13 +1059,8 @@ Global and Emacs."
               (ggtags-with-temp-message "Waiting for Grep to finish..."
                 (while (get-buffer-process (current-buffer))
                   (sit-for 0.2)))
-              (goto-char (point-min))
-              (while (ignore-errors (compilation-next-file 1) t)
-                (let ((m (get-text-property (point) 'compilation-message)))
-                  (push (expand-file-name
-                         (caar (compilation--loc->file-struct
-                                (compilation--message->loc m))))
-                        files))))
+              (ggtags-foreach-file
+               (lambda (file) (push (expand-file-name file) files))))
             (ggtags-navigation-mode -1)
             (nreverse files))))
     (tags-query-replace from to delimited file-form)))
@@ -1627,6 +1661,7 @@ commands `next-error' and `previous-error'.
     (define-key map "\M-p" 'previous-error)
     (define-key map "\M-}" 'ggtags-navigation-next-file)
     (define-key map "\M-{" 'ggtags-navigation-previous-file)
+    (define-key map "\M-=" 'ggtags-navigation-start-file)
     (define-key map "\M->" 'ggtags-navigation-last-error)
     (define-key map "\M-<" 'first-error)
     ;; Note: shadows `isearch-forward-regexp' but it can still be
@@ -1735,6 +1770,20 @@ commands `next-error' and `previous-error'.
 (defun ggtags-navigation-previous-file (n)
   (interactive "p")
   (ggtags-navigation-next-file (- n)))
+
+(defun ggtags-navigation-start-file ()
+  "Move to the file where navigation session starts."
+  (interactive)
+  (let ((start-file (or ggtags-global-start-file
+                        (user-error "Cannot decide start file"))))
+    (ggtags-ensure-global-buffer
+      (pcase (cl-block nil
+               (ggtags-foreach-file
+                (lambda (file)
+                  (when (file-equal-p file start-file)
+                    (cl-return (point))))))
+        (`nil (user-error "No matches for `%s'" start-file))
+        (n (goto-char n) (compile-goto-error))))))
 
 (defun ggtags-navigation-last-error ()
   (interactive)
@@ -2226,6 +2275,10 @@ to nil disables displaying this information.")
 
 ;;;; ChangeLog:
 
+;; 2014-11-10  Leo Liu  <sdl.web@gmail.com>
+;; 
+;; 	Merge remote-tracking branch 'ggtags/master'
+;; 
 ;; 2014-09-12  Leo Liu  <sdl.web@gmail.com>
 ;; 
 ;; 	Merge branch 'master' of github.com:leoliu/ggtags

@@ -3,7 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads nil "elpakit" "elpakit.el" (21403 43472 46026 790000))
+;;;### (autoloads nil "elpakit" "elpakit.el" (21621 38262 214415
+;;;;;;  206000))
 ;;; Generated autoloads from elpakit.el
 
 (autoload 'elpakit-make-multi "elpakit" "\
@@ -13,7 +14,7 @@ If the directory you are in is a package then it is built,
 otherwise this asks you for a package directory.
 
 Optionally, make the package file in the specified
-DESTINTATION-DIR.
+DESTINATION-DIR.
 
 If called interactively, this will default to building the
 current directory as a package, if it has a 'recipes' directory.
@@ -24,7 +25,7 @@ If the prefix argument is used interactively, then this will also
 prompt for the destination directory.
 
 If the customization value
-`elpakit-do-melpa-on-multi-file-package' is `t' and the
+`elpakit-do-melpa-on-multi-file-package' is t and the
 PACKAGE-DIR is a git repository then an orphan branch called
 \"melpa\" is created in the repository and populated with the
 files from the package.  This includes the pkg.el file necessary
@@ -118,7 +119,7 @@ Make a buffer with the package list in it.
 \(fn)" t nil)
 
 (autoload 'elpakit-isearch-hook-jack-in "elpakit" "\
-Jack in Elpakit to isearch. Call from `elisp-mode-hook'.
+Jack in Elpakit to isearch.  Call from `elisp-mode-hook'.
 
 Adds `elpakit-multi-occur' to `isearch' with `M-o'.
 
@@ -129,6 +130,11 @@ Use something like:
 in your configuration file to make it happen.
 
 \(fn)" nil nil)
+
+;;;***
+
+;;;### (autoloads nil nil ("elpakit-pkg.el" "elpakit-run.el") (21621
+;;;;;;  38262 322235 869000))
 
 ;;;***
 

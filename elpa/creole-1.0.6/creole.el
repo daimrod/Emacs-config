@@ -5,7 +5,7 @@
 ;; Author: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Maintainer: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Created: 27th October 2011
-;; Version: 1.0.5
+;; Version: 1.0.6
 ;; Package-requires: ((noflet "0.0.3")(kv "0.0.17"))
 ;; Keywords: lisp, creole, wiki
 
@@ -549,10 +549,7 @@ Returns a list of parsed elements."
         (while (not (eobp))
           (cond
            (;; Heading
-            (looking-at
-             (rx bol
-                 (group (+ "="))
-                 (in blank)))
+            (looking-at (rx bol (group (+ "=")) (in blank)))
              (let ((level (length (match-string 1))))
                ;; Actually, the end = is optional... not sure if, when
                ;; there is an end = it has to be the same number as the
@@ -618,11 +615,10 @@ Returns a list of parsed elements."
                                    (match-string 2)))))
                (forward-line)))
             (;; Ordered list item
-             (looking-at
-              (rx bol
-                  (group (+ "#"))
-                  (in blank)
-                  (group (* any))))
+             (looking-at (rx bol
+                             (group (+ "#"))
+                             (in blank)
+                             (group (* any))))
              (let ((level (length (match-string 1))))
                (setq res (append res
                                  (list
@@ -634,19 +630,15 @@ Returns a list of parsed elements."
                                    (match-string 2)))))
                (forward-line)))
             (;; Horizontal rule
-             (looking-at
-              (rx bol
-                  (* (in blank))
-                  "----"
-                  (* (in blank))
-                  eol))
-             (setq res (append res
-                               (list
-                                (cons 'hr ""))))
+             (looking-at (rx bol
+                             (* (in blank))
+                             "----"
+                             (* (in blank))
+                             eol))
+             (setq res (append res (list (cons 'hr ""))))
              (forward-line))
             (;; Pre-formatted block
-             (looking-at
-              (rx bol "\n{{{" eol))
+             (looking-at (rx bol "\n{{{" eol))
              (if (not
                   (re-search-forward
                    (rx bol
@@ -660,6 +652,7 @@ Returns a list of parsed elements."
                                (list
                                 (cons 'preformatted (match-string 1)))))
              (forward-line))
+            ;; Oddmuse allows space defined pre-blocks
             ((and creole-oddmuse-on (looking-at "^\n +[^-]"))
              (let* ((start (point))
                     (end (progn (next-line)
@@ -927,10 +920,9 @@ change to something heavily based on existing mode choosing
 logic."
   (save-match-data
     (cond
-      ((string-match (rx bol "##! "
-                         (group (* any))
-                         "\n")
-                     text)
+      ((string-match
+        (rx bol "##! " (group (* any)) "\n")
+        text)
        (list
         t
         (intern
@@ -945,6 +937,8 @@ logic."
                    'lisp-mode)))
       ((string-match-p (rx bol "#!/bin/" (+ lower) "sh" eol) text)
        (list nil 'shell-script-mode))
+      ((string-match-p (rx bol "-module(") text)
+       (list nil 'erlang-mode))
       (t (list nil text)))))
 
 (defun creole-htmlize-string (text)

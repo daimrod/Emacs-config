@@ -6,8 +6,8 @@
 ;; Maintainer: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Keywords: data, lisp
 ;; Created: 23rd September 2012
-;; Package-Requires: ((kv "0.0.11"))
-;; Version: 0.0.6
+;; Package-Requires: ((kv "0.0.19"))
+;; Version: 0.0.7
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -54,9 +54,7 @@
 (defun* db-make (reference)
   "Make a DB based on the REFERENCE."
   (if (and (listp reference)
-           (eq
-            'db-hash
-            (car reference)))
+           (eq 'db-hash (car reference)))
       ;; this should be part of what we find when we look it up?
       (db-hash reference)
       ;; Otherwise look it up...
@@ -137,7 +135,14 @@ include a `:filename' key arg to point to a file:
 
   '(db-hash :filename \"/var/local/db/auth-db\")
 
-If the filename exists then it is loaded into the database."
+If the filename exists then it is loaded into the database.
+
+:from-filename let's you specify the source location the db will
+be read from.  The first version of the hash db tied databases to
+specific filenames so you could not easily load a db from one
+file location into another.  This has been fixed but if you need
+to work with a previous version's database you can use
+the :from-filename to specify where the db file was located."
   (let* ((db-plist (cdr reference))
          (filename (plist-get db-plist :filename))
          (from-filename (plist-get db-plist :from-filename))

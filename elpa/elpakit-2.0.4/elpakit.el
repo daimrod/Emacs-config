@@ -6,8 +6,6 @@
 ;; Maintainer: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; URL: http://github.com/nicferrier/elpakit
 ;; Keywords: lisp
-;; Package-Requires: ((anaphora "0.0.6")(dash "2.3.0"))
-;; Version: 1.1.1
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -26,28 +24,54 @@
 
 ;; A package archive builder.
 
-;; This is for building file based package archives. This is useful
+;; This is for building file based package archives.  This is useful
 ;; for deploying small sets of under-development-packages in servers;
 ;; for example elnode packages.
 
 ;; An example:
 
-;; (elpakit
-;;  "/tmp/shoesoffsaas"
-;;  '("~/work/elnode-auth"
-;;    "~/work/emacs-db"
-;;    "~/work/shoes-off"
-;;    "~/work/rcirc-ssh"))
+;;  (elpakit
+;;   "/tmp/shoesoffsaas"
+;;   '("~/work/elnode-auth"
+;;     "~/work/emacs-db"
+;;     "~/work/shoes-off"
+;;     "~/work/rcirc-ssh"))
 
 ;; This should make a package archive in /tmp/shoesoffsaas which has
 ;; the 4 packages in it.
+
+;; Package building
+
+;; elpakit can also be used to build multi-package elpa packages, go
+;; to the directory containing the package source files and then:
+
+;;   M-x elpakit-make-multi
+
+;; will try and make a multi-file tar package in the current
+;; directory.
+
+;; elpakit will make a best effort with multi-file packages but it
+;; won't always get it right without direction.  The right direction
+;; can be supplied in the form of a package recipe.  Elpakit itself is
+;; a package that can only be built with a recipe.
+
+;; You can upload a multi-file package to marmalade or install it
+;; manually with:
+
+;;   M-x package-install-file
+
+;; elpakit can also be used to run tests on packages and do other
+;; things with packages.  See the official README file for more
+;; information.
+
 
 ;;; Code:
 
 (require 'package)
 (require 'dash)
 (require 'cl)
-(require 'anaphora)
+(require 's)
+(require 'shadchen)
 (require 'tabulated-list)
 (require 'server)
 
@@ -83,8 +107,47 @@ the source tree."
   (expand-file-name
    (concat (file-name-as-directory package-dir) file-name)))
 
-(defun elpakit/infer-files (package-dir)
-  "Infer the important files from PACKAGE-DIR
+
+(defmacro with-elpakit-new-package-api (consequent &rest alternate)
+  "Abstract the package API."
+  (declare (debug (form &rest form))
+           (indent 0))
+  `(if (version<=
+        "24.4"
+        (package-version-join
+         (list emacs-major-version emacs-minor-version)))
+       ,consequent
+       ;; Else
+       ,@alternate))
+
+(defun elpakit/package-info (package-info &rest selector)
+  (with-elpakit-new-package-api
+    (if selector
+        (--map
+         (case it
+           (:version (package-version-join (package-desc-version package-info)))
+           (:name (let ((name (package-desc-name package-info)))
+                    (if (symbolp name) (symbol-name name) name)))
+           (:summary (package-desc-summary package-info))
+           (:reqs (package-desc-reqs package-info))
+           (t package-info))
+         selector)
+        ;; Else we just want the package
+        package-info)
+        (if selector
+            (--map
+             (case it
+               (:version (elt package-info 3))
+               (:summary (elt package-info 2))
+               (:reqs (elt package-info 1))
+               (:name (elt package-info 0))
+               (t package-info))
+             selector)
+            ;; Else
+            package-info)))
+
+(defun elpakit/infer-files-old (package-dir)
+  "Infer the important files from PACKAGE-DIR.
 
 Returns a plist with `:elisp-files', `:test-files' and
 `:non-test-elisp' filename lists.
@@ -104,49 +167,116 @@ Returns a plist with `:elisp-files', `:test-files' and
      :test-files test-files
      :non-test-elisp non-test-elisp)))
 
+(defun elpakit/git-files (package-dir)
+  (let ((default-directory
+         (expand-file-name
+          (file-name-as-directory package-dir))))
+    (split-string (shell-command-to-string "git ls-files"))))
+
+(defun elpakit/infer-files (package-dir)
+  "Infer the important files from PACKAGE-DIR.
+
+Returns a plist with `:elisp-files', `:test-files',
+`:other-files' and `:non-test-elisp' filename lists.
+
+`:non-test-elisp' is absolutized, but the others are not."
+  (let* (non-test-elisp
+         elisp-files
+         test-files
+         other-files)
+    (--each (or (elpakit/git-files package-dir)
+                (directory-files package-dir nil "^[^.]+.*[^~#]$"))
+      (cond
+        ((string-match-p "\\(test\\(s\\)*.el\\)\\|\\(.*-test\\(s\\)*.el\\)$" it)
+         (push it elisp-files)
+         (push it test-files))
+        ((equal (file-name-extension it) "el")
+         (push it elisp-files)
+         (push it non-test-elisp))
+        ((and (not (string-match-p "^\\..*" it)))
+         (push it other-files))))
+    (list :elisp-files elisp-files
+          :test-files test-files
+          :non-test-elisp non-test-elisp
+          :other-files other-files)))
+
 (defun elpakit/infer-recipe (package-dir)
   "Infer a recipe from the PACKAGE-DIR.
 
-We currently can't make guesses about multi-file packages so
-unless we can work out if the package is a single file package
-this function just errors.
+Inferring the recipe for a single file project is easy.
+Inferring for a multi-file project is harder, this looks for an
+obvious \"-pkg.el\" file and uses that if present.  If a pkg.el
+file cannot be found it opens the elisp files looking for a
+package header and uses that.  If it can't find a package header
+either it gives up and fails; in that case add a recipe.
 
 Test package files are guessed at to produce the :test section of
 the recipe.
 
 Files mentioned in the recipe are all absolute file names."
-  (destructuring-bind (&key elisp-files test-files non-test-elisp)
-      (elpakit/infer-files package-dir)
+  (match-let
+      (((plist :elisp-files elisp-files
+               :test-files test-files
+               :non-test-elisp non-test-elisp
+               :other-files other-files)
+        (elpakit/infer-files package-dir)))
     ;; Now choose what sort of recipe to build?
     (if (equal (length non-test-elisp) 1)
-        (let ((name (car (elpakit/file->package (car non-test-elisp) :name))))
+        (let ((name (car (elpakit/file->package
+                          (expand-file-name (car non-test-elisp) package-dir)
+                          :name))))
           ;; Return the recipe with optional test section
-          (list* ;; FIXME replace this with dash's -cons*
-           name :files non-test-elisp
+          (list* ; FIXME replace this with dash's -cons*
+           name
+           :files non-test-elisp
            (when test-files
-             (list :test
-                   (list
-                    :files
-                    (mapcar
-                     (lambda (f)
-                       (elpakit/absolutize-file-name package-dir f))
-                     test-files))))))
-        ;; Can't infer a multi-file package right now.
-        ;;
-        ;; FIXME - we could infer a lot about what to put in a
-        ;; package:
-        ;;
-        ;; ** multiple, non-test lisp files could just be packaged
-        ;; ** include any README and licence file
-        ;; ** include any dir file and info files?
-        ;;
-        ;; the blocker is where to get the :version and :requires from.
-        (error
-         "elpakit - cannot infer package for %s - add a recipe description"
-         package-dir))))
+             ;;  (--map (elpakit/absolutize-file-name package-dir it) test-files)
+             (list :test (list :files test-files)))))
+        ;; Else we have a multi-file package...
+        (match (car-safe (--filter (string-match-p "-pkg.el" it) elisp-files))
+          ((? 'stringp filename)
+           (with-temp-buffer
+             (insert-file-contents (expand-file-name filename package-dir))
+             (goto-char (point-min))
+             (match (read (current-buffer))
+               ((list 'define-package name version docstring)
+                (list* name
+                       :version version :doc docstring
+                       :files (append non-test-elisp other-files)
+                       (when test-files
+                         (list :test (list :files test-files))))))))
+          (nil
+           ;; ... try and find the package-info in an elisp-file
+           (let ((info
+                  (car-safe
+                   (--keep
+                    (condition-case err
+                        (with-temp-buffer
+                          (insert-file-contents (expand-file-name it package-dir))
+                          (emacs-lisp-mode)
+                          (package-buffer-info))
+                      (error nil))
+                    elisp-files))))
+             (if (not info)
+                 (error
+                  "elpakit - cannot infer package for %s - add a recipe description"
+                  package-dir)
+                 ;; Else try and construct the package
+                 ;;(list (car info))
+                 (list*
+                  (symbol-name (package-desc-name info))
+                  :version (package-version-join (package-desc-version info))
+                  :doc (package-desc-summary info)
+                  :files
+                  (append
+                   non-test-elisp
+                   other-files) ; (--map (elpakit/absolutize-file-name package-dir it) other-files)
+                  (when test-files
+                    ;; (let ((full (--map (elpakit/absolutize-file-name package-dir it) test-files))))
+                    (list :test (list :files test-files)))))))))))
 
 (defun elpakit/get-recipe (package-dir)
-  "Returns the recipe for the PACKAGE-DIR.
+  "Return the recipe for the PACKAGE-DIR.
 
 Ensure the file list is sorted and consisting of absolute file
 names.  Adds a `:base-files' key containing the original,
@@ -154,24 +284,28 @@ un-absoluted files.
 
 If the recipe is not found as a file then we infer it from the
 PACKAGE-DIR with `elpakit/infer-recipe'."
-  (if (elpakit/file-in-dir-p "recipes" package-dir)
-      (let* ((recipe-filename (elpakit/find-recipe package-dir))
-             (recipe (with-current-buffer (find-file-noselect recipe-filename)
-                       (goto-char (point-min))
-                       (read (current-buffer)))))
-        (plist-put (cdr recipe)
-                   :base-files
-                   (plist-get (cdr recipe) :files))
-        (plist-put (cdr recipe)
-                   :files
-                   (mapcar
-                    (lambda (f)
-                      (elpakit/absolutize-file-name
-                       package-dir f))
-                    (plist-get (cdr recipe) :files)))
-        recipe)
-      ;; Else infer it
-      (elpakit/infer-recipe package-dir)))
+  (let* ((recipe
+          (if (elpakit/file-in-dir-p "recipes" package-dir)
+              (let ((recipe-filename (elpakit/find-recipe package-dir)))
+                (with-temp-buffer
+                  (insert-file-contents recipe-filename)
+                  (goto-char (point-min))
+                  (read (current-buffer))))
+              ;; Else infer the recipe
+              (elpakit/infer-recipe package-dir))))
+    (plist-put
+     (cdr recipe)
+     :base-files
+     (plist-get (cdr recipe) :files))
+    (plist-put
+     (cdr recipe)
+     :files
+     (--map
+      (if (file-name-absolute-p it)
+          it
+          (elpakit/absolutize-file-name package-dir it))
+      (plist-get (cdr recipe) :files)))
+    recipe))
 
 (defun elpakit/package-files (recipe)
   "The list of files specified by the RECIPE.
@@ -191,30 +325,25 @@ The list is returned sorted and with absolute files."
 
 (defun elpakit/make-pkg-lisp (dest-dir pkg-info)
   "Write the package declaration lisp for PKG-INFO into DEST-DIR."
-  ;; This is ripped out of melpa pb/write-pkg-file
-  (let* ((name (aref pkg-info 0))
-         (filename (concat
-                    (file-name-as-directory dest-dir)
-                    (format "%s-pkg.el" name)))
-         (lisp
-          `(define-package ; add the URL to extra-properties
-               ,name
-               ,(aref pkg-info 3)
-             ,(aref pkg-info 2)
-             ',(mapcar
-                (lambda (elt)
-                  (list (car elt)
-                        (package-version-join (cadr elt))))
-                (aref pkg-info 1)))))
-    (with-current-buffer
-        (let (find-file-hook)
-          (find-file-noselect filename))
-      (erase-buffer)
-      (insert (format "%S" lisp))
-      (write-file filename))))
+  (match-let (((list name reqs summary version)
+               (elpakit/package-info pkg-info :name :reqs :summary :version)))
+    (let* ((filename (concat
+                      (file-name-as-directory dest-dir)
+                      (format "%s-pkg.el" name)))
+           (lisp
+            `(define-package ; add the URL to extra-properties
+                 ,name ,version ,summary
+                 (quote ,(--map
+                          (cons
+                           (car it)
+                           (list
+                            (package-version-join (cadr it)))) reqs)))))
+      (with-temp-buffer
+        (insert (format "%S" lisp))
+        (write-file filename)))))
 
 (defun elpakit/copy (source dest)
-  "Copy the file."
+  "Copy SOURCE file to DEST."
   (when (file-exists-p dest)
     (if (file-directory-p dest)
         (delete-directory dest t)
@@ -222,40 +351,28 @@ The list is returned sorted and with absolute files."
   ;;(message "elpakit/copy %s to %s" source dest)
   (copy-file source dest))
 
-(defun elpakit/package-access (package slot)
-  "Do some emacs package API hiding."
-  (if (not (eq (elt package 0) 'cl-struct-package))
-      (case slot
-        (:version (elt package 3))
-        (:reqs (elt package 1))
-        (:name (intern (elt package 0)))
-        (t package))
-      ;; Else
-      (case slot
-        (:version (package-desc-version package))
-        (:reqs (package-desc-reqs package))
-        (:name (package-desc-name package))
-        (t package))))
-
 (defun elpakit/file->package (file &rest selector)
   "Convert FILE to package-info.
 
 Optionaly get a list of SELECTOR which is `:version', `:name',
-`:requires' or `t' for everything."
-  (with-current-buffer (find-file-noselect file)
+`:requires' or t for everything."
+  (with-temp-buffer
+    (insert-file-contents file)
+    (emacs-lisp-mode)
     (let* ((package-info
             (save-excursion
               (package-buffer-info))))
-      (if selector
-          (loop for select in selector
-             collect
-               (elpakit/package-access package-info select))
-          ;; Else
-          package-info))))
+      (apply 'elpakit/package-info package-info selector))))
 
 
 (defun elpakit/build-single (destination single-file &optional recipe)
-  "Build a single file package into DESTINATION."
+  "Build SINGLE-FILE package into DESTINATION.
+
+The package is built as a directory of:
+
+  package-name-version
+
+with the package file inside.  The RECIPE is used if supplied."
   (destructuring-bind
         (package-info name version)
       (condition-case nil
@@ -274,32 +391,40 @@ Optionaly get a list of SELECTOR which is `:version', `:name',
                       "") ; commentary
                     package-name
                     version)))))
-    (unless (file-exists-p destination)
-      (make-directory destination t))
-    ;; Copy the actual lisp file
-    (elpakit/copy
-     single-file
-     (concat
-      (file-name-as-directory destination)
-      (format "%s-%s" name version) ".el"))
-    ;; Return the info
-    package-info))
+    (let* ((filename
+            (s-format "${dir}${name}-${version}/${name}.el"
+                      'aget
+                      `(("dir" . ,(file-name-as-directory destination))
+                        ("name" . ,name)
+                        ("version" . ,version))))
+           (dest (file-name-directory filename)))
+      (unless (file-exists-p dest)
+        (make-directory dest t))
+      ;; Copy the actual lisp file
+      (elpakit/copy single-file filename)
+      ;; Return the info
+      package-info)))
 
 (defun elpakit/recipe->package-decl (recipe)
-  "Convert a recipe into a package declaration."
-  (destructuring-bind (name
-                       ;; FIXME we need all the MELPA recipe things here
-                       &key
-                       version doc requires
-                       base-files files test) recipe
+  "Convert RECIPE into a package declaration."
+  (match-let (((cons
+                name
+                (plist
+                 :version version
+                 :doc doc
+                 :requires requires
+                 :base-files base-files
+                 :files files
+                 :test test)) recipe))
     `(define-package
-         ,(symbol-name name)
+         ,(if (symbolp name) (symbol-name name) name)
          ,version
        ,(if (not (equal doc ""))
             doc
-            (aif (elpakit/mematch "README\\..*" files)
-                (with-current-buffer (find-file-noselect (car it))
-                  (buffer-substring-no-properties (point-min)(point-max)))
+            (let ((matched (elpakit/mematch "README\\..*" files)))
+              (when matched
+                (with-current-buffer (find-file-noselect (car matched))
+                  (buffer-substring-no-properties (point-min)(point-max))))
               "This package has no documentation."))
        ,requires)))
 
@@ -331,24 +456,33 @@ Optionaly get a list of SELECTOR which is `:version', `:name',
 
 (defun elpakit/recipe->pkg-info (recipe)
   "Convert the RECIPE to a package info vector."
-  (let* ((package-decl 
+  (let* ((package-decl
           (package-read-from-string
-           (format "%S" (elpakit/recipe->package-decl recipe))))
-         (name (nth 1 package-decl))
-         (version (nth 2 package-decl))
-         (docstring (elpakit/strip-file-local-vars (nth 3 package-decl)))
-         (require-list (nth 4 package-decl))
-         (requires (elpakit/require-versionify require-list))
-         (readme (elpakit/readme recipe))
-         (package-info
-          (vector name requires docstring version readme)))
-    package-info))
+           (format "%S" (elpakit/recipe->package-decl recipe)))))
+    (with-elpakit-new-package-api
+      (package-desc-create
+       :name (intern (nth 1 package-decl))
+       :version (version-to-list (nth 2 package-decl))
+       :summary (elpakit/strip-file-local-vars (nth 3 package-decl))
+       :reqs (elpakit/require-versionify (nth 4 package-decl)))
+      ;; Else
+      (let* ((name (nth 1 package-decl))
+             (version (nth 2 package-decl))
+             (docstring (elpakit/strip-file-local-vars (nth 3 package-decl)))
+             (require-list (nth 4 package-decl))
+             (requires (elpakit/require-versionify require-list))
+             (readme (elpakit/readme recipe))
+             (package-info
+              (vector name requires docstring version readme)))
+        package-info))))
 
 (defun elpakit/pkg-info->versioned-name (pkg-info)
-  "Make the versioned package name from the PKG-INFO vector."
-  (destructuring-bind
-        (name requires docstring version readme)
-      (mapcar 'identity pkg-info)
+  "Make the versioned package name from the PKG-INFO vector.
+
+Returns eg: `package-name-1.0.0'."
+  (match-let
+      (((list name requires docstring version)
+        (elpakit/package-info pkg-info :name :reqs :summary :version)))
     (format "%s-%s" name version)))
 
 
@@ -363,14 +497,14 @@ Examples:
  (elpakit/file-name-mask \"/two/three/four/five\" \"/one\") => nil
 
 In the final example there is no match with the MASK so we return
-`nil'."
+nil."
   (let* ((mask-parts (split-string mask "/" t))
          (file-name-parts (split-string file-name "/" t))
          (unmatched
           (loop for part in file-name-parts
              if mask-parts
              unless (equal part (pop mask-parts)) return nil end
-             else 
+             else
              collect part)))
     (when unmatched
       (mapconcat 'identity unmatched "/"))))
@@ -379,7 +513,9 @@ In the final example there is no match with the MASK so we return
 (defun elpakit/build-multi (destination recipe)
   "Build a multi-file package into DESTINATION.
 
-RECIPE specifies the package in a plist s-expression form."
+RECIPE specifies the package in a plist s-expression form.
+
+The files should be tar'd and the tar placed into DESTINATION."
   (let* ((files (elpakit/package-files recipe))
          (base-files (elpakit/package-base-files recipe))
          (pkg-info (elpakit/recipe->pkg-info recipe))
@@ -417,15 +553,17 @@ RECIPE specifies the package in a plist s-expression form."
       pkg-info)))
 
 (defun elpakit/melpaize (repo tarball)
-  "Make a `melpa' branch in the REPO directory from PACKAGE.
+  "Make a `melpa' branch in the REPO directory from TARBALL.
 
-PACKAGE is a tarball, perhaps generated by `elpakit-make-multi'."
+TARBALL is a package tarball, perhaps generated by
+`elpakit-make-multi', which will becomes the MELPA branch by
+unpacking."
   (with-current-buffer (get-buffer-create "*elpakit-melpa-branch*")
     (let* ((default-directory (file-name-as-directory repo))
-           (branches 
+           (branches
             (split-string
              (shell-command-to-string "git branch -a"))))
-      (insert 
+      (insert
        (if (member "melpa" branches)
            (shell-command-to-string "git checkout melpa")
            ;; Else create the orphan branch
@@ -457,7 +595,7 @@ If the directory you are in is a package then it is built,
 otherwise this asks you for a package directory.
 
 Optionally, make the package file in the specified
-DESTINTATION-DIR.
+DESTINATION-DIR.
 
 If called interactively, this will default to building the
 current directory as a package, if it has a 'recipes' directory.
@@ -468,7 +606,7 @@ If the prefix argument is used interactively, then this will also
 prompt for the destination directory.
 
 If the customization value
-`elpakit-do-melpa-on-multi-file-package' is `t' and the
+`elpakit-do-melpa-on-multi-file-package' is t and the
 PACKAGE-DIR is a git repository then an orphan branch called
 \"melpa\" is created in the repository and populated with the
 files from the package.  This includes the pkg.el file necessary
@@ -492,8 +630,8 @@ Opens the directory the package has been built in."
           (if (file-directory-p dest-dir)
               dest-dir
               (make-temp-file package-name dir-flag "elpakit")))
-         (package-info (elpakit/build-multi
-                        dest (elpakit/get-recipe directory))))
+         (package-info
+          (elpakit/build-multi dest (elpakit/get-recipe directory))))
     ;; Check whether we should do melpa branch management
     (when (and
            (file-directory-p (concat directory ".git"))
@@ -507,8 +645,9 @@ Opens the directory the package has been built in."
 (defun elpakit/do-eval (package-dir)
   "Just eval the elisp files in the package in PACKAGE-DIR."
   (assert (file-directory-p package-dir))
-  (let* ((files (elpakit/package-files (elpakit/get-recipe package-dir)))
-         (elisp (elpakit/files-to-elisp files)))
+  (let* ((recipe (elpakit/get-recipe package-dir))
+         (files (elpakit/package-files recipe))
+         (elisp (elpakit/files-to-elisp files package-dir)))
     (loop for file in elisp
        do
          (with-current-buffer
@@ -524,7 +663,7 @@ Opens the directory the package has been built in."
                               (append lastcons (list file)))))))))))
 
 (defun elpakit/build-recipe (destination recipe)
-  "Build the package with the RECIPE."
+  "Build the package with RECIPE into DESTINATION."
   (let* ((recipe-plist (cdr recipe))
          (files (plist-get recipe-plist :files)))
     (if (>= (length files) 2)
@@ -618,7 +757,7 @@ test-package cons."
        (elpakit/do-eval package)))
 
 (defun elpakit/packages-list->archive-list (packages-list)
-  "Turn the list of packages into an archive list."
+  "Turn PACKAGES-LIST into an archive list."
   (loop for (type . package) in packages-list
      collect
        (cons
@@ -631,7 +770,7 @@ test-package cons."
 (defun elpakit/archive-list->elpa-list (archive-list)
   "Make a list of ELPA packages referred to by the archive.
 
-This reduces the archive-list down to just the dependent packages
+This reduces the ARCHIVE-LIST down to just the dependent packages
 that are specified in the archive list.
 
 We use this function to resolve the missing depends from test
@@ -688,7 +827,7 @@ packages added to it."
       archive-list)))
 
 (defvar elpakit-make-full-archive t
-  "Set to `t' to get the archive resolution stuff working.")
+  "Set to t to get the archive resolution stuff working.")
 
 ;;;###autoload
 (defun elpakit (destination package-list &optional do-tests)
@@ -746,7 +885,7 @@ the second item is the process type either `:daemon' or
 `:batch'.  Other items may be present.")
 
 (defun elpakit/process-add (name type process &rest rest)
-  "Add a process to the central list."
+  "Add PROCESS to the central list keyed by NAME."
   (puthash name (append (list name type process) rest) elpakit/processes))
 
 (defun elpakit/process-list ()
@@ -764,7 +903,7 @@ the second item is the process type either `:daemon' or
     res))
 
 (defun elpakit/process-del (name)
-  "Remove a process from the central list."
+  "Remove the process with NAME from the central list."
   (remhash name elpakit/processes))
 
 (defun elpakit/process-list-entries ()
@@ -788,7 +927,7 @@ the second item is the process type either `:daemon' or
          (format "emacsclient -s %s --eval '%s'" name (buffer-string)) nil 0))))
 
 (defun elpakit-process-kill (process-id &optional interactive-y)
-  "Kill the specified proc with PROCESS-ID."
+  "Kill the specified process with PROCESS-ID."
   (interactive
    (list
     (buffer-substring-no-properties
@@ -928,7 +1067,7 @@ elpakit processes from batch tests and daemons."
 ;; Process spawning
 
 (defun elpakit/sentinel (process event)
-  "Sentintel to kill the elpakit process when necessary."
+  "Sentintel to kill the elpakit PROCESS when necessary."
   (if (or (string-equal event "finished\n")
           (string-equal event "exited abnormally with code exitcode\n"))
       (elpakit/process-del (process-name process))))
@@ -1198,7 +1337,7 @@ you."
                           :name (match-string 1 e)
                           :version (match-string 2 e)))
             (directory-files package-user-dir nil package-regex)))
-       collect 
+       collect
          (sort
           (cdr entry-lst)
           (lambda (a b)
@@ -1249,9 +1388,15 @@ you."
 
 ;;; Other tools on top of elpakit
 
-(defun elpakit/files-to-elisp (list-of-files)
-  (-filter
-   (lambda (e) (string-match-p ".*\\.el$" e)) list-of-files))
+(defun elpakit/files-to-elisp (list-of-files package-dir)
+  "Return just the package elisp files from LIST-OF-FILES.
+
+The package elisp files are those that are in the root of the
+PACKAGE-DIR."
+  (let* ((dir (file-name-as-directory (expand-file-name package-dir)))
+         (re (rx-to-string
+              `(and ,dir (1+ (not (any "/"))) ".el"))))
+    (-filter (lambda (e) (string-match-p re e)) list-of-files)))
 
 (defun elpakit-multi-occur (buffer thing)
   "Multi-occur the current symbol using the current Elpakit.
@@ -1266,7 +1411,7 @@ All lisp files in the current elpakit are considered.
     (current-buffer)
     (thing-at-point 'symbol)))
   (let* ((files (elpakit/package-files (elpakit/get-recipe ".")))
-         (elisp (elpakit/files-to-elisp files))
+         (elisp (elpakit/files-to-elisp files "."))
          (elisp-buffers
           (loop for filename in elisp
              collect (find-file-noselect filename))))
@@ -1286,7 +1431,7 @@ All lisp files in the current elpakit are considered.
 
 ;;;###autoload
 (defun elpakit-isearch-hook-jack-in ()
-  "Jack in Elpakit to isearch. Call from `elisp-mode-hook'.
+  "Jack in Elpakit to isearch.  Call from `elisp-mode-hook'.
 
 Adds `elpakit-multi-occur' to `isearch' with `M-o'.
 
