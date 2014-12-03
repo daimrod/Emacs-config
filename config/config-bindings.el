@@ -193,7 +193,7 @@ otherwise stop it."
 
 (define-key org-agenda-mode-map (kbd "x") nil)
 
-(define-key bibtex-mode-map (kbd "C-c C-o") 'dmd-bibtex-jump-to-org-entry)
+(define-key bibtex-mode-map (kbd "C-c C-o") 'dmd-bibtex-open)
 
 (define-key gnus-summary-mode-map (kbd "i") (kbd "L S"))
 (define-key gnus-summary-mode-map (kbd "y") (kbd "I S"))

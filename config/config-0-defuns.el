@@ -415,13 +415,28 @@ float."
 (defun dmd--sanitize-org-regexp-matcher (regexp)
   (replace-regexp-in-string "[|/!]" "." regexp))
 
-(defun dmd-bibtex-jump-to-org-entry ()
-  (interactive)
+(defun dmd-bibtex-open (&optional prefix)
+  (interactive "P")
+  (if prefix
+      (dmd--bibtex-open-file)
+    (dmd--bibtex-jump-to-org-entry)))
+
+(defun dmd--bibtex-open-file ()
+  (let ((raw (cdr (assoc-string "file"
+                                (save-excursion
+                                  (bibtex-beginning-of-entry)
+                                  (bibtex-parse-entry))
+                                t))))
+    (string-match "{:\\(.*\\):PDF}" raw)
+    (org-open-file (match-string 1 raw))))
+
+(defun dmd--bibtex-jump-to-org-entry ()
   (let ((bib-buffer "bib.org")
-        (label (cdr (assoc "=key="
-                           (save-excursion
-                             (bibtex-beginning-of-entry)
-                             (bibtex-parse-entry)))))
+        (label (cdr (assoc-string "=key="
+                                  (save-excursion
+                                    (bibtex-beginning-of-entry)
+                                    (bibtex-parse-entry))
+                                  t)))
         position)
     (setq todo-only nil)                ; required by org-make-tags-matcher
     (if (not label)
