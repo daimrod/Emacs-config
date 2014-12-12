@@ -200,4 +200,6 @@ otherwise stop it."
 
 (global-set-key (kbd "C-x #") 'delete-frame)
 
+(define-key org-beamer-mode-map (kbd "C-c C-b") nil)
+
 (provide 'config-bindings)
