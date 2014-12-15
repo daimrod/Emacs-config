@@ -17,6 +17,16 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+(defcustom org-bib-notes-file (expand-file-name "~/org/bib.org")
+  ""
+  :group 'org
+  :type 'file)
+
+(defcustom org-bibtex-file (expand-file-name "~/org/.bib.bib")
+  ""
+  :group 'org
+  :type 'file)
+
 (defun recentf-ido-find-file ()
   "Find a recent file using ido."
   (interactive)
@@ -431,7 +441,7 @@ float."
     (org-open-file (match-string 1 raw))))
 
 (defun dmd--bibtex-jump-to-org-entry ()
-  (let ((bib-buffer "bib.org")
+  (let ((bib-buffer (find-file-noselect org-bib-notes-file))
         (label (cdr (assoc-string "=key="
                                   (save-excursion
                                     (bibtex-beginning-of-entry)
@@ -449,7 +459,7 @@ float."
                                                      (dmd--sanitize-org-regexp-matcher label))))
                                        todo-only))))
       (if (not position)
-          (user-error "Could not find any matching entry in bib.org for %s" label)
+          (user-error "Could not find any matching entry in %s for %s" bib-buffer label)
         (switch-to-buffer bib-buffer)
         (goto-char position)))))
 
@@ -479,7 +489,7 @@ Blocks are named with #+NAME."
          (path (org-element-property :path link)))
     (when (or (string= type "bib")
               (and (string= type "file")
-                   (string= path "~/.bib.bib")))
+                   (file-equal-p path org-bibtex-file)))
       (format "\\cite{%s}" (org-element-property :search-option link)))))
 
 (advice-add 'org-latex-link :around (lambda (oldfun &rest args)
