@@ -256,8 +256,6 @@ Do it recursively if the third argument is not nil."
     info-look
     smartparens
     smartparens-config
-    latex
-    preview
     w3m-load
     w3m
     w3m-search
@@ -265,7 +263,6 @@ Do it recursively if the third argument is not nil."
     pandoc-mode
     xmlgen
     sgml-mode
-    sxml<->xml
     xwidget
     parallel-xwidget
     ace-window
