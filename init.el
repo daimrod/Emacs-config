@@ -278,7 +278,7 @@ Do it recursively if the third argument is not nil."
             ;; packages provided by ELPA.
             (fni/add-to-load-path src-dir t t)
             
-            (load (expand-file-name "~/quicklisp/slime-helper.el"))
+            (load (expand-file-name "~/quicklisp/slime-helper.el") t)
             (load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
 
             (mapc (lambda (module)
