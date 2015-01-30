@@ -187,6 +187,7 @@ Do it recursively if the third argument is not nil."
     bibtex
     org
     org-agenda
+    org-archive
     org-agenda-check
     ox
     ox-latex
