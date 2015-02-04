@@ -169,6 +169,7 @@ Do it recursively if the third argument is not nil."
     ess-site
     gnus
     gnus-msg
+    gnuplot
     sendmail
     message
     mm-decode
@@ -189,6 +190,7 @@ Do it recursively if the third argument is not nil."
     org-agenda
     org-archive
     org-agenda-check
+    org-plot
     ox
     ox-latex
     ox-beamer
