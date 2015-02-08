@@ -292,8 +292,7 @@ Do it recursively if the third argument is not nil."
                   (append dmd/required dmd/modules))
 
             (when (fboundp 'org-agenda-list)
-              (org-agenda-list))
-            (server-mode (yes-or-no-p "Enable server mode?"))))
+              (org-agenda-list))))
 
 ;; enabled/disabled commands
 (put 'upcase-region 'disabled nil)
