@@ -188,6 +188,7 @@ Do it recursively if the third argument is not nil."
     bibtex
     org
     org-agenda
+    org-clock
     org-archive
     org-agenda-check
     org-plot
@@ -272,7 +273,8 @@ Do it recursively if the third argument is not nil."
     ispell
     ws-trim
     marmalade-upload
-    yasnippet)
+    yasnippet
+    pomodoro)
   "List of required modules")
 
 (add-hook 'after-init-hook
