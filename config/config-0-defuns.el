@@ -520,16 +520,4 @@ Blocks are named with #+NAME."
                  (switch-to-buffer (clone-indirect-buffer nil nil))))
             '((name . narrow-to-indirect-region)))
 
-(defun dmd-pomodoro (&optional time-prefix)
-  (interactive "P")
-  (let ((time (if time-prefix
-                  (prefix-numeric-value time-prefix)
-                25)))
-    (run-at-time (format "%d min" time) nil 'dmd--pomodoro-end)))
-
-(defun dmd--pomodoro-end ()
-  (let* ((files (directory-files (expand-file-name "~/Music/Win/") t "\\.mp3$"))
-         (file (elt files (random (length files)))))
-    (emms-play-file file)))
-
 (provide 'config-0-defuns)
