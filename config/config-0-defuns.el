@@ -513,11 +513,4 @@ Blocks are named with #+NAME."
       title
       (symbol-name (w3m-url-coding-system url))))))
 
-(advice-add 'narrow-to-region :before
-            '(lambda (&rest args)
-               "Narrow to indirect buffer when called with a prefix argument."
-               (when current-prefix-arg
-                 (switch-to-buffer (clone-indirect-buffer nil nil))))
-            '((name . narrow-to-indirect-region)))
-
 (provide 'config-0-defuns)
