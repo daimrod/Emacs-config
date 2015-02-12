@@ -189,6 +189,7 @@ Do it recursively if the third argument is not nil."
     org
     org-agenda
     org-clock
+    org-game
     org-archive
     org-agenda-check
     org-plot

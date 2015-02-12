@@ -261,4 +261,6 @@
 (add-to-list 'auto-mode-alist
              '("\\.diary" . diary-mode))
 
+(org-game-start)
+
 (provide 'config-misc)
