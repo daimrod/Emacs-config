@@ -384,6 +384,7 @@ float."
   (interactive)
   (when (and (derived-mode-p 'org-mode)
              (buffer-file-name))
+    (setq-local tex-main-file (buffer-file-name))
     (reftex-set-cite-format "[[bib:%l][%2a (%y)]]")
     (setq-local reftex-cite-punctuation '(", " " and " " et al."))
     (reftex-parse-all)))
