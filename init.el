@@ -275,7 +275,8 @@ Do it recursively if the third argument is not nil."
     ws-trim
     marmalade-upload
     yasnippet
-    pomodoro)
+    pomodoro
+    request)
   "List of required modules")
 
 (add-hook 'after-init-hook

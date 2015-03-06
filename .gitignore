@@ -30,3 +30,4 @@ debug.el
 /.emacs.desktop
 /.emacs.desktop.lock
 /projectile.cache
+/request/curl-cookie-jar

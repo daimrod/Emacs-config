@@ -523,4 +523,17 @@ Blocks are named with #+NAME."
              (find (buffer-file-name) org-agenda-files :test #'file-equal-p))
     (org-map-entries 'org-id-get-create)))
 
+(defun dmd-doi-to-bib (url)
+  (interactive "sURL: ")
+  (request
+   url
+   :parser 'buffer-string
+   :headers '(("Accept" . "text/bibliography; style=bibtex"))
+   :success (function*
+             (lambda (&key data &allow-other-keys)
+               (with-current-buffer (get-buffer-create "*doi-to-bib*")
+                 (delete-region (point-min) (point-max))
+                 (insert data)
+                 (switch-to-buffer-other-window (current-buffer)))))))
+
 (provide 'config-0-defuns)
