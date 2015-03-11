@@ -212,16 +212,23 @@ If N is not set, use `comint-buffer-minimum-size'."
   "*A terminal emulator to use."
   :group 'external)
 
+(defcustom terminal-emulator-parameters nil
+  "*A terminal emulator to use."
+  :group 'external
+  :type '(repeat string))
+
 (defun dmd/terminal-emulator ()
   "Open a terminal emulator using `terminal-emulator'."
   (interactive)
-  (start-process
+  (apply
+   #'start-process
    "Terminal Emulator"
    nil
    (etypecase terminal-emulator
      (string terminal-emulator)
      (function (funcall terminal-emulator))
-     (symbol (symbol-value terminal-emulator)))))
+     (symbol (symbol-value terminal-emulator)))
+   terminal-emulator-parameters))
 
 (defun unfill-paragraph ()
   "Takes a multi-line paragraph and makes it into a single line
