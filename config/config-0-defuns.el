@@ -315,7 +315,7 @@ It uses magit internal."
                               buffer
                               "/bin/bash"
                               "-c"
-                              (format "source ~/.python-virtualenvs/youtube-dl/bin/activate && youtube-dl --no-part --extract-audio --audio-format mp3 --audio-quality 128K %s" url))))
+                              (format "source ~/.virtualenv/youtube-dl/bin/activate && youtube-dl --no-part --extract-audio --audio-format mp3 --audio-quality 128K %s" url))))
     (set-process-sentinel proc (lambda (proc event)
                                  (if (string= event "finished\n")
                                      (kill-buffer buffer)
