@@ -51,13 +51,6 @@
 ;; Highlight matching parentheses when the point is on them.
 (show-paren-mode 1)
 
-;; enable ido-mode
-(add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-truncation)
-(add-hook 'ido-setup-hook 'ido-define-keys)
-
-(ido-mode 1)
-(ido-ubiquitous-mode 1)
-
 ;; Prefer text-mode over fundamental-mode
 (setq-default major-mode 'text-mode)
 

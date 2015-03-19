@@ -104,11 +104,11 @@
                                      (if default-value
                                          (format " (default `%s'): " default-value)
                                        ": ")))
-                     (system (ido-completing-read prompt
-                                                  system-names
-                                                  nil nil nil
-                                                  'slime-system-history
-                                                  default-value)))
+                     (system (completing-read prompt
+                                              system-names
+                                              nil nil nil
+                                              'slime-system-history
+                                              default-value)))
                 (insert "(ql:quickload :" system ")")
                 (slime-repl-send-input t))))
   (:one-liner "Quickload a system"))

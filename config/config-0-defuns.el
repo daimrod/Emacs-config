@@ -27,17 +27,10 @@
   :group 'org
   :type 'file)
 
-(defun recentf-ido-find-file ()
-  "Find a recent file using ido."
-  (interactive)
-  (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
-    (when file
-      (find-file file))))
-
 (defun sudo-edit (&optional arg)
   (interactive "P")
   (if (or arg (not buffer-file-name))
-      (find-file (concat "/sudo:localhost:" (ido-read-file-name "File: ")))
+      (find-file (concat "/sudo:localhost:" (read-file-name "File: ")))
     (find-alternate-file (concat "/sudo:localhost:" buffer-file-name))))
 
 (defun sbrk-paste ()
@@ -168,14 +161,14 @@ but still present in the background."
 (defun dmd/evince (filename)
   "Open the given FILENAME with evince in a background.
 
-`ido-read-file-name' is used to find the files. Extensions can be
+`read-file-name' is used to find the files. Extensions can be
 added to `*evince-extensions*'."
   (interactive
    (let* ((exts (copy-list *evince-extensions*))
           (ext (do* ((ret (concat "\\(" (pop exts)) (concat ret "\\|" ext))
                      (ext (pop exts) (pop exts)))
                    ((null exts) (concat ret "\\)")))))
-     (list (ido-read-file-name
+     (list (read-file-name
             "File: " nil nil
             nil
             (ffap-file-at-point)
@@ -258,7 +251,7 @@ scaling."
        (* (window-width window)
           (expt step amount))))))
 
-(defun dmd/ido-kill-buffer (&optional kill-process)
+(defun dmd/kill-buffer (&optional kill-process)
   "Kill a buffer or its process with a prefix.
 The buffer name is selected interactively by typing a substring.
 For details of keybindings, see `ido-switch-buffer'."
@@ -372,14 +365,6 @@ It uses magit internal."
   "Like `/' but uses floating number by coercing the DIVIDEND to
 float."
   (apply #'/ (coerce dividend 'float) divisors))
-
-(defun ido-disable-line-truncation ()
-  (set (make-local-variable 'truncate-lines) nil))
-
-(defun ido-define-keys ()
-  ;; C-n/p is more intuitive in vertical layout
-  (define-key ido-completion-map (kbd "C-n") 'ido-next-match)
-  (define-key ido-completion-map (kbd "C-p") 'ido-prev-match))
 
 (defun dmd/text-mode-setup ()
   (interactive)
