@@ -31,17 +31,6 @@
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 
-;; Imenu
-(global-set-key (kbd "C-x C-i") 'imenu)
-
-;; File finding
-(global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
-(global-set-key (kbd "C-x C-M-f") 'find-file-in-project)
-(global-set-key (kbd "C-x f") 'recentf-ido-find-file)
-(global-set-key (kbd "C-c y") 'bury-buffer)
-(global-set-key (kbd "C-c r") 'revert-buffer)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-
 ;; Window switching. (C-x o goes to the next window)
 (windmove-default-keybindings) ;; Shift+direction
 (global-set-key (kbd "C-x C-o") (lambda () (interactive) (other-window -1))) ;; back one
@@ -112,8 +101,6 @@
 (global-set-key (kbd "<f6>") 'recompile)
 
 (global-set-key (kbd "M-\\") 'execute-extended-command)
-
-;; (global-set-key (kbd "C-x k") 'dmd/ido-kill-buffer)
 
 ;; M-x
 (global-set-key (kbd "M-x") 'helm-M-x)
