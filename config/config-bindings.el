@@ -113,7 +113,12 @@
 
 (global-set-key (kbd "M-\\") 'execute-extended-command)
 
-(global-set-key (kbd "C-x k") 'dmd/ido-kill-buffer)
+;; (global-set-key (kbd "C-x k") 'dmd/ido-kill-buffer)
+
+;; M-x
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-c m") 'helm-M-x)
+(global-set-key (kbd "C-c C-m") 'helm-M-x)
 
 ;;; EMMS
 (global-set-key (kbd "M-<f10>") 'emms-previous)
@@ -135,9 +140,6 @@ otherwise stop it."
 
 (global-set-key (kbd "C-;") 'newline-and-indent)
 
-;; M-x
-(global-set-key (kbd "C-c m") 'execute-extended-command)
-(global-set-key (kbd "C-c C-m") 'execute-extended-command)
 
 (define-key dired-mode-map (kbd "e") 'dmd/dired-exec-lisp)
 

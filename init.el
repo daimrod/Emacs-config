@@ -95,6 +95,7 @@ Do it recursively if the third argument is not nil."
     recentf
     verbiste
     info
+    helm-config
     ebib
     key-chord
     graze-url
@@ -144,8 +145,6 @@ Do it recursively if the third argument is not nil."
     scratch
     undo-tree
     linum
-    ido
-    ido-ubiquitous
     rw-hunspell
     rw-ispell
     rw-language-and-country-codes
@@ -177,7 +176,6 @@ Do it recursively if the third argument is not nil."
     nnir
     epg
     epa-mail
-    ido-gnus
     adaptive-wrap
     multiple-cursors
     multi-term
@@ -187,6 +185,7 @@ Do it recursively if the third argument is not nil."
     reftex
     bibtex
     org
+    org-ref
     org-agenda
     org-clock
     org-game
