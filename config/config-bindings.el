@@ -191,4 +191,6 @@ otherwise stop it."
 
 (define-key org-beamer-mode-map (kbd "C-c C-b") nil)
 
+(define-key org-mode-map (kbd "C-c C-j") 'helm-org-in-buffer-headings)
+
 (provide 'config-bindings)

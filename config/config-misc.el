@@ -256,4 +256,6 @@
 
 (org-game-start)
 
+(helm-mode 1)
+
 (provide 'config-misc)

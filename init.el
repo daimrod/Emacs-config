@@ -246,7 +246,9 @@ Do it recursively if the third argument is not nil."
     plantuml-mode
     ob-plantuml
     projectile
+    helm
     helm-projectile
+    helm-org
     ag
     prolog
     ediprolog
