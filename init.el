@@ -186,6 +186,12 @@ Do it recursively if the third argument is not nil."
     bibtex
     org
     org-ref
+    doi-utils
+    jmax-bibtex
+    pubmed
+    arxiv
+    sci-id
+    isbn
     org-agenda
     org-clock
     org-game
@@ -249,6 +255,7 @@ Do it recursively if the third argument is not nil."
     helm
     helm-projectile
     helm-org
+    helm-bibtex
     ag
     prolog
     ediprolog
