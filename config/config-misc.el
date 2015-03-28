@@ -257,5 +257,6 @@
 (org-game-start)
 
 (helm-mode 1)
+(helm-projectile-on)
 
 (provide 'config-misc)
