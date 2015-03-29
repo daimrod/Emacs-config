@@ -296,6 +296,7 @@ Do it recursively if the third argument is not nil."
             
             (load (expand-file-name "~/quicklisp/slime-helper.el") t)
             (load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
+            (pdf-tools-install)
 
             (mapc (lambda (module)
                     (message "Loading %s" module)
