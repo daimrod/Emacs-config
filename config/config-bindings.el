@@ -176,7 +176,7 @@ otherwise stop it."
 (global-set-key (kbd "s-f") 'god-mode-all)
 (global-set-key (kbd "s-c") 'god-local-mode)
 
-(define-key org-mode-map (kbd "C-c )") 'reftex-citation)
+(define-key org-mode-map (kbd "C-c )") 'helm-bibtex)
 
 (define-key message-mode-map (kbd "C-c C-c") nil)
 
