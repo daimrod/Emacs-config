@@ -370,7 +370,8 @@ float."
   (interactive)
   (activate-input-method default-input-method)
   (visual-line-mode 1)
-  (adaptive-wrap-prefix-mode 1))
+  (adaptive-wrap-prefix-mode 1)
+  (flyspell-mode 1))
 
 (defun dmd-org-mode-reftex-setup ()
   (interactive)
