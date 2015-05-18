@@ -31,6 +31,10 @@
              (expand-file-name (concat src-dir
                                        "org-mode/doc")))
 
+(add-to-list 'Info-additional-directory-list
+             (expand-file-name (concat dotfiles-dir
+                                       "doc")))
+
 (provide 'config-doc)
 
 ;;; config-doc.el ends here
