@@ -32,3 +32,4 @@ debug.el
 /projectile.cache
 /request/curl-cookie-jar
 /doc/
+/history
