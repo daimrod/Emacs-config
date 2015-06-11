@@ -303,10 +303,7 @@ Do it recursively if the third argument is not nil."
                     ;; (require module)
                     (unless (ignore-errors (require module))
                       (warn "Failed to load module `%s'" module)))
-                  (append dmd/required dmd/modules))
-
-            (when (fboundp 'org-agenda-list)
-              (org-agenda-list))))
+                  (append dmd/required dmd/modules))))
 
 ;; enabled/disabled commands
 (put 'upcase-region 'disabled nil)
