@@ -529,4 +529,11 @@ Blocks are named with #+NAME."
                  (insert data)
                  (switch-to-buffer-other-window (current-buffer)))))))
 
+(defun dmd/org-clock-in-switch-to-state (state)
+  "Switch to \"NEXT\" state unless we are in `org-capture-mode' or if the STATE is \"MEETING\""
+  (cond ((or (string= state "MEETING")
+             org-capture-mode)
+         state)
+        (t "NEXT")))
+
 (provide 'config-0-defuns)
