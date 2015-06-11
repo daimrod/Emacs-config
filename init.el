@@ -249,6 +249,7 @@ Do it recursively if the third argument is not nil."
     org-magit
     org-man
     org-feed
+    org-habit
     plantuml-mode
     ob-plantuml
     projectile
