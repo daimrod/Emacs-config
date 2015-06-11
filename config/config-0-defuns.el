@@ -536,4 +536,9 @@ Blocks are named with #+NAME."
          state)
         (t "NEXT")))
 
+(defun dmd/org-add-created-prop-if-none ()
+  "Add a \"CREATED\" properties if none exists."
+  (unless (org-entry-get (point) "CREATED")
+    (org-set-property "CREATED" (format-time-string "[%Y-%m-%d %a %H:%M]" (org-read-date nil 'totime "today")))))
+
 (provide 'config-0-defuns)
