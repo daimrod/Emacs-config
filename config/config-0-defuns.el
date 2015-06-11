@@ -530,9 +530,13 @@ Blocks are named with #+NAME."
                  (switch-to-buffer-other-window (current-buffer)))))))
 
 (defun dmd/org-clock-in-switch-to-state (state)
-  "Switch to \"NEXT\" state unless we are in `org-capture-mode' or if the STATE is \"MEETING\""
+  "Switch to \"NEXT\" state unless:
+- we are in `org-capture-mode'
+- if the STATE is \"MEETING\"
+- it's a habit (has STYLE=habit)"
   (cond ((or (string= state "MEETING")
-             org-capture-mode)
+             org-capture-mode
+             (equal (org-entry-get (point) "STYLE") "habit"))
          state)
         (t "NEXT")))
 
@@ -540,5 +544,17 @@ Blocks are named with #+NAME."
   "Add a \"CREATED\" properties if none exists."
   (unless (org-entry-get (point) "CREATED")
     (org-set-property "CREATED" (format-time-string "[%Y-%m-%d %a %H:%M]" (org-read-date nil 'totime "today")))))
+
+(defcustom org-agenda-skip-tags nil
+  "Tags that should be excluded even if they have a SCHEDULED or DEADLINE property."
+  :type '(repeat string)
+  :group 'org-agenda)
+
+(defun dmd/org-agenda-skip-tags-entry ()
+  (when (find-if (lambda (s)
+                   (find s (org-get-tags-at (point)) :test #'string=))
+                 org-agenda-skip-tags)
+    (org-end-of-subtree t)
+    (point)))
 
 (provide 'config-0-defuns)
