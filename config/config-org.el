@@ -110,4 +110,6 @@
                            (add-hook 'before-save-hook 'dmd-org-add-ids-to-headlines nil 'local)
                            (add-hook 'before-save-hook 'dmd-org-add-CREATED-to-headlines nil 'local)))
 
+(add-hook 'org-clock-in-prepare-hook 'org-set-effort)
+
 (provide 'config-org)
