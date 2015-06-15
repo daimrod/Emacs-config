@@ -516,6 +516,14 @@ Blocks are named with #+NAME."
              (find (buffer-file-name) org-agenda-files :test #'file-equal-p))
     (org-map-entries 'org-id-get-create)))
 
+(defun dmd-org-add-CREATED-to-headlines ()
+  "Add \"CREATED\" properties to all headlines in the current buffer."
+  (interactive)
+  (when (and (derived-mode-p 'org-mode)
+             (buffer-file-name)
+             (find (buffer-file-name) org-agenda-files :test #'file-equal-p))
+    (org-map-entries #'dmd-org-add-created-prop-if-none)))
+
 (defun dmd-doi-to-bib (url)
   (interactive "sURL: ")
   (request
@@ -529,7 +537,7 @@ Blocks are named with #+NAME."
                  (insert data)
                  (switch-to-buffer-other-window (current-buffer)))))))
 
-(defun dmd/org-clock-in-switch-to-state (state)
+(defun dmd-org-clock-in-switch-to-state (state)
   "Switch to \"NEXT\" state unless:
 - we are in `org-capture-mode'
 - if the STATE is \"MEETING\"
@@ -540,7 +548,7 @@ Blocks are named with #+NAME."
          state)
         (t "NEXT")))
 
-(defun dmd/org-add-created-prop-if-none ()
+(defun dmd-org-add-created-prop-if-none ()
   "Add a \"CREATED\" properties if none exists."
   (unless (org-entry-get (point) "CREATED")
     (org-set-property "CREATED" (format-time-string "[%Y-%m-%d %a %H:%M]" (org-read-date nil 'totime "today")))))
@@ -550,7 +558,7 @@ Blocks are named with #+NAME."
   :type '(repeat string)
   :group 'org-agenda)
 
-(defun dmd/org-agenda-skip-tags-entry ()
+(defun dmd-org-agenda-skip-tags-entry ()
   (when (find-if (lambda (s)
                    (find s (org-get-tags-at (point)) :test #'string=))
                  org-agenda-skip-tags)

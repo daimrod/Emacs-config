@@ -106,6 +106,8 @@
 
 (add-hook 'org-after-refile-insert-hook 'basic-save-buffer)
 
-(add-hook 'org-mode-hook (lambda () (add-hook 'before-save-hook 'dmd-org-add-ids-to-headlines nil 'local)))
+(add-hook 'org-mode-hook (lambda ()
+                           (add-hook 'before-save-hook 'dmd-org-add-ids-to-headlines nil 'local)
+                           (add-hook 'before-save-hook 'dmd-org-add-CREATED-to-headlines nil 'local)))
 
 (provide 'config-org)
