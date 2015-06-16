@@ -46,29 +46,11 @@
 (add-hook 'message-mode-hook 'turn-on-orgstruct++)
 (add-hook 'message-mode-hook 'turn-on-orgtbl)
 
-;; fontify src code
-(setq org-src-fontify-natively t)
-
-;;; Calendar/Diary
-(setq org-agenda-include-diary t)
-
-(setq diary-file "~/.diary"
-      org-agenda-diary-file "~/org/diary.org")
-(add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
-(add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
-
-;;; export Latex
-(setq org-latex-create-formula-image-program 'imagemagick)
-
 ;;; config org-annotate (contrib)
 (setq org-annotate-file-storage-file (concat org-directory "annotated.org"))
 (define-key mode-specific-org-map (kbd "n") 'org-annotate-file)
 
-;;; see (info "(org) Speed keys")
-(setq org-use-speed-commands t)
-
 ;;; Don't scatter LaTeX images
-(setq org-latex-preview-ltxpng-directory "/tmp/ltxpng/")
 (make-directory org-latex-preview-ltxpng-directory t)
 
 ;; Make windmove work in org-mode:
@@ -77,7 +59,7 @@
 (add-hook 'org-shiftdown-final-hook 'windmove-down)
 (add-hook 'org-shiftright-final-hook 'windmove-right)
 
-(setq-default org-element-use-cache nil)
+;; (setq-default org-element-use-cache nil)
 
 ;;; Nicolas Goaziou, http://article.gmane.org/gmane.emacs.orgmode/67692
 (defun org-latex-ignore-heading-filter-headline (headline backend info)
@@ -110,6 +92,7 @@
                            (add-hook 'before-save-hook 'dmd-org-add-ids-to-headlines nil 'local)
                            (add-hook 'before-save-hook 'dmd-org-add-CREATED-to-headlines nil 'local)))
 
-(add-hook 'org-clock-in-prepare-hook 'org-set-effort)
+(add-hook 'org-clock-in-prepare-hook (lambda () (unless org-capture-mode
+                                                  (org-set-effort))))
 
 (provide 'config-org)
