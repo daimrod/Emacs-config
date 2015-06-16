@@ -304,7 +304,9 @@ Do it recursively if the third argument is not nil."
                     ;; (require module)
                     (unless (ignore-errors (require module))
                       (warn "Failed to load module `%s'" module)))
-                  (append dmd/required dmd/modules))))
+                  (append dmd/required dmd/modules))
+            (diary)
+            (mapc #'find-file-noselect diary-included-files)))
 
 ;; enabled/disabled commands
 (put 'upcase-region 'disabled nil)
