@@ -193,4 +193,6 @@ otherwise stop it."
 
 (define-key org-mode-map (kbd "C-c C-j") 'helm-org-in-buffer-headings)
 
+(global-set-key (kbd "<f9>") 'org-agenda)
+
 (provide 'config-bindings)
