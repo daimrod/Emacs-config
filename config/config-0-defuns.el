@@ -573,4 +573,11 @@ Blocks are named with #+NAME."
               (org-entry-get (point) "Effort"))
     (org-set-effort)))
 
+(defun dmd-org-active-timestamp-to-inactive-when-rescheduled ()
+  "Convert some variable with active timestamp to inactive one."
+  (when (eq org-log-note-purpose 'reschedule)
+    (setq org-log-note-previous-state
+          (substitute ?\] ?\> (substitute ?\[ ?\< org-log-note-previous-state :test #'char-equal)
+                      :test #'char-equal))))
+
 (provide 'config-0-defuns)
