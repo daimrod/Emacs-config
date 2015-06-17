@@ -565,4 +565,12 @@ Blocks are named with #+NAME."
     (org-end-of-subtree t)
     (point)))
 
+(defun dmd-org-set-effort ()
+  "Set an effort unless :
+- we are in `org-capture-mode'
+- there is already an effort"
+  (unless (or org-capture-mode
+              (org-entry-get (point) "Effort"))
+    (org-set-effort)))
+
 (provide 'config-0-defuns)
