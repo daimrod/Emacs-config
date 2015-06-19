@@ -513,7 +513,7 @@ Blocks are named with #+NAME."
   ;; just to be sure we're in an org-mode buffer
   (when (and (derived-mode-p 'org-mode)
              (buffer-file-name)
-             (find (buffer-file-name) org-agenda-files :test #'file-equal-p))
+             (org-agenda-file-p))
     (org-map-entries 'org-id-get-create)))
 
 (defun dmd-org-add-CREATED-to-headlines ()
@@ -521,7 +521,7 @@ Blocks are named with #+NAME."
   (interactive)
   (when (and (derived-mode-p 'org-mode)
              (buffer-file-name)
-             (find (buffer-file-name) org-agenda-files :test #'file-equal-p))
+             (org-agenda-file-p))
     (org-map-entries #'dmd-org-add-created-prop-if-none)))
 
 (defun dmd-doi-to-bib (url)
