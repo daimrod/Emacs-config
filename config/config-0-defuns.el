@@ -586,8 +586,10 @@ Blocks are named with #+NAME."
   (if (not (derived-mode-p 'org-mode))
       (user-error "Buffer isn't in Org-Mode")
     (org-content)
-    (while (zerop (forward-line 1))
+    (save-excursion
+      (goto-char (point-min))
+      (while (zerop (forward-line 1))
       (ignore-errors (org-indent-drawer))
-      (org-indent-line))))
+      (org-indent-line)))))
 
 (provide 'config-0-defuns)
