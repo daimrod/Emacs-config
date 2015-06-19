@@ -237,7 +237,6 @@ Do it recursively if the third argument is not nil."
     ob-sh
     ob-sql
     ob-sqlite
-    org-agenda-check
     calendar
     diary-lib
     org-annotate-file
