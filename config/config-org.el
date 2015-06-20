@@ -59,7 +59,7 @@
 (add-hook 'org-shiftdown-final-hook 'windmove-down)
 (add-hook 'org-shiftright-final-hook 'windmove-right)
 
-;; (setq-default org-element-use-cache nil)
+(setq-default org-element-use-cache nil)
 
 ;;; Nicolas Goaziou, http://article.gmane.org/gmane.emacs.orgmode/67692
 (defun org-latex-ignore-heading-filter-headline (headline backend info)
