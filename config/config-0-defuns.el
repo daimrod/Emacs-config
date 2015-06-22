@@ -591,4 +591,9 @@ Blocks are named with #+NAME."
       (ignore-errors (org-indent-drawer))
       (org-indent-line)))))
 
+(defun dmd-org-skip-bib-file ()
+  (if (not (file-equal-p "~/org/bib.org" (buffer-file-name)))
+      t
+    (goto-char (point-max)) nil))
+
 (provide 'config-0-defuns)
