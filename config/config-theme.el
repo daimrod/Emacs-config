@@ -26,7 +26,7 @@
 
 ;; Set the default font
 (defvar *fonts-list* '("-unknown-Inconsolata-normal-normal-normal-*-15-*-*-*-m-0-iso10646-1"
-                       "-unknown-DejaVu Sans Mono-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1"))
+                       "-unknown-DejaVu Sans Mono-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1"))
 
 (add-to-list 'default-frame-alist `(font . ,(find-if #'font-info *fonts-list*)))
 (setq initial-frame-alist (append initial-frame-alist (copy-alist default-frame-alist)))
