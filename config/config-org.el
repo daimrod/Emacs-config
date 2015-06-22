@@ -35,12 +35,6 @@
 ;; define where notes should be stored (for capture with C-c c)
 (setq-default org-default-notes-file (concat org-directory "capture.org"))
 
-;; start the overview on the current day
-(setq-default org-agenda-start-on-weekday nil)
-
-;; Append the new note at the beginning
-(setq-default org-reverse-note-order t)
-
 ;; enable silent org-mode within mail
 (add-hook 'message-mode-hook 'turn-on-orgstruct)
 (add-hook 'message-mode-hook 'turn-on-orgstruct++)
