@@ -171,7 +171,7 @@
   "Emacs quick move minor mode"
   t)
 
-;; 
+;;
 ;; enable a more powerful jump back function from ace jump mode
 ;;
 (autoload
@@ -246,9 +246,6 @@
 
 ;; Ace Window
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-
-;; ws-trim
-(global-ws-trim-mode 1)
 
 ;; Diary mode
 (add-to-list 'auto-mode-alist

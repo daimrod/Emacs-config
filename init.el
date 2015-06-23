@@ -281,7 +281,6 @@ Do it recursively if the third argument is not nil."
     parallel-xwidget
     ace-window
     ispell
-    ws-trim
     marmalade-upload
     yasnippet
     pomodoro
@@ -293,7 +292,7 @@ Do it recursively if the third argument is not nil."
             ;; This needs to be done in `after-init-hook' to override
             ;; packages provided by ELPA.
             (fni/add-to-load-path src-dir t t)
-            
+
             (load (expand-file-name "~/quicklisp/slime-helper.el") t)
             (load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
             (pdf-tools-install)
