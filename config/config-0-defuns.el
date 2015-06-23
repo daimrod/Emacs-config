@@ -213,15 +213,19 @@ If N is not set, use `comint-buffer-minimum-size'."
 (defun dmd/terminal-emulator ()
   "Open a terminal emulator using `terminal-emulator'."
   (interactive)
-  (apply
-   #'start-process
-   "Terminal Emulator"
-   nil
-   (etypecase terminal-emulator
-     (string terminal-emulator)
-     (function (funcall terminal-emulator))
-     (symbol (symbol-value terminal-emulator)))
-   terminal-emulator-parameters))
+  (let ((process-environment
+         (remove-if (lambda (env)
+                      (string-match-p "^TMUX=" env))
+                    process-environment)))
+    (apply
+     #'start-process
+     "Terminal Emulator"
+     nil
+     (etypecase terminal-emulator
+       (string terminal-emulator)
+       (function (funcall terminal-emulator))
+       (symbol (symbol-value terminal-emulator)))
+     terminal-emulator-parameters)))
 
 (defun unfill-paragraph ()
   "Takes a multi-line paragraph and makes it into a single line
@@ -592,8 +596,15 @@ Blocks are named with #+NAME."
       (org-indent-line)))))
 
 (defun dmd-org-skip-bib-file ()
-  (if (not (file-equal-p "~/org/bib.org" (buffer-file-name)))
+  (if (not (file-equal-p org-bib-notes-file (buffer-file-name)))
       t
-    (goto-char (point-max)) nil))
+    (goto-char (point-max))
+    nil))
+
+(defun dmd-org-skip-contacts-files ()
+  (if (not (find (buffer-file-name) (org-contacts-files) :test #'file-equal-p))
+      t
+    (goto-char (point-max))
+    nil))
 
 (provide 'config-0-defuns)

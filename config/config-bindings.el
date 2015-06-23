@@ -85,7 +85,7 @@
 
 ;;; C-x 4 t is for multi-term in another window, so a terminal in
 ;;; another frame should be an xterm or similar.
-(global-set-key (kbd "C-x 5 t") 'dmd/terminal-emulator)
+(global-set-key (kbd "C-x 5 t") 'dmd-terminal-emulator)
 
 (define-key global-map (kbd "M-s") 'ace-map)
 (define-prefix-command 'ace-map)
