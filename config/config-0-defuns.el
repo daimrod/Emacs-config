@@ -210,7 +210,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   :group 'external
   :type '(repeat string))
 
-(defun dmd/terminal-emulator ()
+(defun dmd-terminal-emulator ()
   "Open a terminal emulator using `terminal-emulator'."
   (interactive)
   (let ((process-environment
