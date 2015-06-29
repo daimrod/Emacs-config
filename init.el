@@ -304,7 +304,8 @@ Do it recursively if the third argument is not nil."
                       (warn "Failed to load module `%s'" module)))
                   (append dmd/required dmd/modules))
             (diary-list-entries (calendar-current-date) nil 'list-only)
-            (mapc #'find-file-noselect diary-included-files)))
+            (mapc (lambda (file)
+                    (bury-buffer (find-file-noselect file))) diary-included-files)))
 
 ;; enabled/disabled commands
 (put 'upcase-region 'disabled nil)
