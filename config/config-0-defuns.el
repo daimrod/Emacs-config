@@ -510,22 +510,42 @@ Blocks are named with #+NAME."
       title
       (symbol-name (w3m-url-coding-system url))))))
 
-(defun dmd-org-add-ids-to-headlines ()
+(defun dmd-org-add-ids-to-headlines (&prefix)
   "Add ID properties to all headlines in the current buffer."
-  (interactive)
+  (interactive "P")
   ;; just to be sure we're in an org-mode buffer
   (when (and (derived-mode-p 'org-mode)
              (buffer-file-name)
              (org-agenda-file-p))
-    (org-map-entries 'org-id-get-create)))
+    (let ((scope (when prefix
+                   (message "Add CREATED to headlines for the [b]uffer, [t]ree, [r]egion, [f]ile, [F]ile with archives, [a]gende, [A]genda with archives?")
+                   (let ((r (read-char-exclusive)))
+                     (cond ((char-equal r ?b) nil)
+                           ((char-equal r ?t) 'tree)
+                           ((char-equal r ?r) 'region)
+                           ((char-equal r ?f) 'file)
+                           ((char-equal r ?F) 'file-with-archives)
+                           ((char-equal r ?a) 'agenda)
+                           ((char-equal r ?A) 'agenda-with-archives))))))
+      (org-map-entries 'org-id-get-create t scope))))
 
-(defun dmd-org-add-CREATED-to-headlines ()
+(defun dmd-org-add-CREATED-to-headlines (&optional prefix)
   "Add \"CREATED\" properties to all headlines in the current buffer."
-  (interactive)
+  (interactive "P")
   (when (and (derived-mode-p 'org-mode)
              (buffer-file-name)
              (org-agenda-file-p))
-    (org-map-entries #'dmd-org-add-created-prop-if-none)))
+    (let ((scope (when prefix
+                   (message "Add CREATED to headlines for the [b]uffer, [t]ree, [r]egion, [f]ile, [F]ile with archives, [a]gende, [A]genda with archives?")
+                   (let ((r (read-char-exclusive)))
+                     (cond ((char-equal r ?b) nil)
+                           ((char-equal r ?t) 'tree)
+                           ((char-equal r ?r) 'region)
+                           ((char-equal r ?f) 'file)
+                           ((char-equal r ?F) 'file-with-archives)
+                           ((char-equal r ?a) 'agenda)
+                           ((char-equal r ?A) 'agenda-with-archives))))))
+      (org-map-entries #'dmd-org-add-created-prop-if-none t scope))))
 
 (defun dmd-doi-to-bib (url)
   (interactive "sURL: ")
