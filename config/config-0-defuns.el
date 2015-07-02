@@ -510,10 +510,7 @@ Blocks are named with #+NAME."
       title
       (symbol-name (w3m-url-coding-system url))))))
 
-(defun dmd-org-add-ids-to-headlines (&optional prefix)
-  "Add ID properties to all headlines in the current buffer."
-  (interactive "P")
-  ;; just to be sure we're in an org-mode buffer
+(defun dmd--org-apply-to-headlines (function &optional prefix)
   (when (and (derived-mode-p 'org-mode)
              (buffer-file-name)
              (org-agenda-file-p))
@@ -527,25 +524,19 @@ Blocks are named with #+NAME."
                            ((char-equal r ?F) 'file-with-archives)
                            ((char-equal r ?a) 'agenda)
                            ((char-equal r ?A) 'agenda-with-archives))))))
-      (org-map-entries 'org-id-get-create t scope))))
+      (save-excursion
+        (outline-up-heading 42)
+        (org-map-entries function t scope))))))
+
+(defun dmd-org-add-ids-to-headlines (&optional prefix)
+  "Add ID properties to all headlines in the current buffer."
+  (interactive "P")
+  (dmd--org-apply-to-headlines 'org-id-get-create prefix))
 
 (defun dmd-org-add-CREATED-to-headlines (&optional prefix)
   "Add \"CREATED\" properties to all headlines in the current buffer."
   (interactive "P")
-  (when (and (derived-mode-p 'org-mode)
-             (buffer-file-name)
-             (org-agenda-file-p))
-    (let ((scope (when prefix
-                   (message "Add CREATED to headlines for the [b]uffer, [t]ree, [r]egion, [f]ile, [F]ile with archives, [a]gende, [A]genda with archives?")
-                   (let ((r (read-char-exclusive)))
-                     (cond ((char-equal r ?b) nil)
-                           ((char-equal r ?t) 'tree)
-                           ((char-equal r ?r) 'region)
-                           ((char-equal r ?f) 'file)
-                           ((char-equal r ?F) 'file-with-archives)
-                           ((char-equal r ?a) 'agenda)
-                           ((char-equal r ?A) 'agenda-with-archives))))))
-      (org-map-entries #'dmd-org-add-created-prop-if-none t scope))))
+  (dmd--org-apply-to-headlines 'dmd-org-add-created-prop-if-none prefix))
 
 (defun dmd-doi-to-bib (url)
   (interactive "sURL: ")
