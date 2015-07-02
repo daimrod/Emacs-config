@@ -510,7 +510,7 @@ Blocks are named with #+NAME."
       title
       (symbol-name (w3m-url-coding-system url))))))
 
-(defun dmd-org-add-ids-to-headlines (&prefix)
+(defun dmd-org-add-ids-to-headlines (&optional prefix)
   "Add ID properties to all headlines in the current buffer."
   (interactive "P")
   ;; just to be sure we're in an org-mode buffer
