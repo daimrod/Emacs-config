@@ -525,8 +525,8 @@ Blocks are named with #+NAME."
                            ((char-equal r ?a) 'agenda)
                            ((char-equal r ?A) 'agenda-with-archives))))))
       (save-excursion
-        (outline-up-heading 42)
-        (org-map-entries function t scope))))))
+        (ignore-errors (outline-up-heading 42))
+        (org-map-entries function t scope)))))
 
 (defun dmd-org-add-ids-to-headlines (&optional prefix)
   "Add ID properties to all headlines in the current buffer."
