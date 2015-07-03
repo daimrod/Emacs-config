@@ -257,6 +257,7 @@ Do it recursively if the third argument is not nil."
     helm-org
     helm-bibtex
     ag
+    helm-ag
     prolog
     ediprolog
     view
