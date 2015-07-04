@@ -370,9 +370,8 @@ It uses magit internal."
 float."
   (apply #'/ (coerce dividend 'float) divisors))
 
-(defun dmd/text-mode-setup ()
+(defun dmd-text-mode-setup ()
   (interactive)
-  (activate-input-method default-input-method)
   (visual-line-mode 1)
   (adaptive-wrap-prefix-mode 1))
 

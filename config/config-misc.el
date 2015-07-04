@@ -55,10 +55,10 @@
 (setq-default major-mode 'text-mode)
 
 ;; Text-mode Hook
-(add-hook 'text-mode-hook 'dmd/text-mode-setup)
+(add-hook 'text-mode-hook 'dmd-text-mode-setup)
 
 ;; Message-mode hook
-(add-hook 'message-mode-hook 'dmd/text-mode-setup)
+(add-hook 'message-mode-hook 'dmd-text-mode-setup)
 
 ;; Prog-mode Hook
 (add-hook 'prog-mode-hook (lambda ()
