@@ -514,7 +514,7 @@ Blocks are named with #+NAME."
              (buffer-file-name)
              (org-agenda-file-p))
     (let ((scope (when prefix
-                   (message "Add CREATED to headlines for the [b]uffer, [t]ree, [r]egion, [f]ile, [F]ile with archives, [a]gende, [A]genda with archives?")
+                   (message "Process headlines for the [b]uffer, [t]ree, [r]egion, [f]ile, [F]ile with archives, [a]gende, [A]genda with archives?")
                    (let ((r (read-char-exclusive)))
                      (cond ((char-equal r ?b) nil)
                            ((char-equal r ?t) 'tree)
