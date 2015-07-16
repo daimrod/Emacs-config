@@ -193,7 +193,11 @@ otherwise stop it."
 
 (define-key org-beamer-mode-map (kbd "C-c C-b") nil)
 
-(define-key org-mode-map (kbd "C-c C-j") 'helm-org-in-buffer-headings)
+(define-key org-mode-map (kbd "C-c C-j") (lambda (&optional prefix)
+                                           (interactive "P")
+                                           (if prefix
+                                               (helm-org-agenda-files-headings)
+                                             (helm-org-in-buffer-headings))))
 
 (global-set-key (kbd "<f9>") 'org-agenda)
 
