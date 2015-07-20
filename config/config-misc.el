@@ -90,6 +90,9 @@
 (add-to-list 'auto-mode-alist
              '("\\.mkd" . markdown-mode))
 
+(add-to-list 'auto-mode-alist
+             '("\\.m" . octave-mode))
+
 ;; waf config
 (add-to-list 'auto-mode-alist '("wscript" . python-mode))
 
