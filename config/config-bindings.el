@@ -201,4 +201,6 @@ otherwise stop it."
 
 (global-set-key (kbd "<f9>") 'org-agenda)
 
+(define-key yas-minor-mode-map (kbd "C-c & C-s") 'company-yasnippet)
+
 (provide 'config-bindings)
