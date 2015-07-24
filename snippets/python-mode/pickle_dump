@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: pickle_dump
+# --
+with open(${'pickle.p'}, 'wb') as p_file:
+    pickle.dump(${p_obj}, p_file)
+$0
