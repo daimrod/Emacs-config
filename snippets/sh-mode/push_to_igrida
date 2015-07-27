@@ -5,9 +5,9 @@
 #!/bin/bash
 rsync -Pavhz \
       --exclude=".git/"         `# don't rsync .git/` \
-      --exclude=".virtualenv/"  `# don't rsync .virtualenv/` \
+      --exclude="venv/"         `# don't rsync venv/` \
       --delete                  `# delete files on the remote directory that aren't on the local directory` \
-      --filter="P .virtualenv/" `# but don't delete .virtualenv/ on the remote directory` \
+      --filter="P venv/"        `# but don't delete venv/ on the remote directory` \
       . igrida-oar-frontend:/temp_dd/igrida-fs1/gjadi/src/python/brown-cluster-utils/
       
 
