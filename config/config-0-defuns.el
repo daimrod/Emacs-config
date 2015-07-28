@@ -617,4 +617,15 @@ Blocks are named with #+NAME."
     (goto-char (point-max))
     nil))
 
+(defun dmd--ask-sign-encrypt ()
+  (interactive)
+  (let ((c (read-char "[s]ign, [e]ncrypt or [n]othing?")))
+    (cond ((char-equal c ?s)
+           (mml-secure-message-sign))
+          ((char-equal c ?e)
+           (mml-secure-message-sign-encrypt))
+          ((char-equal c ?n)
+           t)
+          (t (user-error "Command not recognised")))))
+
 (provide 'config-0-defuns)
