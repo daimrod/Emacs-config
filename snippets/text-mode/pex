@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: pex
+# key: pex
+# binding: direct-keybinding
+# --
+p. ex $0

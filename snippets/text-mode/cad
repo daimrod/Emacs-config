@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: cad
+# key: cad
+# binding: direct-keybinding
+# --
+c.-à-d. $0
