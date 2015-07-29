@@ -619,13 +619,22 @@ Blocks are named with #+NAME."
 
 (defun dmd--ask-sign-encrypt ()
   (interactive)
-  (let ((c (read-char "[s]ign, [e]ncrypt or [n]othing?")))
-    (cond ((char-equal c ?s)
-           (mml-secure-message-sign))
-          ((char-equal c ?e)
-           (mml-secure-message-sign-encrypt))
-          ((char-equal c ?n)
-           t)
-          (t (user-error "Command not recognised")))))
+  (save-excursion
+    (goto-char (point-min))
+    (cond ((re-search-forward
+            (concat "^" (regexp-quote mail-header-separator) "\n") nil t)
+           (goto-char (setq insert-loc (match-end 0)))
+           (unless (looking-at "<#secure")
+             (let ((c (read-char "[s]ign, [e]ncrypt or [n]othing?")))
+               (cond ((char-equal c ?s)
+                      (mml-secure-message-sign))
+                     ((char-equal c ?e)
+                      (mml-secure-message-sign-encrypt))
+                     ((char-equal c ?n)
+                      t)
+                     (t (user-error "Command not recognised"))))
+             ))
+          (t (error
+              "The message is corrupted. No mail header separator")))))
 
 (provide 'config-0-defuns)
