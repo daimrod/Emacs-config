@@ -1,0 +1,4 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: img_latex
+# --
+#+ATTR_LaTeX: :width \linewidth :height \textheight :options keepaspectratio
