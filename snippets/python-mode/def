@@ -1,0 +1,19 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: def
+# key: def
+# --
+def ${1:function}(${2:args}):
+    """${Summary of the function}
+
+    ${Longer function information}
+
+    Args:
+${2:$(dmd--format-python-args-for-docstring yas-text)}
+
+    Returns:
+        ${Returns information}
+
+    ${Raises:
+        ${IOError: An error occurred.}}
+    """
+    $0pass

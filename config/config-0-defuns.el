@@ -637,4 +637,20 @@ Blocks are named with #+NAME."
           (t (error
               "The message is corrupted. No mail header separator")))))
 
+(defun dmd--split-python-args-for-doctsring (args)
+  "(dmd--split-python-args-for-doctsring \"big_table, keys, other_silly_variable=None\")
+-> (\"big_table\" \"keys\" \"other_silly_variable\")"
+  (let* ((args-with-default (split-string args "," t split-string-default-separators))
+         (args-without-default (mapcar (lambda (s)
+                                         (replace-regexp-in-string "=.*$" "" s))
+                                       args-with-default)))
+    args-without-default))
+
+(defun dmd--format-python-args-for-docstring (args)
+  (s-join "
+"
+          (mapcar (lambda (s)
+                    (format "        %s: variable documentation." s))
+                  (dmd--split-python-args-for-doctsring args))))
+
 (provide 'config-0-defuns)
