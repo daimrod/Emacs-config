@@ -89,4 +89,6 @@
 
 (add-hook 'org-clock-in-prepare-hook 'dmd-org-set-effort)
 
+(advice-add #'org-attach-open :override #'helm-org-attach-open)
+
 (provide 'config-org)
