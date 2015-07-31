@@ -1,0 +1,34 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: doc
+# --
+# -*- mode: org; org-export-allow-bind-keywords:t; -*-
+#+BIND: org-latex-title-command /""/
+
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t c:nil creator:comment d:(not "LOGBOOK") date:nil
+#+OPTIONS: e:t email:nil f:t inline:t num:t p:nil pri:nil prop:nil
+#+OPTIONS: stat:t tags:t tasks:t tex:t timestamp:t toc:nil todo:t |:t
+#+TITLE: ${Titre}
+#+AUTHOR: ${Grégoire Jadi}
+#+DATE: ${}
+#+DESCRIPTION:
+#+KEYWORDS:
+
+#+LANGUAGE: ${fr}
+#+LATEX_HEADER: \usepackage[${french}]{babel}
+
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR:
+
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS:
+#+LATEX_HEADER:
+#+LATEX_HEADER_EXTRA:
+
+#+LATEX_HEADER: \usepackage[backend=biber,natbib=true,style=alphabetic]{biblatex}
+#+LATEX_HEADER: \addbibresource{/home/jadi-g/.auto-bib.bib,/home/jadi-g/.bib.bib}
+
+* Références                                                  :ignoreheading:
+
+#+LATEX: \printbibliography
