@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: sbib
+# --
+#+BEGIN_SRC bibtex :tangle .auto-bib.bib
+$0
+#+END_SRC
