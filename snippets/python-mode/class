@@ -1,0 +1,17 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: class
+# key: class
+# --
+class ${1:Name}(${2:Object}):
+    """$0Summary of the class.
+
+    Longer class information...
+
+    Attributes:
+        attr: An attribute.
+    """
+
+    def __init__(self, attr = None):
+        """Init $1 with blah.
+        """"
+        self.attr = attr
