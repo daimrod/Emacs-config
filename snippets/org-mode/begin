@@ -1,6 +1,5 @@
 # -*- mode: snippet -*-
-# name: begin a new environment
-# key: begin
+# name: begin
 # --
 #+begin_${1:src} $2
 $0
