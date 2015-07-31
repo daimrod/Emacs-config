@@ -1,0 +1,12 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: attr_wrap
+# --
+#+NAME: attr_wrap
+#+BEGIN_SRC emacs-lisp :var data="[[file]]" :var paperwidth="0.8" :var textheight="" :var options="" :var caption="" :var name="" :results raw :exports none :eval no-export
+  (format "%s%s#+ATTR_LaTeX: :width %s\\paperwidth :height %s\\textheight :options keepaspectratio %s
+  %s"
+          (if (string= "" caption) "" (format "#+CAPTION: %s\n" caption))
+          (if (string= "" name) "" (format "#+NAME: %s\n" name))
+          paperwidth textheight options data)
+#+END_SRC
+
