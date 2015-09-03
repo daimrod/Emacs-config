@@ -1,0 +1,11 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: class_test
+# --
+class Test${1:toTest}(${2:unittest.TestCase}):
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    $0
