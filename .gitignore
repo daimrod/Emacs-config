@@ -35,3 +35,5 @@ debug.el
 /history
 /image-dired/
 /network-security.data
+/elpa/elpy-1.9.0/elpy/__init__.pyc
+/elpa/elpy-1.9.0/elpy/__pycache__/
