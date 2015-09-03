@@ -92,7 +92,8 @@ Do it recursively if the third argument is not nil."
 ;; ELPA configuration
 (setq package-archives
       '(("ELPA" . "https://elpa.gnu.org/packages/")
-        ("marmalade" . "https://marmalade-repo.org/packages/")))
+        ("marmalade" . "https://marmalade-repo.org/packages/")
+        ("elpy" . "https://jorgenschaefer.github.io/packages/")))
 
 ;; Load my configuration
 (defvar dmd/modules
@@ -313,6 +314,7 @@ Do it recursively if the third argument is not nil."
             (load (expand-file-name "~/quicklisp/slime-helper.el") t)
             (load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
             (pdf-tools-install)
+            (elpy-enable)
 
             (mapc (lambda (module)
                     (message "Loading %s" module)
