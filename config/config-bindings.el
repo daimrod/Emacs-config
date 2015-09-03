@@ -193,7 +193,7 @@ otherwise stop it."
 
 (define-key org-beamer-mode-map (kbd "C-c C-b") nil)
 
-(define-key org-mode-map (kbd "C-c C-j") (lambda (&optional prefix)
+(define-key org-mode-map (kbd "C-c j") (lambda (&optional prefix)
                                            (interactive "P")
                                            (if prefix
                                                (helm-org-agenda-files-headings)
@@ -203,6 +203,6 @@ otherwise stop it."
 
 (define-key yas-minor-mode-map (kbd "C-c & C-s") 'company-yasnippet)
 
-(global-set-key (kbd "C-c C-j") 'helm-pages)
+(global-set-key (kbd "C-c j") 'helm-pages)
 
 (provide 'config-bindings)
