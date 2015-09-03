@@ -16,21 +16,13 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
-
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (if (fboundp 'horizontal-scroll-bar-mode) (horizontal-scroll-bar-mode -1))
 
-;; Load path etc.
-
-;; load-path enhancement
+
+;; Load path
 (defun fni/add-to-load-path (this-directory &optional with-subdirs recursive)
   "Add THIS-DIRECTORY at the beginning of the load-path, if it exists.
 Add all its subdirectories not starting with a '.' if the
@@ -71,9 +63,13 @@ Do it recursively if the third argument is not nil."
 (fni/add-to-load-path elisp-dir t)
 (fni/add-to-load-path config-dir)
 
+
+;; custom-file configuration
 (setq custom-file (concat dotfiles-dir "custom.el"))
 (load custom-file 'noerror)
 
+
+;; Misc configuration
 (require 'bytecomp)
 (byte-compile-disable-warning 'cl-functions)
 (require 'cl)
@@ -82,6 +78,16 @@ Do it recursively if the third argument is not nil."
 ;; (advice-add 'jit-lock--debug-fontify :around
 ;;             (lambda (fun &rest args)
 ;;               (with-local-quit (apply fun args))))
+
+
+
+
+;;; Package.el
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
 
 ;; ELPA configuration
 (setq package-archives
@@ -295,6 +301,7 @@ Do it recursively if the third argument is not nil."
     request)
   "List of required modules")
 
+
 (add-hook 'after-init-hook
           (lambda ()
             ;; This needs to be done in `after-init-hook' to override
@@ -316,6 +323,7 @@ Do it recursively if the third argument is not nil."
                     (bury-buffer (find-file-noselect file))) (append diary-included-files
                                                                      (org-agenda-files)))))
 
+
 ;; enabled/disabled commands
 (put 'upcase-region 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
