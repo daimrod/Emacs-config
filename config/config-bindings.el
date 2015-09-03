@@ -1,4 +1,4 @@
-;; config-bindings.el
+;;; config-bindings.el --- My bindings
 ;; Copyright (C) 2011, 2012 Grégoire Jadi
 
 ;; Author: Grégoire Jadi <gregoire.jadi@gmail.com>
@@ -15,6 +15,10 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;;; Code:
 
 ;; Align your code in a pretty way.
 (global-set-key (kbd "C-x \\") 'align-regexp)
@@ -88,6 +92,8 @@
 (global-set-key (kbd "C-x 5 t") 'dmd-terminal-emulator)
 
 (define-key global-map (kbd "M-s") 'ace-map)
+
+(defvar ace-map)
 (define-prefix-command 'ace-map)
 (define-key ace-map (kbd "s") 'ace-jump-word-mode)
 (define-key ace-map (kbd "l") 'ace-jump-line-mode)
@@ -128,7 +134,6 @@ otherwise stop it."
                      (emms-next))))
 
 (global-set-key (kbd "C-;") 'newline-and-indent)
-
 
 (define-key dired-mode-map (kbd "e") 'dmd/dired-exec-lisp)
 
@@ -206,3 +211,5 @@ otherwise stop it."
 (global-set-key (kbd "C-c j") 'helm-pages)
 
 (provide 'config-bindings)
+
+;;; config-bindings.el ends here
