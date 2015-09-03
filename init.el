@@ -301,6 +301,8 @@ Do it recursively if the third argument is not nil."
     pomodoro
     page-break-lines
     helm-pages
+    flycheck
+    flycheck-pos-tip
     request)
   "List of required modules")
 
