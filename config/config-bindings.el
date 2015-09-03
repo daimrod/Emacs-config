@@ -203,4 +203,6 @@ otherwise stop it."
 
 (define-key yas-minor-mode-map (kbd "C-c & C-s") 'company-yasnippet)
 
+(global-set-key (kbd "C-c C-j") 'helm-pages)
+
 (provide 'config-bindings)

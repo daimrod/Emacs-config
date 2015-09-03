@@ -298,6 +298,8 @@ Do it recursively if the third argument is not nil."
     marmalade-upload
     yasnippet
     pomodoro
+    page-break-lines
+    helm-pages
     request)
   "List of required modules")
 
