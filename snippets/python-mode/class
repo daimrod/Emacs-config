@@ -13,5 +13,5 @@ class ${1:Name}(${2:Object}):
 
     def __init__(self, attr = None):
         """Init $1 with blah.
-        """"
+        """
         self.attr = attr
