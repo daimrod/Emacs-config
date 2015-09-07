@@ -303,6 +303,7 @@ Do it recursively if the third argument is not nil."
     helm-pages
     flycheck
     flycheck-pos-tip
+    mu4e
     request)
   "List of required modules")
 
