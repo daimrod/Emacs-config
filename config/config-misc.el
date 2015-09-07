@@ -60,10 +60,6 @@
 ;; Message-mode hook
 (add-hook 'message-mode-hook 'dmd-text-mode-setup)
 
-;; Prog-mode Hook
-(add-hook 'prog-mode-hook (lambda ()
-                            (activate-input-method "ucs")))
-
 ;; Gnus Article Mode
 (add-hook 'gnus-article-mode-hook
           (lambda ()
