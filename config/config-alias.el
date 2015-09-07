@@ -22,6 +22,5 @@
 (defalias 'isp 'rw-ispell-change-dictionary)
 (defalias 'mgrep 'moccur-grep)
 (defalias 'mrgrep 'moccur-grep-find)
-(defalias 'man 'helm-man-woman)
 
 (provide 'config-alias)
