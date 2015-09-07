@@ -21,17 +21,21 @@
 
 ;;; Code:
 
-(add-to-list 'Info-additional-directory-list
+(add-to-list 'Info-directory-list
              (expand-file-name (concat src-dir "ebib")))
 
-(add-to-list 'Info-additional-directory-list
+(add-to-list 'Info-directory-list
              (expand-file-name (concat src-dir "magit/")))
 
-(add-to-list 'Info-additional-directory-list
+(add-to-list 'Info-directory-list
              (expand-file-name (concat src-dir
                                        "org-mode/doc")))
 
-(add-to-list 'Info-additional-directory-list
+(add-to-list 'Info-directory-list
+             (expand-file-name (concat src-dir
+                                       "mu/mu4e")))
+
+(add-to-list 'Info-directory-list
              (expand-file-name (concat dotfiles-dir
                                        "doc")))
 
