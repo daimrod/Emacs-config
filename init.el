@@ -304,6 +304,7 @@ Do it recursively if the third argument is not nil."
     flycheck
     flycheck-pos-tip
     mu4e
+    org-mu4e
     request)
   "List of required modules")
 
