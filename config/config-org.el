@@ -88,6 +88,9 @@
 
 (advice-add #'org-attach-open :override #'helm-org-attach-open)
 
+(org-babel-lob-ingest (concat dotfiles-dir "lob.org"))
+
+
 (provide 'config-org)
 
 ;;; config-org.el ends here

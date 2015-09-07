@@ -1,0 +1,42 @@
+* Library of Babel
+(from [[info:org#Library%20of%20Babel][info:org#Library of Babel]])
+
+The “Library of Babel” consists of code blocks that can be called from any Org mode file. Code blocks defined in the “Library of Babel” can be called remotely as if they were in the current Org mode buffer (see *note Evaluating code blocks:: for information on the syntax of remote code block evaluation).
+
+The central repository of code blocks in the “Library of Babel” is housed in an Org mode file located in the ‘doc’ directory of Org mode.
+
+Users can add code blocks they believe to be generally useful to their “Library of Babel.” The code blocks can be stored in any Org mode file and then loaded into the library with ‘org-babel-lob-ingest’.
+
+Code blocks located in any Org mode file can be loaded into the “Library of Babel” with the ‘org-babel-lob-ingest’ function, bound to ‘C-c C-v i’.
+
+* attr_wrap
+Cette fonction permet d'ajouter des attributs lors de l'export d'image vers du LaTeX.
+
+#+NAME: attr_wrap
+#+BEGIN_SRC emacs-lisp :var data="[[file]]" :var paperwidth="0.8" :var textheight="" :var options="" :var caption="" :var name="" :results raw :exports none :eval no-export
+(format "%s%s#+ATTR_LaTeX: :width %s\\paperwidth :height %s\\textheight :options keepaspectratio %s
+%s"
+        (if (string= "" caption) "" (format "#+CAPTION: %s\n" caption))
+        (if (string= "" name) "" (format "#+NAME: %s\n" name))
+        paperwidth textheight options data)
+#+END_SRC
+
+En voici un exemple d'utilisation :
+
+#+BEGIN_SRC dot :file /tmp/schema-2.svg :cmdline -Kdot -Tsvg :exports results :eval no-export :post attr_wrap(data=*this*,paperwidth=0.6,textheight=0.2) :results drawer
+graph G {
+  rankdir=LR;
+  A [shape=box, label="Article
+A"];
+  B [shape=box, label="Article
+B"];
+  A -- B [label="???"];
+}
+#+END_SRC
+
+#+RESULTS:
+:RESULTS:
+#+ATTR_LaTeX: :width 0.6\paperwidth :height 0.2\textheight :options keepaspectratio 
+[[file:/tmp/schema-2.svg]]
+:END:
+
