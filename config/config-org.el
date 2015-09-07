@@ -1,5 +1,6 @@
-;; config-org.el
-;; Copyright (C) 2011, 2012 Grégoire Jadi
+;;; config-org.el --- Org Mode's configuration
+
+;; Copyright (C) 2015 Grégoire Jadi
 
 ;; Author: Grégoire Jadi <gregoire.jadi@gmail.com>
 
@@ -16,14 +17,14 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(setq org-reveal-root "file:///home/daimrod/packages/reveal/")
+;;; Commentary:
+
+;;; Code:
+
 
 ;; Subcommands for org global keymap
 (define-prefix-command 'mode-specific-org-map)
 (define-key mode-specific-map (kbd "o") 'mode-specific-org-map)
-
-;; define where org file should be located by default
-(setq org-directory "~/org/")
 
 ;; The following lines are always needed. Choose your own keys.
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
@@ -32,16 +33,12 @@
 (define-key mode-specific-org-map (kbd "g") 'org-clock-goto)
 (define-key mode-specific-org-map (kbd "c") 'org-capture)
 
-;; define where notes should be stored (for capture with C-c c)
-(setq-default org-default-notes-file (concat org-directory "capture.org"))
-
 ;; enable silent org-mode within mail
 (add-hook 'message-mode-hook 'turn-on-orgstruct)
 (add-hook 'message-mode-hook 'turn-on-orgstruct++)
 (add-hook 'message-mode-hook 'turn-on-orgtbl)
 
 ;;; config org-annotate (contrib)
-(setq org-annotate-file-storage-file (concat org-directory "annotated.org"))
 (define-key mode-specific-org-map (kbd "n") 'org-annotate-file)
 
 ;;; Don't scatter LaTeX images
@@ -57,7 +54,7 @@
 
 ;;; Nicolas Goaziou, http://article.gmane.org/gmane.emacs.orgmode/67692
 (defun org-latex-ignore-heading-filter-headline (headline backend info)
-  "Strip headline from HEADLINE. Ignore BACKEND and INFO."
+  "Strip headline from HEADLINE.  Ignore BACKEND and INFO."
   (when (and (org-export-derived-backend-p backend 'latex)
              (string-match "\\`.*ignoreheading.*\n" headline))
     (replace-match "" nil nil headline)))
@@ -92,3 +89,5 @@
 (advice-add #'org-attach-open :override #'helm-org-attach-open)
 
 (provide 'config-org)
+
+;;; config-org.el ends here
