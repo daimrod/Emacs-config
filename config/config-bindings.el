@@ -210,6 +210,9 @@ otherwise stop it."
 
 (global-set-key (kbd "C-c j") 'helm-pages)
 
+(define-key mu4e-view-mode-map (kbd "<tab>") 'shr-next-link)
+(define-key mu4e-view-mode-map (kbd "<backtab>") 'shr-previous-link)
+
 (provide 'config-bindings)
 
 ;;; config-bindings.el ends here
