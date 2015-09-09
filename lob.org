@@ -40,3 +40,54 @@ B"];
 [[file:/tmp/schema-2.svg]]
 :END:
 
+* extract_variable                                                      :WIP:
+Ce filtre extrait toutes les variables en repérant les affectations ou les définitions.
+Exemples de définitions :
+- X=Y
+- X : Y
+
+#+NAME: extract_variables
+#+BEGIN_SRC emacs-lisp :exports none :var data="" :results table drawer
+(defun lob-extract-variables (buffer)
+  (loop while (re-search-forward
+               (rx bol (zero-or-more blank)
+                   (group (one-or-more (not blank)))
+                   (zero-or-more blank) (any "=" ":") (zero-or-more blank)
+                   (group (one-or-more not-newline)) eol)
+               nil t)
+        collect (list (string-trim (match-string 1))
+                      (match-string 2))))
+
+(with-temp-buffer
+  (insert data)
+  (goto-char (point-min))
+  (lob-extract-variables (current-buffer)))
+#+END_SRC
+
+On l'utilise de la façon suivante :
+#+NAME: test_extract_variables
+#+BEGIN_SRC sh :post extract_variables(data=*this*) :results output vector
+echo "Ceci est un test"
+echo "Ceci est un super test"
+echo "     FOO_bar-asdf : value"
+echo " FOO_bar-asdf = value"
+echo "stderr:/temp_dd/igrida-fs1/gjadi/OAR_%jobid%.stderrls"
+#+END_SRC
+
+#+RESULTS: test_extract_variables
+| FOO_bar-asdf | value                                          |
+| FOO_bar-asdf | value                                          |
+| stderr       | /temp_dd/igrida-fs1/gjadi/OAR_%jobid%.stderrls |
+
+Par la suite, on peut récupérer les résultats comme ceci :
+#+BEGIN_SRC emacs-lisp :var AL=test_extract_variables
+(assoc "stderr" AL)
+#+END_SRC
+
+#+RESULTS:
+| stderr | /temp_dd/igrida-fs1/gjadi/OAR_%jobid%.stderrls |
+
+
+# Local Variables:
+# org-confirm-babel-evaluate: nil
+# End:
