@@ -47,7 +47,7 @@ Exemples de définitions :
 - X : Y
 
 #+NAME: extract_variables
-#+BEGIN_SRC emacs-lisp :exports none :var data="" var=""
+#+BEGIN_SRC emacs-lisp :exports none :var data="" :var var=""
 (defun lob-extract-variables (buffer)
   (goto-char (point-min))
   (let ((ret (loop while (re-search-forward
