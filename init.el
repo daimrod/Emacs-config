@@ -218,53 +218,15 @@ Do it recursively if the third argument is not nil."
     ox-reveal
     org-list
     org-drill
-    org-ebib
-    ob-asymptote
-    ob-awk
-    ob-calc
-    ob-C
-    ob-clojure
-    ob-css
-    ob-ditaa
-    ob-dot
-    ob-emacs-lisp
-    ob-gnuplot
-    ob-haskell
-    ob-java
-    ob-js
-    ob-latex
-    ob-ledger
-    ob-lisp
-    ob-lilypond
-    ob-matlab
-    ob-mscgen
-    ob-ocaml
-    ob-octave
-    ob-org
-    ob-perl
-    ob-python
-    ob-R
-    ob-ruby
-    ob-sass
-    ob-scheme
-    ob-screen
-    ob-sh
-    ob-sql
-    ob-sqlite
     calendar
     diary-lib
     org-annotate-file
-    os
-    os-bb
-    os-github
-    os-rmine
     org-contacts
     org-magit
     org-man
     org-feed
     org-habit
     plantuml-mode
-    ob-plantuml
     projectile
     helm
     helm-projectile
@@ -305,6 +267,7 @@ Do it recursively if the third argument is not nil."
     flycheck-pos-tip
     mu4e
     org-mu4e
+    epg-config
     request)
   "List of required modules")
 
