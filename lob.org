@@ -47,34 +47,17 @@ Exemples de définitions :
 - X : Y
 
 #+NAME: extract_variables
-#+BEGIN_SRC emacs-lisp :exports none :var data="" :var var=""
-(defun lob-extract-variables (buffer)
-  (goto-char (point-min))
-  (let ((ret (loop while (re-search-forward
-                          (rx bol (zero-or-more blank)
-                              (group (one-or-more (not blank)))
-                              (zero-or-more blank) (any "=" ":") (zero-or-more blank)
-                              (group (one-or-more not-newline)) eol)
-                          nil t)
-                   collect (list (string-trim (match-string 1))
-                                 (match-string 2)))))
-    (if (string= var "")
-        ret
-      (second (assoc var ret)) )))
-
+#+BEGIN_SRC emacs-lisp :exports none :var data="" :var extract_var=""
 (with-temp-buffer
   (insert data)
-  (lob-extract-variables (current-buffer)))
+  (lob-extract-variables extract_var (current-buffer)))
 #+END_SRC
 
-#+RESULTS[ee1e91a4d61a6c24d4f1340d3c015d52467ca4a0]: extract_variables
-:RESULTS:
-nil
-:END:
+#+RESULTS: extract_variables
 
 On l'utilise de la façon suivante :
 #+NAME: test_extract_variables_1
-#+BEGIN_SRC sh :post extract_variables(data=*this*, var="stderr") :cache yes :results output
+#+BEGIN_SRC sh :post extract_variables(data=*this*, extract_var="stderr") :cache yes :results output
 echo "Ceci est un test"
 echo "Ceci est un super test"
 echo "     FOO_bar-asdf : value"
@@ -82,7 +65,7 @@ echo " FOO_bar-asdf = value"
 echo "stderr:/temp_dd/igrida-fs1/gjadi/OAR_%jobid%.stderrls"
 #+END_SRC
 
-#+RESULTS[f52bb0f90c8b013785a278fcd9787fa4c4d74746]: test_extract_variables_1
+#+RESULTS[814de10c731ee52b58719f5f02e47969472debbd]: test_extract_variables_1
 : /temp_dd/igrida-fs1/gjadi/OAR_%jobid%.stderrls
 
 #+NAME: test_extract_variables_2
@@ -99,9 +82,6 @@ echo "stderr:/temp_dd/igrida-fs1/gjadi/OAR_%jobid%.stderrls"
 | FOO_bar-asdf | value                                          |
 | stderr       | /temp_dd/igrida-fs1/gjadi/OAR_%jobid%.stderrls |
 
-#+RESULTS[f52bb0f90c8b013785a278fcd9787fa4c4d74746]: test_extract_variables
-: /temp_dd/igrida-fs1/gjadi/OAR_%jobid%.stderrls
-
 Par la suite, on peut récupérer les résultats comme ceci :
 #+BEGIN_SRC emacs-lisp :var AL=test_extract_variables_2
 (assoc "stderr" AL)
@@ -111,3 +91,6 @@ Par la suite, on peut récupérer les résultats comme ceci :
 | stderr | /temp_dd/igrida-fs1/gjadi/OAR_%jobid%.stderrls |
 
 
+# Local Variables:
+# org-confirm-babel-evaluate: nil
+# End:
