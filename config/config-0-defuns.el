@@ -653,4 +653,19 @@ Blocks are named with #+NAME."
                     (format "        %s: variable documentation." s))
                   (dmd--split-python-args-for-doctsring args))))
 
+(defun lob-extract-variables (extract_var &optional buffer)
+  (setq buffer (or buffer (current-buffer)))
+  (goto-char (point-min))
+  (let ((ret (loop while (re-search-forward
+                          (rx bol (zero-or-more blank)
+                              (group (one-or-more (not blank)))
+                              (zero-or-more blank) (any "=" ":") (zero-or-more blank)
+                              (group (one-or-more not-newline)) eol)
+                          nil t)
+                   collect (list (string-trim (match-string 1))
+                                 (match-string 2)))))
+    (if (or (null extract_var) (string= extract_var ""))
+        ret
+      (second (assoc extract_var ret)) )))
+
 (provide 'config-0-defuns)
