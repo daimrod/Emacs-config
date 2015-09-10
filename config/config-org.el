@@ -84,6 +84,8 @@
                            (add-hook 'before-save-hook 'dmd-org-add-CREATED-to-headlines nil 'local)
                            (add-hook 'before-save-hook 'org-update-parent-todo-statistics nil 'local)))
 
+(add-hook 'org-mode-hook 'org-babel-result-hide-all)
+
 (add-hook 'org-clock-in-prepare-hook 'dmd-org-set-effort)
 
 (advice-add #'org-attach-open :override #'helm-org-attach-open)
