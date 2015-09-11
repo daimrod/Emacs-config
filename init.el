@@ -268,6 +268,7 @@ Do it recursively if the third argument is not nil."
     mu4e
     org-mu4e
     epg-config
+    firestarter
     request)
   "List of required modules")
 
