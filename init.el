@@ -305,3 +305,7 @@ Do it recursively if the third argument is not nil."
 
 ;; Init stuff
 (setf inhibit-startup-screen t)
+
+;; Local Variables:
+;; firestarter: (byte-recompile-file (buffer-file-name))
+;; End:
