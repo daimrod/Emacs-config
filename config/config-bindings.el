@@ -213,6 +213,8 @@ otherwise stop it."
 (define-key mu4e-view-mode-map (kbd "<tab>") 'shr-next-link)
 (define-key mu4e-view-mode-map (kbd "<backtab>") 'shr-previous-link)
 
+(define-key org-mode-map (kbd "C-c >") 'org-time-stamp-inactive)
+
 (provide 'config-bindings)
 
 ;;; config-bindings.el ends here
