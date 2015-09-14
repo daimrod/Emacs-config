@@ -41,6 +41,9 @@ B"];
 :END:
 
 * extract_variable                                                      :WIP:
+:PROPERTIES:
+:ID:       4gd6gjc16zg0
+:END:
 Ce filtre extrait toutes les variables en repérant les affectations ou les définitions.
 Exemples de définitions :
 - X=Y
@@ -89,8 +92,3 @@ Par la suite, on peut récupérer les résultats comme ceci :
 
 #+RESULTS[361b8149afcbda9965f54a8a3d88da62ca100c1f]:
 | stderr | /temp_dd/igrida-fs1/gjadi/OAR_%jobid%.stderrls |
-
-
-# Local Variables:
-# org-confirm-babel-evaluate: nil
-# End:
