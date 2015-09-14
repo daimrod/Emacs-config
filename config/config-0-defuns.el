@@ -668,4 +668,8 @@ Blocks are named with #+NAME."
         ret
       (second (assoc extract_var ret)) )))
 
+(defun dmd-add-to-load-path (&optional dir)
+  (interactive "DAdd directory: ")
+  (add-to-list 'load-path (expand-file-name dir)))
+
 (provide 'config-0-defuns)
