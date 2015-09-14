@@ -200,6 +200,65 @@ Do it recursively if the third argument is not nil."
     bibtex
     org
     org-ref
+    org-loaddefs
+    ob-stan
+    ob-haskell
+    ob-io
+    ob-java
+    ob-js
+    ob-keys
+    ob-latex
+    ob-ledger
+    ob-lilypond
+    ob-lisp
+    ob-makefile
+    ob-matlab
+    ob-maxima
+    ob-mscgen
+    ob-octave
+    ob-org
+    ob-perl
+    ob-picolisp
+    ob-plantuml
+    ob-ruby
+    ob-sass
+    ob-scala
+    ob-scheme
+    ob-screen
+    ob-shell
+    ob-shen
+    ob-sql
+    ob-sqlite
+    ob-table
+    ob-tangle
+    ob-awk
+    ob-calc
+    ob-C
+    ob-clojure
+    ob-comint
+    ob-coq
+    ob-core
+    ob-css
+    ob-ditaa
+    ob-dot
+    ob-emacs-lisp
+    ob-eval
+    ob-exp
+    ob-fortran
+    ob-gnuplot
+    ob-groovy
+    ob-sed
+    ob-forth
+    ob-lob
+    ob-ocaml
+    ob-processing
+    ob-python
+    ob-ref
+    ob-abc
+    ob-asymptote
+    ob-ebnf
+    ob-J
+    ob-R
     doi-utils
     jmax-bibtex
     pubmed
