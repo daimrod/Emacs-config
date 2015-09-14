@@ -261,6 +261,11 @@
 
 (global-flycheck-mode 1)
 
+;; Frame title configuration
+(setq frame-title-format
+      '((:eval (format "%d " (emacs-pid)))
+        ("" invocation-name "@" system-name)))
+
 (provide 'config-misc)
 
 ;;; config-misc.el ends here
