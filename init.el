@@ -328,6 +328,9 @@ Do it recursively if the third argument is not nil."
     org-mu4e
     epg-config
     firestarter
+    calfw
+    calfw-org
+    cal-fw-cal
     request)
   "List of required modules")
 
