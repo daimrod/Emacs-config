@@ -37,7 +37,7 @@
 (setq backup-by-copying t)
 
 ;; configure cliboard
-(setq x-select-enable-clipboard t
+(setq select-enable-clipboard t
       mouse-drag-copy-region t
       yank-pop-change-selection t
       kill-do-not-save-duplicates t)
