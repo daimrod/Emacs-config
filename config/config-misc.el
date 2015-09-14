@@ -268,4 +268,6 @@
 
 (provide 'config-misc)
 
+(firestarter-mode 1)
+
 ;;; config-misc.el ends here
