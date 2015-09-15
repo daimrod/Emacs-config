@@ -270,5 +270,4 @@
 
 (firestarter-mode 1)
 
-(setq dmd-display-local-help-timer (run-with-idle-timer 0.2 t 'display-local-help 42))
 ;;; config-misc.el ends here
