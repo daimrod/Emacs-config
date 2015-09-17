@@ -672,4 +672,19 @@ Blocks are named with #+NAME."
   (interactive "DAdd directory: ")
   (add-to-list 'load-path (expand-file-name dir)))
 
+(defun dmd--etc-log-tail-handler ()
+  (goto-char (point-max))
+  (make-variable-buffer-local 'auto-revert-interval)
+  (setq auto-revert-interval 1)
+  (auto-revert-set-timer)
+  (make-variable-buffer-local 'auto-revert-verbose)
+  (setq auto-revert-verbose nil)
+  (read-only-mode 1)
+  (font-lock-mode -1)
+  (visual-line-mode -1)
+  (toggle-truncate-lines 1)
+  (when (fboundp 'show-smartparens-mode)
+    (show-smartparens-mode 0)))
+
+
 (provide 'config-0-defuns)
