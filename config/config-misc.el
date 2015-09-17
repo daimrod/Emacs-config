@@ -162,10 +162,6 @@
 (require 'browse-kill-ring)
 (global-set-key (kbd "C-M-y") 'browse-kill-ring)
 
-(setq-default user-mail-address "daimrod@gmail.com"
-              user-full-name "Grégoire Jadi"
-              user-email-address user-mail-address)
-
 ;;; column-number in the modeline
 (column-number-mode 1)
 
@@ -269,5 +265,10 @@
 (provide 'config-misc)
 
 (firestarter-mode 1)
+
+;; automagically tail log files
+(add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-tail-mode))
+
+(add-hook 'auto-revert-tail-mode-hook 'dmd--etc-log-tail-handler)
 
 ;;; config-misc.el ends here
