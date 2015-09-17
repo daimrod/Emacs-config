@@ -672,6 +672,35 @@ Blocks are named with #+NAME."
   (interactive "DAdd directory: ")
   (add-to-list 'load-path (expand-file-name dir)))
 
+(defun dmd--decrypt-mail ()
+  (save-excursion
+    (goto-char (point-min))
+    (let ((start (progn
+                   (and (search-forward "-----BEGIN PGP MESSAGE-----" nil t)
+                        (match-beginning 0))))
+          (end (progn (and (search-forward "-----END PGP MESSAGE-----" nil t)
+                           (match-end 0)))))
+      (when (and start end)
+        (epa-decrypt-region start end)))))
+
+(defun dmd-replace-links-gnus-by-mu4e (&optional buffer)
+  "Replace gnus style links by mu4e style links in BUFFER."
+  (interactive "bBuffer: ")
+  (with-current-buffer buffer
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward
+              (rx "[[gnus:"
+                  (0+ (not (any "#"))) "#"
+                  (group (1+ (not (any "]"))))
+                  "]"
+                  (group (and (? "[")
+                              (0+ (not (any "]")))))
+                  "]")
+              nil t)
+        (replace-match "[[mu4e:msgid:\\1]\\2]"
+                       'fixedcase)))))
+
 (defun dmd--etc-log-tail-handler ()
   (goto-char (point-max))
   (make-variable-buffer-local 'auto-revert-interval)
