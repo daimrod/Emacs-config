@@ -43,3 +43,6 @@
 [submodule "modules/emacs-w3m"]
 	path = modules/emacs-w3m
 	url = git@github.com:daimrod/w3m.git
+[submodule "modules/git-modes"]
+	path = modules/git-modes
+	url = https://github.com/magit/git-modes.git
