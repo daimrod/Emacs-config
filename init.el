@@ -26,51 +26,18 @@
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (if (fboundp 'horizontal-scroll-bar-mode) (horizontal-scroll-bar-mode -1))
 
-
-;; Load path
-(defun fni/add-to-load-path (this-directory &optional with-subdirs recursive)
-  "Add THIS-DIRECTORY at the beginning of the `load-path', if it exists.
-Add all its subdirectories not starting with a '.' if the
-optional argument WITH-SUBDIRS is not nil.
-Do it recursively if the third argument RECURSIVE is not nil."
-  (when (and this-directory
-             (file-directory-p this-directory))
-    (let* ((this-directory (expand-file-name this-directory))
-           (files (directory-files this-directory t "^[^\\.]")))
+(defvar elisp-dir (expand-file-name "elisp/" user-emacs-directory))
+(defvar elpa-dir (expand-file-name "elpa/" user-emacs-directory))
+(defvar config-dir (expand-file-name "config/" user-emacs-directory))
 
-      ;; completely canonicalize the directory name (*may not* begin with `~')
-      (while (not (string= this-directory (expand-file-name this-directory)))
-             (setq this-directory (expand-file-name this-directory)))
-
-      (message "Adding `%s' to load-path..." this-directory)
-      (add-to-list 'load-path this-directory)
-
-      (when with-subdirs
-        (while files
-               (let ((dir-or-file (car files)))
-                 (when (file-directory-p dir-or-file)
-                   (if recursive
-                       (fni/add-to-load-path dir-or-file 'with-subdirs 'recursive)
-                       (fni/add-to-load-path dir-or-file))))
-               (setq files (cdr files)))))))
-
-(defvar dotfiles-dir (file-name-directory
-                      (or (buffer-file-name) load-file-name))
-  ".emacs.d location.")
-(defvar elisp-dir (concat dotfiles-dir "elisp/"))
-(defvar elpa-dir (concat dotfiles-dir "elpa/"))
-(defvar config-dir (concat dotfiles-dir "config/"))
-
-(defcustom src-dir (concat (getenv "HOME") "/src/elisp/")
+(defcustom src-dir (expand-file-name "src/elisp/" (getenv "HOME"))
   "The source directory where third-part modules are located."
   :group 'dmd/config)
 
-(fni/add-to-load-path elisp-dir t)
-(fni/add-to-load-path config-dir)
+(add-to-list 'load-path config-dir)
 
-
 ;; custom-file configuration
-(setq custom-file (concat dotfiles-dir "custom.el"))
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
 
 
