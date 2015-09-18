@@ -40,3 +40,6 @@
 [submodule "modules/mu"]
 	path = modules/mu
 	url = git@github.com:daimrod/mu.git
+[submodule "modules/emacs-w3m"]
+	path = modules/emacs-w3m
+	url = git@github.com:daimrod/w3m.git
