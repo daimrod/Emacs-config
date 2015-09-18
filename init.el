@@ -40,37 +40,15 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
 
-
-;; Misc configuration
-(require 'bytecomp)
-(byte-compile-disable-warning 'cl-functions)
-(require 'cl)
-
-;; Allow SIGUSR2 to "unfreeze" emacs when it blocks in jit-lock
-;; (advice-add 'jit-lock--debug-fontify :around
-;;             (lambda (fun &rest args)
-;;               (with-local-quit (apply fun args))))
-
-
-
-
-;;; Package.el
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
-
-;; ELPA configuration
-(setq package-archives
-      '(("ELPA" . "https://elpa.gnu.org/packages/")
-        ("marmalade" . "https://marmalade-repo.org/packages/")
-        ("elpy" . "https://jorgenschaefer.github.io/packages/")))
+(eval-and-compile
+  (require 'bytecomp)
+  (byte-compile-disable-warning 'cl-functions)
+  (require 'cl))
 
 ;; Load my configuration
 (defvar dmd/modules
-  (loop for config-file in (directory-files config-dir nil "^config-.*.el$")
-        collect (intern (subseq config-file 0 (- (length config-file) 3))))
+  (cl-loop for config-file in (directory-files config-dir nil "^config-.*.el$")
+           collect (intern (subseq config-file 0 (- (length config-file) 3))))
   "List of available configuration modules.")
 
 (defvar dmd/required
