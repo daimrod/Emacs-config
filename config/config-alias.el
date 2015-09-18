@@ -1,5 +1,6 @@
-;; config-alias.el
-;; Copyright (C) 2011, 2012 Grégoire Jadi
+;;; config-alias.el --- Setup some aliases
+
+;; Copyright (C) 2015 Grégoire Jadi
 
 ;; Author: Grégoire Jadi <gregoire.jadi@gmail.com>
 
@@ -16,6 +17,10 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;;; Commentary:
+
+;;; Code:
+
 (defalias 'renb 'dmd/rename-buffer)
 (defalias 'srepl 'slime-repl)
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -24,3 +29,6 @@
 (defalias 'mrgrep 'moccur-grep-find)
 
 (provide 'config-alias)
+
+;;; config-alias.el ends here
+
