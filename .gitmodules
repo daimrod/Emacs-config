@@ -34,3 +34,6 @@
 [submodule "modules/company-mode"]
 	path = modules/company-mode
 	url = https://github.com/company-mode/company-mode.git
+[submodule "modules/yasnippet"]
+	path = modules/yasnippet
+	url = https://github.com/capitaomorte/yasnippet
