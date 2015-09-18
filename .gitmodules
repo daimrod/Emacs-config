@@ -37,3 +37,6 @@
 [submodule "modules/yasnippet"]
 	path = modules/yasnippet
 	url = https://github.com/capitaomorte/yasnippet
+[submodule "modules/mu"]
+	path = modules/mu
+	url = git@github.com:daimrod/mu.git
