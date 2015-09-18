@@ -56,7 +56,7 @@
 (require 'use-package)
 (require 'bind-key)
 
-(defvar dmd/required
+(defvar dmd-required
   '(saveplace
     ffap
     uniquify
@@ -412,6 +412,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 ;; Remove annoying keybindings
 (unbind-key "C-x C-z")
+(unbind-key "C-z")
 (unbind-key "C-x C-c")
 
 (use-package graze-url
@@ -478,7 +479,8 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 (global-set-key (kbd "M-\\") 'execute-extended-command)
 
 ;;;; Helm
-(use-package helm
+(use-package helm-autoloads
+  :load-path (lambda () (expand-file-name "helm" src-dir))
   :bind (("M-x" . helm-M-x)
          ("C-c m" . helm-M-x)
          ("C-c C-m" . helm-M-x)
@@ -548,63 +550,75 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (use-package magit
   :load-path (lambda () (expand-file-name "magit" src-dir))
+
+  :init
+  (use-package git-commit-mode
+    :load-path (lambda () (expand-file-name "git-modes" src-dir)))
+  
   :bind (("C-c g" . magit-status)))
 
 (use-package javadoc-lookup
   :bind (("C-h j" . javadoc-lookup)))
 
-(define-key eclim-mode-map (kbd "C-c C-e p r") 'eclim-run-class)
+(use-package eclim
+  :config
+  (bind-key "C-c C-e p r" 'eclim-run-class eclim-mode-map))
 
-(define-prefix-command 'moccur-map)
-(define-key global-map (kbd "M-o") 'moccur-map)
+(use-package moccur
+  :load-path (lambda () (expand-file-name "moccur" src-dir))
 
-(define-key moccur-map (kbd "s") 'occur-by-moccur)
-(define-key moccur-map (kbd "m") 'moccur)
-(define-key moccur-map (kbd "d") 'dmoccur)
+  :config
+  (bind-keys :prefix-map moccur-map
+             :prefix "M-o"
+             ("s" . occur-by-moccur)
+             ("m" . moccur)
+             ("d" . dmoccur)))
 
-(define-key dired-mode-map (kbd "M-o") 'moccur-map)
-
-(global-set-key (kbd "s-f") 'god-mode-all)
-(global-set-key (kbd "s-c") 'god-local-mode)
-
-(define-key org-mode-map (kbd "C-c )") 'helm-bibtex)
-
-(define-key message-mode-map (kbd "C-c C-c") nil)
-
-(define-key org-agenda-mode-map (kbd "x") nil)
-
-(define-key bibtex-mode-map (kbd "C-c C-o") 'dmd-bibtex-open)
-
-(define-key gnus-summary-mode-map (kbd "i") (kbd "L S"))
-(define-key gnus-summary-mode-map (kbd "y") (kbd "I S"))
-
-(global-set-key (kbd "C-x #") 'delete-frame)
-
-(define-key org-beamer-mode-map (kbd "C-c C-b") nil)
-
-(define-key org-mode-map (kbd "C-c j") (lambda (&optional prefix)
+(use-package org
+  :config
+  (bind-keys :map org-mode-map
+	     ("C-c )" . helm-bibtex)
+	     ("C-c j)" . (lambda (&optional prefix)
                                            (interactive "P")
                                            (if prefix
                                                (helm-org-agenda-files-headings)
                                              (helm-org-in-buffer-headings))))
+	     ("C-c >" . org-time-stamp-inactive)))
 
-(global-set-key (kbd "<f9>") 'org-agenda)
+(use-package message
+  :config
+  (unbind-key "C-c C-c" message-mode-map))
 
-(define-key yas-minor-mode-map (kbd "C-c & C-s") 'company-yasnippet)
+(use-package bibtex
+  :config
+  (bind-key "C-c C-o" 'dmd-bibtex-open bibtex-mode-map))
 
-(global-set-key (kbd "C-c j") 'helm-pages)
+(bind-key "C-x #" 'delete-frame)
 
-(define-key mu4e-view-mode-map (kbd "<tab>") 'shr-next-link)
-(define-key mu4e-view-mode-map (kbd "<backtab>") 'shr-previous-link)
+(use-package ox-beamer
+  :config
+  (unbind-key "C-c C-b" org-beamer-mode-map))
 
-(define-key org-mode-map (kbd "C-c >") 'org-time-stamp-inactive)
+(bind-key "<f9>" 'org-agenda)
+
+(use-package yasnippet
+  :load-path (lambda () (expand-file-name "yasnippet" src-dir))
+  :config
+  (bind-key "C-c & C-s" 'company-yasnippet yas-minor-mode-map))
+
+(use-package helm-pages
+  :load-path (lambda () (expand-file-name "helm-pages" src-dir))
+  :bind (("C-c j" . helm-pages)))
+
+(use-package mu4e
+  :load-path (lambda () (expand-file-name "mu/mu4e" src-dir)))
 
 (mapc (lambda (module)
         (message "Loading %s" module)
         ;; (require module)
         (unless (ignore-errors (require module))
           (warn "Failed to load module `%s'" module)))
-      (append dmd/required dmd/modules))
+      (append dmd-required dmd-modules))
 
 (provide 'init)
 
