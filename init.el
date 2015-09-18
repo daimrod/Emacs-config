@@ -74,8 +74,12 @@
 (put 'downcase-region 'disabled nil)
 (put 'scroll-left 'disabled nil)
 
-(use-package info)
-(use-package ispell)
+(use-package info
+  :demand t)
+
+(use-package ispell
+  :config
+  (defalias 'isp 'rw-ispell-change-dictionary))
 
 (use-package dabbrev
   :bind (("M-/" . dabbrev-expand)))
@@ -253,7 +257,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
          ("C-x b" . helm-buffers-list)
          ("C-c h" . helm-command-prefix))
   :config
-  (use-package helm-commands)
+  (use-package helm-command)
   (use-package helm-files)
   (use-package helm-buffers)
   (use-package helm-ag)
@@ -261,6 +265,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
   (use-package helm-pages
     :bind (("C-c j" . helm-pages)))
   (use-package helm-mode
+    :demand t
     :config
     (helm-mode 1)))
 
@@ -351,7 +356,9 @@ If N is not set, use `comint-buffer-minimum-size'."
              :prefix "M-o"
              ("s" . occur-by-moccur)
              ("m" . moccur)
-             ("d" . dmoccur)))
+             ("d" . dmoccur))
+  (defalias 'mgrep 'moccur-grep)
+  (defalias 'mrgrep 'moccur-grep-find))
 
 (use-package org
   :config
@@ -440,6 +447,60 @@ If N is not set, use `comint-buffer-minimum-size'."
     (when (fboundp 'show-smartparens-mode)
       (show-smartparens-mode 0)))
   (add-hook 'auto-revert-tail-mode-hook 'dmd--etc-log-tail-handler))
+
+(use-package slime
+  :config
+  (defalias 'srepl 'slime-repl))
+
+(use-package copyright
+  :config
+  ;;; redefined skeleton (original in copyright.el)
+  (define-skeleton copyright
+    "Insert a copyright by $ORGANIZATION notice at cursor."
+    nil
+    comment-start
+    " Copyright (C) " `(format-time-string "%Y") " by "
+    (or (getenv "ORGANIZATION")
+        user-full-name)
+    comment-end \n
+    comment-start
+    " See the file LICENSE for copying permission."
+    comment-end \n))
+
+(use-package workgroups
+  :demand t
+  :config
+  (workgroups-mode 1))
+
+(use-package mule
+  :config
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8))
+
+(use-package ansi-color
+  :config
+  (ansi-color-for-comint-mode-on))
+
+(use-package saveplace
+  :demand t)
+
+;; Save a list of recent files visited.
+(recentf-mode 1)
+
+;; Highlight matching parentheses when the point is on them.
+(show-paren-mode 1)
+
+;; Text-mode Hook
+(add-hook 'text-mode-hook 'dmd-text-mode-setup)
+
+;; Message-mode hook
+(add-hook 'message-mode-hook 'dmd-text-mode-setup)
+
+
+;;;; Alias
+(defalias 'renb 'dmd/rename-buffer)
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 (provide 'init)
 

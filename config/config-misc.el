@@ -22,49 +22,9 @@
 ;;; Code:
 
 
-(require 'workgroups)
 (require 'scratch)
 (require 'undo-tree)
-(require 'el-dispatcher)
-(require 'linum)
 
-;; disable line number everywhere
-(global-linum-mode -1)
-
-;; every backup files'll store in ~/backup directory
-(setq backup-directory-alist
-      '(("." . "~/backup/")))
-(setq backup-by-copying t)
-
-;; configure cliboard
-(setq select-enable-clipboard t
-      mouse-drag-copy-region t
-      yank-pop-change-selection t
-      kill-do-not-save-duplicates t)
-
-;; utf-8 roxx
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-(ansi-color-for-comint-mode-on)
-
-;; some configuration (C-h v)
-(setq save-place-file (concat dotfiles-dir "places"))
-
-;; Save a list of recent files visited.
-(recentf-mode 1)
-
-;; Highlight matching parentheses when the point is on them.
-(show-paren-mode 1)
-
-;; Prefer text-mode over fundamental-mode
-(setq-default major-mode 'text-mode)
-
-;; Text-mode Hook
-(add-hook 'text-mode-hook 'dmd-text-mode-setup)
-
-;; Message-mode hook
-(add-hook 'message-mode-hook 'dmd-text-mode-setup)
 
 ;; Gnus Article Mode
 (add-hook 'gnus-article-mode-hook
@@ -80,9 +40,6 @@
 
 (add-hook 'prog-mode-hook 'subword-mode)
 (add-hook 'prog-mode-hook 'glasses-mode)
-
-;; workgroups configuration
-(workgroups-mode)
 
 ;; markdown configuration
 (autoload 'markdown-mode "markdown-mode"
