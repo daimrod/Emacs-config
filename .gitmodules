@@ -58,3 +58,6 @@
 [submodule "modules/parsebib"]
 	path = modules/parsebib
 	url = git@github.com:joostkremers/parsebib.git
+[submodule "modules/f"]
+	path = modules/f
+	url = https://github.com/rejeep/f.el.git
