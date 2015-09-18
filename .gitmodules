@@ -1,3 +1,6 @@
 [submodule "modules/which-key"]
 	path = modules/which-key
 	url = https://github.com/justbur/emacs-which-key.git
+[submodule "modules/s"]
+	path = modules/s
+	url = https://github.com/magnars/s.el.git
