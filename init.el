@@ -29,6 +29,7 @@
 (defvar elisp-dir (expand-file-name "elisp/" user-emacs-directory))
 (defvar elpa-dir (expand-file-name "elpa/" user-emacs-directory))
 (defvar config-dir (expand-file-name "config/" user-emacs-directory))
+(defvar modules-dir (expand-file-name "modules/" user-emacs-directory))
 
 (defcustom src-dir (expand-file-name "~/src/elisp/")
   "The source directory where third-part modules are located."
@@ -45,10 +46,13 @@
   (byte-compile-disable-warning 'cl-functions)
   (require 'cl))
 
-(defvar dmd-modules
+(defvar dmd-config-modules
   (cl-loop for config-file in (directory-files config-dir nil "^config-.*.el$")
            collect (intern (file-name-base config-file)))
   "List of available configuration modules.")
+
+(dolist (module-dir (directory-files modules-dir t "^[^.]"))
+  (add-to-list 'load-path module-dir))
 
 (add-to-list 'load-path (expand-file-name "use-package/" src-dir))
 
@@ -618,7 +622,7 @@ If N is not set, use `comint-buffer-minimum-size'."
         ;; (require module)
         (unless (ignore-errors (require module))
           (warn "Failed to load module `%s'" module)))
-      (append dmd-required dmd-modules))
+      (append dmd-required dmd-config-modules))
 
 (provide 'init)
 
