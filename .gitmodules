@@ -1,0 +1,3 @@
+[submodule "modules/which-key"]
+	path = modules/which-key
+	url = https://github.com/justbur/emacs-which-key.git
