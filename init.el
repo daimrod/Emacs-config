@@ -617,6 +617,11 @@ If N is not set, use `comint-buffer-minimum-size'."
 (use-package mu4e
   :load-path (lambda () (expand-file-name "mu/mu4e" src-dir)))
 
+(use-package which-key
+  :load-path "modules/which-key"
+  :config
+  (which-key-mode 1))
+
 (mapc (lambda (module)
         (message "Loading %s" module)
         ;; (require module)
