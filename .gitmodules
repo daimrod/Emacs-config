@@ -61,3 +61,6 @@
 [submodule "modules/f"]
 	path = modules/f
 	url = https://github.com/rejeep/f.el.git
+[submodule "modules/workgroups"]
+	path = modules/workgroups
+	url = https://github.com/tlh/workgroups.el.git
