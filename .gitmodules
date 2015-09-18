@@ -52,3 +52,6 @@
 [submodule "modules/color-moccur"]
 	path = modules/color-moccur
 	url = https://github.com/myuhe/color-moccur.el.git
+[submodule "modules/use-package"]
+	path = modules/use-package
+	url = https://github.com/jwiegley/use-package.git
