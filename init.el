@@ -1,5 +1,6 @@
-;; init.el
-;; Copyright (C) 2011, 2012 Grégoire Jadi
+;;; init.el --- Initialization
+
+;; Copyright (C) 2015 Grégoire Jadi
 
 ;; Author: Grégoire Jadi <gregoire.jadi@gmail.com>
 
@@ -16,6 +17,10 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;;; Commentary:
+
+;;; Code:
+
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
@@ -24,10 +29,10 @@
 
 ;; Load path
 (defun fni/add-to-load-path (this-directory &optional with-subdirs recursive)
-  "Add THIS-DIRECTORY at the beginning of the load-path, if it exists.
+  "Add THIS-DIRECTORY at the beginning of the `load-path', if it exists.
 Add all its subdirectories not starting with a '.' if the
 optional argument WITH-SUBDIRS is not nil.
-Do it recursively if the third argument is not nil."
+Do it recursively if the third argument RECURSIVE is not nil."
   (when (and this-directory
              (file-directory-p this-directory))
     (let* ((this-directory (expand-file-name this-directory))
@@ -332,7 +337,7 @@ Do it recursively if the third argument is not nil."
     calfw-org
     cal-fw-cal
     request)
-  "List of required modules")
+  "List of required modules.")
 
 
 (add-hook 'after-init-hook
@@ -371,3 +376,7 @@ Do it recursively if the third argument is not nil."
 ;; Local Variables:
 ;; firestarter: (byte-recompile-file (buffer-file-name))
 ;; End:
+
+(provide 'init)
+
+;;; init.el ends here
