@@ -43,59 +43,7 @@
                       `((author ,(getenv "USER"))
                         (code ,(buffer-substring start end))))))
 
-(defun zap-to-char- (arg char)
-  "Just like zap-to-char- but do not chop the last CHAR."
-  (interactive "p\ncZap to char-: ")
-  ;; Avoid "obsolete warnings for translation-table-for-input.
-  (with-no-warnings
-    (if (char-table-p translation-table-for-input)
-        (setq char (or (aref translation-table-for-input char) char))))
-  (save-excursion
-    (kill-region (point)
-                 (progn
-                   (search-forward (char-to-string char) nil nil arg)
-                   (if (>= arg 0)
-                       (- (point) 1)
-                     (+ (point) 1))))))
 
-(defun move-to-window-line-top ()
-  (interactive)
-  (move-to-window-line 0))
-
-(defun move-to-window-line-bottom ()
-  (interactive)
-  (move-to-window-line -1))
-
-(defun push-mark-no-activate ()
-  "Pushes `point' to `mark-ring' and does not activate the region
-Equivalent to \\[set-mark-command] when \\[transient-mark-mode] is disabled"
-  (interactive)
-  (push-mark (point) t nil)
-  (message "Pushed mark to ring"))
-
-(defun jump-to-mark ()
-  "Jumps to the local mark, respecting the `mark-ring' order.
-This is the same as using \\[set-mark-command] with the prefix argument."
-  (interactive)
-  (set-mark-command 1))
-
-(defun dmd/small-scroll-up-command (&optional arg)
-  (interactive "^P")
-  (let ((fun-scroll-up (if (fboundp 'scroll-up-command)
-                           'scroll-up-command
-                         'scroll-up)))
-    (if arg
-        (funcall fun-scroll-up arg)
-      (funcall fun-scroll-up 5))))
-
-(defun dmd/small-scroll-down-command (&optional arg)
-  (interactive "^P")
-  (let ((fun-scroll-down (if (fboundp 'scroll-down-command)
-                             'scroll-down-command
-                           'scroll-down)))
-    (if arg
-        (funcall fun-scroll-down arg)
-      (funcall fun-scroll-down 5))))
 
 (defun dmd/show-big-text (text &optional size font)
   (interactive "sText to show: ")
@@ -134,15 +82,6 @@ If not, use the classic save-buffers-and-kill-emacs function."
         (add-to-list 'dmd/dead-clients (dmd/client-process)))
     (save-buffers-kill-emacs)))
 
-(defun dmd/delete-zombie-clients (frame)
-  "Delete zombie clients, that is, emacsclient that are finished
-but still present in the background."
-  (when (fboundp 'server-delete-client)
-    (dolist (process dmd/dead-clients)
-      (server-delete-client process))))
-
-(add-hook 'after-make-frame-functions #'dmd/delete-zombie-clients)
-
 (defun dmd/autocompile ()
   "Byte compile an elisp and reload it."
   (interactive)
@@ -158,41 +97,6 @@ but still present in the background."
 (defvar *evince-location* "/usr/bin/evince"
   "Where is evince?")
 
-(defun dmd/evince (filename)
-  "Open the given FILENAME with evince in a background.
-
-`read-file-name' is used to find the files. Extensions can be
-added to `*evince-extensions*'."
-  (interactive
-   (let* ((exts (copy-list *evince-extensions*))
-          (ext (do* ((ret (concat "\\(" (pop exts)) (concat ret "\\|" ext))
-                     (ext (pop exts) (pop exts)))
-                   ((null exts) (concat ret "\\)")))))
-     (list (read-file-name
-            "File: " nil nil
-            nil
-            (ffap-file-at-point)
-            '(lambda (filename)
-               (and (file-exists-p filename)
-                    (or
-                     (string= "~" filename)
-                     (file-directory-p filename)
-                     (string-match (format "^.*\.%s$" ext) filename))))))))
-  (shell-command (format "evince \"%s\" & disown" (expand-file-name filename)))
-  (message "%s" filename))
-
-(defvar comint-buffer-minimum-size 0)
-(defun dmd/comint-truncate-buffer (&optional n)
-  "Does what comint-truncate-buffer should do. That is, truncate
-the buffer to keep N lines.
-
-If N is not set, use `comint-buffer-minimum-size'."
-  (interactive "P")
-  (let ((comint-buffer-maximum-size
-         (or n
-             (- (line-number-at-pos (point-max)) (line-number-at-pos)))))
-    (comint-truncate-buffer)))
-
 (defun toggle-fullscreen ()
   "Toggle full screen on X11"
   (interactive)
@@ -201,31 +105,6 @@ If N is not set, use `comint-buffer-minimum-size'."
      nil 'fullscreen
      (when (not (frame-parameter nil 'fullscreen)) 'fullboth))))
 
-(defcustom terminal-emulator "xterm"
-  "*A terminal emulator to use."
-  :group 'external)
-
-(defcustom terminal-emulator-parameters nil
-  "*A terminal emulator to use."
-  :group 'external
-  :type '(repeat string))
-
-(defun dmd-terminal-emulator ()
-  "Open a terminal emulator using `terminal-emulator'."
-  (interactive)
-  (let ((process-environment
-         (remove-if (lambda (env)
-                      (string-match-p "^TMUX=" env))
-                    process-environment)))
-    (apply
-     #'start-process
-     "Terminal Emulator"
-     nil
-     (etypecase terminal-emulator
-       (string terminal-emulator)
-       (function (funcall terminal-emulator))
-       (symbol (symbol-value terminal-emulator)))
-     terminal-emulator-parameters)))
 
 (defun unfill-paragraph ()
   "Takes a multi-line paragraph and makes it into a single line
@@ -302,68 +181,7 @@ It uses magit internal."
     (error "No active region"))
   (add-face-text-property start end (read (read-from-minibuffer "Property: "))))
 
-(defun youtube-dl (url)
-  (interactive "MURL: ")
-  (let* ((buffer (get-buffer-create (format "*Youtube DL %s*" url)))
-         (default-directory (if (string-match-p "~/Music" default-directory)
-                                default-directory
-                                "~/Music/Random/"))
-         (proc (start-process "youtube-dl"
-                              buffer
-                              "/bin/bash"
-                              "-c"
-                              (format "source ~/.virtualenv/youtube-dl/bin/activate && youtube-dl --no-part --extract-audio --audio-format mp3 --audio-quality 128K %s" url))))
-    (set-process-sentinel proc (lambda (proc event)
-                                 (if (string= event "finished\n")
-                                     (kill-buffer buffer)
-                                   (user-error "A problem occured in %s" (buffer-name buffer)))))))
 
-(defun dmd/dired-exec-lisp (function)
-  (interactive "XExec: ")
-  (funcall function (dired-get-marked-files)))
-
-(defun dmd/doc-view-info ()
-  "Open a buffer with the current doc's info as text."
-  (interactive)
-  (let ((buffer (concat "*Info of "
-                        (file-name-nondirectory buffer-file-name)
-                        "*")))
-    (if (get-buffer buffer)
-        (kill-buffer buffer))
-    (call-process "/usr/bin/pdfinfo" nil buffer nil buffer-file-name)
-    (switch-to-buffer buffer)
-    (read-only-mode 1)
-    (goto-char (point-min))))
-
-(defun dmd/doc-view-external ()
-  "Open the current document using an external program."
-  (interactive)
-  (start-process "doc-view external" (generate-new-buffer " *DocView External Viewer*")
-                 "/usr/bin/evince" buffer-file-name))
-
-(defun dmd/open-pdf (file)
-  (interactive "fFile: ")
-  (list file))
-
-(el-dispatcher-make 'dmd/open-pdf
-                    '(("doc-view" . find-file)
-                      ("mupdf" . (lambda (file)
-                                 (start-process (format "mupdf %S" file)
-                                                nil
-                                                "mupdf" file)))
-                      ("evince" . (lambda (file)
-                                  (start-process (format "evince %S" file)
-                                                 nil
-                                                 "evince" file)))))
-
-(defadvice emms-start (after emms-show-track (&rest args) activate)
-  (emms-show))
-
-(defun dmd/read-lines (filename &optional visit beg end replace)
-  "Return a list of lines in FILENAME."
-  (with-temp-buffer
-    (insert-file-contents filename visit beg end replace)
-    (split-string (buffer-string) "\n" t)))
 
 (defsubst /. (dividend &rest divisors)
   "Like `/' but uses floating number by coercing the DIVIDEND to
@@ -602,8 +420,8 @@ Blocks are named with #+NAME."
     (save-excursion
       (goto-char (point-min))
       (while (zerop (forward-line 1))
-      (ignore-errors (org-indent-drawer))
-      (org-indent-line)))))
+        (ignore-errors (org-indent-drawer))
+        (org-indent-line)))))
 
 (defun dmd-org-skip-bib-file ()
   (if (not (file-equal-p org-bib-notes-file (buffer-file-name)))
@@ -703,10 +521,9 @@ Blocks are named with #+NAME."
 
 (defun dmd--etc-log-tail-handler ()
   (goto-char (point-max))
-  (make-variable-buffer-local 'auto-revert-interval)
+  (make-local-variable 'auto-revert-interval)
   (setq auto-revert-interval 1)
   (auto-revert-set-timer)
-  (make-variable-buffer-local 'auto-revert-verbose)
   (setq auto-revert-verbose nil)
   (read-only-mode 1)
   (font-lock-mode -1)
