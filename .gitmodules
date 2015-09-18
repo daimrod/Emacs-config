@@ -7,3 +7,6 @@
 [submodule "modules/dash"]
 	path = modules/dash
 	url = https://github.com/magnars/dash.el.git
+[submodule "modules/ag"]
+	path = modules/ag
+	url = https://github.com/Wilfred/ag.el.git
