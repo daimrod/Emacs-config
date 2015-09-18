@@ -19,3 +19,6 @@
 [submodule "modules/iy-go-to-char"]
 	path = modules/iy-go-to-char
 	url = https://github.com/doitian/iy-go-to-char.git
+[submodule "modules/helm"]
+	path = modules/helm
+	url = git@github.com:emacs-helm/helm.git
