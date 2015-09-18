@@ -22,3 +22,12 @@
 [submodule "modules/helm"]
 	path = modules/helm
 	url = git@github.com:emacs-helm/helm.git
+[submodule "modules/helm-ag"]
+	path = modules/helm-ag
+	url = https://github.com/syohex/emacs-helm-ag.git
+[submodule "modules/helm-bibtex"]
+	path = modules/helm-bibtex
+	url = git@github.com:tmalsburg/helm-bibtex.git
+[submodule "modules/helm-pages"]
+	path = modules/helm-pages
+	url = https://github.com/david-christiansen/helm-pages.git
