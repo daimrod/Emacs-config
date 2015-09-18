@@ -485,6 +485,14 @@ If N is not set, use `comint-buffer-minimum-size'."
 (use-package saveplace
   :demand t)
 
+(use-package python
+  :mode (("wscript" . python-mode)))
+
+(use-package undo-tree
+  :demand t
+  :config
+  (global-undo-tree-mode))
+
 ;; Save a list of recent files visited.
 (recentf-mode 1)
 
@@ -496,6 +504,11 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 ;; Message-mode hook
 (add-hook 'message-mode-hook 'dmd-text-mode-setup)
+
+;; Prog-mode hook
+(add-hook 'prog-mode-hook 'hs-minor-mode)
+(add-hook 'prog-mode-hook 'subword-mode)
+(add-hook 'prog-mode-hook 'glasses-mode)
 
 
 ;;;; Alias

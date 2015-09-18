@@ -23,23 +23,6 @@
 
 
 (require 'scratch)
-(require 'undo-tree)
-
-
-;; Gnus Article Mode
-(add-hook 'gnus-article-mode-hook
-          (lambda ()
-            (visual-line-mode 1)
-            (adaptive-wrap-prefix-mode 1)))
-
-(require' fic-ext-mode)
-(add-hook 'prog-mode-hook 'fic-ext-mode)
-
-(require 'hideshow)
-(add-hook 'prog-mode-hook 'hs-minor-mode)
-
-(add-hook 'prog-mode-hook 'subword-mode)
-(add-hook 'prog-mode-hook 'glasses-mode)
 
 ;; markdown configuration
 (autoload 'markdown-mode "markdown-mode"
@@ -52,24 +35,9 @@
 (add-to-list 'auto-mode-alist
              '("\\.m" . octave-mode))
 
-;; waf config
-(add-to-list 'auto-mode-alist '("wscript" . python-mode))
-
-;; do not ask confirmation to open a file or a buffer
-(setq confirm-nonexistent-file-or-buffer nil)
-
-;; undo-tree everywhere
-(global-undo-tree-mode)
-
 ;; ImageMagick support
 (autoload 'eimp-mode "eimp" "Emacs Image Manipulation Package." t)
 (add-hook 'image-mode-hook 'eimp-mode)
-
-;; automatically refresh files from disk when they are updated
-(global-auto-revert-mode t)
-
-;; hide the cursor in the others windows
-(setq-default cursor-in-non-selected-windows nil)
 
 ;; enable Zaps mode everywhere
 (require 'markit)
