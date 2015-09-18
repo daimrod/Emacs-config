@@ -36,6 +36,7 @@
   :group 'dmd-config)
 
 (add-to-list 'load-path config-dir)
+(add-to-list 'load-path elisp-dir)
 
 ;; custom-file configuration
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -54,258 +55,17 @@
 (dolist (module-dir (directory-files modules-dir t "^[^.]"))
   (add-to-list 'load-path module-dir))
 
-(add-to-list 'load-path (expand-file-name "use-package/" src-dir))
-
 (defvar use-package-verbose t)
 (require 'use-package)
 (require 'bind-key)
-
-(defvar dmd-required
-  '(saveplace
-    ffap
-    uniquify
-    ansi-color
-    recentf
-    verbiste
-    info
-    helm-config
-    ebib
-    key-chord
-    graze-url
-    compile-cache
-    dired
-    comint
-    doc-view
-    hideshow
-    gtk-lookup
-    semantic
-    semantic/ia
-    semantic/bovine/gcc
-    semantic/imenu
-    cedet-global
-    company
-    company-yasnippet
-    http-post-simple
-    thingatpt
-    imenu
-    bytecomp
-    el-dispatcher
-    doctags
-    ediff
-    emms-setup
-    emms-player-mpv-quiet
-    magit
-    magit-svn
-    magit-blame
-    tidy-autoloads
-    rcirc
-    shoes-off-log
-    shoes-off
-    cc-mode
-    javadoc-lookup
-    maven-fetch
-    eclim
-    eclimd
-    company-emacs-eclim
-    js2-mode
-    moz
-    xlicense
-    skeleton
-    elisp-slime-nav
-    redshank-loader
-    markdown-mode
-    workgroups
-    scratch
-    undo-tree
-    linum
-    rw-hunspell
-    rw-ispell
-    rw-language-and-country-codes
-    fic-ext-mode
-    markit
-    yaml-mode
-    dired-x
-    rainbow-mode
-    chm-view
-    cursor-chg
-    woman
-    browse-kill-ring
-    manual-tagging
-    w3m-wget
-    smart-tab
-    smerge-mode
-    edebug
-    compilation-font
-    parallel
-    ess
-    ess-site
-    gnuplot
-    sendmail
-    message
-    mm-decode
-    mail-utils
-    nnir
-    epg
-    epa-mail
-    adaptive-wrap
-    multiple-cursors
-    multi-term
-    tuareg
-    ocamldebug
-    god-mode
-    reftex
-    bibtex
-    org
-    org-ref
-    org-loaddefs
-    ob-stan
-    ob-haskell
-    ob-io
-    ob-java
-    ob-js
-    ob-keys
-    ob-latex
-    ob-ledger
-    ob-lilypond
-    ob-lisp
-    ob-makefile
-    ob-matlab
-    ob-maxima
-    ob-mscgen
-    ob-octave
-    ob-org
-    ob-perl
-    ob-picolisp
-    ob-plantuml
-    ob-ruby
-    ob-sass
-    ob-scala
-    ob-scheme
-    ob-screen
-    ob-shell
-    ob-shen
-    ob-sql
-    ob-sqlite
-    ob-table
-    ob-tangle
-    ob-awk
-    ob-calc
-    ob-C
-    ob-clojure
-    ob-comint
-    ob-coq
-    ob-core
-    ob-css
-    ob-ditaa
-    ob-dot
-    ob-emacs-lisp
-    ob-eval
-    ob-exp
-    ob-fortran
-    ob-gnuplot
-    ob-groovy
-    ob-sed
-    ob-forth
-    ob-lob
-    ob-ocaml
-    ob-processing
-    ob-python
-    ob-ref
-    ob-abc
-    ob-asymptote
-    ob-ebnf
-    ob-J
-    ob-R
-    doi-utils
-    jmax-bibtex
-    pubmed
-    arxiv
-    sci-id
-    isbn
-    org-agenda
-    org-clock
-    org-game
-    org-archive
-    org-plot
-    ox
-    ox-latex
-    ox-beamer
-    ox-md
-    ox-reveal
-    org-list
-    org-drill
-    calendar
-    diary-lib
-    org-annotate-file
-    org-contacts
-    org-magit
-    org-man
-    org-feed
-    org-habit
-    plantuml-mode
-    projectile
-    helm
-    helm-projectile
-    helm-org
-    helm-bibtex
-    ag
-    helm-ag
-    prolog
-    ediprolog
-    view
-    rust-mode
-    scala-mode-auto
-    ensime
-    color-moccur
-    moccur-edit
-    slime-autoloads
-    slime
-    info-look
-    smartparens
-    smartparens-config
-    w3m-load
-    w3m
-    w3m-search
-    browse-url
-    pandoc-mode
-    xmlgen
-    sgml-mode
-    xwidget
-    parallel-xwidget
-    ace-window
-    ispell
-    marmalade-upload
-    yasnippet
-    pomodoro
-    page-break-lines
-    helm-pages
-    flycheck
-    flycheck-pos-tip
-    mu4e
-    org-mu4e
-    epg-config
-    firestarter
-    calfw
-    calfw-org
-    cal-fw-cal
-    request)
-  "List of required modules.")
 
 (load (expand-file-name "~/quicklisp/slime-helper.el") t)
 (load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
 
 (use-package pdf-tools
-  :load-path (lambda () (expand-file-name src-dir "pdf-tools/pdf-tools-0.50/"))
+  :load-path "pdf-tools/pdf-tools-0.70/"
   :config
   (pdf-tools-install))
-
-(use-package diary-lib
-  :config
-  (diary-list-entries (calendar-current-date) nil 'list-only)
-  (mapc (lambda (file)
-          (bury-buffer (find-file-noselect file)))
-        (append diary-included-files
-                (org-agenda-files))))
 
 ;; Enabled/Disabled commands
 (put 'upcase-region 'disabled nil)
@@ -313,6 +73,9 @@
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'scroll-left 'disabled nil)
+
+(use-package info)
+(use-package ispell)
 
 (use-package dabbrev
   :bind (("M-/" . dabbrev-expand)))
@@ -412,7 +175,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
       (funcall fun-scroll-down dmd-small-scrolling))))
 
 (bind-keys ("C-v" . dmd-small-scroll-up-command)
-           ("M-v" . dmd-small-scroll-up-command))
+           ("M-v" . dmd-small-scroll-down-command))
 
 ;; Remove annoying keybindings
 (unbind-key "C-x C-z")
@@ -426,7 +189,6 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 ;; iy-go-to-char configuration
 (use-package iy-go-to-char
-  :load-path (lambda () (expand-file-name "iy-go-to-char" src-dir))
   :bind (("C-c f" . iy-go-to-char)
          ("C-c F" . iy-go-to-char-backward)
          ("C-c ;" . iy-go-to-char-continue)
@@ -483,13 +245,24 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 (global-set-key (kbd "M-\\") 'execute-extended-command)
 
 ;;;; Helm
-(use-package helm-autoloads
-  :load-path (lambda () (expand-file-name "helm" src-dir))
+(use-package helm-config
   :bind (("M-x" . helm-M-x)
          ("C-c m" . helm-M-x)
          ("C-c C-m" . helm-M-x)
          ("C-x C-f" . helm-find-files)
-         ("C-x b" . helm-buffers-list)))
+         ("C-x b" . helm-buffers-list)
+         ("C-c h" . helm-command-prefix))
+  :config
+  (use-package helm-commands)
+  (use-package helm-files)
+  (use-package helm-buffers)
+  (use-package helm-ag)
+  (use-package helm-bibtex)
+  (use-package helm-pages
+    :bind (("C-c j" . helm-pages)))
+  (use-package helm-mode
+    :config
+    (helm-mode 1)))
 
 (global-set-key (kbd "C-;") 'newline-and-indent)
 
@@ -545,33 +318,35 @@ If N is not set, use `comint-buffer-minimum-size'."
              ("C-c +" . hs-show-all)))
 
 (use-package company
-  :load-path (lambda () (expand-file-name "company-mode" src-dir))
-  :bind (("C-SPC" . company-complete)))
-
-(use-package company-yasnippet
-  :load-path (lambda () (expand-file-name "company-mode" src-dir))
-  :bind (("M-C" . company-yasnippet)))
+  :bind (("C-SPC" . company-complete))
+  :config)
 
 (use-package magit
-  :load-path (lambda () (expand-file-name "magit" src-dir))
-
   :init
-  (use-package git-commit-mode
-    :load-path (lambda () (expand-file-name "git-modes" src-dir)))
+  (use-package git-commit-mode)
   
-  :bind (("C-c g" . magit-status)))
+  :bind (("C-c g" . magit-status))
+
+  :config
+  (add-to-list 'Info-directory-list
+               (expand-file-name (concat src-dir "magit/")))
+
+  (use-package magit-svn))
 
 (use-package javadoc-lookup
-  :bind (("C-h j" . javadoc-lookup)))
+  :bind (("C-h j" . javadoc-lookup))
+  :config
+  (javadoc-add-roots "/usr/share/doc/openjdk-7-jdk/api"))
 
 (use-package eclim
   :config
-  (bind-key "C-c C-e p r" 'eclim-run-class eclim-mode-map))
+  (bind-key "C-c C-e p r" 'eclim-run-class eclim-mode-map)
+  (add-hook 'eclim-mode-hook 'company-emacs-eclim-setup)
+  (add-hook 'java-mode-hook 'eclim-mode))
 
-(use-package moccur
-  :load-path (lambda () (expand-file-name "moccur" src-dir))
-
+(use-package color-moccur
   :config
+  (use-package moccur-edit)
   (bind-keys :prefix-map moccur-map
              :prefix "M-o"
              ("s" . occur-by-moccur)
@@ -587,7 +362,18 @@ If N is not set, use `comint-buffer-minimum-size'."
                                            (if prefix
                                                (helm-org-agenda-files-headings)
                                              (helm-org-in-buffer-headings))))
-	     ("C-c >" . org-time-stamp-inactive)))
+	     ("C-c >" . org-time-stamp-inactive))
+
+  (add-to-list 'Info-directory-list
+               (expand-file-name (concat src-dir
+                                         "org-mode/doc")))
+
+  (use-package diary-lib
+	:config
+	(diary-list-entries (calendar-current-date) nil 'list-only)
+	(mapc (lambda (file)
+			(bury-buffer (find-file-noselect file)))
+		  diary-included-files)))
 
 (use-package message
   :config
@@ -606,19 +392,21 @@ If N is not set, use `comint-buffer-minimum-size'."
 (bind-key "<f9>" 'org-agenda)
 
 (use-package yasnippet
-  :load-path (lambda () (expand-file-name "yasnippet" src-dir))
   :config
-  (bind-key "C-c & C-s" 'company-yasnippet yas-minor-mode-map))
-
-(use-package helm-pages
-  :load-path (lambda () (expand-file-name "helm-pages" src-dir))
-  :bind (("C-c j" . helm-pages)))
+  (bind-key "C-c & C-s" 'company-yasnippet yas-minor-mode-map)
+  (use-package company-yasnippet
+    :bind (("M-C" . company-yasnippet))))
 
 (use-package mu4e
-  :load-path (lambda () (expand-file-name "mu/mu4e" src-dir)))
+  :config
+  (add-to-list 'Info-directory-list
+               (expand-file-name (expand-file-name
+                                  "mu/mu4e"
+                                  modules-dir)))
+  (setq mu4e-mu-binary (expand-file-name "mu/mu/mu"
+                                         modules-dir)))
 
 (use-package which-key
-  :load-path "modules/which-key"
   :config
   (which-key-mode 1))
 
@@ -627,7 +415,31 @@ If N is not set, use `comint-buffer-minimum-size'."
         ;; (require module)
         (unless (ignore-errors (require module))
           (warn "Failed to load module `%s'" module)))
-      (append dmd-required dmd-config-modules))
+	  dmd-config-modules)
+
+(use-package env-helper
+  :config
+  (file-notify-add-watch "/etc/environment"
+                         '(change)
+                         #'dmd--environment-watcher))
+
+;; automagically tail log files
+(use-package autorevert
+  :mode ("\\.log\\'" . auto-revert-tail-mode)
+  :config
+  (defun dmd--etc-log-tail-handler ()
+    (goto-char (point-max))
+    (make-local-variable 'auto-revert-interval)
+    (setq auto-revert-interval 1)
+    (auto-revert-set-timer)
+    (setq auto-revert-verbose nil)
+    (read-only-mode 1)
+    (font-lock-mode -1)
+    (visual-line-mode -1)
+    (toggle-truncate-lines 1)
+    (when (fboundp 'show-smartparens-mode)
+      (show-smartparens-mode 0)))
+  (add-hook 'auto-revert-tail-mode-hook 'dmd--etc-log-tail-handler))
 
 (provide 'init)
 

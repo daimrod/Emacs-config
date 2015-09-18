@@ -519,18 +519,5 @@ Blocks are named with #+NAME."
         (replace-match "[[mu4e:msgid:\\1]\\2]"
                        'fixedcase)))))
 
-(defun dmd--etc-log-tail-handler ()
-  (goto-char (point-max))
-  (make-local-variable 'auto-revert-interval)
-  (setq auto-revert-interval 1)
-  (auto-revert-set-timer)
-  (setq auto-revert-verbose nil)
-  (read-only-mode 1)
-  (font-lock-mode -1)
-  (visual-line-mode -1)
-  (toggle-truncate-lines 1)
-  (when (fboundp 'show-smartparens-mode)
-    (show-smartparens-mode 0)))
-
 
 (provide 'config-0-defuns)

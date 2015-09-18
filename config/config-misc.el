@@ -252,9 +252,6 @@
 (add-to-list 'auto-mode-alist
              '("\\.diary" . diary-mode))
 
-(helm-mode 1)
-(helm-projectile-on)
-
 (global-flycheck-mode 1)
 
 ;; Frame title configuration
@@ -262,13 +259,8 @@
       '((:eval (format "%d " (emacs-pid)))
         ("" invocation-name "@" system-name)))
 
-(provide 'config-misc)
-
 (firestarter-mode 1)
 
-;; automagically tail log files
-(add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-tail-mode))
-
-(add-hook 'auto-revert-tail-mode-hook 'dmd--etc-log-tail-handler)
+(provide 'config-misc)
 
 ;;; config-misc.el ends here

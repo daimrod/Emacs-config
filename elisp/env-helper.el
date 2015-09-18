@@ -1,4 +1,4 @@
-;;; config-env.el ---
+;;; env-helper.el --- 
 
 ;; Copyright (C) 2014 Grégoire Jadi
 
@@ -46,10 +46,6 @@
     (unless file-open-p
       (kill-buffer buffer))))
 
-(file-notify-add-watch "/etc/environment"
-                       '(change)
-                       #'dmd--environment-watcher)
+(provide 'env-helper)
 
-(provide 'config-env)
-
-;;; config-env.el ends here
+;;; env-helper.el ends here
