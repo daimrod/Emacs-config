@@ -10,3 +10,6 @@
 [submodule "modules/ag"]
 	path = modules/ag
 	url = https://github.com/Wilfred/ag.el.git
+[submodule "modules/magit"]
+	path = modules/magit
+	url = git@github.com:daimrod/magit.git
