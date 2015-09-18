@@ -64,3 +64,6 @@
 [submodule "modules/workgroups"]
 	path = modules/workgroups
 	url = https://github.com/tlh/workgroups.el.git
+[submodule "modules/undo-tree"]
+	path = modules/undo-tree
+	url = http://www.dr-qubit.org/git/undo-tree.git
