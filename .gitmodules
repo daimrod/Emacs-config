@@ -4,3 +4,6 @@
 [submodule "modules/s"]
 	path = modules/s
 	url = https://github.com/magnars/s.el.git
+[submodule "modules/dash"]
+	path = modules/dash
+	url = https://github.com/magnars/dash.el.git
