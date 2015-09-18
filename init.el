@@ -48,7 +48,7 @@
 ;; Load my configuration
 (defvar dmd/modules
   (cl-loop for config-file in (directory-files config-dir nil "^config-.*.el$")
-           collect (intern (subseq config-file 0 (- (length config-file) 3))))
+           collect (intern (file-name-base config-file)))
   "List of available configuration modules.")
 
 (defvar dmd/required
