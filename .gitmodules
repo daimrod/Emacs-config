@@ -16,3 +16,6 @@
 [submodule "modules/pdf-tools"]
 	path = modules/pdf-tools
 	url = https://github.com/politza/pdf-tools.git
+[submodule "modules/iy-go-to-char"]
+	path = modules/iy-go-to-char
+	url = https://github.com/doitian/iy-go-to-char.git
