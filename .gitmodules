@@ -55,3 +55,6 @@
 [submodule "modules/use-package"]
 	path = modules/use-package
 	url = https://github.com/jwiegley/use-package.git
+[submodule "modules/parsebib"]
+	path = modules/parsebib
+	url = git@github.com:joostkremers/parsebib.git
