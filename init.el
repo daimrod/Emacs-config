@@ -410,8 +410,9 @@ If N is not set, use `comint-buffer-minimum-size'."
                (expand-file-name (expand-file-name
                                   "mu/mu4e"
                                   modules-dir)))
-  (setq mu4e-mu-binary (expand-file-name "mu/mu/mu"
-                                         modules-dir)))
+  (setq mu4e-mu-binary (or (executable-find "mu")
+                           (expand-file-name "mu/mu/mu"
+                                             modules-dir))))
 
 (use-package which-key
   :config
