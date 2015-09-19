@@ -327,6 +327,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   :config)
 
 (use-package magit
+  :load-path "modules/magit/lisp"
   :init
   (use-package git-commit-mode)
   
