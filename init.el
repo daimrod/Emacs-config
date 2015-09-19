@@ -425,6 +425,9 @@ If N is not set, use `comint-buffer-minimum-size'."
 	  dmd-config-modules)
 
 (use-package env-helper
+  :init
+  (use-package filenotify
+    :commands (file-notify-add-watch))
   :config
   (file-notify-add-watch "/etc/environment"
                          '(change)
