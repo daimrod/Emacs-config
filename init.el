@@ -497,6 +497,11 @@ If N is not set, use `comint-buffer-minimum-size'."
   :config
   (global-undo-tree-mode))
 
+(use-package projectile
+  :config
+  (projectile-global-mode)
+  (use-package helm-projectile))
+
 ;; Save a list of recent files visited.
 (recentf-mode 1)
 

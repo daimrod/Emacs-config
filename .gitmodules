@@ -67,3 +67,6 @@
 [submodule "modules/undo-tree"]
 	path = modules/undo-tree
 	url = http://www.dr-qubit.org/git/undo-tree.git
+[submodule "modules/projectile"]
+	path = modules/projectile
+	url = https://github.com/bbatsov/projectile.git
