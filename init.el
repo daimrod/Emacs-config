@@ -405,6 +405,7 @@ If N is not set, use `comint-buffer-minimum-size'."
     :bind (("M-C" . company-yasnippet))))
 
 (use-package mu4e
+  :load-path "modules/mu/mu4e"
   :config
   (add-to-list 'Info-directory-list
                (expand-file-name (expand-file-name
