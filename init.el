@@ -77,6 +77,8 @@
 (use-package info
   :demand t)
 
+(use-package adaptive-wrap)
+
 (use-package ispell
   :config
   (defalias 'isp 'rw-ispell-change-dictionary))
