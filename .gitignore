@@ -38,3 +38,4 @@ debug.el
 /elpa/elpy-1.9.0/elpy/__init__.pyc
 /elpa/elpy-1.9.0/elpy/__pycache__/
 *.pyc
+/recentf
