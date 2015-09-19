@@ -250,6 +250,11 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 ;;;; Helm
 (use-package helm-config
+  :init
+  (use-package helm-mode
+    :demand t
+    :config
+    (helm-mode 1))
   :bind (("M-x" . helm-M-x)
          ("C-c m" . helm-M-x)
          ("C-c C-m" . helm-M-x)
@@ -263,11 +268,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
   (use-package helm-ag)
   (use-package helm-bibtex)
   (use-package helm-pages
-    :bind (("C-c j" . helm-pages)))
-  (use-package helm-mode
-    :demand t
-    :config
-    (helm-mode 1)))
+    :bind (("C-c j" . helm-pages))))
 
 (global-set-key (kbd "C-;") 'newline-and-indent)
 
