@@ -529,7 +529,7 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 
 ;;;; Alias
-(defalias 'renb 'dmd/rename-buffer)
+(defalias 'renb 'dmd-rename-buffer)
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (provide 'init)

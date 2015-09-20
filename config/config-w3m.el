@@ -46,11 +46,11 @@
      (destructuring-bind (key &rest def)
          pair
        (define-key map (read-kbd-macro key) def)))
-   `(("g" . dmd/w3m-browse-url)
+   `(("g" . dmd-w3m-browse-url)
      ("q" . w3m-delete-buffer)
      ("n" . w3m-next-buffer)
      ("p" . w3m-previous-buffer)
-     ("G" . dmd/w3m-browse-url-new-session)
+     ("G" . dmd-w3m-browse-url-new-session)
      ("F" . w3m-view-next-page)
      ("M-s" . nil)))
   (setf w3m-mode-map map))
@@ -58,7 +58,7 @@
 (add-hook 'w3m-mode-hook (lambda ()
                            (adaptive-wrap-prefix-mode 1)))
 
-(defun dmd/w3m-browse-url (url prefix)
+(defun dmd-w3m-browse-url (url prefix)
   "Ask emacs-w3m to browse URL."
   (interactive
    (progn
@@ -66,7 +66,7 @@
   (when (stringp url)
     (w3m-goto-url (w3m-canonicalize-url url))))
 
-(defun dmd/w3m-browse-url-new-session (url prefix)
+(defun dmd-w3m-browse-url-new-session (url prefix)
   "Ask emacs-w3m to browse URL."
   (interactive
    (progn
@@ -74,7 +74,7 @@
   (when (stringp url)
     (w3m-goto-url-new-session (w3m-canonicalize-url url))))
 
-(defun dmd/switch-color-frame ()
+(defun dmd-switch-color-frame ()
   "Switch the color between the foreground and the background of
 he current frame."
   (interactive)

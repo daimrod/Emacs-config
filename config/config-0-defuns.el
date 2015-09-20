@@ -27,85 +27,6 @@
   :group 'org
   :type 'file)
 
-(defun sudo-edit (&optional arg)
-  (interactive "P")
-  (if (or arg (not buffer-file-name))
-      (find-file (concat "/sudo:localhost:" (read-file-name "File: ")))
-    (find-alternate-file (concat "/sudo:localhost:" buffer-file-name))))
-
-(defun sbrk-paste ()
-  "paste a chunk of code to pastebin.sbrk.org"
-  (interactive)
-  (let* ((region-active-p (region-active-p))
-         (start (if region-active-p (region-beginning) (buffer-end -1)))
-         (end (if region-active-p (region-end) (buffer-end 1))))
-    (http-post-simple "http://pastebin.sbrk.org/add"
-                      `((author ,(getenv "USER"))
-                        (code ,(buffer-substring start end))))))
-
-
-
-(defun dmd/show-big-text (text &optional size font)
-  (interactive "sText to show: ")
-  (let ((size (number-to-string
-               (if (null size)
-                   (window-width)
-                 size)))
-        (font (if (null font)
-                  "doh"
-                font)))
-    (shell-command (format "figlet -w %s -f %s %s"
-                           size font text))))
-
-(defun dmd/client-process ()
-  "Returns the process associated with the current emacsclient"
-  (when (boundp 'server-clients)
-    (loop for process in server-clients
-          when (eq (selected-frame)
-                   (process-get process 'frame))
-          return process)))
-
-(defvar dmd/dead-clients nil
-  "List of dead clients that should be destroyed.")
-
-(defun dmd/quit-or-hide (rly?)
-  "If it this is an instance of a running Emacs daemon, then
-if it's the last frame, hide it, otherwise delete it.
-
-If not, use the classic save-buffers-and-kill-emacs function."
-  (interactive "P")
-  (if (and (boundp 'server-process) (not (null server-process)) (null rly?))
-	  (progn
-        (condition-case nil
-            (make-frame-invisible nil t)
-          (error (delete-frame)))
-        (add-to-list 'dmd/dead-clients (dmd/client-process)))
-    (save-buffers-kill-emacs)))
-
-(defun dmd/autocompile ()
-  "Byte compile an elisp and reload it."
-  (interactive)
-  (let ((filename (buffer-file-name)))
-    (when (eq major-mode 'emacs-lisp-mode)
-      (byte-compile-file filename)
-      (load (file-name-sans-extension filename)))))
-
-(defvar *evince-extensions* nil
-  "List of extentions supported by evince.")
-(setf *evince-extensions* '("pdf" "ps" "dvi"))
-
-(defvar *evince-location* "/usr/bin/evince"
-  "Where is evince?")
-
-(defun toggle-fullscreen ()
-  "Toggle full screen on X11"
-  (interactive)
-  (when (eq window-system 'x)
-    (set-frame-parameter
-     nil 'fullscreen
-     (when (not (frame-parameter nil 'fullscreen)) 'fullboth))))
-
-
 (defun unfill-paragraph ()
   "Takes a multi-line paragraph and makes it into a single line
 of text."
@@ -113,13 +34,7 @@ of text."
   (let ((fill-column (point-max)))
     (fill-paragraph nil)))
 
-(defun insert-notebook-note ()
-  (interactive)
-  (insert (org-make-link-string
-           (format-time-string "%A %d %B %Y (%H:%M)")
-           (format-time-string "@%H%M"))))
-
-(defun dmd/window-width (&optional window)
+(defun dmd-window-width (&optional window)
   "Like `window-width' except that it takes into account text
 scaling."
   (setq window (or window (selected-window)))
@@ -134,22 +49,7 @@ scaling."
        (* (window-width window)
           (expt step amount))))))
 
-(defun dmd/kill-buffer (&optional kill-process)
-  "Kill a buffer or its process with a prefix.
-The buffer name is selected interactively by typing a substring.
-For details of keybindings, see `ido-switch-buffer'."
-  (interactive "P")
-  (if kill-process
-      (let ((proc (get-buffer-process
-                   (ido-buffer-internal
-                    nil nil "Kill buffer process: "
-                    (buffer-name (current-buffer))
-                    nil 'ignore))))
-        (delete-process proc)
-        (message "Process `%S' killed" proc))
-    (ido-buffer-internal 'kill 'kill-buffer "Kill buffer: " (buffer-name (current-buffer)) nil 'ignore)))
-
-(defun dmd/switch-git<->https ()
+(defun dmd-switch-git<->https ()
   "Switch the current remote from git to https or the other way
 around depending on the current value.
 
@@ -169,19 +69,17 @@ It uses magit internal."
            (t (error "Unknown remote URL format `%s'" remote-url)))
      "remote" remote "url")))
 
-(defun dmd/rename-buffer (&optional unique)
+(defun dmd-rename-buffer (&optional unique)
   (interactive "P")
   (let ((new-name (read-from-minibuffer "Rename buffer: " (buffer-name))))
     (rename-buffer new-name unique)))
 
-(defun dmd/text-properties (&optional start end)
+(defun dmd-text-properties (&optional start end)
   "Add properties in the current active region."
   (interactive "r")
   (unless (use-region-p)
     (error "No active region"))
   (add-face-text-property start end (read (read-from-minibuffer "Property: "))))
-
-
 
 (defsubst /. (dividend &rest divisors)
   "Like `/' but uses floating number by coercing the DIVIDEND to
