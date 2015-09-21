@@ -62,7 +62,7 @@
 (add-to-list 'org-export-filter-headline-functions
              'org-latex-ignore-heading-filter-headline)
 
-(setq org-export-async-init-file (expand-file-name "init-org-async.el" dotfiles-dir))
+(setq org-export-async-init-file (expand-file-name "init-org-async.el" user-emacs-directory))
 
 (add-hook 'org-mode-hook 'dmd-org-mode-reftex-setup)
 
@@ -88,7 +88,7 @@
 
 (advice-add #'org-attach-open :override #'helm-org-attach-open)
 
-(org-babel-lob-ingest (concat dotfiles-dir "lob.org"))
+(org-babel-lob-ingest (expand-file-name "lob.org" user-emacs-directory))
 
 
 (provide 'config-org)
