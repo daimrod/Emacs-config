@@ -331,7 +331,8 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (use-package company
   :bind (("C-SPC" . company-complete))
-  :config)
+  :config
+  (global-company-mode))
 
 (use-package magit
   :load-path "modules/magit/lisp"
