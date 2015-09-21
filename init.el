@@ -401,6 +401,10 @@ If N is not set, use `comint-buffer-minimum-size'."
 			(bury-buffer (find-file-noselect file)))
 		  diary-included-files)))
 
+(use-package pyvenv
+  :config
+  (pyvenv-tracking-mode t))
+
 (use-package elpy
   :config
   (elpy-enable))
