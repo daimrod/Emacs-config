@@ -539,6 +539,8 @@ If N is not set, use `comint-buffer-minimum-size'."
   (use-package helm-projectile)
   (helm-projectile-on))
 
+(use-package elisp-slime-nav)
+
 ;; Save a list of recent files visited.
 (recentf-mode 1)
 

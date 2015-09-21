@@ -91,3 +91,6 @@
 [submodule "modules/pyvenv"]
 	path = modules/pyvenv
 	url = git@github.com:jorgenschaefer/pyvenv.git
+[submodule "modules/elisp-slime-nav"]
+	path = modules/elisp-slime-nav
+	url = git@github.com:purcell/elisp-slime-nav.git
