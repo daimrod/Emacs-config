@@ -387,9 +387,9 @@ If N is not set, use `comint-buffer-minimum-size'."
 
   (add-to-list 'Info-directory-list
                (expand-file-name "org-mode/doc" modules-dir))
-  (use-package org-contacts
-    :commands (org-contacts-files))
-  (use-package org-ref)
+  (require 'org-contacts)
+  (require 'org-habit)
+  (require 'org-ref)
   (use-package diary-lib
 	:config
 	(diary-list-entries (calendar-current-date) nil 'list-only)
@@ -523,7 +523,8 @@ If N is not set, use `comint-buffer-minimum-size'."
   :demand t
   :config
   (projectile-global-mode)
-  (use-package helm-projectile))
+  (use-package helm-projectile)
+  (helm-projectile-on))
 
 ;; Save a list of recent files visited.
 (recentf-mode 1)
