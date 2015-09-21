@@ -248,6 +248,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 (bind-key "M-Q" 'unfill-paragraph)
 
 (use-package compile
+  :init (use-package compile-cache)
   :bind (("<f5>" . compile-cache)
          ("<f6>" . recompile)))
 
