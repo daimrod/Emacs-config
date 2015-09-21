@@ -388,6 +388,7 @@ If N is not set, use `comint-buffer-minimum-size'."
                (expand-file-name "org-mode/doc" modules-dir))
   (use-package org-contacts
     :commands (org-contacts-files))
+  (use-package org-ref)
   (use-package diary-lib
 	:config
 	(diary-list-entries (calendar-current-date) nil 'list-only)

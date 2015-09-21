@@ -76,3 +76,6 @@
 [submodule "modules/org-mode"]
 	path = modules/org-mode
 	url = git@github.com:daimrod/org-mode.git
+[submodule "modules/org-ref"]
+	path = modules/org-ref
+	url = git@github.com:jkitchin/org-ref.git
