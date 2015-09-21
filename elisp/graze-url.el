@@ -22,7 +22,7 @@
 ;;; Code:
 
 (require 'cl)
-(require 'el-dispatcher)
+;; (require 'el-dispatcher)
 
 (defgroup graze-url nil
   "Browse URL"
@@ -53,10 +53,10 @@ the terms searched."
 (defun gu-find-url-org-mode ()
   "Find URL in `org-mode' style."
   (when (every 'fboundp
-               '(org-at-regexp-p
+               '(org-in-regexp
                  org-link-unescape
                  org-match-string-no-properties))
-    (if (org-at-regexp-p org-bracket-link-regexp)
+    (if (org-in-regexp org-bracket-link-regexp)
         (org-link-unescape
          (org-match-string-no-properties 1)))))
 
@@ -67,10 +67,10 @@ the terms searched."
       (let (ret)
         (dolist (fun file-name-at-point-functions)
           (when (functionp fun)
-            (setq filename (funcall fun))
-            (when filename
-              (throw 'filename-found (concat "file://"
-                                             (file-truename filename)))))))
+            (let ((filename (funcall fun)))
+              (when filename
+                (throw 'filename-found (concat "file://"
+                                               (file-truename filename))))))))
       nil)))
 
 (defun gu-find-url-w3m ()
@@ -121,8 +121,8 @@ the terms searched."
   (interactive)
   (list (format gu-search-format (read-string "Search: "))))
 
-(el-dispatcher-make 'gu-browse-url 'gu-browse-url-functions)
-(el-dispatcher-make 'gu-search 'gu-browse-url-functions)
+;; (el-dispatcher-make 'gu-browse-url 'gu-browse-url-functions)
+;; (el-dispatcher-make 'gu-search 'gu-browse-url-functions)
 
 (provide 'graze-url)
 
