@@ -388,6 +388,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   (add-to-list 'Info-directory-list
                (expand-file-name "org-mode/doc" modules-dir))
   (require 'org-contacts)
+  (require 'org-clock)
   (require 'org-habit)
   (require 'org-ref)
   (use-package diary-lib
