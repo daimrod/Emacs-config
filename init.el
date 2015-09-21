@@ -423,7 +423,9 @@ If N is not set, use `comint-buffer-minimum-size'."
                                   modules-dir)))
   (setq mu4e-mu-binary (or (executable-find "mu")
                            (expand-file-name "mu/mu/mu"
-                                             modules-dir))))
+                                             modules-dir)))
+  (use-package org-mu4e
+    :demand t))
 
 (use-package which-key
   :config
