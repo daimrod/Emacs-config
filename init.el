@@ -93,6 +93,9 @@
   :bind (("C-s" . isearch-forward-regexp)
          ("C-r" . isearch-backward-regexp)))
 
+(use-package w3m
+  :commands (w3m-buffer))
+
 (use-package windmove
   :bind* (("S-<up>" . windmove-up)
           ("S-<down>" . windmove-down)
