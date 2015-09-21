@@ -380,7 +380,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   (add-to-list 'load-path (expand-file-name "modules/org-mode/contrib/lisp" user-emacs-directory))
   (bind-keys :map org-mode-map
 	     ("C-c )" . helm-bibtex)
-	     ("C-c j)" . (lambda (&optional prefix)
+	     ("C-c j" . (lambda (&optional prefix)
                                            (interactive "P")
                                            (if prefix
                                                (helm-org-agenda-files-headings)
