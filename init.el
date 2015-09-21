@@ -372,7 +372,9 @@ If N is not set, use `comint-buffer-minimum-size'."
   (defalias 'mrgrep 'moccur-grep-find))
 
 (use-package org
+  :load-path "modules/org-mode/lisp"
   :config
+  (add-to-list 'load-path (expand-file-name "modules/org-mode/contrib/lisp" user-emacs-directory))
   (bind-keys :map org-mode-map
 	     ("C-c )" . helm-bibtex)
 	     ("C-c j)" . (lambda (&optional prefix)
@@ -383,9 +385,9 @@ If N is not set, use `comint-buffer-minimum-size'."
 	     ("C-c >" . org-time-stamp-inactive))
 
   (add-to-list 'Info-directory-list
-               (expand-file-name (concat src-dir
-                                         "org-mode/doc")))
-
+               (expand-file-name "org-mode/doc" modules-dir))
+  (use-package org-contacts
+    :commands (org-contacts-files))
   (use-package diary-lib
 	:config
 	(diary-list-entries (calendar-current-date) nil 'list-only)
