@@ -80,8 +80,9 @@
 (use-package adaptive-wrap)
 
 (use-package ispell
+  :demand t
   :config
-  (defalias 'isp 'rw-ispell-change-dictionary))
+  (defalias 'isp 'ispell-change-dictionary))
 
 (use-package dabbrev
   :bind (("M-/" . dabbrev-expand)))
