@@ -29,6 +29,8 @@
   ""
   :type '(repeat (cons directory string)))
 
+
+;;;###autoload
 (defun compile-cache (command &optional comint)
   "Compile the program including the current buffer.
 Runs COMMAND, a shell command, in a separate process asynchronously
