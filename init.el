@@ -433,6 +433,10 @@ If N is not set, use `comint-buffer-minimum-size'."
     :bind (("M-C" . company-yasnippet)))
   (yas-global-mode 1))
 
+(use-package flycheck
+  :config
+  (global-flycheck-mode))
+
 (use-package mu4e
   :load-path "modules/mu/mu4e"
   :config

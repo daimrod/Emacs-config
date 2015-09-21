@@ -94,3 +94,6 @@
 [submodule "modules/elisp-slime-nav"]
 	path = modules/elisp-slime-nav
 	url = git@github.com:purcell/elisp-slime-nav.git
+[submodule "modules/flycheck"]
+	path = modules/flycheck
+	url = git@github.com:flycheck/flycheck.git
