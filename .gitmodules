@@ -85,3 +85,6 @@
 [submodule "modules/firestarter"]
 	path = modules/firestarter
 	url = git@github.com:wasamasa/firestarter.git
+[submodule "modules/elpy"]
+	path = modules/elpy
+	url = git@github.com:jorgenschaefer/elpy.git
