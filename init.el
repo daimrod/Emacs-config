@@ -435,6 +435,9 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (use-package flycheck
   :config
+  (use-package flycheck-pos-tip
+    :init
+    (use-package popup-el))
   (global-flycheck-mode))
 
 (use-package mu4e

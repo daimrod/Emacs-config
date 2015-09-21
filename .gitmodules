@@ -97,3 +97,9 @@
 [submodule "modules/flycheck"]
 	path = modules/flycheck
 	url = git@github.com:flycheck/flycheck.git
+[submodule "modules/flycheck-pos-tip"]
+	path = modules/flycheck-pos-tip
+	url = git@github.com:flycheck/flycheck-pos-tip.git
+[submodule "modules/popup-el"]
+	path = modules/popup-el
+	url = git@github.com:auto-complete/popup-el.git
