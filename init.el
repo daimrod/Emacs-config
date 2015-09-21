@@ -154,8 +154,8 @@ This is the same as using \\[set-mark-command] with the prefix argument."
   (interactive)
   (set-mark-command 1))
 
-(bind-keys ("C-`" . push-mark-no-activate)
-           ("M-`" . jump-to-mark))
+(bind-keys ("C-`" . dmd-push-mark-no-activate)
+           ("M-`" . dmd-jump-to-mark))
 
 ;; Scrolling -- Scroll up and down slowly by default (one line at time)
 (defcustom dmd-small-scrolling 5
