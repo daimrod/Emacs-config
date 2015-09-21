@@ -509,6 +509,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   (global-undo-tree-mode))
 
 (use-package projectile
+  :demand t
   :config
   (projectile-global-mode)
   (use-package helm-projectile))
