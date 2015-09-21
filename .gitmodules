@@ -82,3 +82,6 @@
 [submodule "modules/orgit"]
 	path = modules/orgit
 	url = git@github.com:magit/orgit.git
+[submodule "modules/firestarter"]
+	path = modules/firestarter
+	url = git@github.com:wasamasa/firestarter.git

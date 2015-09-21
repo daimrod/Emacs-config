@@ -184,8 +184,6 @@
       '((:eval (format "%d " (emacs-pid)))
         ("" invocation-name "@" system-name)))
 
-(firestarter-mode 1)
-
 (provide 'config-misc)
 
 ;;; config-misc.el ends here

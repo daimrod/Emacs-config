@@ -500,6 +500,10 @@ If N is not set, use `comint-buffer-minimum-size'."
   (set-keyboard-coding-system 'utf-8)
   (prefer-coding-system 'utf-8))
 
+(use-package firestarter
+  :config
+  (firestarter-mode 1))
+
 (use-package ansi-color
   :config
   (ansi-color-for-comint-mode-on))
@@ -548,5 +552,5 @@ If N is not set, use `comint-buffer-minimum-size'."
 ;;; init.el ends here
 
 ;; Local Variables:
-;; firestarter: (byte-recompile-file (buffer-file-name))
+;; firestarter: (byte-recompile-file (buffer-file-name) nil 0)
 ;; End:
