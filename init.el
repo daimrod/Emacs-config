@@ -391,6 +391,9 @@ If N is not set, use `comint-buffer-minimum-size'."
   (require 'org-clock)
   (require 'org-habit)
   (require 'org-ref)
+  (require 'org-agenda)
+  (require 'ob)
+  (require 'ob-python)
   (use-package diary-lib
 	:config
 	(diary-list-entries (calendar-current-date) nil 'list-only)
