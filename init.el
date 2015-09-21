@@ -338,7 +338,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   :init
   (use-package git-commit-mode)
   (use-package magit-autoloads)
-  
+
   :bind (("C-c g" . magit-status))
 
   :config
@@ -347,7 +347,8 @@ If N is not set, use `comint-buffer-minimum-size'."
 
   (use-package magit-svn
     :config
-    (add-hook 'magit-mode-hook 'magit-svn-mode)))
+    (add-hook 'magit-mode-hook 'magit-svn-mode))
+  (use-package orgit))
 
 (use-package javadoc-lookup
   :bind (("C-h j" . javadoc-lookup))

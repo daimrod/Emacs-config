@@ -79,3 +79,6 @@
 [submodule "modules/org-ref"]
 	path = modules/org-ref
 	url = git@github.com:jkitchin/org-ref.git
+[submodule "modules/orgit"]
+	path = modules/orgit
+	url = git@github.com:magit/orgit.git
