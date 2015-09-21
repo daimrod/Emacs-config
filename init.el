@@ -430,7 +430,8 @@ If N is not set, use `comint-buffer-minimum-size'."
   :config
   (bind-key "C-c & C-s" 'company-yasnippet yas-minor-mode-map)
   (use-package company-yasnippet
-    :bind (("M-C" . company-yasnippet))))
+    :bind (("M-C" . company-yasnippet)))
+  (yas-global-mode 1))
 
 (use-package mu4e
   :load-path "modules/mu/mu4e"
