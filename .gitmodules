@@ -73,3 +73,6 @@
 [submodule "modules/adaptive-wrap"]
 	path = modules/adaptive-wrap
 	url = https://github.com/emacsmirror/adaptive-wrap.git
+[submodule "modules/org-mode"]
+	path = modules/org-mode
+	url = git@github.com:daimrod/org-mode.git
