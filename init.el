@@ -386,8 +386,6 @@ If N is not set, use `comint-buffer-minimum-size'."
   (require 'org-agenda)
   (require 'org-id)
   (require 'org-attach)
-  (require 'ob)
-  (require 'ob-python)
   (require 'org-bullets)
   
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
