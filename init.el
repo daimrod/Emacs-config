@@ -596,7 +596,9 @@ If N is not set, use `comint-buffer-minimum-size'."
                        "-unknown-DejaVu Sans Mono-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1"))
 
 (add-to-list 'default-frame-alist `(font . ,(find-if #'font-info *fonts-list*)))
-(setq initial-frame-alist (append initial-frame-alist (copy-alist default-frame-alist)))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(setq initial-frame-alist (append initial-frame-alist
+                                  (copy-alist default-frame-alist)))
 
 (use-package color-theme-sanityinc-tomorrow
   :config
