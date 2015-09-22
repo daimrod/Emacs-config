@@ -532,7 +532,8 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (use-package firestarter
   :config
-  (firestarter-mode 1))
+  (firestarter-mode 1)
+  (defvar firestarter nil))
 
 (use-package ansi-color
   :config
