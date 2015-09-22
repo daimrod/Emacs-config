@@ -599,9 +599,8 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (use-package color-theme-sanityinc-tomorrow
   :config
-  (color-theme-sanityinc-tomorrow-eighties))
+  (color-theme-sanityinc-tomorrow--define-theme eighties))
 
-(provide 'init)
 
 ;;; init.el ends here
 
