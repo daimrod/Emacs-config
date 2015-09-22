@@ -363,6 +363,8 @@ If N is not set, use `comint-buffer-minimum-size'."
   (add-hook 'eclim-mode-hook 'company-emacs-eclim-setup)
   (add-hook 'java-mode-hook 'eclim-mode))
 
+(use-package color-theme-sanityinc-tomorrow)  
+
 (use-package color-moccur
   :config
   (use-package moccur-edit)

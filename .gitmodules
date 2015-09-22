@@ -106,3 +106,6 @@
 [submodule "modules/org-bullets"]
 	path = modules/org-bullets
 	url = git@github.com:sabof/org-bullets.git
+[submodule "modules/color-theme-sanityinc-tomorrow"]
+	path = modules/color-theme-sanityinc-tomorrow
+	url = git@github.com:purcell/color-theme-sanityinc-tomorrow.git
