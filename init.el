@@ -211,7 +211,9 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 ;; Winner configuration
 (use-package winner
   :bind (("C-c u" . winner-undo)
-         ("C-c r" . winner-redo)))
+         ("C-c r" . winner-redo))
+  :config
+  (winner-mode 1))
 
 (bind-key "<f11>" 'toggle-fullscreen)
 
