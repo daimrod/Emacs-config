@@ -103,3 +103,6 @@
 [submodule "modules/popup-el"]
 	path = modules/popup-el
 	url = git@github.com:auto-complete/popup-el.git
+[submodule "modules/org-bullets"]
+	path = modules/org-bullets
+	url = git@github.com:sabof/org-bullets.git

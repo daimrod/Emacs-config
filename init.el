@@ -388,6 +388,9 @@ If N is not set, use `comint-buffer-minimum-size'."
   (require 'org-attach)
   (require 'ob)
   (require 'ob-python)
+  (use-package org-bullets
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
   (use-package diary-lib
 	:config
 	(diary-list-entries (calendar-current-date) nil 'list-only)
