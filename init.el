@@ -378,22 +378,14 @@ If N is not set, use `comint-buffer-minimum-size'."
   :load-path "modules/org-mode/lisp"
   :config
   (add-to-list 'load-path (expand-file-name "modules/org-mode/contrib/lisp" user-emacs-directory))
-  (bind-keys :map org-mode-map
-	     ("C-c )" . helm-bibtex)
-	     ("C-c j" . (lambda (&optional prefix)
-                                           (interactive "P")
-                                           (if prefix
-                                               (helm-org-agenda-files-headings)
-                                             (helm-org-in-buffer-headings))))
-	     ("C-c >" . org-time-stamp-inactive))
-
-  (add-to-list 'Info-directory-list
-               (expand-file-name "org-mode/doc" modules-dir))
+  
   (require 'org-contacts)
   (require 'org-clock)
   (require 'org-habit)
   (require 'org-ref)
   (require 'org-agenda)
+  (require 'org-id)
+  (require 'org-attach)
   (require 'ob)
   (require 'ob-python)
   (use-package diary-lib
@@ -401,7 +393,19 @@ If N is not set, use `comint-buffer-minimum-size'."
 	(diary-list-entries (calendar-current-date) nil 'list-only)
 	(mapc (lambda (file)
 			(bury-buffer (find-file-noselect file)))
-		  diary-included-files)))
+		  diary-included-files))
+  (bind-keys :map org-mode-map
+             ("C-c )" . helm-bibtex)
+             ("C-c j" . (lambda (&optional prefix)
+                          (interactive "P")
+                          (if prefix
+                              (helm-org-agenda-files-headings)
+                            (helm-org-in-buffer-headings))))
+             ("C-c >" . org-time-stamp-inactive))
+
+  (add-to-list 'Info-directory-list
+               (expand-file-name "org-mode/doc" modules-dir))
+  (add-hook 'org-store-link-functions 'org-id-store-link))
 
 (use-package pyvenv
   :config
