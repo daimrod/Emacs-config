@@ -38,10 +38,6 @@
 (add-to-list 'load-path config-dir)
 (add-to-list 'load-path elisp-dir)
 
-;; custom-file configuration
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file 'noerror)
-
 (eval-and-compile
   (require 'bytecomp)
   (byte-compile-disable-warning 'cl-functions)
@@ -54,6 +50,10 @@
 
 (dolist (module-dir (directory-files modules-dir t "^[^.]"))
   (add-to-list 'load-path module-dir))
+
+;; custom-file configuration
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file 'noerror)
 
 (defvar use-package-verbose t)
 (require 'use-package)
@@ -363,8 +363,6 @@ If N is not set, use `comint-buffer-minimum-size'."
   (add-hook 'eclim-mode-hook 'company-emacs-eclim-setup)
   (add-hook 'java-mode-hook 'eclim-mode))
 
-(use-package color-theme-sanityinc-tomorrow)  
-
 (use-package color-moccur
   :config
   (use-package moccur-edit)
@@ -390,15 +388,15 @@ If N is not set, use `comint-buffer-minimum-size'."
   (require 'org-attach)
   (require 'ob)
   (require 'ob-python)
-  (use-package org-bullets
-    :config
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-  (use-package diary-lib
-	:config
-	(diary-list-entries (calendar-current-date) nil 'list-only)
-	(mapc (lambda (file)
-			(bury-buffer (find-file-noselect file)))
-		  diary-included-files))
+  (require 'org-bullets)
+  
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  
+  (require 'diary-lib)
+  (diary-list-entries (calendar-current-date) nil 'list-only)
+  (mapc (lambda (file)
+          (bury-buffer (find-file-noselect file)))
+        diary-included-files)
   (bind-keys :map org-mode-map
              ("C-c )" . helm-bibtex)
              ("C-c j" . (lambda (&optional prefix)
@@ -581,6 +579,27 @@ If N is not set, use `comint-buffer-minimum-size'."
 ;;;; Alias
 (defalias 'renb 'dmd-rename-buffer)
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+;;;; Theme
+
+;; tab and indentation configuration
+(setq-default indent-tabs-mode nil)
+(setq tab-width 4)
+
+(global-font-lock-mode 1)
+(setq font-lock-maximum-decoration t
+      font-lock-verbose nil)
+
+;; Set the default font
+(defvar *fonts-list* '("-unknown-Inconsolata-normal-normal-normal-*-15-*-*-*-m-0-iso10646-1"
+                       "-unknown-DejaVu Sans Mono-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1"))
+
+(add-to-list 'default-frame-alist `(font . ,(find-if #'font-info *fonts-list*)))
+(setq initial-frame-alist (append initial-frame-alist (copy-alist default-frame-alist)))
+
+(use-package color-theme-sanityinc-tomorrow
+  :config
+  (color-theme-sanityinc-tomorrow-eighties))
 
 (provide 'init)
 
