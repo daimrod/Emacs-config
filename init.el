@@ -95,7 +95,7 @@
          ("C-r" . isearch-backward-regexp)))
 
 (use-package w3m
-  :commands (w3m-buffer))
+  :commands (w3m-buffer w3m-browse-url))
 
 (use-package windmove
   :bind* (("S-<up>" . windmove-up)
