@@ -412,7 +412,7 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (use-package pyvenv
   :config
-  (pyvenv-tracking-mode t)
+  ;; (pyvenv-tracking-mode t)
   (pyvenv-mode 1))
 
 (use-package elpy
