@@ -108,14 +108,14 @@ the terms searched."
 
 (defun gu-browse-url (&rest _)
   (interactive)
-  (list (read-string "URL: "
-                     (or (and transient-mark-mode mark-active
-                              ;; rfc2396 Appendix E.
-                              (replace-regexp-in-string
-                               "[\t\r\f\n ]+" ""
-                               (buffer-substring-no-properties
-                                (region-beginning) (region-end))))
-                         (gu-find-url-at-point)))))
+  (browse-url (read-string "URL: "
+                           (or (and transient-mark-mode mark-active
+                                    ;; rfc2396 Appendix E.
+                                    (replace-regexp-in-string
+                                     "[\t\r\f\n ]+" ""
+                                     (buffer-substring-no-properties
+                                      (region-beginning) (region-end))))
+                               (gu-find-url-at-point)))))
 
 (defun gu-search ()
   (interactive)

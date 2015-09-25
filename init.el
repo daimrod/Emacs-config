@@ -95,7 +95,7 @@
          ("C-r" . isearch-backward-regexp)))
 
 (use-package w3m
-  :commands (w3m-buffer))
+  :commands (w3m-buffer w3m-browse-url))
 
 (use-package windmove
   :bind* (("S-<up>" . windmove-up)
@@ -412,7 +412,7 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (use-package pyvenv
   :config
-  (pyvenv-tracking-mode t)
+  ;; (pyvenv-tracking-mode t)
   (pyvenv-mode 1))
 
 (use-package elpy
