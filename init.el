@@ -380,6 +380,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   :load-path "modules/org-mode/lisp"
   :config
   (add-to-list 'load-path (expand-file-name "modules/org-mode/contrib/lisp" user-emacs-directory))
+  (add-to-list 'org-babel-default-header-args '(padline . no))
   
   (require 'org-contacts)
   (require 'org-clock)
@@ -389,7 +390,13 @@ If N is not set, use `comint-buffer-minimum-size'."
   (require 'org-id)
   (require 'org-attach)
   (require 'org-bullets)
-  
+  (use-package ox-beamer
+    :config
+    (unbind-key "C-c C-b" org-beamer-mode-map))
+
+  (bind-key "<f9>" 'org-agenda)
+
+
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
   
   (require 'diary-lib)
@@ -428,12 +435,6 @@ If N is not set, use `comint-buffer-minimum-size'."
   (bind-key "C-c C-o" 'dmd-bibtex-open bibtex-mode-map))
 
 (bind-key "C-x #" 'delete-frame)
-
-(use-package ox-beamer
-  :config
-  (unbind-key "C-c C-b" org-beamer-mode-map))
-
-(bind-key "<f9>" 'org-agenda)
 
 (use-package yasnippet
   :config
