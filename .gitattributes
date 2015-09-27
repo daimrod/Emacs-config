@@ -1,1 +1,2 @@
 /custom.el filter=crypt diff=crypt
+/org-agenda-files filter=crypt diff=crypt

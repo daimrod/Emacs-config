@@ -381,6 +381,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   :config
   (add-to-list 'load-path (expand-file-name "modules/org-mode/contrib/lisp" user-emacs-directory))
   (add-to-list 'org-babel-default-header-args '(padline . no))
+  (setq org-agenda-files (expand-file-name "org-agenda-files" user-emacs-directory))
   
   (require 'org-contacts)
   (require 'org-clock)
