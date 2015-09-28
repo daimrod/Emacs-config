@@ -268,7 +268,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 (use-package compile
   :init 
-(use-package compile-cache)
+  (use-package compile-cache)
   :bind (("<f5>" . compile-cache)
          ("<f6>" . recompile)))
 
@@ -279,7 +279,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 (use-package helm-config
   :init
   
-(use-package helm-mode
+  (use-package helm-mode
     :demand t
     :config
     (helm-mode 1))
@@ -291,17 +291,17 @@ This is the same as using \\[set-mark-command] with the prefix argument."
          ("C-c h" . helm-command-prefix))
   :config
   
-(use-package helm-command)
+  (use-package helm-command)
   
-(use-package helm-files)
+  (use-package helm-files)
   
-(use-package helm-buffers)
+  (use-package helm-buffers)
   
-(use-package helm-ag)
+  (use-package helm-ag)
   
-(use-package helm-bibtex)
+  (use-package helm-bibtex)
   
-(use-package helm-pages
+  (use-package helm-pages
     :bind (("C-c j" . helm-pages))))
 
 (global-set-key (kbd "C-;") 'newline-and-indent)
@@ -371,9 +371,9 @@ If N is not set, use `comint-buffer-minimum-size'."
   :load-path "modules/magit/lisp"
   :init
   
-(use-package git-commit-mode)
+  (use-package git-commit-mode)
   
-(use-package magit-autoloads)
+  (use-package magit-autoloads)
 
   :bind (("C-c g" . magit-status))
 
@@ -382,11 +382,11 @@ If N is not set, use `comint-buffer-minimum-size'."
                (expand-file-name "magit/Documentation" modules-dir))
 
   
-(use-package magit-svn
+  (use-package magit-svn
     :config
     (add-hook 'magit-mode-hook 'magit-svn-mode))
   
-(use-package orgit))
+  (use-package orgit))
 
 
 (use-package javadoc-lookup
@@ -405,7 +405,7 @@ If N is not set, use `comint-buffer-minimum-size'."
 (use-package color-moccur
   :config
   
-(use-package moccur-edit)
+  (use-package moccur-edit)
   (bind-keys :prefix-map moccur-map
              :prefix "M-o"
              ("s" . occur-by-moccur)
@@ -437,7 +437,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   (require 'org-attach)
   (require 'org-bullets)
   
-(use-package ox-beamer
+  (use-package ox-beamer
     :config
     (unbind-key "C-c C-b" org-beamer-mode-map))
 
@@ -492,7 +492,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   :config
   (bind-key "C-c & C-s" 'company-yasnippet yas-minor-mode-map)
   
-(use-package company-yasnippet
+  (use-package company-yasnippet
     :bind (("M-C" . company-yasnippet)))
   (yas-global-mode 1))
 
@@ -500,10 +500,10 @@ If N is not set, use `comint-buffer-minimum-size'."
 (use-package flycheck
   :config
   
-(use-package flycheck-pos-tip
+  (use-package flycheck-pos-tip
     :init
     
-(use-package popup-el))
+    (use-package popup-el))
   (global-flycheck-mode))
 
 
@@ -518,7 +518,7 @@ If N is not set, use `comint-buffer-minimum-size'."
                            (expand-file-name "mu/mu/mu"
                                              modules-dir)))
   
-(use-package org-mu4e
+  (use-package org-mu4e
     :demand t))
 
 
@@ -537,7 +537,7 @@ If N is not set, use `comint-buffer-minimum-size'."
 (use-package env-helper
   :init
   
-(use-package filenotify
+  (use-package filenotify
     :commands (file-notify-add-watch))
   :config
   (file-notify-add-watch "/etc/environment"
@@ -628,7 +628,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   :config
   (projectile-global-mode)
   
-(use-package helm-projectile)
+  (use-package helm-projectile)
   (helm-projectile-on))
 
 
