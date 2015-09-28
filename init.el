@@ -349,7 +349,7 @@ If N is not set, use `comint-buffer-minimum-size'."
 
   :config
   (add-to-list 'Info-directory-list
-               (expand-file-name (concat src-dir "magit/")))
+               (expand-file-name "magit/Documentation" modules-dir))
 
   (use-package magit-svn
     :config
