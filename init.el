@@ -666,10 +666,12 @@ If N is not set, use `comint-buffer-minimum-size'."
   (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
   (add-hook 'ielm-mode-hook 'enable-paredit-mode)
   (add-hook 'lisp-mode-hook 'enable-paredit-mode)
-  (add-hook 'slime-mode-hook 'enable-paredit-mode))
+  (add-hook 'slime-repl-mode-hook 'enable-paredit-mode))
 
 
-(use-package redshank)
+(use-package redshank-loader
+  :config
+  (redshank-setup '(lisp-mode-hook slime-repl-mode-hook) t))
 
 ;; Save a list of recent files visited.
 (recentf-mode 1)
