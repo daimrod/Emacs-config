@@ -115,3 +115,6 @@
 [submodule "modules/redshank"]
 	path = modules/redshank
 	url = git@github.com:emacsmirror/redshank.git
+[submodule "modules/slime-company"]
+	path = modules/slime-company
+	url = git@github.com:anwyn/slime-company.git
