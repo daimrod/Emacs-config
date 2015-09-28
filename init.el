@@ -75,7 +75,9 @@
 (put 'scroll-left 'disabled nil)
 
 (use-package info
-  :demand t)
+  :demand t
+  :config
+  (setq Info-directory-list (append Info-directory-list Info-default-directory-list)))
 
 (use-package adaptive-wrap)
 
