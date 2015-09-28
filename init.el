@@ -381,8 +381,14 @@ If N is not set, use `comint-buffer-minimum-size'."
   :config
   (add-to-list 'load-path (expand-file-name "modules/org-mode/contrib/lisp" user-emacs-directory))
   (add-to-list 'org-babel-default-header-args '(padline . no))
-  (setq org-agenda-files (expand-file-name "org-agenda-files" user-emacs-directory))
-  
+  (let ((sbuf (with-current-buffer (find-file-noselect 
+                                    (expand-file-name "org-agenda-files" user-emacs-directory))
+                (buffer-substring-no-properties (point-min) (point-max)))))
+    (setq org-agenda-files nil)
+    (dolist (f (s-lines sbuf))
+      (if (and (not (string-empty-p f))
+               (file-exists-p f))
+          (add-to-list 'org-agenda-files f))))
   (require 'org-contacts)
   (require 'org-clock)
   (require 'org-habit)
