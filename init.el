@@ -59,9 +59,6 @@
 (require 'use-package)
 (require 'bind-key)
 
-(load (expand-file-name "~/quicklisp/slime-helper.el") t)
-(load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
-
 
 (use-package pdf-tools
   :load-path "modules/pdf-tools/pdf-tools-0.70/"
@@ -584,6 +581,8 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (use-package slime
   :config
+  (load (expand-file-name "~/quicklisp/slime-helper.el") t)
+  (load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
   (defalias 'srepl 'slime-repl))
 
 
@@ -650,7 +649,27 @@ If N is not set, use `comint-buffer-minimum-size'."
   (helm-projectile-on))
 
 
-(use-package elisp-slime-nav)
+(use-package elisp-slime-nav
+  :config
+  (add-hook 'emacs-lisp-mode-hook 'elisp-slime-nav-mode)
+  (add-hook 'ielm-mode-hook 'elisp-slime-nav-mode))
+
+
+(use-package eldoc
+  :config
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode))
+
+
+(use-package paredit
+  :config
+  (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+  (add-hook 'ielm-mode-hook 'enable-paredit-mode)
+  (add-hook 'lisp-mode-hook 'enable-paredit-mode)
+  (add-hook 'slime-mode-hook 'enable-paredit-mode))
+
+
+(use-package redshank)
 
 ;; Save a list of recent files visited.
 (recentf-mode 1)
