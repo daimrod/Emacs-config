@@ -581,9 +581,11 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 
 (use-package slime
-  :config
+  :init
   (load (expand-file-name "~/quicklisp/slime-helper.el") t)
   (load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
+  
+  :config
   (defalias 'srepl 'slime-repl)
   (require 'slime-company)
   (slime-setup '(slime-repl
