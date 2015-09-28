@@ -64,8 +64,9 @@
 
 
 (use-package pdf-tools
-  :load-path "pdf-tools/pdf-tools-0.70/"
+  :load-path "modules/pdf-tools/pdf-tools-0.70/"
   :config
+  (require 'pdf-tools-autoloads)
   (pdf-tools-install))
 
 ;; Enabled/Disabled commands
