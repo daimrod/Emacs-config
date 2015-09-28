@@ -62,6 +62,7 @@
 (load (expand-file-name "~/quicklisp/slime-helper.el") t)
 (load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
 
+
 (use-package pdf-tools
   :load-path "pdf-tools/pdf-tools-0.70/"
   :config
@@ -74,31 +75,39 @@
 (put 'downcase-region 'disabled nil)
 (put 'scroll-left 'disabled nil)
 
+
 (use-package info
   :demand t
   :config
   (setq Info-directory-list (append Info-directory-list Info-default-directory-list)))
 
+
 (use-package adaptive-wrap)
 
+
 (use-package ispell
   :demand t
   :config
   (defalias 'isp 'ispell-change-dictionary))
 
+
 (use-package dabbrev
   :bind (("M-/" . dabbrev-expand)))
 
+
 (use-package align
   :bind (("C-x \\" . align-regexp)))
 
+
 (use-package isearch
   :bind (("C-s" . isearch-forward-regexp)
          ("C-r" . isearch-backward-regexp)))
 
+
 (use-package w3m
   :commands (w3m-buffer w3m-browse-url))
 
+
 (use-package windmove
   :bind* (("S-<up>" . windmove-up)
           ("S-<down>" . windmove-down)
@@ -194,12 +203,14 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 (unbind-key "C-z")
 (unbind-key "C-x C-c")
 
+
 (use-package graze-url
   :bind (("C-c y" . gu-copy-url-at-point)
          ("C-c b" . gu-browse-url)
          ("C-c w s" . gu-search)))
 
 ;; iy-go-to-char configuration
+
 (use-package iy-go-to-char
   :bind (("C-c f" . iy-go-to-char)
          ("C-c F" . iy-go-to-char-backward)
@@ -207,10 +218,12 @@ This is the same as using \\[set-mark-command] with the prefix argument."
          ("C-c ," . iy-go-to-char-continue-backward)))
 
 ;; Quiet!
+
 (use-package config-quiet
   :bind (("C-c q" . quiet-mode)))
 
 ;; Winner configuration
+
 (use-package winner
   :bind (("C-c u" . winner-undo)
          ("C-c r" . winner-redo))
@@ -252,17 +265,21 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 (bind-key "M-Q" 'unfill-paragraph)
 
+
 (use-package compile
-  :init (use-package compile-cache)
+  :init 
+(use-package compile-cache)
   :bind (("<f5>" . compile-cache)
          ("<f6>" . recompile)))
 
 (global-set-key (kbd "M-\\") 'execute-extended-command)
 
 ;;;; Helm
+
 (use-package helm-config
   :init
-  (use-package helm-mode
+  
+(use-package helm-mode
     :demand t
     :config
     (helm-mode 1))
@@ -273,16 +290,23 @@ This is the same as using \\[set-mark-command] with the prefix argument."
          ("C-x b" . helm-buffers-list)
          ("C-c h" . helm-command-prefix))
   :config
-  (use-package helm-command)
-  (use-package helm-files)
-  (use-package helm-buffers)
-  (use-package helm-ag)
-  (use-package helm-bibtex)
-  (use-package helm-pages
+  
+(use-package helm-command)
+  
+(use-package helm-files)
+  
+(use-package helm-buffers)
+  
+(use-package helm-ag)
+  
+(use-package helm-bibtex)
+  
+(use-package helm-pages
     :bind (("C-c j" . helm-pages))))
 
 (global-set-key (kbd "C-;") 'newline-and-indent)
 
+
 (use-package comint
   :config
   (defcustom comint-buffer-minimum-size 0
@@ -301,6 +325,7 @@ If N is not set, use `comint-buffer-minimum-size'."
       (comint-truncate-buffer)))
   (bind-key "C-c C-l" 'dmd-comint-truncate-buffer comint-mode-map))
 
+
 (use-package doc-view
   :config
   (defun dmd-doc-view-info ()
@@ -326,6 +351,7 @@ If N is not set, use `comint-buffer-minimum-size'."
              ("C-c C-i" . dmd-doc-view-info)
              ("C-c C-v" . dmd-doc-view-external)))
 
+
 (use-package hideshow
   :config
   (bind-keys :map hs-minor-mode-map
@@ -334,16 +360,20 @@ If N is not set, use `comint-buffer-minimum-size'."
              ("C-c =" . hs-show-block)
              ("C-c +" . hs-show-all)))
 
+
 (use-package company
   :bind (("C-SPC" . company-complete))
   :config
   (global-company-mode))
 
+
 (use-package magit
   :load-path "modules/magit/lisp"
   :init
-  (use-package git-commit-mode)
-  (use-package magit-autoloads)
+  
+(use-package git-commit-mode)
+  
+(use-package magit-autoloads)
 
   :bind (("C-c g" . magit-status))
 
@@ -351,25 +381,31 @@ If N is not set, use `comint-buffer-minimum-size'."
   (add-to-list 'Info-directory-list
                (expand-file-name "magit/Documentation" modules-dir))
 
-  (use-package magit-svn
+  
+(use-package magit-svn
     :config
     (add-hook 'magit-mode-hook 'magit-svn-mode))
-  (use-package orgit))
+  
+(use-package orgit))
 
+
 (use-package javadoc-lookup
   :bind (("C-h j" . javadoc-lookup))
   :config
   (javadoc-add-roots "/usr/share/doc/openjdk-7-jdk/api"))
 
+
 (use-package eclim
   :config
   (bind-key "C-c C-e p r" 'eclim-run-class eclim-mode-map)
   (add-hook 'eclim-mode-hook 'company-emacs-eclim-setup)
   (add-hook 'java-mode-hook 'eclim-mode))
 
+
 (use-package color-moccur
   :config
-  (use-package moccur-edit)
+  
+(use-package moccur-edit)
   (bind-keys :prefix-map moccur-map
              :prefix "M-o"
              ("s" . occur-by-moccur)
@@ -378,6 +414,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   (defalias 'mgrep 'moccur-grep)
   (defalias 'mrgrep 'moccur-grep-find))
 
+
 (use-package org
   :load-path "modules/org-mode/lisp"
   :config
@@ -399,7 +436,8 @@ If N is not set, use `comint-buffer-minimum-size'."
   (require 'org-id)
   (require 'org-attach)
   (require 'org-bullets)
-  (use-package ox-beamer
+  
+(use-package ox-beamer
     :config
     (unbind-key "C-c C-b" org-beamer-mode-map))
 
@@ -426,39 +464,49 @@ If N is not set, use `comint-buffer-minimum-size'."
                (expand-file-name "org-mode/doc" modules-dir))
   (add-hook 'org-store-link-functions 'org-id-store-link))
 
+
 (use-package pyvenv
   :config
   (pyvenv-tracking-mode 1)
   (pyvenv-mode 1))
 
+
 (use-package elpy
   :config
   (elpy-enable))
 
+
 (use-package message
   :config
   (unbind-key "C-c C-c" message-mode-map))
 
+
 (use-package bibtex
   :config
   (bind-key "C-c C-o" 'dmd-bibtex-open bibtex-mode-map))
 
 (bind-key "C-x #" 'delete-frame)
 
+
 (use-package yasnippet
   :config
   (bind-key "C-c & C-s" 'company-yasnippet yas-minor-mode-map)
-  (use-package company-yasnippet
+  
+(use-package company-yasnippet
     :bind (("M-C" . company-yasnippet)))
   (yas-global-mode 1))
 
+
 (use-package flycheck
   :config
-  (use-package flycheck-pos-tip
+  
+(use-package flycheck-pos-tip
     :init
-    (use-package popup-el))
+    
+(use-package popup-el))
   (global-flycheck-mode))
 
+
 (use-package mu4e
   :load-path "modules/mu/mu4e"
   :config
@@ -469,9 +517,11 @@ If N is not set, use `comint-buffer-minimum-size'."
   (setq mu4e-mu-binary (or (executable-find "mu")
                            (expand-file-name "mu/mu/mu"
                                              modules-dir)))
-  (use-package org-mu4e
+  
+(use-package org-mu4e
     :demand t))
 
+
 (use-package which-key
   :config
   (which-key-mode 1))
@@ -483,9 +533,11 @@ If N is not set, use `comint-buffer-minimum-size'."
           (warn "Failed to load module `%s'" module)))
 	  dmd-config-modules)
 
+
 (use-package env-helper
   :init
-  (use-package filenotify
+  
+(use-package filenotify
     :commands (file-notify-add-watch))
   :config
   (file-notify-add-watch "/etc/environment"
@@ -493,6 +545,7 @@ If N is not set, use `comint-buffer-minimum-size'."
                          #'dmd--environment-watcher))
 
 ;; automagically tail log files
+
 (use-package autorevert
   :mode ("\\.log\\'" . auto-revert-tail-mode)
   :config
@@ -510,10 +563,12 @@ If N is not set, use `comint-buffer-minimum-size'."
       (show-smartparens-mode 0)))
   (add-hook 'auto-revert-tail-mode-hook 'dmd--etc-log-tail-handler))
 
+
 (use-package slime
   :config
   (defalias 'srepl 'slime-repl))
 
+
 (use-package copyright
   :config
   ;;; redefined skeleton (original in copyright.el)
@@ -529,44 +584,54 @@ If N is not set, use `comint-buffer-minimum-size'."
     " See the file LICENSE for copying permission."
     comment-end \n))
 
+
 (use-package workgroups
   :demand t
   :config
   (workgroups-mode 1))
 
+
 (use-package mule
   :config
   (set-terminal-coding-system 'utf-8)
   (set-keyboard-coding-system 'utf-8)
   (prefer-coding-system 'utf-8))
 
+
 (use-package firestarter
   :config
   (firestarter-mode 1)
   (defvar firestarter nil))
 
+
 (use-package ansi-color
   :config
   (ansi-color-for-comint-mode-on))
 
+
 (use-package saveplace
   :demand t)
 
+
 (use-package python
   :mode (("wscript" . python-mode)))
 
+
 (use-package undo-tree
   :demand t
   :config
   (global-undo-tree-mode))
 
+
 (use-package projectile
   :demand t
   :config
   (projectile-global-mode)
-  (use-package helm-projectile)
+  
+(use-package helm-projectile)
   (helm-projectile-on))
 
+
 (use-package elisp-slime-nav)
 
 ;; Save a list of recent files visited.
@@ -610,6 +675,7 @@ If N is not set, use `comint-buffer-minimum-size'."
 (setq initial-frame-alist (append initial-frame-alist
                                   (copy-alist default-frame-alist)))
 
+
 (use-package color-theme-sanityinc-tomorrow
   :config
   (color-theme-sanityinc-tomorrow--define-theme eighties))
