@@ -267,7 +267,8 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 
 (use-package compile
-  :init 
+  :init
+
   (use-package compile-cache)
   :bind (("<f5>" . compile-cache)
          ("<f6>" . recompile)))
@@ -278,7 +279,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 (use-package helm-config
   :init
-  
+
   (use-package helm-mode
     :demand t
     :config
@@ -290,17 +291,17 @@ This is the same as using \\[set-mark-command] with the prefix argument."
          ("C-x b" . helm-buffers-list)
          ("C-c h" . helm-command-prefix))
   :config
-  
+
   (use-package helm-command)
-  
+
   (use-package helm-files)
-  
+
   (use-package helm-buffers)
-  
+
   (use-package helm-ag)
-  
+
   (use-package helm-bibtex)
-  
+
   (use-package helm-pages
     :bind (("C-c j" . helm-pages))))
 
@@ -370,9 +371,9 @@ If N is not set, use `comint-buffer-minimum-size'."
 (use-package magit
   :load-path "modules/magit/lisp"
   :init
-  
+
   (use-package git-commit-mode)
-  
+
   (use-package magit-autoloads)
 
   :bind (("C-c g" . magit-status))
@@ -381,11 +382,11 @@ If N is not set, use `comint-buffer-minimum-size'."
   (add-to-list 'Info-directory-list
                (expand-file-name "magit/Documentation" modules-dir))
 
-  
+
   (use-package magit-svn
     :config
     (add-hook 'magit-mode-hook 'magit-svn-mode))
-  
+
   (use-package orgit))
 
 
@@ -404,7 +405,7 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (use-package color-moccur
   :config
-  
+
   (use-package moccur-edit)
   (bind-keys :prefix-map moccur-map
              :prefix "M-o"
@@ -436,7 +437,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   (require 'org-id)
   (require 'org-attach)
   (require 'org-bullets)
-  
+
   (use-package ox-beamer
     :config
     (unbind-key "C-c C-b" org-beamer-mode-map))
@@ -462,7 +463,23 @@ If N is not set, use `comint-buffer-minimum-size'."
 
   (add-to-list 'Info-directory-list
                (expand-file-name "org-mode/doc" modules-dir))
-  (add-hook 'org-store-link-functions 'org-id-store-link))
+  (add-hook 'org-store-link-functions 'org-id-store-link)
+  (defun dmd-org-babel-tangle-async ()
+    (interactive)
+    (start-process "org-tangle-async"
+                   "*org-tangle-async*"
+                   (executable-find "emacs")
+                   "-Q" "--batch"
+                   "--eval"
+                   "(progn
+(add-to-list 'load-path (expand-file-name \"~/.emacs.d/modules/org-mode/lisp/\"))
+(add-to-list 'load-path (expand-file-name \"~/.emacs.d/modules/org-mode/contrib/lisp/\"))
+(require 'org)
+(require 'ob)
+(require 'ob-tangle))"
+                   "--eval"
+                   (format "(with-current-buffer (find-file-noselect %S)
+                              (org-babel-tangle))" (buffer-file-name)))))
 
 
 (use-package pyvenv
@@ -491,7 +508,7 @@ If N is not set, use `comint-buffer-minimum-size'."
 (use-package yasnippet
   :config
   (bind-key "C-c & C-s" 'company-yasnippet yas-minor-mode-map)
-  
+
   (use-package company-yasnippet
     :bind (("M-C" . company-yasnippet)))
   (yas-global-mode 1))
@@ -499,10 +516,10 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (use-package flycheck
   :config
-  
+
   (use-package flycheck-pos-tip
     :init
-    
+
     (use-package popup-el))
   (global-flycheck-mode))
 
@@ -517,7 +534,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   (setq mu4e-mu-binary (or (executable-find "mu")
                            (expand-file-name "mu/mu/mu"
                                              modules-dir)))
-  
+
   (use-package org-mu4e
     :demand t))
 
@@ -536,7 +553,7 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (use-package env-helper
   :init
-  
+
   (use-package filenotify
     :commands (file-notify-add-watch))
   :config
@@ -627,7 +644,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   :demand t
   :config
   (projectile-global-mode)
-  
+
   (use-package helm-projectile)
   (helm-projectile-on))
 
