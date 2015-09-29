@@ -77,7 +77,9 @@
 (use-package info
   :demand t
   :config
-  (setq Info-directory-list (append Info-directory-list Info-default-directory-list))
+  (setq Info-directory-list (append Info-directory-list
+                                    Info-default-directory-list
+                                    (list (expand-file-name "doc" user-emacs-directory))))
   (require 'info-look))
 
 
