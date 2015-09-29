@@ -118,3 +118,6 @@
 [submodule "modules/slime-company"]
 	path = modules/slime-company
 	url = git@github.com:anwyn/slime-company.git
+[submodule "modules/anaphora"]
+	path = modules/anaphora
+	url = git@github.com:rolandwalker/anaphora.git
