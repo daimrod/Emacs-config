@@ -420,14 +420,6 @@ If N is not set, use `comint-buffer-minimum-size'."
   :config
   (add-to-list 'load-path (expand-file-name "modules/org-mode/contrib/lisp" user-emacs-directory))
   (add-to-list 'org-babel-default-header-args '(padline . no))
-  (let ((sbuf (with-current-buffer (find-file-noselect
-                                    (expand-file-name "org-agenda-files" user-emacs-directory))
-                (buffer-substring-no-properties (point-min) (point-max)))))
-    (setq org-agenda-files nil)
-    (dolist (f (s-lines sbuf))
-      (if (and (not (string-empty-p f))
-               (file-exists-p f))
-          (add-to-list 'org-agenda-files f))))
   (require 'org-contacts)
   (require 'org-clock)
   (require 'org-habit)
@@ -440,6 +432,18 @@ If N is not set, use `comint-buffer-minimum-size'."
   (use-package ox-beamer
     :config
     (unbind-key "C-c C-b" org-beamer-mode-map))
+
+  (use-package org-agenda
+    :demand t
+	:config
+	(let ((sbuf (with-current-buffer (find-file-noselect
+									  (expand-file-name "org-agenda-files" user-emacs-directory))
+				  (buffer-substring-no-properties (point-min) (point-max)))))
+	  (setq org-agenda-files nil)
+	  (dolist (f (s-lines sbuf))
+		(if (and (not (string-empty-p f))
+				 (file-exists-p f))
+			(add-to-list 'org-agenda-files f)))))
 
   (bind-key "<f9>" 'org-agenda)
 
@@ -812,6 +816,12 @@ If N is not set, use `comint-buffer-minimum-size'."
 (use-package redshank-loader
   :config
   (redshank-setup '(lisp-mode-hook slime-repl-mode-hook) t))
+
+
+(use-package org-game
+  :load-path (lambda () (expand-file-name "org-game" src-dir))
+  :config
+  (org-game-start))
 
 ;; Save a list of recent files visited.
 (recentf-mode 1)
