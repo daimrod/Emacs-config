@@ -231,7 +231,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
   :config
   (winner-mode 1))
 
-(bind-key "<f11>" 'toggle-fullscreen)
+(bind-key "<f11>" 'toggle-frame-fullscreen)
 
 ;;;; Terminal Emulator
 ;; C-x 4 t is for multi-term in another window, so a terminal in
