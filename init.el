@@ -100,9 +100,9 @@
   :bind (("C-x \\" . align-regexp)))
 
 
-(use-package isearch
-  :bind (("C-s" . isearch-forward-regexp)
-         ("C-r" . isearch-backward-regexp)))
+;;; Isearch
+(bind-keys ("C-s" . isearch-forward-regexp)
+           ("C-r" . isearch-backward-regexp))
 
 
 (use-package w3m
