@@ -111,7 +111,7 @@
 	url = git@github.com:purcell/color-theme-sanityinc-tomorrow.git
 [submodule "modules/paredit"]
 	path = modules/paredit
-	url = git://github.com:emacsmirror/paredit.git
+	url = git@github.com:emacsmirror/paredit.git
 [submodule "modules/redshank"]
 	path = modules/redshank
 	url = git@github.com:emacsmirror/redshank.git
