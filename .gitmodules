@@ -124,3 +124,6 @@
 [submodule "modules/elfeed"]
 	path = modules/elfeed
 	url = git@github.com:skeeto/elfeed.git
+[submodule "modules/elfeed-org"]
+	path = modules/elfeed-org
+	url = git@github.com:remyhonig/elfeed-org.git

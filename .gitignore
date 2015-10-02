@@ -39,3 +39,4 @@ debug.el
 /elpa/elpy-1.9.0/elpy/__pycache__/
 *.pyc
 /recentf
+/elfeed/

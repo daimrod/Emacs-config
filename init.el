@@ -829,7 +829,10 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (use-package elfeed
   :config
-  (add-hook 'kill-emacs-hook 'elfeed-db-compact))
+  (add-hook 'kill-emacs-hook 'elfeed-db-compact)
+  (use-package elfeed-org
+    :config
+    (elfeed-org)))
 
 ;; Save a list of recent files visited.
 (recentf-mode 1)
