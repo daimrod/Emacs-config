@@ -540,9 +540,13 @@ If N is not set, use `comint-buffer-minimum-size'."
   (setq mu4e-mu-binary (or (executable-find "mu")
                            (expand-file-name "mu/mu/mu"
                                              modules-dir)))
-
-  (use-package org-mu4e
-    :demand t))
+  (require 'org-mu4e)
+  (add-hook 'mu4e-view-mode-hook
+            (lambda()
+              ;; try to emulate some of the eww key-bindings
+              (local-set-key (kbd "<tab>") 'w3m-next-anchor)
+              (local-set-key (kbd "<backtab>") 'w3m-previous-anchor)))
+)
 
 
 (use-package which-key
