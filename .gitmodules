@@ -121,3 +121,6 @@
 [submodule "modules/anaphora"]
 	path = modules/anaphora
 	url = git@github.com:rolandwalker/anaphora.git
+[submodule "modules/elfeed"]
+	path = modules/elfeed
+	url = git@github.com:skeeto/elfeed.git
