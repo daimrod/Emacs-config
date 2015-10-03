@@ -853,8 +853,8 @@ If N is not set, use `comint-buffer-minimum-size'."
   (defun dmd-elfeed-show-tag-mustread ()
     (interactive)
     (elfeed-show-tag 'mustread))
-  (bind-key "!" 'dmd-elfeed-search-tag-mustread elfeed-search-mode-map)
-  (bind-key "!" 'dmd-elfeed-show-tag-mustread elfeed-show-mode-map))
+  (bind-key "e" 'dmd-elfeed-search-tag-mustread elfeed-search-mode-map)
+  (bind-key "e" 'dmd-elfeed-show-tag-mustread elfeed-show-mode-map))
 
 ;; Save a list of recent files visited.
 (recentf-mode 1)
