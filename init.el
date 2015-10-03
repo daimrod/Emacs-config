@@ -441,6 +441,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   (require 'org-attach)
   (require 'org-bullets)
   (require 'org-mime)
+  (require 'org-drill)
 
   (use-package ox-beamer
     :config
