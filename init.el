@@ -716,15 +716,15 @@ If N is not set, use `comint-buffer-minimum-size'."
   (define-key slime-repl-mode-map (kbd "C-c C-d f") 'common-lisp-hyperspec)
 
 ;;; dpans
-  (cl-flet ((ansicl-lookup (major-mode)
-                           (info-lookup-add-help
-                            :mode major-mode
-                            :regexp "[^][()'\" \t\n]+"
-                            :ignore-case t
-                            :doc-spec '(("(ansicl)Symbol Index" nil nil nil)))))
-    (mapc 'ansicl-lookup
-          '(lisp-mode
-            slime-repl-mode)))
+  (defun dmd-ansicl-lookup (major-mode)
+    (info-lookup-add-help
+     :mode major-mode
+     :regexp "[^][()'\" \t\n]+"
+     :ignore-case t
+     :doc-spec '(("(ansicl)Symbol Index" nil nil nil))))
+  (mapc 'dmd-ansicl-lookup
+        '(lisp-mode
+          slime-repl-mode))
 
 ;;; bind C-c / to slime-selector
   (define-key slime-mode-map (kbd "C-c /") 'slime-selector)
