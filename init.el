@@ -900,7 +900,11 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 
 (use-package color-theme-sanityinc-tomorrow
+  :demand t
   :config
+  (add-to-list 'custom-theme-load-path (expand-file-name
+                                        "modules/color-theme-sanityinc-tomorrow"
+                                        user-emacs-directory))
   (color-theme-sanityinc-tomorrow--define-theme eighties))
 
 
