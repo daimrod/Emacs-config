@@ -481,6 +481,19 @@ If N is not set, use `comint-buffer-minimum-size'."
   (add-to-list 'Info-directory-list
                (expand-file-name "org-mode/doc" modules-dir))
   (add-hook 'org-store-link-functions 'org-id-store-link)
+  (defun dmd-add-org-capture-template ()
+    (let ((file (buffer-file-name)))
+      (setq-local org-capture-templates
+                  (append `(("T" "Task in current project" entry
+                             (file+headline ,file "Task")
+                             "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a" :prepend t :empty-lines 1 :unnarrowed t)
+                            ("J" "New journal entry in current project" entry
+                             (file+datetree ,file)
+                             "* %?" :immediate-finish t :jump-to-captured t :empty-lines 1 :unnarrowed t))
+                          org-capture-templates))))
+
+  (add-hook 'org-mode-hook 'dmd-add-org-capture-template)
+  
   (defun dmd-org-babel-tangle-async ()
     (interactive)
     (start-process "org-tangle-async"
