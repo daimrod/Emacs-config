@@ -92,3 +92,49 @@ Par la suite, on peut récupérer les résultats comme ceci :
 
 #+RESULTS[361b8149afcbda9965f54a8a3d88da62ca100c1f]:
 | stderr | /temp_dd/igrida-fs1/gjadi/OAR_%jobid%.stderrls |
+
+* ansi_color
+Converti les séquences d'échappement shell pour la couleurs en text-properties emacs.
+
+#+NAME: ansi_color
+#+BEGIN_SRC emacs-lisp :var data=""
+(ansi-color-apply data)
+#+END_SRC
+
+#+NAME: test_no_ansi_color
+#+BEGIN_SRC bash :results pp
+ls --color | head
+#+END_SRC
+
+#+RESULTS: test_no_ansi_color
+#+begin_example
+[0m[01;34mauto-save-list[0m
+bookmarks
+[01;34mconfig[0m
+custom.el
+[01;34mdoc[0m
+ede-projects.el
+[01;34melfeed[0m
+[01;34melisp[0m
+[01;34memms[0m
+[01;34meshell[0m
+#+end_example
+
+#+NAME: test_ansi_color
+#+BEGIN_SRC bash :results pp :post ansi_color(data=*this*)
+ls --color | head
+#+END_SRC
+
+#+RESULTS: test_ansi_color
+#+begin_example
+auto-save-list
+bookmarks
+config
+custom.el
+doc
+ede-projects.el
+elfeed
+elisp
+emms
+eshell
+#+end_example
