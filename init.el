@@ -450,14 +450,17 @@ If N is not set, use `comint-buffer-minimum-size'."
   (use-package org-agenda
     :demand t
 	:config
-	(let ((sbuf (with-current-buffer (find-file-noselect
-									  (expand-file-name "org-agenda-files" user-emacs-directory))
-				  (buffer-substring-no-properties (point-min) (point-max)))))
-	  (setq org-agenda-files nil)
-	  (dolist (f (s-lines sbuf))
-		(if (and (not (string-empty-p f))
-				 (file-exists-p f))
-			(add-to-list 'org-agenda-files f)))))
+    (defun dmd--update-org-agenda-files ()
+      (interactive)
+      (let ((sbuf (with-current-buffer (find-file-noselect
+                                        (expand-file-name "org-agenda-files" user-emacs-directory))
+                    (buffer-substring-no-properties (point-min) (point-max)))))
+        (setq org-agenda-files nil)
+        (dolist (f (s-lines sbuf))
+          (if (and (not (string-empty-p f))
+                   (file-exists-p f))
+              (add-to-list 'org-agenda-files f)))))
+    (dmd--update-org-agenda-files))
 
   (bind-key "<f9>" 'org-agenda)
 
