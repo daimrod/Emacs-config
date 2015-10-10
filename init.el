@@ -490,7 +490,7 @@ If N is not set, use `comint-buffer-minimum-size'."
         (setq-local org-capture-templates
                     (append `(("T" "Task in current project" entry
                                (file+headline ,file "Task")
-                               "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a" :prepend t :empty-lines 1 :unnarrowed t)
+                               "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a" :prepend t :empty-lines 1)
                               ("J" "New journal entry in current project" entry
                                (file+datetree ,file)
                                "* %?" :immediate-finish t :jump-to-captured t :empty-lines 1 :unnarrowed t))
