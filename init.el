@@ -79,7 +79,10 @@
   :config
   (setq Info-directory-list (append Info-directory-list
                                     Info-default-directory-list
-                                    (list (expand-file-name "doc" user-emacs-directory))))
+                                    Info-additional-directory-list
+                                    (list
+                                     (expand-file-name "../info" data-directory)
+                                     (expand-file-name "doc" user-emacs-directory))))
   (require 'info-look))
 
 
