@@ -924,8 +924,15 @@ If N is not set, use `comint-buffer-minimum-size'."
   :config
   (add-to-list 'custom-theme-load-path (expand-file-name
                                         "modules/color-theme-sanityinc-tomorrow"
-                                        user-emacs-directory))
-  (color-theme-sanityinc-tomorrow--define-theme eighties))
+                                        user-emacs-directory)))
+
+
+(use-package solarized
+  :demand t
+  :config
+  (add-to-list 'custom-theme-load-path (expand-file-name
+                                        "modules/solarized-emacs"
+                                        user-emacs-directory)))
 
 
 ;;; init.el ends here

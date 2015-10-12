@@ -130,3 +130,6 @@
 [submodule "modules/org-drill"]
 	path = modules/org-drill
 	url = git@github.com:daimrod/org-drill.git
+[submodule "modules/solarized-emacs"]
+	path = modules/solarized-emacs
+	url = git@github.com:bbatsov/solarized-emacs.git
