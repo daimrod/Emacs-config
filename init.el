@@ -439,13 +439,56 @@ If N is not set, use `comint-buffer-minimum-size'."
   (require 'org-contacts)
   (require 'org-clock)
   (require 'org-habit)
-  (require 'org-ref)
   (require 'org-agenda)
   (require 'org-id)
   (require 'org-attach)
   (require 'org-bullets)
   (require 'org-mime)
   (require 'org-drill)
+
+
+  (use-package org-ref
+    :demand t
+    :config
+    (defun dmd-org-ref-open-bibtex-notes ()
+      "From a bibtex entry, open the notes if they exist, and create a heading if they do not.
+
+I never did figure out how to use reftex to make this happen
+non-interactively. the reftex-format-citation function did not
+work perfectly; there were carriage returns in the strings, and
+it did not put the key where it needed to be. so, below I replace
+the carriage returns and extra spaces with a single space and
+construct the heading by hand."
+      (interactive)
+
+      (bibtex-beginning-of-entry)
+      (let* ((cb (current-buffer))
+             (bibtex-entry (buffer-substring (point)
+                                             (save-excursion
+                                               (bibtex-end-of-entry)
+                                               (point))))
+             (bibtex-expand-strings t)
+             (entry (cl-loop for (key . value) in (bibtex-parse-entry t)
+                             collect (cons (downcase key) value)))
+             (key (reftex-get-bib-field "=key=" entry)))
+
+        ;; save key to clipboard to make saving pdf later easier by pasting.
+        (with-temp-buffer
+          (insert key)
+          (kill-ring-save (point-min) (point-max)))
+
+        ;; now look for entry in the notes file
+        (if  org-ref-bibliography-notes
+            (find-file-other-window org-ref-bibliography-notes)
+          (error "Org-ref-bib-bibliography-notes is not set to anything"))
+
+        (goto-char (point-min))
+        ;; put new entry in notes if we don't find it.
+        (if (re-search-forward key nil 'end)
+            (funcall org-ref-open-notes-function)
+          (error "Couldn't find %s in %s" entry org-ref-bibliography-notes))))
+    (add-hook 'org-ref-open-notes-functions 'dmd-org-ref-open-bibtex-notes))
+
 
   (use-package ox-beamer
     :config
