@@ -104,8 +104,8 @@
 
 
 ;;; Isearch
-(bind-keys ("C-s" . isearch-forward-regexp)
-           ("C-r" . isearch-backward-regexp))
+(bind-keys ("C-S-s" . isearch-forward-regexp)
+           ("C-S-r" . isearch-backward-regexp))
 
 
 (use-package w3m
@@ -317,7 +317,11 @@ This is the same as using \\[set-mark-command] with the prefix argument."
   (use-package helm-bibtex)
 
   (use-package helm-pages
-    :bind (("C-c j" . helm-pages))))
+    :bind (("C-c j" . helm-pages)))
+
+  (use-package swiper-helm
+    :init (use-package swiper)
+    :bind (("C-s" . swiper-helm))))
 
 (global-set-key (kbd "C-;") 'newline-and-indent)
 

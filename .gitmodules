@@ -133,3 +133,9 @@
 [submodule "modules/solarized-emacs"]
 	path = modules/solarized-emacs
 	url = git@github.com:bbatsov/solarized-emacs.git
+[submodule "modules/swiper"]
+	path = modules/swiper
+	url = git@github.com:daimrod/swiper.git
+[submodule "modules/helm-swiper"]
+	path = modules/helm-swiper
+	url = git@github.com:daimrod/swiper-helm.git
