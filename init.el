@@ -443,7 +443,6 @@ If N is not set, use `comint-buffer-minimum-size'."
   :config
   (require 'subr-x)
   (add-to-list 'load-path (expand-file-name "modules/org-mode/contrib/lisp" user-emacs-directory))
-  (add-to-list 'org-babel-default-header-args '(padline . no))
   (require 'org-contacts)
   (require 'org-clock)
   (require 'org-habit)
@@ -457,13 +456,11 @@ If N is not set, use `comint-buffer-minimum-size'."
   (require 'org-agenda)
   (require 'dmd-org-mode)
   (require 'diary-lib)
-
-  
-  (use-package ox-beamer
-    :config
-    (unbind-key "C-c C-b" org-beamer-mode-map))
+  (require 'ox-beamer)
 
   (dmd--update-org-agenda-files)
+
+  (unbind-key "C-c C-b" org-beamer-mode-map)
 
   (bind-keys :map mode-specific-map
              :prefix-map mode-specific-org-map
@@ -478,6 +475,8 @@ If N is not set, use `comint-buffer-minimum-size'."
                'org-latex-ignore-heading-filter-headline)
 
   (setq org-export-async-init-file (expand-file-name "init-org-async.el" user-emacs-directory))
+
+  (add-to-list 'org-babel-default-header-args '(padline . no))
 
   (diary-list-entries (calendar-current-date) nil 'list-only)
   (mapc (lambda (file)
