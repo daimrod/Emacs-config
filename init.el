@@ -484,9 +484,9 @@ construct the heading by hand."
 
         (goto-char (point-min))
         ;; put new entry in notes if we don't find it.
-        (if (re-search-forward key nil 'end)
-            (funcall org-ref-open-notes-function)
-          (error "Couldn't find %s in %s" entry org-ref-bibliography-notes))))
+        (when (re-search-forward key nil 'end)
+          (funcall org-ref-open-notes-function)
+          t)))
     (add-hook 'org-ref-open-notes-functions 'dmd-org-ref-open-bibtex-notes))
 
 
