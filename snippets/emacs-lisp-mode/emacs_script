@@ -2,7 +2,7 @@
 # name: emacs_script
 # --
 #!/bin/sh
-":"; exec emacs --quick --script "\$0" -- "\$@" # -*- mode: emacs-lisp
+":"; exec emacs --quick --script "\$0" -- "\$@" # -*- mode: emacs-lisp; -*-
 
 ;; (message "foo: %S" argv)                ; print on stderr
 ;; (princ "bar")                           ; print on stdout
