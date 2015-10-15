@@ -526,6 +526,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   (add-hook 'org-after-refile-insert-hook 'basic-save-buffer)
 
   (add-hook 'org-mode-hook 'dmd-add-org-capture-template)
+  (add-hook 'org-mode-hook 'dmd-set-ispell-dictionary-from-org)
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
   (add-hook 'org-mode-hook 'dmd-org-mode-reftex-setup)
   (add-hook 'org-mode-hook

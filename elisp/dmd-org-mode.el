@@ -23,6 +23,7 @@
 
 (require 'org-capture)
 (require 'org-ref)
+(require 'anaphora)
 
 (defun dmd-add-org-capture-template ()
   "Add custom capture template.
@@ -207,6 +208,20 @@ Can be used in as agenda skip function or when refiling."
       t
     (goto-char (point-max))
     nil))
+
+(defvar dmd-org-lang-to-ispell-dict
+  '(("en" . "english")
+    ("fr" . "francais")))
+
+(defun dmd-set-ispell-dictionary-from-org ()
+  "Infer current language from current org-mode's buffer.
+
+The language can be specified with the #+LANGUAGE export option.
+Use it."
+  (let ((lang (plist-get (org-export--get-inbuffer-options) :language)))
+    (awhen (and lang
+                (assoc lang dmd-org-lang-to-ispell-dict))
+      (setq ispell-local-dictionary (rest it)))))
 
 (defun dmd-org-babel-tangle-async ()
   "Tangle current buffer asynchronously."
