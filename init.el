@@ -441,6 +441,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   :demand t
   :load-path "modules/org-mode/lisp"
   :config
+  (require 'subr-x)
   (add-to-list 'load-path (expand-file-name "modules/org-mode/contrib/lisp" user-emacs-directory))
   (add-to-list 'org-babel-default-header-args '(padline . no))
   (require 'org-contacts)
