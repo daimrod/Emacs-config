@@ -230,20 +230,12 @@ Use it."
 (defun dmd-org-babel-tangle-async ()
   "Tangle current buffer asynchronously."
   (interactive)
-  (start-process "org-tangle-async"
-                 "*org-tangle-async*"
-                 (executable-find "emacs")
-                 "-Q" "--batch"
-                 "--eval"
-                 "(progn
-(add-to-list 'load-path (expand-file-name \"~/.emacs.d/modules/org-mode/lisp/\"))
-(add-to-list 'load-path (expand-file-name \"~/.emacs.d/modules/org-mode/contrib/lisp/\"))
-(require 'org)
-(require 'ob)
-(require 'ob-tangle))"
-                   "--eval"
-                   (format "(with-current-buffer (find-file-noselect %S)
-(org-babel-tangle))" (buffer-file-name))))
+  (start-process-shell-command
+   "org-tangle-async"
+   "*org-tangle-async*"
+   (format "%s %s"
+           (expand-file-name "~/.emacs.d/elisp/tangle.sh")
+           (buffer-file-name))))
 
 (provide 'dmd-org-mode)
 
