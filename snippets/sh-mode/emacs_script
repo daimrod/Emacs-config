@@ -2,11 +2,15 @@
 # name: emacs_script
 # --
 #!/bin/sh
-":"; exec emacs --quick --script "\$0" "\$@" # -*- mode: emacs-lisp; -*-
+":"; exec emacs --quick --script "\$0" -- "\$@" # -*- mode: emacs-lisp; -*-
+;;; Commentary: 
 
 ;; (message "foo: %S" argv)                ; print on stderr
 ;; (princ "bar")                           ; print on stdout
-`(emacs-lisp-mode)`
+
+;;; Code:
+
+
 $0
 
 (setq argv nil) ; prevents emacs from interpreting remaining args
