@@ -321,7 +321,8 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
   (use-package swiper-helm
     :init (use-package swiper)
-    :bind (("C-s" . swiper-helm))))
+    :bind (("C-s" . swiper-helm)
+           ("C-r" . swiper-helm))))
 
 (global-set-key (kbd "C-;") 'newline-and-indent)
 
