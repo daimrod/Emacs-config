@@ -212,7 +212,7 @@ Can be used in as agenda skip function or when refiling."
 (defvar dmd-org-lang-to-ispell-dict
   '(("en" . "english")
     ("fr" . "francais"))
-  "Translate org-mode's language to ispell dictionaries.
+  "Translate org-mode's language to Ispell dictionaries.
 
 Org-mode languages are listed in `org-clock-clocktable-language-setup'.
 Ispell dictionaries are listed in `ispell-dictionary-base-alist'.")
