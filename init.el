@@ -111,6 +111,8 @@
 (use-package w3m
   :commands (w3m-buffer w3m-browse-url)
   :config
+  (require 'w3m-util)
+  
   (defun dmd--w3m-go-to-title-in-page ()
     (interactive)
     (let ((title (w3m-buffer-title (current-buffer)))
@@ -450,76 +452,32 @@ If N is not set, use `comint-buffer-minimum-size'."
   (require 'org-bullets)
   (require 'org-mime)
   (require 'org-drill)
+  (require 'org-ref)
+  (require 'org-agenda)
+  (require 'dmd-org-mode)
+  (require 'diary-lib)
 
-
-  (use-package org-ref
-    :demand t
-    :config
-    (defun dmd-org-ref-open-bibtex-notes ()
-      "From a bibtex entry, open the notes if they exist, and create a heading if they do not.
-
-I never did figure out how to use reftex to make this happen
-non-interactively. the reftex-format-citation function did not
-work perfectly; there were carriage returns in the strings, and
-it did not put the key where it needed to be. so, below I replace
-the carriage returns and extra spaces with a single space and
-construct the heading by hand."
-      (interactive)
-
-      (bibtex-beginning-of-entry)
-      (let* ((cb (current-buffer))
-             (bibtex-entry (buffer-substring (point)
-                                             (save-excursion
-                                               (bibtex-end-of-entry)
-                                               (point))))
-             (bibtex-expand-strings t)
-             (entry (cl-loop for (key . value) in (bibtex-parse-entry t)
-                             collect (cons (downcase key) value)))
-             (key (reftex-get-bib-field "=key=" entry)))
-
-        ;; save key to clipboard to make saving pdf later easier by pasting.
-        (with-temp-buffer
-          (insert key)
-          (kill-ring-save (point-min) (point-max)))
-
-        ;; now look for entry in the notes file
-        (if  org-ref-bibliography-notes
-            (find-file-other-window org-ref-bibliography-notes)
-          (error "Org-ref-bib-bibliography-notes is not set to anything"))
-
-        (goto-char (point-min))
-        ;; put new entry in notes if we don't find it.
-        (when (re-search-forward key nil 'end)
-          (funcall org-ref-open-notes-function)
-          t)))
-    (add-hook 'org-ref-open-notes-functions 'dmd-org-ref-open-bibtex-notes))
-
-
+  
   (use-package ox-beamer
     :config
     (unbind-key "C-c C-b" org-beamer-mode-map))
-
-  (use-package org-agenda
-    :demand t
-	:config
-    (defun dmd--update-org-agenda-files ()
-      (interactive)
-      (let ((sbuf (with-current-buffer (find-file-noselect
-                                        (expand-file-name "org-agenda-files" user-emacs-directory))
-                    (buffer-substring-no-properties (point-min) (point-max)))))
-        (setq org-agenda-files nil)
-        (dolist (f (s-lines sbuf))
-          (if (and (not (string-empty-p f))
-                   (file-exists-p f))
-              (add-to-list 'org-agenda-files f)))))
-    (dmd--update-org-agenda-files))
 
-  (bind-key "<f9>" 'org-agenda)
+  (dmd--update-org-agenda-files)
 
+  (bind-keys :map mode-specific-map
+             :prefix-map mode-specific-org-map
+             :prefix "o"
+             ("l" . org-store-link)
+             ("a" . org-agenda)
+             ("g" . org-clock-goto)
+             ("c" . org-capture)
+             ("n" . org-annotate-file))
 
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-  
-  (require 'diary-lib)
+  (add-to-list 'org-export-filter-headline-functions
+               'org-latex-ignore-heading-filter-headline)
+
+  (setq org-export-async-init-file (expand-file-name "init-org-async.el" user-emacs-directory))
+
   (diary-list-entries (calendar-current-date) nil 'list-only)
   (mapc (lambda (file)
           (bury-buffer (find-file-noselect file)))
@@ -536,39 +494,45 @@ construct the heading by hand."
   (add-to-list 'Info-directory-list
                (expand-file-name "org-mode/doc" modules-dir))
 
+  ;; Prompt for a date for CREATED properties
+  (add-to-list 'org-property-set-functions-alist
+               (cons "CREATED" '(lambda (prompt collection
+                                                &optional predicate require-match initial-input
+                                                hist def inherit-input-method)
+                                  (format-time-string "[%Y-%m-%d %a %H:%M]" (org-read-date nil 'totime nil prompt nil def nil)))))
+
+  (advice-add #'org-attach-open :override #'helm-org-attach-open)
+
   ;;; Don't scatter LaTeX images
   (make-directory org-latex-preview-ltxpng-directory t)
 
-  (defun dmd-add-org-capture-template ()
-    (let ((file (buffer-file-name)))
-      (when file
-        (setq-local org-capture-templates
-                    (append `(("T" "Task in current project" entry
-                               (file+headline ,file "Task")
-                               "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a" :prepend t :empty-lines 1)
-                              ("J" "New journal entry in current project" entry
-                               (file+datetree ,file)
-                               "* %?" :immediate-finish t :jump-to-captured t :empty-lines 1 :unnarrowed t))
-                            org-capture-templates)))))
+  (add-hook 'org-clock-in-prepare-hook 'dmd-org-set-effort)
+
+  (org-babel-lob-ingest (expand-file-name "lob.org" user-emacs-directory))
+
+  ;; message-mode
+  (add-hook 'message-mode-hook 'turn-on-orgstruct)
+  (add-hook 'message-mode-hook 'turn-on-orgstruct++)
+  (add-hook 'message-mode-hook 'turn-on-orgtbl)
+
+  (add-hook 'org-ref-open-notes-functions 'dmd-org-ref-open-bibtex-notes)
+  
+  ;; Make windmove work in org-mode:
+  (add-hook 'org-shiftup-final-hook 'windmove-up)
+  (add-hook 'org-shiftleft-final-hook 'windmove-left)
+  (add-hook 'org-shiftdown-final-hook 'windmove-down)
+  (add-hook 'org-shiftright-final-hook 'windmove-right)
+
+  (add-hook 'org-after-refile-insert-hook 'basic-save-buffer)
 
   (add-hook 'org-mode-hook 'dmd-add-org-capture-template)
-  
-  (defun dmd-org-babel-tangle-async ()
-    (interactive)
-    (start-process "org-tangle-async"
-                   "*org-tangle-async*"
-                   (executable-find "emacs")
-                   "-Q" "--batch"
-                   "--eval"
-                   "(progn
-(add-to-list 'load-path (expand-file-name \"~/.emacs.d/modules/org-mode/lisp/\"))
-(add-to-list 'load-path (expand-file-name \"~/.emacs.d/modules/org-mode/contrib/lisp/\"))
-(require 'org)
-(require 'ob)
-(require 'ob-tangle))"
-                   "--eval"
-                   (format "(with-current-buffer (find-file-noselect %S)
-                              (org-babel-tangle))" (buffer-file-name)))))
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  (add-hook 'org-mode-hook 'dmd-org-mode-reftex-setup)
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook 'dmd-org-add-ids-to-headlines nil 'local)
+              (add-hook 'before-save-hook 'dmd-org-add-CREATED-to-headlines nil 'local)
+              (add-hook 'before-save-hook 'org-update-parent-todo-statistics nil 'local))))
 
 
 (use-package pyvenv
