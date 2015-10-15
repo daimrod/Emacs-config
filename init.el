@@ -1,4 +1,4 @@
-;;; init.el --- Initialization
+;;; init.el --- Initialization  -*- firestarter: (byte-recompile-file (buffer-file-name) nil 0); -*-
 
 ;; Copyright (C) 2015 Grégoire Jadi
 
@@ -982,9 +982,4 @@ construct the heading by hand."
                                         "modules/solarized-emacs"
                                         user-emacs-directory)))
 
-
 ;;; init.el ends here
-
-;; Local Variables:
-;; firestarter: (byte-recompile-file (buffer-file-name) nil 0)
-;; End:
