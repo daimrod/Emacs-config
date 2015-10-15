@@ -535,7 +535,10 @@ construct the heading by hand."
 
   (add-to-list 'Info-directory-list
                (expand-file-name "org-mode/doc" modules-dir))
-  (add-hook 'org-store-link-functions 'org-id-store-link)
+
+  ;;; Don't scatter LaTeX images
+  (make-directory org-latex-preview-ltxpng-directory t)
+
   (defun dmd-add-org-capture-template ()
     (let ((file (buffer-file-name)))
       (when file

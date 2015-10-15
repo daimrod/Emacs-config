@@ -41,9 +41,6 @@
 ;;; config org-annotate (contrib)
 (define-key mode-specific-org-map (kbd "n") 'org-annotate-file)
 
-;;; Don't scatter LaTeX images
-(make-directory org-latex-preview-ltxpng-directory t)
-
 ;; Make windmove work in org-mode:
 (add-hook 'org-shiftup-final-hook 'windmove-up)
 (add-hook 'org-shiftleft-final-hook 'windmove-left)
