@@ -3,14 +3,14 @@
 # --
 #!/bin/sh
 ":"; exec emacs --quick --script "\$0" -- "\$@" # -*- mode: emacs-lisp; -*-
-;;; Commentary: 
+;;; Commentary:
 
 ;; (message "foo: %S" argv)                ; print on stderr
 ;; (princ "bar")                           ; print on stdout
 
 ;;; Code:
 
-
 $0
 
 (setq argv nil) ; prevents emacs from interpreting remaining args
+`(emacs-lisp-mode)`
