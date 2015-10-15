@@ -100,6 +100,115 @@ This function should be added to `org-export-filter-headline-functions'."
              (string-match "\\`.*ignoreheading.*\n" headline))
     (replace-match "" nil nil headline)))
 
+(defun dmd--org-apply-to-headlines (function &optional prefix)
+  "Apply FUNCTION to each headline in the current buffer.
+
+The PREFIX argument is passed to the function."
+  (when (and (derived-mode-p 'org-mode)
+             (buffer-file-name)
+             (org-agenda-file-p))
+    (let ((scope (when prefix
+                   (message "Process headlines for the [b]uffer, [t]ree, [r]egion, [f]ile, [F]ile with archives, [a]gende, [A]genda with archives?")
+                   (let ((r (read-char-exclusive)))
+                     (cond ((char-equal r ?b) nil)
+                           ((char-equal r ?t) 'tree)
+                           ((char-equal r ?r) 'region)
+                           ((char-equal r ?f) 'file)
+                           ((char-equal r ?F) 'file-with-archives)
+                           ((char-equal r ?a) 'agenda)
+                           ((char-equal r ?A) 'agenda-with-archives))))))
+      (save-excursion
+        (ignore-errors (outline-up-heading 42))
+        (org-map-entries function t scope)))))
+
+(defun dmd-org-add-ids-to-headlines (&optional prefix)
+  "Add ID properties to all headlines in the current buffer.
+
+PREFIX is used to determine the scope."
+  (interactive "P")
+  (dmd--org-apply-to-headlines 'org-id-get-create prefix))
+
+(defun dmd-org-add-CREATED-to-headlines (&optional prefix)
+  "Add \"CREATED\" properties to all headlines in the current buffer.
+
+PREFIX is used to determine the scope."
+  (interactive "P")
+  (dmd--org-apply-to-headlines 'dmd-org-add-created-prop-if-none prefix))
+
+(defun dmd-org-clock-in-switch-to-state (state)
+  "Switch to \"NEXT\" state unless:
+- we are in `org-capture-mode'
+- if the STATE is \"MEETING\"
+- it's a habit (has STYLE=habit)"
+  (cond ((or (string= state "MEETING")
+             org-capture-mode
+             (equal (org-entry-get (point) "STYLE") "habit"))
+         state)
+
+(defun dmd-org-add-created-prop-if-none ()
+  "Add a \"CREATED\" properties if none exists."
+  (unless (org-entry-get (point) "CREATED")
+    (org-set-property "CREATED" (format-time-string "[%Y-%m-%d %a %H:%M]" (org-read-date nil 'totime "today")))))
+
+(defcustom org-agenda-skip-tags nil
+  "Tags that should be excluded even if they have a SCHEDULED or DEADLINE property."
+  :type '(repeat string)
+  :group 'org-agenda)
+
+(defun dmd-org-agenda-skip-tags-entry ()
+  "Skip tags found in `org-agenda-skip-tags'."
+  (when (find-if (lambda (s)
+                   (find s (org-get-tags-at (point)) :test #'string=))
+                 org-agenda-skip-tags)
+    (org-end-of-subtree t)
+    (point)))
+        (t "NEXT")))
+
+(defun dmd-org-set-effort ()
+  "Set an effort unless :
+- we are in `org-capture-mode'
+- there is already an effort"
+  (unless (or org-capture-mode
+              (org-entry-get (point) "Effort"))
+    (org-set-effort)))
+
+(defun dmd-org-active-timestamp-to-inactive-when-rescheduled ()
+  "Convert some variable with active timestamp to inactive one."
+  (when (eq org-log-note-purpose 'reschedule)
+    (setq org-log-note-previous-state
+          (substitute ?\] ?\> (substitute ?\[ ?\< org-log-note-previous-state :test #'char-equal)
+                      :test #'char-equal))))
+
+(defun dmd-org-indent-buffer ()
+  "Indent current buffer."
+  (interactive)
+  (if (not (derived-mode-p 'org-mode))
+      (user-error "Buffer isn't in Org-Mode")
+    (org-content)
+    (save-excursion
+      (goto-char (point-min))
+      (while (zerop (forward-line 1))
+        (ignore-errors (org-indent-drawer))
+        (org-indent-line)))))
+
+(defun dmd-org-skip-bib-file ()
+  "Skip bib file.
+
+Can be used in as agenda skip function or when refiling."
+  (if (not (file-equal-p org-ref-bibliography-notes (buffer-file-name)))
+      t
+    (goto-char (point-max))
+    nil))
+
+(defun dmd-org-skip-contacts-files ()
+  "Skip contacts files.
+
+Can be used in as agenda skip function or when refiling."
+  (if (not (find (buffer-file-name) (org-contacts-files) :test #'file-equal-p))
+      t
+    (goto-char (point-max))
+    nil))
+
 (defun dmd-org-babel-tangle-async ()
   "Tangle current buffer asynchronously."
   (interactive)
