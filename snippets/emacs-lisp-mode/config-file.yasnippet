@@ -3,7 +3,7 @@
 # expand-env: ((yas/indent-line 'fixed))
 # key: config-file
 # --
-;;; `(buffer-name)` --- ${1:Summary}
+;;; `(file-name-nondirectory (buffer-file-name))` --- ${1:Summary}
 
 ;; Copyright (C) `(format-time-string "%Y")` Grégoire Jadi
 
@@ -28,6 +28,6 @@
 
 $0
 
-(provide '`(subseq (buffer-name) 0 (- (length (buffer-name)) 3))`)
+(provide '`(file-name-base (buffer-file-name))`)
 
-;;; `(buffer-name)` ends here
+;;; `(file-name-nondirectory (buffer-file-name))` ends here
