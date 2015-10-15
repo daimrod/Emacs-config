@@ -39,7 +39,6 @@ This function is can be added to `org-mode-hook'."
                              "* %?" :immediate-finish t :jump-to-captured t :empty-lines 1 :unnarrowed t))
                           org-capture-templates)))))
 
-
 (defun dmd-org-ref-open-bibtex-notes ()
   "From a bibtex entry, open the notes.
 
