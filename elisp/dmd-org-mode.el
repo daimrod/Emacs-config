@@ -144,6 +144,7 @@ PREFIX is used to determine the scope."
              org-capture-mode
              (equal (org-entry-get (point) "STYLE") "habit"))
          state)
+        (t "NEXT")))
 
 (defun dmd-org-add-created-prop-if-none ()
   "Add a \"CREATED\" properties if none exists."
@@ -162,7 +163,6 @@ PREFIX is used to determine the scope."
                  org-agenda-skip-tags)
     (org-end-of-subtree t)
     (point)))
-        (t "NEXT")))
 
 (defun dmd-org-set-effort ()
   "Set an effort unless :
