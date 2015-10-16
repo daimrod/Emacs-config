@@ -391,24 +391,19 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (use-package magit
   :load-path "modules/magit/lisp"
-  :init
-
-  (use-package git-commit-mode)
-
-  (use-package magit-autoloads)
-
   :bind (("C-c g" . magit-status))
 
   :config
+  (require 'git-commit)
+  (require 'magit-autoloads)
+  (require 'magit-svn)
+  (require 'orgit)
+  
   (add-to-list 'Info-directory-list
                (expand-file-name "magit/Documentation" modules-dir))
 
-
-  (use-package magit-svn
-    :config
-    (add-hook 'magit-mode-hook 'magit-svn-mode))
-
-  (use-package orgit))
+  (add-hook 'magit-mode-hook 'magit-svn-mode)
+  (add-hook 'magit-diff-mode-hook 'visual-line-mode))
 
 
 (use-package javadoc-lookup

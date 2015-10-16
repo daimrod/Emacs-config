@@ -139,3 +139,6 @@
 [submodule "modules/helm-swiper"]
 	path = modules/helm-swiper
 	url = git@github.com:daimrod/swiper-helm.git
+[submodule "modules/magit-svn"]
+	path = modules/magit-svn
+	url = git@github.com:magit/magit-svn.git
