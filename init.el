@@ -402,8 +402,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   (add-to-list 'Info-directory-list
                (expand-file-name "magit/Documentation" modules-dir))
 
-  (add-hook 'magit-mode-hook 'magit-svn-mode)
-  (add-hook 'magit-diff-mode-hook 'visual-line-mode))
+  (add-hook 'magit-mode-hook 'magit-svn-mode))
 
 
 (use-package javadoc-lookup
