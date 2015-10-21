@@ -951,7 +951,7 @@ SCHEDULED: %t
 ;;;; Theme
 
 ;; tab and indentation configuration
-(setq-default indent-tabs-mode nil)
+(setq indent-tabs-mode nil)
 (setq tab-width 4)
 
 (global-font-lock-mode 1)
