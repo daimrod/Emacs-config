@@ -474,18 +474,18 @@ If N is not set, use `comint-buffer-minimum-size'."
   (setq org-capture-templates
         '(("T" "Task in current buffer" entry
            (file+headline buffer-file-name "Task")
-           "* TODO %?
+           "* TODO %?%a
 :PROPERTIES:
 :CREATED: %U
 :END:
-%a" :prepend t :empty-lines 1)
+" :prepend t :empty-lines 1)
           ("t" "Task" entry
           (file+headline "~/org/capture.org" "Task")
-          "* TODO %?
+          "* TODO %?%a
 :PROPERTIES:
 :CREATED: %U
 :END:
-%a" :prepend t :empty-lines 1)
+" :prepend t :empty-lines 1)
          ("m" "Mail" entry
           (file+headline "~/org/capture.org" "Task")
           "* NEXT Mail from %:from on %:subject
@@ -494,13 +494,6 @@ SCHEDULED: %t
 :CREATED: %U
 :END:
 %a" :prepend t :immediate-finish t :empty-lines 1)
-         ("n" "Note" entry
-          (file+headline "~/org/capture.org" "Task")
-          "* %? :NOTE:
-:PROPERTIES:
-:CREATED: %U
-:END:
-%a" :prepend t :empty-lines 1)
          ("J" "New journal entry in current buffer" entry
           (file+datetree buffer-file-name)
           "* %?" :immediate-finish t :jump-to-captured t :empty-lines 1 :unnarrowed t)
