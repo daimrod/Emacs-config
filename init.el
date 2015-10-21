@@ -471,6 +471,52 @@ If N is not set, use `comint-buffer-minimum-size'."
 
   (setq org-export-async-init-file (expand-file-name "init-org-async.el" user-emacs-directory))
 
+  (setq org-capture-templates
+        '(("T" "Task in current buffer" entry
+           (file+headline buffer-file-name "Task")
+           "* TODO %?
+:PROPERTIES:
+:CREATED: %U
+:END:
+%a" :prepend t :empty-lines 1)
+          ("t" "Task" entry
+          (file+headline "~/org/capture.org" "Task")
+          "* TODO %?
+:PROPERTIES:
+:CREATED: %U
+:END:
+%a" :prepend t :empty-lines 1)
+         ("m" "Mail" entry
+          (file+headline "~/org/capture.org" "Task")
+          "* NEXT Mail from %:from on %:subject
+SCHEDULED: %t
+:PROPERTIES:
+:CREATED: %U
+:END:
+%a" :prepend t :immediate-finish t :empty-lines 1)
+         ("n" "Note" entry
+          (file+headline "~/org/capture.org" "Task")
+          "* %? :NOTE:
+:PROPERTIES:
+:CREATED: %U
+:END:
+%a" :prepend t :empty-lines 1)
+         ("J" "New journal entry in current buffer" entry
+          (file+datetree buffer-file-name)
+          "* %?" :immediate-finish t :jump-to-captured t :empty-lines 1 :unnarrowed t)
+         ("j" "New journal entry" entry
+          (file+datetree "~/org/journals.org")
+          "* %?" :immediate-finish t :jump-to-captured t :empty-lines 1 :unnarrowed t)
+         ("e" "Meeting" entry
+          (file+headline "~/org/capture.org" "Task")
+          "* MEETING with %?
+:PROPERTIES:
+:CREATED: %U
+:END:" :prepend t :empty-lines 1 :clock-in t :clock-resume t))
+        org-capture-templates-contexts
+        '(("m" ((in-mode . "mu4e-view-mode")))
+          ("T" ((in-mode . "org-mode")))))
+
   (add-to-list 'org-babel-default-header-args '(padline . no))
 
   (diary-list-entries (calendar-current-date) nil 'list-only)
@@ -520,7 +566,6 @@ If N is not set, use `comint-buffer-minimum-size'."
 
   (add-hook 'org-after-refile-insert-hook 'basic-save-buffer)
 
-  (add-hook 'org-mode-hook 'dmd-add-org-capture-template)
   (add-hook 'org-mode-hook 'dmd-set-ispell-dictionary-from-org)
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
   (add-hook 'org-mode-hook 'dmd-org-mode-reftex-setup)
