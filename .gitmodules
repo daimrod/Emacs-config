@@ -1,42 +1,42 @@
 [submodule "modules/which-key"]
 	path = modules/which-key
-	url = https://github.com/justbur/emacs-which-key.git
+	url = git@github.com:justbur/emacs-which-key.git
 [submodule "modules/s"]
 	path = modules/s
-	url = https://github.com/magnars/s.el.git
+	url = git@github.com:magnars/s.el.git
 [submodule "modules/dash"]
 	path = modules/dash
-	url = https://github.com/magnars/dash.el.git
+	url = git@github.com:magnars/dash.el.git
 [submodule "modules/ag"]
 	path = modules/ag
-	url = https://github.com/Wilfred/ag.el.git
+	url = git@github.com:Wilfred/ag.el.git
 [submodule "modules/magit"]
 	path = modules/magit
 	url = git@github.com:daimrod/magit.git
 [submodule "modules/pdf-tools"]
 	path = modules/pdf-tools
-	url = https://github.com/politza/pdf-tools.git
+	url = git@github.com:politza/pdf-tools.git
 [submodule "modules/iy-go-to-char"]
 	path = modules/iy-go-to-char
-	url = https://github.com/doitian/iy-go-to-char.git
+	url = git@github.com:doitian/iy-go-to-char.git
 [submodule "modules/helm"]
 	path = modules/helm
 	url = git@github.com:emacs-helm/helm.git
 [submodule "modules/helm-ag"]
 	path = modules/helm-ag
-	url = https://github.com/syohex/emacs-helm-ag.git
+	url = git@github.com:syohex/emacs-helm-ag.git
 [submodule "modules/helm-bibtex"]
 	path = modules/helm-bibtex
 	url = git@github.com:tmalsburg/helm-bibtex.git
 [submodule "modules/helm-pages"]
 	path = modules/helm-pages
-	url = https://github.com/david-christiansen/helm-pages.git
+	url = git@github.com:david-christiansen/helm-pages.git
 [submodule "modules/company-mode"]
 	path = modules/company-mode
-	url = https://github.com/company-mode/company-mode.git
+	url = git@github.com:company-mode/company-mode.git
 [submodule "modules/yasnippet"]
 	path = modules/yasnippet
-	url = https://github.com/capitaomorte/yasnippet
+	url = git@github.com:capitaomorte/yasnippet
 [submodule "modules/mu"]
 	path = modules/mu
 	url = git@github.com:daimrod/mu.git
@@ -45,34 +45,34 @@
 	url = git@github.com:daimrod/w3m.git
 [submodule "modules/git-modes"]
 	path = modules/git-modes
-	url = https://github.com/magit/git-modes.git
+	url = git@github.com:magit/git-modes.git
 [submodule "modules/moccur-edit"]
 	path = modules/moccur-edit
-	url = https://github.com/myuhe/moccur-edit.el.git
+	url = git@github.com:myuhe/moccur-edit.el.git
 [submodule "modules/color-moccur"]
 	path = modules/color-moccur
-	url = https://github.com/myuhe/color-moccur.el.git
+	url = git@github.com:myuhe/color-moccur.el.git
 [submodule "modules/use-package"]
 	path = modules/use-package
-	url = https://github.com/jwiegley/use-package.git
+	url = git@github.com:jwiegley/use-package.git
 [submodule "modules/parsebib"]
 	path = modules/parsebib
 	url = git@github.com:joostkremers/parsebib.git
 [submodule "modules/f"]
 	path = modules/f
-	url = https://github.com/rejeep/f.el.git
+	url = git@github.com:rejeep/f.el.git
 [submodule "modules/workgroups"]
 	path = modules/workgroups
-	url = https://github.com/tlh/workgroups.el.git
+	url = git@github.com:tlh/workgroups.el.git
 [submodule "modules/undo-tree"]
 	path = modules/undo-tree
-	url = http://www.dr-qubit.org/git/undo-tree.git
+	url = git@github.com:emacsmirror/undo-tree.git
 [submodule "modules/projectile"]
 	path = modules/projectile
-	url = https://github.com/bbatsov/projectile.git
+	url = git@github.com:bbatsov/projectile.git
 [submodule "modules/adaptive-wrap"]
 	path = modules/adaptive-wrap
-	url = https://github.com/emacsmirror/adaptive-wrap.git
+	url = git@github.com:emacsmirror/adaptive-wrap.git
 [submodule "modules/org-mode"]
 	path = modules/org-mode
 	url = git@github.com:daimrod/org-mode.git
