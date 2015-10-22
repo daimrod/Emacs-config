@@ -984,4 +984,9 @@ SCHEDULED: %t
                                         "modules/solarized-emacs"
                                         user-emacs-directory)))
 
+(add-to-list 'custom-theme-load-path
+			 (expand-file-name
+			  "modules/replace-colorthemes/"
+			  user-emacs-directory))
+
 ;;; init.el ends here

@@ -142,3 +142,6 @@
 [submodule "modules/magit-svn"]
 	path = modules/magit-svn
 	url = git@github.com:magit/magit-svn.git
+[submodule "modules/replace-colorthemes"]
+	path = modules/replace-colorthemes
+	url = git@github.com:emacs-jp/replace-colorthemes.git
