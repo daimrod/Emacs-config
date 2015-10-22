@@ -507,7 +507,8 @@ SCHEDULED: %t
 :END:" :prepend t :empty-lines 1 :clock-in t :clock-resume t))
         org-capture-templates-contexts
         '(("m" ((in-mode . "mu4e-view-mode")))
-          ("T" ((in-mode . "org-mode")))))
+          ("T" ((in-mode . "org-mode")))
+          ("J" ((in-mode . "org-mode")))))
 
   (add-to-list 'org-babel-default-header-args '(padline . no))
 
