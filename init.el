@@ -430,7 +430,6 @@ If N is not set, use `comint-buffer-minimum-size'."
   (defalias 'mgrep 'moccur-grep)
   (defalias 'mrgrep 'moccur-grep-find))
 
-
 (use-package org
   :demand t
   :load-path "modules/org-mode/lisp"
@@ -568,49 +567,39 @@ SCHEDULED: %t
               (add-hook 'before-save-hook 'dmd-org-add-CREATED-to-headlines nil 'local)
               (add-hook 'before-save-hook 'org-update-parent-todo-statistics nil 'local))))
 
-
 (use-package pyvenv
   :config
   (pyvenv-tracking-mode 1)
   (pyvenv-mode 1))
 
-
 (use-package elpy
   :config
   (elpy-enable))
 
-
 (use-package message
   :config
   (unbind-key "C-c C-c" message-mode-map))
 
-
 (use-package bibtex
   :config
   (bind-key "C-c C-o" 'dmd-bibtex-open bibtex-mode-map))
 
 (bind-key "C-x #" 'delete-frame)
 
-
 (use-package yasnippet
   :config
   (bind-key "C-c & C-s" 'company-yasnippet yas-minor-mode-map)
-
   (use-package company-yasnippet
     :bind (("M-C" . company-yasnippet)))
   (yas-global-mode 1))
 
-
 (use-package flycheck
   :config
-
   (use-package flycheck-pos-tip
     :init
-
     (use-package popup-el))
   (global-flycheck-mode))
 
-
 (use-package mu4e
   :load-path "modules/mu/mu4e"
   :config
@@ -629,7 +618,6 @@ SCHEDULED: %t
               (local-set-key (kbd "<backtab>") 'w3m-previous-anchor)))
 )
 
-
 (use-package which-key
   :config
   (which-key-mode 1))
@@ -641,10 +629,8 @@ SCHEDULED: %t
           (warn "Failed to load module `%s'" module)))
 	  dmd-config-modules)
 
-
 (use-package env-helper
   :init
-
   (use-package filenotify
     :commands (file-notify-add-watch))
   :config
@@ -653,7 +639,6 @@ SCHEDULED: %t
                          #'dmd--environment-watcher))
 
 ;; automagically tail log files
-
 (use-package autorevert
   :mode ("\\.log\\'" . auto-revert-tail-mode)
   :config
@@ -671,7 +656,6 @@ SCHEDULED: %t
       (show-smartparens-mode 0)))
   (add-hook 'auto-revert-tail-mode-hook 'dmd--etc-log-tail-handler))
 
-
 (use-package slime
   :init
   (load (expand-file-name "~/quicklisp/slime-helper.el") t)
@@ -817,7 +801,6 @@ SCHEDULED: %t
                  :program-args '("--core" "slime.img")
                  :directory default-directory)))
 
-
 (use-package copyright
   :config
   ;;; redefined skeleton (original in copyright.el)
@@ -833,66 +816,54 @@ SCHEDULED: %t
     " See the file LICENSE for copying permission."
     comment-end \n))
 
-
 (use-package workgroups
   :demand t
   :config
   (workgroups-mode 1))
 
-
 (use-package mule
   :config
   (set-terminal-coding-system 'utf-8)
   (set-keyboard-coding-system 'utf-8)
   (prefer-coding-system 'utf-8))
 
-
 (use-package firestarter
   :config
   (firestarter-mode 1)
   (defvar firestarter nil))
 
-
 (use-package ansi-color
   :config
   (ansi-color-for-comint-mode-on))
 
-
 (use-package saveplace
   :demand t)
 
-
 (use-package python
   :mode (("wscript" . python-mode)))
 
-
 (use-package undo-tree
   :demand t
   :config
   (global-undo-tree-mode))
 
-
 (use-package projectile
   :demand t
   :config
   (projectile-global-mode)
-
   (use-package helm-projectile)
   (helm-projectile-on))
 
-
 (use-package elisp-slime-nav
   :config
   (add-hook 'emacs-lisp-mode-hook 'elisp-slime-nav-mode)
   (add-hook 'ielm-mode-hook 'elisp-slime-nav-mode))
 
-
 (use-package eldoc
   :config
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode))
 
-
 (use-package paredit
   :config
   (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
@@ -900,18 +871,15 @@ SCHEDULED: %t
   (add-hook 'lisp-mode-hook 'enable-paredit-mode)
   (add-hook 'slime-repl-mode-hook 'enable-paredit-mode))
 
-
 (use-package redshank-loader
   :config
   (redshank-setup '(lisp-mode-hook slime-repl-mode-hook) t))
 
-
 (use-package org-game
   :load-path (lambda () (expand-file-name "org-game" src-dir))
   :config
   (org-game-start))
 
-
 (use-package elfeed
   :config
   (add-hook 'kill-emacs-hook 'elfeed-db-compact)
@@ -968,7 +936,6 @@ SCHEDULED: %t
 (setq initial-frame-alist (append initial-frame-alist
                                   (copy-alist default-frame-alist)))
 
-
 (use-package color-theme-sanityinc-tomorrow
   :demand t
   :config
@@ -976,7 +943,6 @@ SCHEDULED: %t
                                         "modules/color-theme-sanityinc-tomorrow"
                                         user-emacs-directory)))
 
-
 (use-package solarized
   :demand t
   :config
