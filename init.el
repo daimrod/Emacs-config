@@ -470,8 +470,15 @@ If N is not set, use `comint-buffer-minimum-size'."
   (setq org-export-async-init-file (expand-file-name "init-org-async.el" user-emacs-directory))
 
   (setq org-capture-templates
-        '(("T" "Task in current buffer" entry
-           (file+headline buffer-file-name "Task")
+        `(("n" "Note" entry
+		   (function dmd--org-capture-elfeed)
+		   "* %a
+:PROPERTIES:
+:CREATED: %U
+:END:
+" :prepend t :empty-lines 1)
+		  ("T" "Task in current buffer" entry
+           (function ,(dmd--org-capture-headline "Task"))
            "* TODO %?%a
 :PROPERTIES:
 :CREATED: %U
@@ -493,7 +500,8 @@ SCHEDULED: %t
 :END:
 %a" :prepend t :immediate-finish t :empty-lines 1)
          ("J" "New journal entry in current buffer" entry
-          (file+datetree buffer-file-name)
+
+		  (function dmd--org-capture-datetree)
           "* %?" :immediate-finish t :jump-to-captured t :empty-lines 1 :unnarrowed t)
          ("j" "New journal entry" entry
           (file+datetree "~/org/journals.org")
@@ -507,7 +515,8 @@ SCHEDULED: %t
         org-capture-templates-contexts
         '(("m" ((in-mode . "mu4e-view-mode")))
           ("T" ((in-mode . "org-mode")))
-          ("J" ((in-mode . "org-mode")))))
+          ("J" ((in-mode . "org-mode")))
+		  ("n" ((in-mode . "elfeed")))))
 
   (add-to-list 'org-babel-default-header-args '(padline . no))
 

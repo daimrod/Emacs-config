@@ -24,6 +24,49 @@
 (require 'org-capture)
 (require 'org-ref)
 (require 'anaphora)
+(require 'org-datetree)
+
+(defun dmd--org-capture-headline (headline)
+  "Return a function that jumps to HEADLINE in current buffer.
+
+Adapted from `org-capture-set-target-location'."
+  (lexical-let ((headline headline))
+	(lambda ()
+	  (goto-char (point-min))
+	  (if (re-search-forward
+		   (format org-complex-heading-regexp-format (regexp-quote headline))
+		   nil t)
+		  (goto-char (point-at-bol))
+		(goto-char (point-max))
+		(or (bolp) (insert "\n"))
+		(insert "* " headline "\n")
+		(beginning-of-line 0)))))
+
+(defun dmd--org-capture-datetree ()
+  "Jumps to a datetree in current buffer.
+
+Adapted from `org-capture-set-target-location'."
+  (org-datetree-find-date-create
+   (calendar-gregorian-from-absolute
+	(org-today))))
+
+(defun dmd--org-capture-elfeed ()
+  "Jumps to the proper headline in elfeed.org."
+  (let ((entry (cond ((eq major-mode 'elfeed-search-mode)
+                      (elfeed-search-selected :ignore-region))
+                     ((eq major-mode 'elfeed-show-mode)
+                      elfeed-show-entry))))
+    (when entry
+      (let* ((id (elfeed-entry-id entry))
+             (feed (first id))
+             (url (rest id))
+             (title (elfeed-entry-title entry)))
+		(loop for file in rmh-elfeed-org-files
+			  do (set-buffer (find-file-noselect file))
+			  do (goto-char (point-min))
+			  until (re-search-forward (format org-complex-heading-regexp-format
+											   (regexp-quote feed))))
+		(goto-char (point-at-bol))))))
 
 (defun dmd-org-ref-open-bibtex-notes ()
   "From a bibtex entry, open the notes.
