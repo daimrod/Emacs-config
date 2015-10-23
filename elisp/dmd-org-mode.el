@@ -25,21 +25,6 @@
 (require 'org-ref)
 (require 'anaphora)
 
-(defun dmd-add-org-capture-template ()
-  "Add custom capture template.
-
-This function is can be added to `org-mode-hook'."
-  (let ((file (buffer-file-name)))
-    (when file
-      (setq-local org-capture-templates
-                  (append `(("T" "Task in current project" entry
-                             (file+headline ,file "Task")
-                             "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a" :prepend t :empty-lines 1)
-                            ("J" "New journal entry in current project" entry
-                             (file+datetree ,file)
-                             "* %?" :immediate-finish t :jump-to-captured t :empty-lines 1 :unnarrowed t))
-                          org-capture-templates)))))
-
 (defun dmd-org-ref-open-bibtex-notes ()
   "From a bibtex entry, open the notes.
 
