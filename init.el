@@ -825,11 +825,6 @@ SCHEDULED: %t
     " See the file LICENSE for copying permission."
     comment-end \n))
 
-(use-package workgroups
-  :demand t
-  :config
-  (workgroups-mode 1))
-
 (use-package mule
   :config
   (set-terminal-coding-system 'utf-8)
