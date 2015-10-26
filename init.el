@@ -30,6 +30,7 @@
 (defvar elpa-dir (expand-file-name "elpa/" user-emacs-directory))
 (defvar config-dir (expand-file-name "config/" user-emacs-directory))
 (defvar modules-dir (expand-file-name "modules/" user-emacs-directory))
+(defvar elpa-dir (expand-file-name "elpa/packages" user-emacs-directory))
 
 (defcustom src-dir (expand-file-name "~/src/elisp/")
   "The source directory where third-part modules are located."
@@ -48,8 +49,10 @@
            collect (intern (file-name-base config-file)))
   "List of available configuration modules.")
 
-(dolist (module-dir (directory-files modules-dir t "^[^.]"))
-  (add-to-list 'load-path module-dir))
+(dolist (root-dir (list elpa-dir modules-dir))
+  (dolist (dir (directory-files root-dir t "^[^.]"))
+	(when (file-directory-p dir)
+	  (add-to-list 'load-path dir))))
 
 ;; custom-file configuration
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
