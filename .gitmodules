@@ -123,7 +123,7 @@
 	url = git@github.com:rolandwalker/anaphora.git
 [submodule "modules/elfeed"]
 	path = modules/elfeed
-	url = git@github.com:skeeto/elfeed.git
+	url = git@github.com:daimrod/elfeed.git
 [submodule "modules/elfeed-org"]
 	path = modules/elfeed-org
 	url = git@github.com:daimrod/elfeed-org.git
