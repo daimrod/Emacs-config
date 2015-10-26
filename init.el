@@ -593,7 +593,8 @@ SCHEDULED: %t
 
 (use-package bibtex
   :config
-  (bind-key "C-c C-o" 'dmd-bibtex-open bibtex-mode-map))
+  (bind-key "C-c C-o" 'dmd-bibtex-open bibtex-mode-map)
+  (add-hook 'bibtex-mode-hook 'bibtex-set-dialect))
 
 (bind-key "C-x #" 'delete-frame)
 
