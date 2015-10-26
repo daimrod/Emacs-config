@@ -145,3 +145,6 @@
 [submodule "modules/replace-colorthemes"]
 	path = modules/replace-colorthemes
 	url = git@github.com:emacs-jp/replace-colorthemes.git
+[submodule "elpa"]
+	path = elpa
+	url = git://git.sv.gnu.org/emacs/elpa.git
