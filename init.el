@@ -605,6 +605,7 @@ SCHEDULED: %t
   (yas-global-mode 1))
 
 (use-package flycheck
+  :demand t
   :config
   (use-package flycheck-pos-tip
     :init
