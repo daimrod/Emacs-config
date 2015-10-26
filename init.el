@@ -469,6 +469,8 @@ If N is not set, use `comint-buffer-minimum-size'."
 
   (setq org-export-async-init-file (expand-file-name "init-org-async.el" user-emacs-directory))
 
+  (setq org-element-use-cache nil)
+
   (setq org-capture-templates
         `(("n" "Note" entry
 		   (function dmd--org-capture-elfeed)
