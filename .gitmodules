@@ -126,7 +126,7 @@
 	url = git@github.com:skeeto/elfeed.git
 [submodule "modules/elfeed-org"]
 	path = modules/elfeed-org
-	url = git@github.com:remyhonig/elfeed-org.git
+	url = git@github.com:daimrod/elfeed-org.git
 [submodule "modules/org-drill"]
 	path = modules/org-drill
 	url = git@github.com:daimrod/org-drill.git
