@@ -961,6 +961,8 @@ SCHEDULED: %t
                                         "modules/solarized-emacs"
                                         user-emacs-directory)))
 
+(use-package debbugs)
+
 (add-to-list 'custom-theme-load-path
 			 (expand-file-name
 			  "modules/replace-colorthemes/"
