@@ -61,13 +61,15 @@ Adapted from `org-capture-set-target-location'."
              (feed (first id))
              (url (rest id))
              (title (elfeed-entry-title entry))
-			 (found?))
+			 found?)
+		(setq tmp-feed feed)
 		(loop for file in rmh-elfeed-org-files
 			  do (set-buffer (find-file-noselect file))
 			  do (goto-char (point-min))
-			  for found? = (re-search-forward (format org-complex-heading-regexp-format
-													  (regexp-quote feed))
-											  nil t)
+			  do (setf found?
+					   (re-search-forward (format org-complex-heading-regexp-format
+												  (regexp-quote (format "[[%s]]" feed)))
+										  nil t))
 			  until found?)
 		(if found?
 			(goto-char (point-at-bol))
