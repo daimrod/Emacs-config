@@ -27,7 +27,6 @@
 (if (fboundp 'horizontal-scroll-bar-mode) (horizontal-scroll-bar-mode -1))
 
 (defvar elisp-dir (expand-file-name "elisp/" user-emacs-directory))
-(defvar elpa-dir (expand-file-name "elpa/" user-emacs-directory))
 (defvar config-dir (expand-file-name "config/" user-emacs-directory))
 (defvar modules-dir (expand-file-name "modules/" user-emacs-directory))
 (defvar elpa-dir (expand-file-name "elpa/packages" user-emacs-directory))
