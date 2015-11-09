@@ -960,7 +960,12 @@ SCHEDULED: %t
                                         "modules/solarized-emacs"
                                         user-emacs-directory)))
 
-(use-package debbugs)
+(use-package debbugs
+  :config
+  (add-to-list 'Info-directory-list
+               (expand-file-name
+				"debbugs"
+				elpa-dir)))
 
 (add-to-list 'custom-theme-load-path
 			 (expand-file-name
