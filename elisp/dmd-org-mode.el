@@ -60,13 +60,18 @@ Adapted from `org-capture-set-target-location'."
       (let* ((id (elfeed-entry-id entry))
              (feed (first id))
              (url (rest id))
-             (title (elfeed-entry-title entry)))
+             (title (elfeed-entry-title entry))
+			 (found?))
 		(loop for file in rmh-elfeed-org-files
 			  do (set-buffer (find-file-noselect file))
 			  do (goto-char (point-min))
-			  until (re-search-forward (format org-complex-heading-regexp-format
-											   (regexp-quote feed))))
-		(goto-char (point-at-bol))))))
+			  for found? = (re-search-forward (format org-complex-heading-regexp-format
+													  (regexp-quote feed))
+											  nil t)
+			  until found?)
+		(if found?
+			(goto-char (point-at-bol))
+		  (user-error "Couldn't find feed %s" feed))))))
 
 (defun dmd-org-ref-open-bibtex-notes ()
   "From a bibtex entry, open the notes.
