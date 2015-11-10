@@ -28,6 +28,7 @@
 
 (defvar elisp-dir (expand-file-name "elisp/" user-emacs-directory))
 (defvar config-dir (expand-file-name "config/" user-emacs-directory))
+(defvar autoloads-dir (expand-file-name "autoloads/" user-emacs-directory))
 (defvar modules-dir (expand-file-name "modules/" user-emacs-directory))
 (defvar elpa-dir (expand-file-name "elpa/packages" user-emacs-directory))
 (defvar package-user-dir elpa-dir)
@@ -38,6 +39,7 @@
 
 (add-to-list 'load-path config-dir)
 (add-to-list 'load-path elisp-dir)
+(add-to-list 'load-path autoloads-dir)
 
 (eval-and-compile
   (require 'bytecomp)
@@ -115,8 +117,7 @@
   (global-set-key (kbd "C-S-s") 'isearch-forward-regexp)
     (global-set-key (kbd "C-S-r") 'isearch-backward-regexp))
 
-(autoload 'w3m-buffer "w3m.el" nil t)
-(autoload 'w3m-browse-url "w3m.el" nil t)
+(require 'emacs-w3m-autoloads)
 (with-eval-after-load 'w3m
   (require 'w3m-util)
   (defun dmd--w3m-go-to-title-in-page ()
@@ -224,9 +225,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 (global-set-key (kbd "C-z") nil)
 (global-set-key (kbd "C-x C-c") nil)
 
-(autoload 'gu-copy-url-at-point "graze-url.el" nil t)
-(autoload 'gu-browse-url "graze-url.el" nil t)
-(autoload 'gu-search "graze-url.el" nil t)
+(require 'graze-url-autoloads)
 (global-set-key (kbd "C-c y") 'gu-copy-url-at-point)
 (global-set-key (kbd "C-c b") 'gu-browse-url)
 (global-set-key (kbd "C-c w s") 'gu-search)
