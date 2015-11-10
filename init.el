@@ -81,8 +81,8 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
 
-(with-eval-after-load 'pdf-tools
-  (pdf-tools-install))
+(require 'pdf-tools-autoloads)
+(pdf-tools-install)
 
 ;; Enabled/Disabled commands
 (put 'upcase-region 'disabled nil)
@@ -103,19 +103,12 @@
   (require 'info-look))
 (require 'info)
 
-(with-eval-after-load 'ispell
-  (defalias 'isp 'ispell-change-dictionary))
 (require 'ispell)
 
-(with-eval-after-load 'dabbrev
-	(global-set-key (kbd "M-/") 'dabbrev-expand))
-
-(with-eval-after-load 'align
-  (global-set-key (kbd "C-x \\") 'align-regexp))
-
-(with-eval-after-load 'isearch
-  (global-set-key (kbd "C-S-s") 'isearch-forward-regexp)
-    (global-set-key (kbd "C-S-r") 'isearch-backward-regexp))
+(global-set-key (kbd "M-/") 'dabbrev-expand)
+(global-set-key (kbd "C-x \\") 'align-regexp)
+(global-set-key (kbd "C-S-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-S-r") 'isearch-backward-regexp)
 
 (require 'emacs-w3m-autoloads)
 (with-eval-after-load 'w3m
@@ -795,10 +788,11 @@ SCHEDULED: %t
   :load-path (lambda () (expand-file-name "org-game" src-dir))
   (org-game-start))
 
+(require 'elfeed-autoloads)
+(require 'elfeed-org-autoloads)
 (with-eval-after-load 'elfeed
   (add-hook 'kill-emacs-hook 'elfeed-db-compact)
-  (with-eval-after-load 'elfeed-org
-    (elfeed-org))
+  (elfeed-org)
   (defun dmd-elfeed-search-tag-mustread ()
     (interactive)
     (elfeed-search-tag-all 'mustread))
@@ -829,6 +823,7 @@ SCHEDULED: %t
 ;;;; Alias
 (defalias 'renb 'dmd-rename-buffer)
 (defalias 'yes-or-no-p 'y-or-n-p)
+(defalias 'isp 'ispell-change-dictionary)
 
 ;;; Debbugs
 (require 'debbugs-autoloads)
