@@ -832,6 +832,7 @@ SCHEDULED: %t
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;;; Debbugs
+(require 'debbugs-autoloads)
 (with-eval-after-load 'debbugs
   (add-to-list 'Info-directory-list
                (expand-file-name
