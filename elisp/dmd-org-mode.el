@@ -68,7 +68,7 @@ Adapted from `org-capture-set-target-location'."
 			  do (goto-char (point-min))
 			  do (setf found?
 					   (re-search-forward (format org-complex-heading-regexp-format
-												  (regexp-quote (format "[[%s]]" feed)))
+												  (format "\\[?\\[?%s]?]?" (regexp-quote feed)))
 										  nil t))
 			  until found?)
 		(if found?
