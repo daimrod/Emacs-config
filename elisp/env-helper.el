@@ -21,8 +21,6 @@
 
 ;;; Code:
 
-(require 'filenotify)
-
 (defun dmd--environment-watcher (event)
   "Watch for `changed' EVENT to update EMACS environment."
   (cl-destructuring-bind (descriptor action file &optional file1)
