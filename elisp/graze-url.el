@@ -97,6 +97,7 @@ the terms searched."
                             (funcall fun))))
     url))
 
+;;;###autoload
 (defun gu-copy-url-at-point ()
   "Copy the url at point."
   (interactive)
@@ -106,6 +107,7 @@ the terms searched."
       (kill-new url)
       (message "%s" url))))
 
+;;;###autoload
 (defun gu-browse-url (&rest _)
   (interactive)
   (browse-url (read-string "URL: "
@@ -117,6 +119,7 @@ the terms searched."
                                       (region-beginning) (region-end))))
                                (gu-find-url-at-point)))))
 
+;;;###autoload
 (defun gu-search ()
   (interactive)
   (list (format gu-search-format (read-string "Search: "))))
