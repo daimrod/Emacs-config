@@ -57,15 +57,9 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
 
-(defvar use-package-verbose t)
-(require 'use-package)
-(require 'bind-key)
-
-
-(use-package pdf-tools
-  :load-path "modules/pdf-tools/pdf-tools-0.70/"
-  :config
-  (require 'pdf-tools-autoloads)
+(add-to-list 'load-path (expand-file-name "pdf-tools/pdf-tools-0.70/"
+										  modules-dir))
+(with-eval-after-load 'pdf-tools
   (pdf-tools-install))
 
 ;; Enabled/Disabled commands
@@ -75,10 +69,9 @@
 (put 'downcase-region 'disabled nil)
 (put 'scroll-left 'disabled nil)
 
-
-(use-package info
-  :demand t
-  :config
+(with-eval-after-load 'info
+  (defvar Info-directory-list)
+  (defvar Info-additional-directory-list)
   (setq Info-directory-list (append Info-directory-list
                                     Info-default-directory-list
                                     Info-additional-directory-list
@@ -86,35 +79,26 @@
                                      (expand-file-name "../info" data-directory)
                                      (expand-file-name "doc" user-emacs-directory))))
   (require 'info-look))
+(require 'info)
 
-
-(use-package adaptive-wrap)
-
-
-(use-package ispell
-  :demand t
-  :config
+(with-eval-after-load 'ispell
   (defalias 'isp 'ispell-change-dictionary))
+(require 'ispell)
 
-
-(use-package dabbrev
-  :bind (("M-/" . dabbrev-expand)))
+(with-eval-after-load 'dabbrev
+	(global-set-key (kbd "M-/") 'dabbrev-expand))
 
-
-(use-package align
-  :bind (("C-x \\" . align-regexp)))
+(with-eval-after-load 'align
+  (global-set-key (kbd "C-x \\") 'align-regexp))
 
-
-;;; Isearch
-(bind-keys ("C-S-s" . isearch-forward-regexp)
-           ("C-S-r" . isearch-backward-regexp))
+(with-eval-after-load 'isearch
+  (global-set-key (kbd "C-S-s") 'isearch-forward-regexp)
+    (global-set-key (kbd "C-S-r") 'isearch-backward-regexp))
 
-
-(use-package w3m
-  :commands (w3m-buffer w3m-browse-url)
-  :config
+(autoload 'w3m-buffer "w3m.el")
+(autoload 'w3m-browse-url "w3m.el")
+(with-eval-after-load 'w3m
   (require 'w3m-util)
-  
   (defun dmd--w3m-go-to-title-in-page ()
     (interactive)
     (let ((title (w3m-buffer-title (current-buffer)))
@@ -125,15 +109,15 @@
                     (> (length title) max-cut)
                     (setq title (subseq title 0 (1- (length title))))))))))
 
-
-(use-package windmove
-  :bind* (("S-<up>" . windmove-up)
-          ("S-<down>" . windmove-down)
-          ("S-<right>" . windmove-right)
-          ("S-<left>" . windmove-left)))
+(with-eval-after-load 'windmove
+  (global-set-key (kbd "S-<up>") 'windmove-up)
+  (global-set-key (kbd "S-<down>") 'windmove-down)
+  (global-set-key (kbd "S-<right>") 'windmove-right)
+  (global-set-key (kbd "S-<left>") 'windmove-left))
+(require 'windmove)
 
 ;; Window switching. (C-x o goes to the next window)
-(bind-key "C-x C-o" (lambda () (interactive) (other-window -1)))
+(global-set-key (kbd "C-x C-o") (lambda () (interactive) (other-window -1)))
 
 ;; Use another version of zap-to-char (don't chopd the last char)
 (defun zap-to-char- (arg char)
@@ -153,7 +137,7 @@ Goes backward if ARG is negative; error if CHAR not found."
                        (- (point) 1)
                      (+ (point) 1))))))
 
-(bind-key "M-z" 'zap-to-char-)
+(global-set-key (kbd "M-z") 'zap-to-char-)
 
 ;; Move in window
 (defun move-to-window-line-top ()
@@ -166,9 +150,8 @@ Goes backward if ARG is negative; error if CHAR not found."
   (interactive)
   (move-to-window-line -1))
 
-(bind-keys ("C-c <" . move-to-window-line-top)
-           ("C-c >" . move-to-window-line-bottom))
-
+(global-set-key (kbd "C-c <") 'move-to-window-line-top)
+(global-set-key (kbd "C-c >") 'move-to-window-line-bottom)
 
 ;; Inactive marks -- Quickmove between mark without disturbing transient-mark-mode
 (defun dmd-push-mark-no-activate ()
@@ -184,8 +167,8 @@ This is the same as using \\[set-mark-command] with the prefix argument."
   (interactive)
   (set-mark-command 1))
 
-(bind-keys ("C-`" . dmd-push-mark-no-activate)
-           ("M-`" . dmd-jump-to-mark))
+(global-set-key (kbd "C-`") 'dmd-push-mark-no-activate)
+(global-set-key (kbd "M-`") 'dmd-jump-to-mark)
 
 ;; Scrolling -- Scroll up and down slowly by default (one line at time)
 (defcustom dmd-small-scrolling 5
@@ -213,42 +196,37 @@ This is the same as using \\[set-mark-command] with the prefix argument."
         (funcall fun-scroll-down arg)
       (funcall fun-scroll-down dmd-small-scrolling))))
 
-(bind-keys ("C-v" . dmd-small-scroll-up-command)
-           ("M-v" . dmd-small-scroll-down-command))
+(global-set-key (kbd "C-v") 'dmd-small-scroll-up-command)
+(global-set-key (kbd "M-v") 'dmd-small-scroll-down-command)
 
 ;; Remove annoying keybindings
-(unbind-key "C-x C-z")
-(unbind-key "C-z")
-(unbind-key "C-x C-c")
+(global-set-key (kbd "C-x C-z") nil)
+(global-set-key (kbd "C-z") nil)
+(global-set-key (kbd "C-x C-c") nil)
 
-
-(use-package graze-url
-  :bind (("C-c y" . gu-copy-url-at-point)
-         ("C-c b" . gu-browse-url)
-         ("C-c w s" . gu-search)))
+(with-eval-after-load 'graze-url
+  (global-set-key (kbd "C-c y") 'gu-copy-url-at-point)
+  (global-set-key (kbd "C-c b") 'gu-browse-url)
+  (global-set-key (kbd "C-c w s") 'gu-search))
 
 ;; iy-go-to-char configuration
-
-(use-package iy-go-to-char
-  :bind (("C-c f" . iy-go-to-char)
-         ("C-c F" . iy-go-to-char-backward)
-         ("C-c ;" . iy-go-to-char-continue)
-         ("C-c ," . iy-go-to-char-continue-backward)))
+(with-eval-after-load 'iy-go-to-char
+  (global-set-key (kbd "C-c f") 'riy-go-to-char)
+  (global-set-key (kbd "C-c F") 'iy-go-to-char-backward)
+  (global-set-key (kbd "C-c ;") 'iy-go-to-char-continue)
+  (global-set-key (kbd "C-c ,") 'iy-go-to-char-continue-backward))
 
 ;; Quiet!
-
-(use-package config-quiet
-  :bind (("C-c q" . quiet-mode)))
+(with-eval-after-load 'config-quiet
+  (global-set-key (kbd "C-c q") 'quiet-mode))
 
 ;; Winner configuration
-
-(use-package winner
-  :bind (("C-c u" . winner-undo)
-         ("C-c r" . winner-redo))
-  :config
+(with-eval-after-load 'winner
+  (global-set-key (kbd "C-c u") 'winner-undo)
+  (global-set-key (kbd "C-c r") 'winner-redo)
   (winner-mode 1))
 
-(bind-key "<f11>" 'toggle-frame-fullscreen)
+(global-set-key (kbd "<f11>") 'toggle-frame-fullscreen)
 
 ;;;; Terminal Emulator
 ;; C-x 4 t is for multi-term in another window, so a terminal in
@@ -279,60 +257,43 @@ This is the same as using \\[set-mark-command] with the prefix argument."
        (symbol (symbol-value terminal-emulator)))
      terminal-emulator-parameters)))
 
-(bind-key "C-x 5 t" 'dmd-terminal-emulator)
+(global-set-key (kbd "C-x 5 t") 'dmd-terminal-emulator)
 
-(bind-key "M-Q" 'unfill-paragraph)
+(global-set-key (kbd "M-Q") 'unfill-paragraph)
 
-
-(use-package compile
-  :init
-
-  (use-package compile-cache)
-  :bind (("<f5>" . compile-cache)
-         ("<f6>" . recompile)))
+(with-eval-after-load 'compile-cache
+  (require 'compile)
+  (global-set-key (kbd "<f5>") 'compile-cache)
+  (global-set-key (kbd "<f6>") 'recompile))
 
 (global-set-key (kbd "M-\\") 'execute-extended-command)
 
 ;;;; Helm
-
-(use-package helm-config
-  :init
-
-  (use-package helm-mode
-    :demand t
-    :config
-    (helm-mode 1))
-  :bind (("M-x" . helm-M-x)
-         ("C-c m" . helm-M-x)
-         ("C-c C-m" . helm-M-x)
-         ("C-x C-f" . helm-find-files)
-         ("C-x b" . helm-buffers-list)
-         ("C-c h" . helm-command-prefix))
-  :config
-
-  (use-package helm-command)
-
-  (use-package helm-files)
-
-  (use-package helm-buffers)
-
-  (use-package helm-ag)
-
-  (use-package helm-bibtex)
-
-  (use-package helm-pages
-    :bind (("C-c j" . helm-pages)))
-
-  (use-package swiper-helm
-    :init (use-package swiper)
-    :bind (("C-s" . swiper-helm)
-           ("C-r" . swiper-helm))))
+(require 'helm-mode)
+(helm-mode 1)
+(with-eval-after-load 'helm-config
+  (require 'helm-command)
+  (require 'helm-files)
+  (require 'helm-buffers)
+  (require 'helm-ag)
+  (require 'helm-bibtex)
+  (require 'helm-pages)
 
-(global-set-key (kbd "C-;") 'newline-and-indent)
+  (global-set-key (kbd "M-x") 'helm-M-x)
+  (global-set-key (kbd "C-c m") 'helm-M-x)
+  (global-set-key (kbd "C-c C-m") 'helm-M-x)
+  (global-set-key (kbd "C-x C-f") 'helm-find-files)
+  (global-set-key (kbd "C-x b") 'helm-buffers-list)
+  (global-set-key (kbd "C-c h") 'helm-command-prefix)
+  (global-set-key (kbd "C-c j") 'helm-pages)
+  (require 'swiper)
+  (with-eval-after-load 'swiper-helm
+	(global-set-key (kbd "C-s") 'swiper-helm)
+	(global-set-key (kbd "C-r") 'swiper-helm))
 
-
-(use-package comint
-  :config
+  (global-set-key (kbd "C-;") 'newline-and-indent))
+
+(with-eval-after-load 'comint
   (defcustom comint-buffer-minimum-size 0
     "The minimum size for comint buffer when truncating."
     :type 'integer
@@ -347,55 +308,25 @@ If N is not set, use `comint-buffer-minimum-size'."
            (or n
                (- (line-number-at-pos (point-max)) (line-number-at-pos)))))
       (comint-truncate-buffer)))
-  (bind-key "C-c C-l" 'dmd-comint-truncate-buffer comint-mode-map))
+  (define-key comint-mode-map (kbd "C-c C-l") 'dmd-comint-truncate-buffer))
 
-
-(use-package doc-view
-  :config
-  (defun dmd-doc-view-info ()
-    "Open a buffer with the current doc's info as text."
-    (interactive)
-    (let ((buffer (concat "*Info of "
-                          (file-name-nondirectory buffer-file-name)
-                          "*")))
-      (if (get-buffer buffer)
-          (kill-buffer buffer))
-      (call-process "/usr/bin/pdfinfo" nil buffer nil buffer-file-name)
-      (switch-to-buffer buffer)
-      (read-only-mode 1)
-      (goto-char (point-min))))
+;;; Hideshow
+(add-hook 'prog-mode-hook (lambda () (hs-minor-mode 1)))
+(with-eval-after-load 'hideshow
+  (define-key hs-minor-mode-map (kbd "C-c -") 'hs-hide-block)
+  (define-key hs-minor-mode-map (kbd "C-c _") 'hs-hide-all)
+  (define-key hs-minor-mode-map (kbd "C-c =") 'hs-show-block)
+  (define-key hs-minor-mode-map (kbd "C-c +") 'hs-show-all))
 
-  (defun dmd-doc-view-external ()
-    "Open the current document using an external program."
-    (interactive)
-    (start-process "doc-view external" (generate-new-buffer " *DocView External Viewer*")
-                   "/usr/bin/evince" buffer-file-name))
-  
-  (bind-keys :map doc-view-mode-map
-             ("C-c C-i" . dmd-doc-view-info)
-             ("C-c C-v" . dmd-doc-view-external)))
-
-
-(use-package hideshow
-  :config
-  (bind-keys :map hs-minor-mode-map
-             ("C-c -" . hs-hide-block)
-             ("C-c _" . hs-hide-all)
-             ("C-c =" . hs-show-block)
-             ("C-c +" . hs-show-all)))
-
-
-(use-package company
-  :bind (("C-SPC" . company-complete))
-  :config
+;;; Company
+(global-set-key (kbd "C-SPC") 'company-complete)
+(with-eval-after-load 'company
   (global-company-mode))
 
-
-(use-package magit
-  :load-path "modules/magit/lisp"
-  :bind (("C-c g" . magit-status))
-
-  :config
+;;; Magit
+(add-to-list 'load-path (expand-file-name "magit/lisp/" modules-dir))
+(global-set-key (kbd "C-c g") 'magit-status)
+(with-eval-after-load 'magit
   (require 'git-commit)
   (require 'magit-autoloads)
   (require 'magit-svn)
@@ -406,38 +337,29 @@ If N is not set, use `comint-buffer-minimum-size'."
 
   (add-hook 'magit-mode-hook 'magit-svn-mode))
 
-
-(use-package javadoc-lookup
-  :bind (("C-h j" . javadoc-lookup))
-  :config
+(global-set-key (kbd "C-h j") 'javadoc-lookup)
+(with-eval-after-load 'javadoc-lookup
   (javadoc-add-roots "/usr/share/doc/openjdk-7-jdk/api"))
 
-
-(use-package eclim
-  :config
-  (bind-key "C-c C-e p r" 'eclim-run-class eclim-mode-map)
+(with-eval-after-load 'eclim
+  (defvar eclim-mode-map)
+  (define-key eclim-mode-map (kbd "C-c C-e p r") 'eclim-run-class)
   (add-hook 'eclim-mode-hook 'company-emacs-eclim-setup)
   (add-hook 'java-mode-hook 'eclim-mode))
 
-
-(use-package color-moccur
-  :config
-
-  (use-package moccur-edit)
-  (bind-keys :prefix-map moccur-map
-             :prefix "M-o"
-             ("s" . occur-by-moccur)
-             ("m" . moccur)
-             ("d" . dmoccur))
+(global-set-key (kbd "M-o s") 'occur-by-moccur)
+(global-set-key (kbd "M-o m") 'moccur)
+(global-set-key (kbd "M-o d") 'dmoccur)
+(with-eval-after-load 'color-moccur
+  (require 'moccur-edit)
   (defalias 'mgrep 'moccur-grep)
   (defalias 'mrgrep 'moccur-grep-find))
 
-(use-package org
-  :demand t
-  :load-path "modules/org-mode/lisp"
-  :config
+(add-to-list 'load-path (expand-file-name "org-mode/lisp" modules-dir))
+(add-to-list 'load-path (expand-file-name "org-mode/contrib/lisp" modules-dir))
+(require 'org)
+(with-eval-after-load 'org
   (require 'subr-x)
-  (add-to-list 'load-path (expand-file-name "modules/org-mode/contrib/lisp" user-emacs-directory))
   (require 'org-contacts)
   (require 'org-clock)
   (require 'org-habit)
@@ -455,16 +377,13 @@ If N is not set, use `comint-buffer-minimum-size'."
 
   (dmd--update-org-agenda-files)
 
-  (unbind-key "C-c C-b" org-beamer-mode-map)
+  (define-key org-beamer-mode-map (kbd "C-c C-b") nil)
 
-  (bind-keys :map mode-specific-map
-             :prefix-map mode-specific-org-map
-             :prefix "o"
-             ("l" . org-store-link)
-             ("a" . org-agenda)
-             ("g" . org-clock-goto)
-             ("c" . org-capture)
-             ("n" . org-annotate-file))
+  (global-set-key (kbd "C-c o l") 'org-store-link)
+  (global-set-key (kbd "C-c o a") 'org-agenda)
+  (global-set-key (kbd "C-c o g") 'org-clock-goto)
+  (global-set-key (kbd "C-c o c") 'org-capture)
+  (global-set-key (kbd "C-c o n") 'org-annotate-file)
 
   (add-to-list 'org-export-filter-headline-functions
                'org-latex-ignore-heading-filter-headline)
@@ -528,14 +447,14 @@ SCHEDULED: %t
   (mapc (lambda (file)
           (bury-buffer (find-file-noselect file)))
         diary-included-files)
-  (bind-keys :map org-mode-map
-             ("C-c )" . helm-bibtex)
-             ("C-c j" . (lambda (&optional prefix)
-                          (interactive "P")
-                          (if prefix
-                              (helm-org-agenda-files-headings)
-                            (helm-org-in-buffer-headings))))
-             ("C-c >" . org-time-stamp-inactive))
+  (define-key org-mode-map (kbd "C-c )") 'helm-bibtex)
+  (define-key org-mode-map (kbd "C-c j")
+	'(lambda (&optional prefix)
+	   (interactive "P")
+	   (if prefix
+		   (helm-org-agenda-files-headings)
+		 (helm-org-in-buffer-headings))))
+  (define-key org-mode-map (kbd "C-c >") 'org-time-stamp-inactive)
 
   (add-to-list 'Info-directory-list
                (expand-file-name "org-mode/doc" modules-dir))
@@ -580,44 +499,36 @@ SCHEDULED: %t
               (add-hook 'before-save-hook 'dmd-org-add-CREATED-to-headlines nil 'local)
               (add-hook 'before-save-hook 'org-update-parent-todo-statistics nil 'local))))
 
-(use-package pyvenv
+(with-eval-after-load 'pyvenv
   :config
   (pyvenv-tracking-mode 1)
   (pyvenv-mode 1))
 
-(use-package elpy
+(with-eval-after-load 'elpy
   :config
   (elpy-enable))
 
-(use-package message
-  :config
-  (unbind-key "C-c C-c" message-mode-map))
+(with-eval-after-load 'message
+  (define-key message-mode-map (kbd "C-c C-c") nil))
 
-(use-package bibtex
-  :config
-  (bind-key "C-c C-o" 'dmd-bibtex-open bibtex-mode-map)
+(with-eval-after-load 'bibtex
+  (define-key bibtex-mode-map (kbd "C-c C-o") 'dmd-bibtex-open)
   (add-hook 'bibtex-mode-hook 'bibtex-set-dialect))
 
-(bind-key "C-x #" 'delete-frame)
+(global-set-key (kbd "C-x #") 'delete-frame)
 
-(use-package yasnippet
-  :config
-  (bind-key "C-c & C-s" 'company-yasnippet yas-minor-mode-map)
-  (use-package company-yasnippet
-    :bind (("M-C" . company-yasnippet)))
-  (yas-global-mode 1))
+(require 'yasnippet)
+(require 'company-yasnippet)
+(define-key yas-minor-mode-map (kbd "C-c & C-s") 'company-yasnippet)
+(global-set-key (kbd "M-S-c") 'company-yasnippet)
+(yas-global-mode 1)
 
-(use-package flycheck
-  :demand t
-  :config
-  (use-package flycheck-pos-tip
-    :init
-    (use-package popup-el))
-  (global-flycheck-mode))
+(require 'flycheck)
+(require 'flycheck-pos-tip)
+(global-flycheck-mode 1)
 
-(use-package mu4e
-  :load-path "modules/mu/mu4e"
-  :config
+(add-to-list 'load-path (expand-file-name "mu/mu4e" modules-dir))
+(with-eval-after-load 'mu4e
   (add-to-list 'Info-directory-list
                (expand-file-name (expand-file-name
                                   "mu/mu4e"
@@ -630,12 +541,10 @@ SCHEDULED: %t
             (lambda()
               ;; try to emulate some of the eww key-bindings
               (local-set-key (kbd "<tab>") 'w3m-next-anchor)
-              (local-set-key (kbd "<backtab>") 'w3m-previous-anchor)))
-)
+              (local-set-key (kbd "<backtab>") 'w3m-previous-anchor))))
 
-(use-package which-key
-  :config
-  (which-key-mode 1))
+(require 'which-key)
+(which-key-mode 1)
 
 (mapc (lambda (module)
         (message "Loading %s" module)
@@ -644,19 +553,15 @@ SCHEDULED: %t
           (warn "Failed to load module `%s'" module)))
 	  dmd-config-modules)
 
-(use-package env-helper
-  :init
-  (use-package filenotify
-    :commands (file-notify-add-watch))
-  :config
-  (file-notify-add-watch "/etc/environment"
-                         '(change)
-                         #'dmd--environment-watcher))
 
-;; automagically tail log files
-(use-package autorevert
-  :mode ("\\.log\\'" . auto-revert-tail-mode)
-  :config
+(require 'env-helper)
+(file-notify-add-watch "/etc/environment"
+					   '(change)
+					   #'dmd--environment-watcher)
+
+;; Automagically tail log files
+(add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-tail-mode))
+(with-eval-after-load 'autorevert
   (defun dmd--etc-log-tail-handler ()
     (goto-char (point-max))
     (make-local-variable 'auto-revert-interval)
@@ -671,12 +576,9 @@ SCHEDULED: %t
       (show-smartparens-mode 0)))
   (add-hook 'auto-revert-tail-mode-hook 'dmd--etc-log-tail-handler))
 
-(use-package slime
-  :init
-  (load (expand-file-name "~/quicklisp/slime-helper.el") t)
-  (load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
-  
-  :config
+(load (expand-file-name "~/quicklisp/slime-helper.el") t)
+(load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
+(with-eval-after-load 'slime
   (defalias 'srepl 'slime-repl)
   (require 'slime-company)
   (slime-setup '(slime-repl
@@ -816,8 +718,7 @@ SCHEDULED: %t
                  :program-args '("--core" "slime.img")
                  :directory default-directory)))
 
-(use-package copyright
-  :config
+(with-eval-after-load 'copyright
   ;;; redefined skeleton (original in copyright.el)
   (define-skeleton copyright
     "Insert a copyright by $ORGANIZATION notice at cursor."
@@ -831,70 +732,54 @@ SCHEDULED: %t
     " See the file LICENSE for copying permission."
     comment-end \n))
 
-(use-package mule
-  :config
+(with-eval-after-load 'mule
   (set-terminal-coding-system 'utf-8)
   (set-keyboard-coding-system 'utf-8)
   (prefer-coding-system 'utf-8))
 
-(use-package firestarter
-  :config
+(with-eval-after-load 'firestarter
   (firestarter-mode 1)
   (defvar firestarter nil))
 
-(use-package ansi-color
-  :config
+(with-eval-after-load 'ansi-color
   (ansi-color-for-comint-mode-on))
 
-(use-package saveplace
-  :demand t)
+(require 'saveplace)
 
-(use-package python
-  :mode (("wscript" . python-mode)))
+(add-to-list 'auto-mode-alist '("wscript" . python-mode))
 
-(use-package undo-tree
-  :demand t
-  :config
-  (global-undo-tree-mode))
+(require 'undo-tree)
+(global-undo-tree-mode 1)
 
-(use-package projectile
-  :demand t
-  :config
-  (projectile-global-mode)
-  (use-package helm-projectile)
-  (helm-projectile-on))
+(require 'projectile)
+(projectile-global-mode 1)
+(require 'helm-projectile)
+(helm-projectile-on)
 
-(use-package elisp-slime-nav
-  :config
+(with-eval-after-load 'elisp-slime-nav
   (add-hook 'emacs-lisp-mode-hook 'elisp-slime-nav-mode)
   (add-hook 'ielm-mode-hook 'elisp-slime-nav-mode))
 
-(use-package eldoc
-  :config
+(with-eval-after-load 'eldoc
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode))
 
-(use-package paredit
-  :config
+(with-eval-after-load 'paredit
   (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
   (add-hook 'ielm-mode-hook 'enable-paredit-mode)
   (add-hook 'lisp-mode-hook 'enable-paredit-mode)
   (add-hook 'slime-repl-mode-hook 'enable-paredit-mode))
 
-(use-package redshank-loader
-  :config
+(with-eval-after-load 'redshank-loader
   (redshank-setup '(lisp-mode-hook slime-repl-mode-hook) t))
 
-(use-package org-game
+(with-eval-after-load 'org-game
   :load-path (lambda () (expand-file-name "org-game" src-dir))
-  :config
   (org-game-start))
 
-(use-package elfeed
-  :config
+(with-eval-after-load 'elfeed
   (add-hook 'kill-emacs-hook 'elfeed-db-compact)
-  (use-package elfeed-org
-    :config
+  (with-eval-after-load 'elfeed-org
     (elfeed-org))
   (defun dmd-elfeed-search-tag-mustread ()
     (interactive)
@@ -902,8 +787,8 @@ SCHEDULED: %t
   (defun dmd-elfeed-show-tag-mustread ()
     (interactive)
     (elfeed-show-tag 'mustread))
-  (bind-key "e" 'dmd-elfeed-search-tag-mustread elfeed-search-mode-map)
-  (bind-key "e" 'dmd-elfeed-show-tag-mustread elfeed-show-mode-map))
+  (define-key elfeed-search-mode-map (kbd "e") 'dmd-elfeed-search-tag-mustread)
+  (define-key elfeed-show-mode-map (kbd "e") 'dmd-elfeed-show-tag-mustread))
 
 ;; Save a list of recent files visited.
 (recentf-mode 1)
@@ -927,6 +812,13 @@ SCHEDULED: %t
 (defalias 'renb 'dmd-rename-buffer)
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+;;; Debbugs
+(with-eval-after-load 'debbugs
+  (add-to-list 'Info-directory-list
+               (expand-file-name
+				"debbugs"
+				elpa-dir)))
+
 ;;;; Theme
 
 ;; tab and indentation configuration
@@ -945,31 +837,18 @@ SCHEDULED: %t
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (setq initial-frame-alist (append initial-frame-alist
                                   (copy-alist default-frame-alist)))
-
-(use-package color-theme-sanityinc-tomorrow
-  :demand t
-  :config
-  (add-to-list 'custom-theme-load-path (expand-file-name
-                                        "modules/color-theme-sanityinc-tomorrow"
-                                        user-emacs-directory)))
-
-(use-package solarized
-  :demand t
-  :config
-  (add-to-list 'custom-theme-load-path (expand-file-name
+;;; Custom Themes
+(add-to-list 'custom-theme-load-path (expand-file-name
+									  "modules/color-theme-sanityinc-tomorrow"
+									  user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name
                                         "modules/solarized-emacs"
-                                        user-emacs-directory)))
-
-(use-package debbugs
-  :config
-  (add-to-list 'Info-directory-list
-               (expand-file-name
-				"debbugs"
-				elpa-dir)))
-
+                                        user-emacs-directory))
 (add-to-list 'custom-theme-load-path
 			 (expand-file-name
 			  "modules/replace-colorthemes/"
 			  user-emacs-directory))
+
+(load custom-file 'noerror)
 
 ;;; init.el ends here
