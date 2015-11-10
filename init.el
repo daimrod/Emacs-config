@@ -857,6 +857,4 @@ SCHEDULED: %t
 (setq initial-frame-alist (append initial-frame-alist
                                   (copy-alist default-frame-alist)))
 
-(message "foo")
-
 ;;; init.el ends here
