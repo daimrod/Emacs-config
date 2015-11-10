@@ -30,6 +30,7 @@
 (defvar config-dir (expand-file-name "config/" user-emacs-directory))
 (defvar modules-dir (expand-file-name "modules/" user-emacs-directory))
 (defvar elpa-dir (expand-file-name "elpa/packages" user-emacs-directory))
+(defvar package-user-dir elpa-dir)
 
 (defcustom src-dir (expand-file-name "~/src/elisp/")
   "The source directory where third-part modules are located."
@@ -48,17 +49,36 @@
            collect (intern (file-name-base config-file)))
   "List of available configuration modules.")
 
+;;; Default load-path
 (dolist (root-dir (list elpa-dir modules-dir))
   (dolist (dir (directory-files root-dir t "^[^.]"))
 	(when (file-directory-p dir)
 	  (add-to-list 'load-path dir))))
 
-;; custom-file configuration
+;;; Custom load-path
+(add-to-list 'load-path (expand-file-name "magit/lisp/" modules-dir))
+(add-to-list 'load-path (expand-file-name "pdf-tools/pdf-tools-0.70/"
+										  modules-dir))
+(add-to-list 'load-path (expand-file-name "org-mode/lisp" modules-dir))
+(add-to-list 'load-path (expand-file-name "org-mode/contrib/lisp" modules-dir))
+(add-to-list 'load-path (expand-file-name "mu/mu4e" modules-dir))
+
+;;; Custom Themes
+(add-to-list 'custom-theme-load-path (expand-file-name
+									  "modules/color-theme-sanityinc-tomorrow"
+									  user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name
+                                        "modules/solarized-emacs"
+                                        user-emacs-directory))
+(add-to-list 'custom-theme-load-path
+			 (expand-file-name
+			  "modules/replace-colorthemes/"
+			  user-emacs-directory))
+
+;;; Load Custom
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
 
-(add-to-list 'load-path (expand-file-name "pdf-tools/pdf-tools-0.70/"
-										  modules-dir))
 (with-eval-after-load 'pdf-tools
   (pdf-tools-install))
 
@@ -95,8 +115,8 @@
   (global-set-key (kbd "C-S-s") 'isearch-forward-regexp)
     (global-set-key (kbd "C-S-r") 'isearch-backward-regexp))
 
-(autoload 'w3m-buffer "w3m.el")
-(autoload 'w3m-browse-url "w3m.el")
+(autoload 'w3m-buffer "w3m.el" nil t)
+(autoload 'w3m-browse-url "w3m.el" nil t)
 (with-eval-after-load 'w3m
   (require 'w3m-util)
   (defun dmd--w3m-go-to-title-in-page ()
@@ -204,10 +224,12 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 (global-set-key (kbd "C-z") nil)
 (global-set-key (kbd "C-x C-c") nil)
 
-(with-eval-after-load 'graze-url
-  (global-set-key (kbd "C-c y") 'gu-copy-url-at-point)
-  (global-set-key (kbd "C-c b") 'gu-browse-url)
-  (global-set-key (kbd "C-c w s") 'gu-search))
+(autoload 'gu-copy-url-at-point "graze-url.el" nil t)
+(autoload 'gu-browse-url "graze-url.el" nil t)
+(autoload 'gu-search "graze-url.el" nil t)
+(global-set-key (kbd "C-c y") 'gu-copy-url-at-point)
+(global-set-key (kbd "C-c b") 'gu-browse-url)
+(global-set-key (kbd "C-c w s") 'gu-search)
 
 ;; iy-go-to-char configuration
 (with-eval-after-load 'iy-go-to-char
@@ -269,8 +291,6 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 (global-set-key (kbd "M-\\") 'execute-extended-command)
 
 ;;;; Helm
-(require 'helm-mode)
-(helm-mode 1)
 (with-eval-after-load 'helm-config
   (require 'helm-command)
   (require 'helm-files)
@@ -278,6 +298,8 @@ This is the same as using \\[set-mark-command] with the prefix argument."
   (require 'helm-ag)
   (require 'helm-bibtex)
   (require 'helm-pages)
+  (require 'swiper)
+  (require 'swiper-helm)
 
   (global-set-key (kbd "M-x") 'helm-M-x)
   (global-set-key (kbd "C-c m") 'helm-M-x)
@@ -286,12 +308,11 @@ This is the same as using \\[set-mark-command] with the prefix argument."
   (global-set-key (kbd "C-x b") 'helm-buffers-list)
   (global-set-key (kbd "C-c h") 'helm-command-prefix)
   (global-set-key (kbd "C-c j") 'helm-pages)
-  (require 'swiper)
-  (with-eval-after-load 'swiper-helm
-	(global-set-key (kbd "C-s") 'swiper-helm)
-	(global-set-key (kbd "C-r") 'swiper-helm))
-
+  (global-set-key (kbd "C-s") 'swiper-helm)
+  (global-set-key (kbd "C-r") 'swiper-helm)
   (global-set-key (kbd "C-;") 'newline-and-indent))
+(require 'helm-config)
+(helm-mode 1)
 
 (with-eval-after-load 'comint
   (defcustom comint-buffer-minimum-size 0
@@ -324,11 +345,10 @@ If N is not set, use `comint-buffer-minimum-size'."
   (global-company-mode))
 
 ;;; Magit
-(add-to-list 'load-path (expand-file-name "magit/lisp/" modules-dir))
+(require 'magit-autoloads)
 (global-set-key (kbd "C-c g") 'magit-status)
 (with-eval-after-load 'magit
   (require 'git-commit)
-  (require 'magit-autoloads)
   (require 'magit-svn)
   (require 'orgit)
   
@@ -355,8 +375,6 @@ If N is not set, use `comint-buffer-minimum-size'."
   (defalias 'mgrep 'moccur-grep)
   (defalias 'mrgrep 'moccur-grep-find))
 
-(add-to-list 'load-path (expand-file-name "org-mode/lisp" modules-dir))
-(add-to-list 'load-path (expand-file-name "org-mode/contrib/lisp" modules-dir))
 (require 'org)
 (with-eval-after-load 'org
   (require 'subr-x)
@@ -527,7 +545,6 @@ SCHEDULED: %t
 (require 'flycheck-pos-tip)
 (global-flycheck-mode 1)
 
-(add-to-list 'load-path (expand-file-name "mu/mu4e" modules-dir))
 (with-eval-after-load 'mu4e
   (add-to-list 'Info-directory-list
                (expand-file-name (expand-file-name
@@ -542,6 +559,7 @@ SCHEDULED: %t
               ;; try to emulate some of the eww key-bindings
               (local-set-key (kbd "<tab>") 'w3m-next-anchor)
               (local-set-key (kbd "<backtab>") 'w3m-previous-anchor))))
+(require 'mu4e)
 
 (require 'which-key)
 (which-key-mode 1)
@@ -764,6 +782,7 @@ SCHEDULED: %t
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode))
 
+(require 'paredit)
 (with-eval-after-load 'paredit
   (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
   (add-hook 'ielm-mode-hook 'enable-paredit-mode)
@@ -837,18 +856,7 @@ SCHEDULED: %t
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (setq initial-frame-alist (append initial-frame-alist
                                   (copy-alist default-frame-alist)))
-;;; Custom Themes
-(add-to-list 'custom-theme-load-path (expand-file-name
-									  "modules/color-theme-sanityinc-tomorrow"
-									  user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name
-                                        "modules/solarized-emacs"
-                                        user-emacs-directory))
-(add-to-list 'custom-theme-load-path
-			 (expand-file-name
-			  "modules/replace-colorthemes/"
-			  user-emacs-directory))
 
-(load custom-file 'noerror)
+(message "foo")
 
 ;;; init.el ends here
