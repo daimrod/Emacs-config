@@ -52,9 +52,6 @@
 [submodule "modules/color-moccur"]
 	path = modules/color-moccur
 	url = git@github.com:myuhe/color-moccur.el.git
-[submodule "modules/use-package"]
-	path = modules/use-package
-	url = git@github.com:jwiegley/use-package.git
 [submodule "modules/parsebib"]
 	path = modules/parsebib
 	url = git@github.com:joostkremers/parsebib.git
