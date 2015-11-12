@@ -833,6 +833,10 @@ SCHEDULED: %t
 				"debbugs"
 				elpa-dir)))
 
+;;; Beacon
+(require 'beacon)
+(beacon-mode 1)
+
 ;;;; Theme
 
 ;; tab and indentation configuration
