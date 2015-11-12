@@ -145,3 +145,6 @@
 [submodule "elpa"]
 	path = elpa
 	url = git://git.sv.gnu.org/emacs/elpa.git
+[submodule "modules/beacon"]
+	path = modules/beacon
+	url = git@github.com:daimrod/beacon.git
