@@ -586,6 +586,10 @@ SCHEDULED: %t
       (show-smartparens-mode 0)))
   (add-hook 'auto-revert-tail-mode-hook 'dmd--etc-log-tail-handler))
 
+;;; Octave
+(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+
+;;; Slime
 (load (expand-file-name "~/quicklisp/slime-helper.el") t)
 (load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
 (with-eval-after-load 'slime
