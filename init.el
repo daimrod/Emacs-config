@@ -751,9 +751,9 @@ SCHEDULED: %t
   (set-keyboard-coding-system 'utf-8)
   (prefer-coding-system 'utf-8))
 
-(with-eval-after-load 'firestarter
-  (firestarter-mode 1)
-  (defvar firestarter nil))
+(require 'firestarter)
+(defvar firestarter nil)
+(firestarter-mode 1)
 
 (with-eval-after-load 'ansi-color
   (ansi-color-for-comint-mode-on))
