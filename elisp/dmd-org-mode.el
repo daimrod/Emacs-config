@@ -61,7 +61,8 @@ Adapted from `org-capture-set-target-location'."
              (feed (first id))
              (url (rest id))
              (title (elfeed-entry-title entry))
-			 found?)
+			 found?
+			 tmp-feed)
 		(setq tmp-feed feed)
 		(loop for file in rmh-elfeed-org-files
 			  do (set-buffer (find-file-noselect file))
