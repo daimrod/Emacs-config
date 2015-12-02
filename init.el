@@ -485,6 +485,14 @@ SCHEDULED: %t
 
   (org-babel-lob-ingest (expand-file-name "lob.org" user-emacs-directory))
 
+  ;; Always clocking, always !
+  (defvar dmd-always-clocking)
+  (setq dmd-always-clocking
+		(run-with-idle-timer (* 60 2) 'repeat
+							 (lambda ()
+							   (unless (org-clocking-p)
+								 (org-notify "Not clocking!")))))
+
   ;; message-mode
   (add-hook 'message-mode-hook 'turn-on-orgstruct)
   (add-hook 'message-mode-hook 'turn-on-orgstruct++)
