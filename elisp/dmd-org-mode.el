@@ -273,6 +273,38 @@ Use it."
            (expand-file-name "~/.emacs.d/elisp/tangle.sh")
            (buffer-file-name))))
 
+;;;; Always Clocking, always !
+(defgroup dmd-always-clocking nil
+  "Customize Always Clocking behavior."
+  :tag "Always Clocking"
+  :group 'dmd-always-clocking)
+
+;;; Customize Always Clocking
+(defcustom dmd-always-clocking-timeout (* 60 2)
+  "2 minutes before the alert!"
+  :type 'int
+  :group 'dmd-always-clocking)
+
+(defcustom dmd-always-clocking-message
+  "You're not clocking!\nWhat the f*ck are you doing"
+  "How would you like to be reminded that you should clock?"
+  :type 'string
+  :group 'dmd-always-clocking-message)
+
+;;; Internal variables
+(defvar dmd-always-clocking-last-check (current-time)
+  "When was the last time we checked if you were clocking?")
+
+;;; Internal Functions
+(defun dmd-always-clocking-check ()
+  "Check whether we're clocking or not, and act if necessary!"
+  (if (org-clocking-p)
+	  (setq dmd-always-clocking-last-check (current-time))
+	(when (time-less-p (time-add dmd-always-clocking-last-check
+								 dmd-always-clocking-timeout)
+					   (current-time))
+	  (org-notify dmd-always-clocking-message))))
+
 (provide 'dmd-org-mode)
 
 ;;; dmd-org-mode.el ends here
