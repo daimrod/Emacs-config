@@ -81,8 +81,9 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
 
-(require 'pdf-tools-autoloads)
-(pdf-tools-install)
+(require 'pdf-tools-autoloads nil t)
+(when (fboundp 'pdf-tools-install)
+  (pdf-tools-install))
 
 ;; Enabled/Disabled commands
 (put 'upcase-region 'disabled nil)
