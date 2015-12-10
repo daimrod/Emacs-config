@@ -84,7 +84,7 @@
 	url = git@github.com:wasamasa/firestarter.git
 [submodule "modules/elpy"]
 	path = modules/elpy
-	url = git@github.com:jorgenschaefer/elpy.git
+	url = git@github.com:daimrod/elpy.git
 [submodule "modules/pyvenv"]
 	path = modules/pyvenv
 	url = git@github.com:jorgenschaefer/pyvenv.git
