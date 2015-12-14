@@ -347,6 +347,10 @@ If N is not set, use `comint-buffer-minimum-size'."
   (add-to-list 'Info-directory-list
                (expand-file-name "magit/Documentation" modules-dir))
 
+  (defvar dmd-magit-commit-diff nil)
+  (add-hook 'magit-mode-hook (lambda ()
+							   (unless dmd-magit-commit-diff
+								 (remove-hook server-switch-hook 'magit-commit-diff))))
   (add-hook 'magit-mode-hook 'magit-svn-mode))
 
 (global-set-key (kbd "C-h j") 'javadoc-lookup)
