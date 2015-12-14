@@ -493,7 +493,7 @@ SCHEDULED: %t
   (add-hook 'org-ref-open-notes-functions 'dmd-org-ref-open-bibtex-notes)
 
   ;; Always clocking ! Always !
-  (defvar dmd-always-clocking-clock (run-at-time 't 10 'dmd-always-clocking-check))
+  (defvar dmd-always-clocking-timer (run-at-time 't 30 'dmd-always-clocking-check))
   
   ;; Make windmove work in org-mode:
   (add-hook 'org-shiftup-final-hook 'windmove-up)
