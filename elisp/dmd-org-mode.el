@@ -175,10 +175,11 @@ PREFIX is used to determine the scope."
   "Switch to \"NEXT\" state unless:
 - we are in `org-capture-mode'
 - if the STATE is \"MEETING\"
-- it's a habit (has STYLE=habit)"
+- it's a habit (has STYLE=habit or habit \in FILETAG)"
   (cond ((or (string= state "MEETING")
              org-capture-mode
-             (equal (org-entry-get (point) "STYLE") "habit"))
+             (equal (org-entry-get (point) "STYLE") "habit")
+			 (find "habit" (org-get-tags-at (point)) :test #'string=))
          state)
         (t "NEXT")))
 
