@@ -118,6 +118,7 @@ construct the heading by hand."
 
 (defun dmd--update-org-agenda-files ()
   "Update `org-agenda-files' with filename from the org-agenda-files file."
+  (interactive)
   (let ((sbuf (with-current-buffer (find-file-noselect
                                     (expand-file-name "org-agenda-files" user-emacs-directory))
                 (buffer-substring-no-properties (point-min) (point-max)))))
