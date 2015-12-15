@@ -274,6 +274,14 @@ Use it."
            (expand-file-name "~/.emacs.d/elisp/tangle.sh")
            (buffer-file-name))))
 
+;;; Org Drill
+(defun org-drilll (&optional scope)
+  (interactive
+   (list (intern
+		  (completing-read "Score: "
+						   '(file tree agenda directory)))))
+  (org-drill scope))
+
 ;;;; Always Clocking, always !
 (defgroup dmd-always-clocking nil
   "Customize Always Clocking behavior."
