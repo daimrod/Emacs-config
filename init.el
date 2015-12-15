@@ -521,8 +521,8 @@ SCHEDULED: %t
 			(lambda ()
 			  (setq-default python-shell-buffer-name python-shell-buffer-name))))
 
+(require 'elpy)
 (with-eval-after-load 'elpy
-  :config
   (elpy-enable))
 
 (with-eval-after-load 'message
