@@ -513,10 +513,13 @@ SCHEDULED: %t
               (add-hook 'before-save-hook 'dmd-org-add-CREATED-to-headlines nil 'local)
               (add-hook 'before-save-hook 'org-update-parent-todo-statistics nil 'local))))
 
+(require' pyvenv)
 (with-eval-after-load 'pyvenv
-  :config
   (pyvenv-tracking-mode 1)
-  (pyvenv-mode 1))
+  (pyvenv-mode 1)
+  (add-hook 'pyvenv-post-activate-hooks
+			(lambda ()
+			  (setq-default python-shell-buffer-name python-shell-buffer-name))))
 
 (with-eval-after-load 'elpy
   :config
