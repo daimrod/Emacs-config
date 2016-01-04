@@ -479,6 +479,12 @@ SCHEDULED: %t
 
   (advice-add #'org-attach-open :override #'helm-org-attach-open)
 
+  (advice-add #'org-toggle-latex-fragment :around (lambda (oldfun &optional arg)
+													"Temp fix for org-latex-preview in non-file buffers (skip the buffer instead of throwing an error)"
+													(if (buffer-file-name (buffer-base-buffer))
+														(funcall oldfun arg)
+													  (message "Can't preview LaTeX fragment in a non-file buffer"))))
+
   ;;; Don't scatter LaTeX images
   (make-directory org-latex-preview-ltxpng-directory t)
 
