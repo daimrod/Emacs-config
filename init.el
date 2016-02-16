@@ -427,7 +427,7 @@ If N is not set, use `comint-buffer-minimum-size'."
 " :prepend t :empty-lines 1)
          ("m" "Mail" entry
           (file+headline "~/org/capture.org" "Task")
-          "* NEXT Mail from %:from on %:subject
+          "* NEXT Mail from %:from on %:subject :mail:
 SCHEDULED: %t
 :PROPERTIES:
 :CREATED: %U
@@ -779,6 +779,12 @@ SCHEDULED: %t
 (global-undo-tree-mode 1)
 
 (require 'projectile)
+(with-eval-after-load 'projectile
+  ;; Remove inexistant projects
+  (dolist (proj projectile-known-projects)
+	(unless (file-exists-p proj)
+	  (setq projectile-known-projects (delete proj projectile-known-projects))))
+  (projectile-save-known-projects))
 (projectile-global-mode 1)
 (require 'helm-projectile)
 (helm-projectile-on)
@@ -872,5 +878,12 @@ SCHEDULED: %t
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (setq initial-frame-alist (append initial-frame-alist
                                   (copy-alist default-frame-alist)))
+
+;;; Switch all buffers to fundamental hooks cuz sometimes something
+;;; bad has happened but we don't care if we're killing emacs.
+(add-hook 'kill-emacs-hook (lambda ()
+							 (dolist (buffer (buffer-list))
+							   (with-current-buffer buffer
+								 (fundamental-mode)))))
 
 ;;; init.el ends here
