@@ -490,8 +490,8 @@ SCHEDULED: %t
 
   (add-hook 'org-clock-in-prepare-hook 'dmd-org-set-effort)
 
-  (org-babel-lob-ingest (expand-file-name "lob.org" user-emacs-directory))
   (org-babel-lob-ingest (expand-file-name "org-mode/doc/library-of-babel.org" modules-dir))
+  (org-babel-lob-ingest (expand-file-name "lob.org" user-emacs-directory))
 
   ;; message-mode
   (add-hook 'message-mode-hook 'turn-on-orgstruct)
