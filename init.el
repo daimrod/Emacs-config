@@ -413,17 +413,19 @@ If N is not set, use `comint-buffer-minimum-size'."
 " :prepend t :empty-lines 1)
 		  ("T" "Task in current buffer" entry
            (function ,(dmd--org-capture-headline "Task"))
-           "* TODO %?%a
+           "* TODO %?
 :PROPERTIES:
 :CREATED: %U
 :END:
+%a
 " :prepend t :empty-lines 1)
           ("t" "Task" entry
           (file+headline "~/org/capture.org" "Task")
-          "* TODO %?%a
+          "* TODO %?
 :PROPERTIES:
 :CREATED: %U
 :END:
+%a
 " :prepend t :empty-lines 1)
          ("m" "Mail" entry
           (file+headline "~/org/capture.org" "Task")
@@ -564,7 +566,32 @@ SCHEDULED: %t
             (lambda()
               ;; try to emulate some of the eww key-bindings
               (local-set-key (kbd "<tab>") 'w3m-next-anchor)
-              (local-set-key (kbd "<backtab>") 'w3m-previous-anchor))))
+              (local-set-key (kbd "<backtab>") 'w3m-previous-anchor)
+			  (local-set-key (kbd "*") (lambda ()
+										 (interactive)
+										 (org-capture nil "m")
+										 (mu4e-view-mark-for-flag))))))
+
+(with-eval-after-load 'org-mu4e
+  (setq org-mu4e-link-query-in-headers-mode nil)
+  ;; Redefine org-mu4e-open to fit my needs
+  (defun org-mu4e-open (path)
+	"Open the mu4e message (for paths starting with 'msgid:') or run
+the query (for paths starting with 'query:')."
+	(require 'mu4e)
+	(cond
+	 ((string-match "^msgid:\\(.+\\)" path)
+	  (let ((msgid (match-string 1 path)))
+		(mu4e-headers-search (format "msgid:%s" msgid) current-prefix-arg)
+		(mu4e~headers-redraw-get-view-window)
+		(other-window 1)
+		(mu4e-view-message-with-msgid msgid)))
+	 ((string-match "^query:\\(.+\\)" path)
+	  (let ((mu4e-headers-include-related t)
+			(mu4e-headers-show-threads t))
+		(mu4e-headers-search (match-string 1 path) current-prefix-arg)))
+	 (t (mu4e-error "mu4e: unrecognized link type '%s'" path)))))
+
 (require 'mu4e)
 
 (require 'which-key)
