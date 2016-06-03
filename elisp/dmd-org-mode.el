@@ -50,6 +50,14 @@ Adapted from `org-capture-set-target-location'."
    (calendar-gregorian-from-absolute
 	(org-today))))
 
+(defun dmd--org-capture-weektree ()
+  "Jumps to a weektree in current buffer.
+
+Adapted from `org-capture-set-target-location'."
+  (org-datetree-find-iso-week-create
+   (calendar-gregorian-from-absolute
+	(org-today))))
+
 (defun dmd--org-capture-elfeed ()
   "Jumps to the proper headline in elfeed.org."
   (let ((entry (cond ((eq major-mode 'elfeed-search-mode)
@@ -307,16 +315,29 @@ Use it."
 ;;; Internal variables
 (defvar dmd-always-clocking-last-check (current-time)
   "When was the last time we checked if you were clocking?")
+(defvar dmd-always-clocking-on t
+  "Are you clocking?")
 
 ;;; Internal Functions
 (defun dmd-always-clocking-check ()
   "Check whether we're clocking or not, and act if necessary!"
-  (if (org-clocking-p)
-	  (setq dmd-always-clocking-last-check (current-time))
-	(when (time-less-p (time-add dmd-always-clocking-last-check
-								 dmd-always-clocking-timeout)
-					   (current-time))
-	  (org-notify dmd-always-clocking-message))))
+  (when dmd-always-clocking-on
+	(if (org-clocking-p)
+		(setq dmd-always-clocking-last-check (current-time))
+	  (when (time-less-p (time-add dmd-always-clocking-last-check
+								   dmd-always-clocking-timeout)
+						 (current-time))
+		(org-notify dmd-always-clocking-message)))))
+
+(defun dmd-always-clocking-on ()
+  "Enable always-clocking."
+  (interactive)
+  (setq dmd-always-clocking-on t))
+
+(defun dmd-always-clocking-off ()
+  "Disable always clocking."
+  (interactive)
+  (setq dmd-always-clocking-on nil))
 
 (provide 'dmd-org-mode)
 

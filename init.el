@@ -21,6 +21,13 @@
 
 ;;; Code:
 
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
@@ -437,7 +444,7 @@ SCHEDULED: %t
 %a" :prepend t :immediate-finish t :empty-lines 1)
          ("J" "New journal entry in current buffer" entry
 
-		  (function dmd--org-capture-datetree)
+		  (function dmd--org-capture-weektree)
           "* %?" :immediate-finish t :jump-to-captured t :empty-lines 1 :unnarrowed t)
          ("j" "New journal entry" entry
           (file+datetree "~/org/journals.org")
@@ -581,7 +588,9 @@ the query (for paths starting with 'query:')."
 	(require 'mu4e)
 	(cond
 	 ((string-match "^msgid:\\(.+\\)" path)
-	  (let ((msgid (match-string 1 path)))
+	  (let ((msgid (match-string 1 path))
+			(mu4e-headers-include-related t)
+			(mu4e-headers-show-threads t))
 		(mu4e-headers-search (format "msgid:%s" msgid) current-prefix-arg)
 		(mu4e~headers-redraw-get-view-window)
 		(other-window 1)
@@ -906,12 +915,5 @@ the query (for paths starting with 'query:')."
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (setq initial-frame-alist (append initial-frame-alist
                                   (copy-alist default-frame-alist)))
-
-;;; Switch all buffers to fundamental hooks cuz sometimes something
-;;; bad has happened but we don't care if we're killing emacs.
-(add-hook 'kill-emacs-hook (lambda ()
-							 (dolist (buffer (buffer-list))
-							   (with-current-buffer buffer
-								 (fundamental-mode)))))
 
 ;;; init.el ends here
