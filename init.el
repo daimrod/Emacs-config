@@ -865,7 +865,16 @@ the query (for paths starting with 'query:')."
 ;; Save a list of recent files visited.
 (recentf-mode 1)
 
-;; Highlight matching parentheses when the point is on them.
+;; Emms
+(add-to-list 'load-path (expand-file-name "emms/lisp/" modules-dir))
+(require 'emms-setup)
+(add-to-list 'Info-directory-list
+             (expand-file-name "emms/doc" modules-dir))
+(with-eval-after-load 'emms-setup
+  (emms-all)
+  (emms-default-players))
+
+;; highlight matching parentheses when the point is on them.
 (show-paren-mode 1)
 
 ;; Text-mode Hook
