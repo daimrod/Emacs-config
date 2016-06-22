@@ -148,3 +148,6 @@
 [submodule "modules/beacon"]
 	path = modules/beacon
 	url = git@github.com:daimrod/beacon.git
+[submodule "modules/emms"]
+	path = modules/emms
+	url = git://git.sv.gnu.org/emms.git
