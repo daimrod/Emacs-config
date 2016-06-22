@@ -872,7 +872,9 @@ the query (for paths starting with 'query:')."
              (expand-file-name "emms/doc" modules-dir))
 (with-eval-after-load 'emms-setup
   (emms-all)
-  (emms-default-players))
+  (emms-default-players)
+  (add-hook 'org-clock-in-hook 'emms-pause)
+  (add-hook 'org-clock-out-hook 'emms-pause))
 
 ;; highlight matching parentheses when the point is on them.
 (show-paren-mode 1)
