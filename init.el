@@ -577,7 +577,14 @@ SCHEDULED: %t
 			  (local-set-key (kbd "*") (lambda ()
 										 (interactive)
 										 (org-capture nil "m")
-										 (mu4e-view-mark-for-flag))))))
+										 (mu4e-view-mark-for-flag)))))
+  (defun dmd-mu4e-view-add-subject-to-buffer-name ()
+    "Add Subject to buffer name."
+    (let* ((subject (plist-get mu4e~view-msg :subject))
+           (buffer-name (buffer-name))
+           (new-name (concat buffer-name " " subject)))
+      (rename-buffer new-name)))
+  (add-hook 'mu4e-view-mode-hook #'dmd-mu4e-view-add-subject-to-buffer-name))
 
 (with-eval-after-load 'org-mu4e
   (setq org-mu4e-link-query-in-headers-mode nil)
