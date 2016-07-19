@@ -157,3 +157,6 @@
 [submodule "modules/pos-tip"]
 	path = modules/pos-tip
 	url = git@github.com:pitkali/pos-tip.git
+[submodule "modules/helm-projectile"]
+	path = modules/helm-projectile
+	url = git@github.com:bbatsov/helm-projectile.git
