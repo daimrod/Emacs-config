@@ -151,3 +151,6 @@
 [submodule "modules/emms"]
 	path = modules/emms
 	url = git://git.sv.gnu.org/emms.git
+[submodule "modules/biblio.el"]
+	path = modules/biblio.el
+	url = git@github.com:cpitclaudel/biblio.el.git
