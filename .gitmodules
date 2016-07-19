@@ -154,3 +154,6 @@
 [submodule "modules/biblio.el"]
 	path = modules/biblio.el
 	url = git@github.com:cpitclaudel/biblio.el.git
+[submodule "modules/pos-tip"]
+	path = modules/pos-tip
+	url = git@github.com:pitkali/pos-tip.git
