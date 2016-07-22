@@ -26,6 +26,7 @@
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
+(setq package-enable-at-startup nil)
 (package-initialize)
 
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
