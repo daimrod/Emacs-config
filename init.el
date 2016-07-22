@@ -498,8 +498,6 @@ SCHEDULED: %t
   ;;; Don't scatter LaTeX images
   (make-directory org-latex-preview-ltxpng-directory t)
 
-  (add-hook 'org-clock-in-prepare-hook 'dmd-org-set-effort)
-
   (org-babel-lob-ingest (expand-file-name "org-mode/doc/library-of-babel.org" modules-dir))
   (org-babel-lob-ingest (expand-file-name "lob.org" user-emacs-directory))
 
