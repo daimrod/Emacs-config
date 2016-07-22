@@ -910,7 +910,7 @@ the query (for paths starting with 'query:')."
 (defalias 'isp 'ispell-change-dictionary)
 
 ;;; Debbugs
-(require 'debbugs-autoloads)
+(require 'debbugs)
 (with-eval-after-load 'debbugs
   (add-to-list 'Info-directory-list
                (expand-file-name
