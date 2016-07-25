@@ -443,6 +443,9 @@ SCHEDULED: %t
 :CREATED: %U
 :END:
 %a" :prepend t :immediate-finish t :empty-lines 1)
+         ("p" "New planning entry" entry
+		  (file+datetree "~/org/planning.org")
+          "* TODO %?%a" :empty-lines 1)
          ("J" "New journal entry in current buffer" entry
 
 		  (function dmd--org-capture-weektree)
