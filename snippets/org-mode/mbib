@@ -1,0 +1,12 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: mbib
+# --
+| property    | value |
+|-------------+-------|
+| recap       | $0      |
+| keywords    |       |
+| ressources  |       |
+| models      |       |
+| evaluations |       |
+| urls        |       |
+
