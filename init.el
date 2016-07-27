@@ -120,6 +120,8 @@
 (global-set-key (kbd "C-S-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-S-r") 'isearch-backward-regexp)
 
+(require 'pomodoro)
+
 (require 'emacs-w3m-autoloads)
 (with-eval-after-load 'w3m
   (require 'w3m-util)
