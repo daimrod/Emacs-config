@@ -72,6 +72,7 @@
 (add-to-list 'load-path (expand-file-name "org-mode/lisp" modules-dir))
 (add-to-list 'load-path (expand-file-name "org-mode/contrib/lisp" modules-dir))
 (add-to-list 'load-path (expand-file-name "mu/mu4e" modules-dir))
+(add-to-list 'load-path "/usr/lib/erlang/lib/tools-2.6.13/emacs/")
 
 ;;; Custom Themes
 (add-to-list 'custom-theme-load-path (expand-file-name
@@ -916,6 +917,13 @@ the query (for paths starting with 'query:')."
                (expand-file-name
 				"debbugs"
 				elpa-dir)))
+
+;;; Erlang
+(require 'erlang-start)
+(with-eval-after-load 'erlang-start
+  (add-to-list 'auto-mode-alist '("\\.erl?$" . erlang-mode))
+  (add-to-list 'auto-mode-alist '("\\.hrl?$" . erlang-mode))
+  (setq erlang-electric-commands '(erlang-electric-newline)))
 
 ;;; Beacon
 (require 'beacon)
