@@ -121,6 +121,9 @@
 (global-set-key (kbd "C-S-r") 'isearch-backward-regexp)
 
 (require 'pomodoro)
+(with-eval-after-load 'pomodoro
+  (add-hook 'window-configuration-change-hook 'pomodoro-update-modeline)
+  (add-hook 'focus-in-hook 'pomodoro-update-modeline))
 
 (require 'emacs-w3m-autoloads)
 (with-eval-after-load 'w3m

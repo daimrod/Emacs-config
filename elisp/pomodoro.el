@@ -147,7 +147,8 @@ diplayed")
   (interactive)
   (when pomodoro-timer
     (cancel-timer pomodoro-timer))
-  (setq pomodoro-display-string "")
+  (setq pomodoro-display-string ""
+        pomodoro-state nil)
   (when (get-buffer pomodoro-buffer-name)
     (kill-buffer "*pomodoro*")))
 
@@ -186,9 +187,11 @@ It takes care of updating the modeline as well a message buffer"
               ((eq pomodoro-state 'short-break)
                (format pomodoro-break-format
                        pomodoro-set pomodoro-minute))
-              (t
+              ((eq pomodoro-state 'long-break)
                (format pomodoro-long-break-format
-                       pomodoro-minute))))
+                       pomodoro-minute))
+              (t
+               "")))
   (force-mode-line-update))
 
 (defun pomodoro-message (msg)
