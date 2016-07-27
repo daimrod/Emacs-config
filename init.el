@@ -934,6 +934,12 @@ the query (for paths starting with 'query:')."
 (require 'beacon)
 (beacon-mode 1)
 
+(require 'elscreen)
+(with-eval-after-load 'elscreen
+  (elscreen-start)
+  (require 'helm-elscreen)
+  (global-set-key (kbd "C-z '") 'helm-elscreen))
+
 ;;;; Theme
 
 ;; tab and indentation configuration

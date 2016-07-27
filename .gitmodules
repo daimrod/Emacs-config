@@ -160,3 +160,6 @@
 [submodule "modules/helm-projectile"]
 	path = modules/helm-projectile
 	url = git@github.com:bbatsov/helm-projectile.git
+[submodule "modules/elscreen"]
+	path = modules/elscreen
+	url = git@github.com:knu/elscreen.git
