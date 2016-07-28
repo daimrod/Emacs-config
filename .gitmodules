@@ -163,3 +163,6 @@
 [submodule "modules/elscreen"]
 	path = modules/elscreen
 	url = git@github.com:knu/elscreen.git
+[submodule "modules/bookmark-plus"]
+	path = modules/bookmark-plus
+	url = git@github.com:emacsmirror/bookmark-plus.git
