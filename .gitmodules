@@ -166,3 +166,6 @@
 [submodule "modules/bookmark-plus"]
 	path = modules/bookmark-plus
 	url = git@github.com:emacsmirror/bookmark-plus.git
+[submodule "modules/hyperbole"]
+	path = modules/hyperbole
+	url = http://git.savannah.gnu.org/r/hyperbole.git
