@@ -112,8 +112,8 @@ diplayed")
   "String displayed in the modeline for a long break.")
 
 (defvar pomodoro-display-string "")
-(defvar pomodoro-minute)
-(defvar pomodoro-set)
+(defvar pomodoro-minute 0)
+(defvar pomodoro-set 0)
 (defvar pomodoro-timer nil)
 (defvar pomodoro-state 'work)
 
@@ -189,7 +189,7 @@ It takes care of updating the modeline as well a message buffer"
                        pomodoro-set pomodoro-minute))
               ((eq pomodoro-state 'long-break)
                (format pomodoro-long-break-format
-                       pomodoro-minute))
+                       pomodoro-set pomodoro-minute))
               (t
                "")))
   (force-mode-line-update))
