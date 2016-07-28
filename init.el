@@ -514,7 +514,7 @@ SCHEDULED: %t
   (add-hook 'message-mode-hook 'turn-on-orgstruct++)
   (add-hook 'message-mode-hook 'turn-on-orgtbl)
 
-  (add-hook 'org-ref-open-notes-functions 'dmd-org-ref-open-bibtex-notes)
+  (advice-add #'org-ref-open-bibtex-notes :override 'dmd-org-ref-open-bibtex-notes)
 
   ;; Always clocking ! Always !
   (defvar dmd-always-clocking-timer (run-at-time 't 30 'dmd-always-clocking-check))
