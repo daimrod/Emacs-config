@@ -485,6 +485,7 @@ SCHEDULED: %t
 		   (helm-org-agenda-files-headings)
 		 (helm-org-in-buffer-headings))))
   (define-key org-mode-map (kbd "C-c >") 'org-time-stamp-inactive)
+  (define-key org-mode-map (kbd "C-c C-S-o") 'org-mark-ring-goto)
 
   (add-to-list 'Info-directory-list
                (expand-file-name "org-mode/doc" modules-dir))
