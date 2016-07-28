@@ -399,6 +399,7 @@ If N is not set, use `comint-buffer-minimum-size'."
   (require 'dmd-org-mode)
   (require 'diary-lib)
   (require 'ox-beamer)
+  (require 'helm-org)
 
   (dmd--update-org-agenda-files)
 
