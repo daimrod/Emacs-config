@@ -119,10 +119,22 @@ construct the heading by hand."
       (error "Org-ref-bib-bibliography-notes is not set to anything"))
 
     (goto-char (point-min))
-    ;; put new entry in notes if we don't find it.
-    (when (re-search-forward key nil 'end)
-      (funcall org-ref-open-notes-function)
-      t)))
+    (re-search-forward (format "@.*{%s" key) nil 'end)))
+
+(defun dmd-org-ref-open-bibtex-key-notes (thekey)
+  "THEKEY."
+  (interactive)
+  (let* ((results (org-ref-get-bibtex-key-and-file thekey))
+         (key (car results))
+         (bibfile (cdr results)))
+
+    ;; look for entry in the notes file
+    (if  org-ref-bibliography-notes
+        (find-file-other-window org-ref-bibliography-notes)
+      (error "Org-ref-bib-bibliography-notes is not set to anything"))
+
+    (goto-char (point-min))
+    (re-search-forward (format "@.*{%s" key) nil 'end)))
 
 (defun dmd--update-org-agenda-files ()
   "Update `org-agenda-files' with filename from the org-agenda-files file.
