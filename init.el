@@ -949,6 +949,9 @@ the query (for paths starting with 'query:')."
 ;;                (expand-file-name "hyperbole/man"
 ;;                                  modules-dir)))
 
+(require 'bookmark+)
+(with-eval-after-load 'bookmark+
+  )
 
 ;;;; Theme
 
