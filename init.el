@@ -942,12 +942,13 @@ the query (for paths starting with 'query:')."
   (require 'helm-elscreen)
   (global-set-key (kbd "C-z '") 'helm-elscreen))
 
-(require 'hyperbole)
-(require 'hyperbole-autoloads)
-(with-eval-after-load 'hyperbole
-  (add-to-list 'Info-directory-list
-               (expand-file-name "hyperbole/man"
-                                 modules-dir)))
+;; (require 'hyperbole)
+;; (require 'hyperbole-autoloads)
+;; (with-eval-after-load 'hyperbole
+;;   (add-to-list 'Info-directory-list
+;;                (expand-file-name "hyperbole/man"
+;;                                  modules-dir)))
+
 
 ;;;; Theme
 
