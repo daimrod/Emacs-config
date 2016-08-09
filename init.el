@@ -596,26 +596,7 @@ SCHEDULED: %t
   (add-hook 'mu4e-view-mode-hook #'dmd-mu4e-view-add-subject-to-buffer-name))
 
 (with-eval-after-load 'org-mu4e
-  (setq org-mu4e-link-query-in-headers-mode nil)
-  ;; Redefine org-mu4e-open to fit my needs
-  (defun org-mu4e-open (path)
-	"Open the mu4e message (for paths starting with 'msgid:') or run
-the query (for paths starting with 'query:')."
-	(require 'mu4e)
-	(cond
-	 ((string-match "^msgid:\\(.+\\)" path)
-	  (let ((msgid (match-string 1 path))
-			(mu4e-headers-include-related t)
-			(mu4e-headers-show-threads t))
-		(mu4e-headers-search (format "msgid:%s" msgid) current-prefix-arg)
-		(mu4e~headers-redraw-get-view-window)
-		(other-window 1)
-		(mu4e-view-message-with-msgid msgid)))
-	 ((string-match "^query:\\(.+\\)" path)
-	  (let ((mu4e-headers-include-related t)
-			(mu4e-headers-show-threads t))
-		(mu4e-headers-search (match-string 1 path) current-prefix-arg)))
-	 (t (mu4e-error "mu4e: unrecognized link type '%s'" path)))))
+  (setq org-mu4e-link-query-in-headers-mode nil))
 
 (require 'mu4e)
 
