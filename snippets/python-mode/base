@@ -11,7 +11,7 @@ if 'logger' not in locals():
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter(
-        '%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+        '%(asctime)s %(filename)s:%(lineno)s - %(funcName)20s() %(levelname)-8s %(message)s')
     # StreamHandler
     sh = logging.StreamHandler()
     sh.setLevel(logging.INFO)

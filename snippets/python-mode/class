@@ -2,7 +2,7 @@
 # name: class
 # key: class
 # --
-class ${1:Name}(${2:Object}):
+class ${1:Name}(${2:object}):
     """$0Summary of the class.
 
     Longer class information...
@@ -11,7 +11,7 @@ class ${1:Name}(${2:Object}):
         attr: An attribute.
     """
 
-    def __init__(self, attr = None):
+    def __init__(self, attr=None):
         """Init $1 with blah.
         """
         self.attr = attr
