@@ -13,6 +13,7 @@
 (require 'ob)
 (require 'ob-tangle)
 
+(message "%s" (format-time-string "%Y-%m-%d %H:%M:%S"))
 (dolist (file argv)
   (with-current-buffer (find-file-noselect file)
     (org-babel-tangle)))
