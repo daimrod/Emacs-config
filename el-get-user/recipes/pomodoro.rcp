@@ -1,0 +1,4 @@
+(:name pomodoro
+       :description "Pomodoro Technique for emacs"
+       :type emacswiki
+       :url "https://www.emacswiki.org/emacs/download/pomodoro.el")

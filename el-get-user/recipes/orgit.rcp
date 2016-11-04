@@ -1,0 +1,4 @@
+(:name orgit
+       :description "Support for Org links to Magit buffers https://github.com/magit/orgit/blob/master/orgit.el#L28"
+       :type github
+       :pkgname "magit/orgit")

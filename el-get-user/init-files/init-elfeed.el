@@ -1,0 +1,13 @@
+(require 'elfeed-autoloads)
+(require 'elfeed-org-autoloads)
+(add-hook 'kill-emacs-hook 'elfeed-db-compact)
+(elfeed-org)
+(defun dmd-elfeed-search-tag-mustread ()
+  (interactive)
+  (elfeed-search-tag-all 'mustread))
+(defun dmd-elfeed-show-tag-mustread ()
+  (interactive)
+  (elfeed-show-tag 'mustread))
+(define-key elfeed-search-mode-map (kbd "e") 'dmd-elfeed-search-tag-mustread)
+(define-key elfeed-show-mode-map (kbd "e") 'dmd-elfeed-show-tag-mustread)
+
