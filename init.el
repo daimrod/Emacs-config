@@ -62,6 +62,7 @@
         git-commit-mode
         magit-svn
         pomodoro
+        reftex
         orgit
         org-ref
         org-bullets
