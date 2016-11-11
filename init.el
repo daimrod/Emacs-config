@@ -247,7 +247,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
 
-  (with-eval-after-load 'compile-cache
+(with-eval-after-load 'compile-cache
   (require 'compile)
   (global-set-key (kbd "<f5>") 'compile-cache)
   (global-set-key (kbd "<f6>") 'recompile))
