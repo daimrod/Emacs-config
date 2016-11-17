@@ -81,6 +81,10 @@
         pyvenv
         elpy))
 
+;;; Load Custom
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file 'noerror)
+
 (el-get 'sync my-packages)
 
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
@@ -95,7 +99,7 @@
 
 (require 'ispell)
 
-;;; Load Custom
+;;; Load Custom (2nd time)
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
 
