@@ -31,7 +31,7 @@
 
 (setq org-export-async-init-file (expand-file-name "init-org-async.el" user-emacs-directory))
 
-(setq org-element-use-cache nil)
+(setq org-element-use-cache t)
 
 (setq org-capture-templates
       `(("n" "Note" entry
