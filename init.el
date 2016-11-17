@@ -388,5 +388,6 @@ If N is not set, use `comint-buffer-minimum-size'."
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (setq initial-frame-alist (append initial-frame-alist
                                   (copy-alist default-frame-alist)))
+(setq x-selection-timeout 10)
 
 ;;; init.el ends here
