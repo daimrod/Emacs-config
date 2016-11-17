@@ -151,3 +151,4 @@ SCHEDULED: %t
             (add-hook 'before-save-hook 'dmd-org-add-CREATED-to-headlines nil 'local)
             (add-hook 'before-save-hook 'org-update-parent-todo-statistics nil 'local)))
 
+(advice-add #'org-check-agenda-file  :override #'dmd-org-check-agenda-file)

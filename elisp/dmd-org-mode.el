@@ -351,6 +351,20 @@ Use it."
   (interactive)
   (setq dmd-always-clocking-on nil))
 
+(defun dmd-org-check-agenda-file (file)
+  "Make sure FILE exists.  If not, ask user what to do."
+  (unless (file-exists-p file)
+    (message "Non-existent agenda file %s.  [R]emove from list, [A]bort or [S]kip?"
+             (abbreviate-file-name file))
+    (let ((r (downcase (read-char-exclusive))))
+      (cond
+       ((equal r ?r)
+        (org-remove-file file)
+        (throw 'nextfile t))
+       ((equal r ?s)
+        (throw 'nextfile t))
+       (t (user-error "Abort"))))))
+
 (provide 'dmd-org-mode)
 
 ;;; dmd-org-mode.el ends here
