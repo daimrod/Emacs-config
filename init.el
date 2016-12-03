@@ -79,7 +79,8 @@
         elisp-slime-nav
         paredit
         pyvenv
-        elpy))
+        elpy
+        markdown-mode))
 
 ;;; Load Custom
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
