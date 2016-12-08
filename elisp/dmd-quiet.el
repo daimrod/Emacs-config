@@ -1,4 +1,4 @@
-;;; config-quiet.el ---
+;;; dmd-quiet.el --- Quiet mode
 
 ;; Copyright (C) 2012 Grégoire Jadi
 
@@ -20,6 +20,9 @@
 ;;; Commentary:
 
 ;;; Code:
+
+(require 'view)
+(require 'advice)
 
 (define-minor-mode centerize-mode
   "Centerize a buffer.
@@ -100,10 +103,10 @@ Quiet is a local minor mode."
           (lambda ()
             ;; In `view-mode', `view-mode-map' overrides other minor
             ;; mode maps.
-            (pushnew (cons 'view-mode view-mode-map)
-                     minor-mode-overriding-map-alist
-                     :key #'car)))
+            (cl-pushnew (cons 'view-mode view-mode-map)
+                        minor-mode-overriding-map-alist
+                        :key #'car)))
 
-(provide 'config-quiet)
+(provide 'dmd-quiet)
 
-;;; config-quiet.el ends here
+;;; dmd-quiet.el ends here
