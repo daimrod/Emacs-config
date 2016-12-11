@@ -112,6 +112,7 @@
 (put 'scroll-left 'disabled nil)
 
 (require 'dmd-utils)
+(require 'dmd-quiet)
 
 (global-set-key (kbd "M-/") 'dabbrev-expand)
 (global-set-key (kbd "C-x \\") 'align-regexp)
