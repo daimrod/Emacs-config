@@ -151,4 +151,10 @@ SCHEDULED: %t
             (add-hook 'before-save-hook 'dmd-org-add-CREATED-to-headlines nil 'local)
             (add-hook 'before-save-hook 'org-update-parent-todo-statistics nil 'local)))
 
+(setq bibtex-files (list (expand-file-name "~/org/.auto-bib.bib")))
+(setq org-ref-default-bibliography bibtex-files)
+(setq helm-bibtex-bibliography bibtex-files)
+(setq reftex-default-bibliography bibtex-files)
+
+
 (advice-add #'org-check-agenda-file  :override #'dmd-org-check-agenda-file)
