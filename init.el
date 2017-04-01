@@ -48,6 +48,8 @@
 (defvar my-packages)
 (setq my-packages
       '(el-get
+        god-mode
+        undo-tree
         anaphora
         color-theme-sanityinc-tomorrow
         solarized-emacs
@@ -80,7 +82,8 @@
         paredit
         pyvenv
         elpy
-        markdown-mode))
+        markdown-mode
+        rainbow-mode))
 
 ;;; Load Custom
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
