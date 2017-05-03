@@ -48,7 +48,6 @@
 (defvar my-packages)
 (setq my-packages
       '(el-get
-        god-mode
         undo-tree
         anaphora
         color-theme-sanityinc-tomorrow
