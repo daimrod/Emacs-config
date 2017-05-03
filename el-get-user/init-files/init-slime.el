@@ -1,8 +1,8 @@
 ;;; Slime
 (load (expand-file-name "~/quicklisp/slime-helper.el") t)
 (load (expand-file-name "~/quicklisp/clhs-use-local.el") t)
+
 (defalias 'srepl 'slime-repl)
-(require 'slime-company)
 (slime-setup '(slime-repl
                inferior-slime
                slime-asdf
@@ -19,12 +19,11 @@
                slime-references
                slime-scratch
                slime-xref-browser
-               slime-presentations
-               slime-company))
+               slime-presentations))
 
 (slime-autodoc-mode)
 
-(setq inferior-lisp-program "~/bin/sbcl"
+(setq inferior-lisp-program "sbcl"
       slime-complete-symbol-function 'slime-fuzzy-complete-symbol
       slime-startup-animation t
       slime-complete-symbol*-fancy t
@@ -57,6 +56,7 @@
 (setq slime-compile-file-options '(:fasl-directory "/tmp/slime-fasls/"))
 
 ;; Add a directory to asdf:*central-registry*
+(require 'slime-repl)
 (defslime-repl-shortcut slime-repl-add-to-central-registry
   ("add-to-central-registry" "+a" "add")
   (:handler (lambda (directory)
@@ -110,15 +110,15 @@
 (define-key slime-repl-mode-map (kbd "C-c C-d f") 'common-lisp-hyperspec)
 
 ;;; dpans
-(defun dmd-ansicl-lookup (major-mode)
-  (info-lookup-add-help
-   :mode major-mode
-   :regexp "[^][()'\" \t\n]+"
-   :ignore-case t
-   :doc-spec '(("(ansicl)Symbol Index" nil nil nil))))
-(mapc 'dmd-ansicl-lookup
-      '(lisp-mode
-        slime-repl-mode))
+;; (defun dmd-ansicl-lookup (major-mode)
+;;   (info-lookup-add-help
+;;    :mode major-mode
+;;    :regexp "[^][()'\" \t\n]+"
+;;    :ignore-case t
+;;    :doc-spec '(("(ansicl)Symbol Index" nil nil nil))))
+;; (mapc 'dmd-ansicl-lookup
+;;       '(lisp-mode
+;;         slime-repl-mode))
 
 ;;; bind C-c / to slime-selector
 (define-key slime-mode-map (kbd "C-c /") 'slime-selector)
@@ -136,7 +136,7 @@
 (defun dmd-load-slime ()
   "Load a previously saved SLIME image (see `dmd-dump-slime') named PWD/slime.img."
   (interactive)
-  (slime-start :program "~/bin/sbcl"
+  (slime-start :program "sbcl"
                :program-args '("--core" "slime.img")
                :directory default-directory))
 
