@@ -82,7 +82,8 @@
         pyvenv
         elpy
         markdown-mode
-        rainbow-mode))
+        rainbow-mode
+        slime))
 
 ;;; Load Custom
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -375,6 +376,7 @@ If N is not set, use `comint-buffer-minimum-size'."
 (defalias 'renb 'dmd-rename-buffer)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (defalias 'isp 'ispell-change-dictionary)
+(defalias 'ff 'find-file)
 
 ;; tab and indentation configuration
 (setq indent-tabs-mode nil)
@@ -384,14 +386,14 @@ If N is not set, use `comint-buffer-minimum-size'."
 (setq font-lock-maximum-decoration t
       font-lock-verbose nil)
 
-;; Set the default font
-(defvar *fonts-list* '("-unknown-Inconsolata-normal-normal-normal-*-15-*-*-*-m-0-iso10646-1"
-                       "-unknown-DejaVu Sans Mono-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1"))
+(defun dmd-init-theme (frame)
+  "Run once frames are avaiable, but only once."
+  (with-selected-frame frame
+    (load-theme 'solarized-dark t)
+    (enable-theme 'solarized-dark))
+  (remove-hook 'after-make-frame-functions 'dmd-init-theme))
+(add-hook 'after-make-frame-functions 'dmd-init-theme)
 
-(add-to-list 'default-frame-alist `(font . ,(find-if #'font-info *fonts-list*)))
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-(setq initial-frame-alist (append initial-frame-alist
-                                  (copy-alist default-frame-alist)))
 (setq x-selection-timeout 10)
 
 ;;; init.el ends here
