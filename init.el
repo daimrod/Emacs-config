@@ -218,6 +218,10 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 (global-set-key (kbd "C-c b") 'gu-browse-url)
 (global-set-key (kbd "C-c w s") 'gu-search)
 
+(require 'dedale (expand-file-name "~/src/elisp/dedale/dedale.el"))
+(global-set-key (kbd "C-c e") 'dedale-edit-notes)
+(dedale-global-mode 1)
+
 ;; Quiet!
 (with-eval-after-load 'config-quiet
   (global-set-key (kbd "C-c q") 'quiet-mode))
