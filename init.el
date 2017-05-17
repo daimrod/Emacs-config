@@ -391,6 +391,8 @@ If N is not set, use `comint-buffer-minimum-size'."
 (setq font-lock-maximum-decoration t
       font-lock-verbose nil)
 
+(setq x-selection-timeout 10)
+
 (defun dmd-init-theme (frame)
   "Run once frames are avaiable, but only once."
   (with-selected-frame frame
