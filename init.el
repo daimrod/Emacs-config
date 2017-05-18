@@ -98,11 +98,11 @@
 (if (fboundp 'horizontal-scroll-bar-mode) (horizontal-scroll-bar-mode -1))
 
 (eval-and-compile
-  (require 'bytecomp)
+  (require 'bytecomp nil 'noerror)
   (byte-compile-disable-warning 'cl-functions)
-  (require 'cl))
+  (require 'cl nil 'noerror))
 
-(require 'ispell)
+(require 'ispell nil 'noerror)
 
 ;;; Load Custom (2nd time)
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -115,8 +115,8 @@
 (put 'downcase-region 'disabled nil)
 (put 'scroll-left 'disabled nil)
 
-(require 'dmd-utils)
-(require 'dmd-quiet)
+(require 'dmd-utils nil 'noerror)
+(require 'dmd-quiet nil 'noerror)
 
 (global-set-key (kbd "M-/") 'dabbrev-expand)
 (global-set-key (kbd "C-x \\") 'align-regexp)
@@ -213,13 +213,13 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 (global-set-key (kbd "C-z") nil)
 (global-set-key (kbd "C-x C-c") nil)
 
-(require 'graze-url)
+(require 'graze-url nil 'noerror)
 (global-set-key (kbd "C-c y") 'gu-copy-url-at-point)
 (global-set-key (kbd "C-c b") 'gu-browse-url)
 (global-set-key (kbd "C-c w s") 'gu-search)
 
-(require 'dedale (expand-file-name "~/src/elisp/dedale/dedale.el"))
-(global-set-key (kbd "C-c e") 'dedale-edit-notes)
+(add-to-list 'load-path  "~/src/elisp/dedale/")
+(require 'dedale nil 'noerror)
 (dedale-global-mode 1)
 
 ;; Quiet!
@@ -262,7 +262,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
 
 (with-eval-after-load 'compile-cache
-  (require 'compile)
+  (require 'compile nil 'noerror)
   (global-set-key (kbd "<f5>") 'compile-cache)
   (global-set-key (kbd "<f6>") 'recompile))
 
@@ -304,7 +304,7 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (global-set-key (kbd "C-x #") 'delete-frame)
 
-(require 'env-helper)
+(require 'env-helper nil 'noerror)
 (when (file-exists-p "/etc/environment")
   (file-notify-add-watch "/etc/environment"
                          '(change)
@@ -352,7 +352,7 @@ If N is not set, use `comint-buffer-minimum-size'."
 (with-eval-after-load 'ansi-color
   (ansi-color-for-comint-mode-on))
 
-(require 'saveplace)
+(require 'saveplace nil 'noerror)
 
 (add-to-list 'auto-mode-alist '("wscript" . python-mode))
 
