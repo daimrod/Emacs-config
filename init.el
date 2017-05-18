@@ -104,7 +104,7 @@
 
 (require 'ispell nil 'noerror)
 
-;;; Load Custom (2nd time)
+;; ;;; Load Custom (2nd time)
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
 
@@ -391,10 +391,9 @@ If N is not set, use `comint-buffer-minimum-size'."
 (setq font-lock-maximum-decoration t
       font-lock-verbose nil)
 
-(setq x-selection-timeout 10)
-
 (defun dmd-init-theme (frame)
   "Run once frames are avaiable, but only once."
+  (setq x-selection-timeout 10)
   (with-selected-frame frame
     (load-theme 'solarized-dark t)
     (enable-theme 'solarized-dark))
