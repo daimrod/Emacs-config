@@ -322,6 +322,18 @@ Blocks are named with #+NAME."
         (replace-match "[[mu4e:msgid:\\1]\\2]"
                        'fixedcase)))))
 
+(defun dmd-random-MAC (prefix)
+  "Genrerate a random MAC address.
+
+If called with PREFIX, insert the address instead of echoing it."
+  (interactive "P")
+  (funcall (if prefix
+               #'insert
+             #'message)
+           (apply #'format "%x%x:%x%x:%x%x:%x%x:%x%x:%x%x"
+                  (cl-loop for i from 0 upto 12
+                           collect (random 16)))))
+
 (provide 'dmd-utils)
 
 ;;; dmd-utils.el ends here
