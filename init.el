@@ -395,8 +395,8 @@ If N is not set, use `comint-buffer-minimum-size'."
   "Run once frames are avaiable, but only once."
   (setq x-selection-timeout 10)
   (with-selected-frame frame
-    (load-theme 'solarized-dark t)
-    (enable-theme 'solarized-dark))
+    (load-theme 'solarized-light t)
+    (enable-theme 'solarized-light))
   (remove-hook 'after-make-frame-functions 'dmd-init-theme))
 (add-hook 'after-make-frame-functions 'dmd-init-theme)
 
