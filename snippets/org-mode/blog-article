@@ -1,0 +1,23 @@
+# -*- mode: snippet -*-
+# name: blog-article
+# key: blog-article
+# --
+#+TITLE: $1
+#+FILETAGS: $2
+#+CATEGORY: blog
+#+LANGUAGE: ${3:en}
+#+DATE: `(with-temp-buffer (org-insert-time-stamp (current-time) nil 'inactive) (buffer-substring-no-properties (point-min) (point-max)))`
+#+INCLUDE: "navbar.html" export html
+
+* $1
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: container
+:ID:       `(org-id-new)`
+:END:
+
+#+BEGIN_ABSTRACT
+$0
+#+END_ABSTRACT
+
+* Task                                                             :noexport:
+
