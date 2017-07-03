@@ -22,9 +22,8 @@
 ;;; Code:
 
 (require 'org-capture)
-(require 'org-ref)
-(require 'anaphora)
 (require 'org-datetree)
+(require 's)
 
 (defun dmd--org-capture-headline (headline)
   "Return a function that jumps to HEADLINE in current buffer.

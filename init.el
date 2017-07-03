@@ -48,11 +48,11 @@
 (defvar my-packages)
 (setq my-packages
       '(el-get
+        dash s f anaphora
         magit
         magit-svn
         pdf-tools
         undo-tree
-        anaphora
         color-theme-sanityinc-tomorrow
         solarized-emacs
         projectile
@@ -65,8 +65,8 @@
         pomodoro
         reftex
         orgit
-        org-ref
         org-bullets
+        org-ref
         org-mime
         org-mode
         company-mode
@@ -89,6 +89,7 @@
 ;;; Load Custom
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
+(setq bibtex-files (list (expand-file-name "~/org/.auto-bib.bib")))
 
 (el-get 'sync my-packages)
 

@@ -6,8 +6,6 @@
 (require 'org-agenda)
 (require 'org-id)
 (require 'org-attach)
-(require 'org-bullets)
-(require 'org-ref)
 (require 'org-agenda)
 (require 'dmd-org-mode)
 (require 'diary-lib)
@@ -127,8 +125,6 @@ SCHEDULED: %t
 (add-hook 'message-mode-hook 'turn-on-orgstruct++)
 (add-hook 'message-mode-hook 'turn-on-orgtbl)
 
-(setq org-ref-notes-function 'dmd-org-ref-open-bibtex-key-notes)
-
 ;; Always clocking ! Always !
 ;; (defvar dmd-always-clocking-timer (run-at-time 't 30 'dmd-always-clocking-check))
 
@@ -149,8 +145,6 @@ SCHEDULED: %t
             (add-hook 'before-save-hook 'dmd-org-add-CREATED-to-headlines nil 'local)
             (add-hook 'before-save-hook 'org-update-parent-todo-statistics nil 'local)))
 
-(setq bibtex-files (list (expand-file-name "~/org/.auto-bib.bib")))
-(setq org-ref-default-bibliography bibtex-files)
 (setq helm-bibtex-bibliography bibtex-files)
 (setq reftex-default-bibliography bibtex-files)
 
