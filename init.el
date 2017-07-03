@@ -48,6 +48,9 @@
 (defvar my-packages)
 (setq my-packages
       '(el-get
+        magit
+        magit-svn
+        pdf-tools
         undo-tree
         anaphora
         color-theme-sanityinc-tomorrow
@@ -59,9 +62,6 @@
         helm-bibtex
         helm-ag
         helm
-        magit
-        git-commit-mode
-        magit-svn
         pomodoro
         reftex
         orgit
