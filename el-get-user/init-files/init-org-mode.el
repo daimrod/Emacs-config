@@ -7,8 +7,6 @@
 (require 'org-id)
 (require 'org-attach)
 (require 'org-bullets)
-(require 'org-mime)
-;; (require 'org-drill (expand-file-name "org-drill/org-drill.el" modules-dir))
 (require 'org-ref)
 (require 'org-agenda)
 (require 'dmd-org-mode)
