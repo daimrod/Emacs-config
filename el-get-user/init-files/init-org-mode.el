@@ -5,6 +5,7 @@
 (require 'org-habit)
 (require 'org-agenda)
 (require 'org-id)
+(require 'org-drill)
 (require 'org-attach)
 (require 'org-agenda)
 (require 'dmd-org-mode)
