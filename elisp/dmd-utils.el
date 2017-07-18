@@ -105,21 +105,21 @@ It uses magit internal."
      "remote" remote "url")))
 
 (defun dmd-rename-buffer (&optional unique)
+  "Prompt for a new, potentially UNIQUE, name for the current buffer."
   (interactive "P")
   (let ((new-name (read-from-minibuffer "Rename buffer: " (buffer-name))))
     (rename-buffer new-name unique)))
 
 (defun dmd-text-properties (&optional start end)
-  "Add properties in the current active region."
+  "Add properties in the current active region defined by START, END."
   (interactive "r")
   (unless (use-region-p)
     (error "No active region"))
   (add-face-text-property start end (read (read-from-minibuffer "Property: "))))
 
-(defsubst /. (dividend &rest divisors)
-  "Like `/' but uses floating number by coercing the DIVIDEND to
-float."
-  (apply #'/ (coerce dividend 'float) divisors))
+(defsubst /. (number &rest divisors)
+  "Divide NUMBER by DIVISORS after coercing NUMBER to float."
+  (apply #'/ (coerce number 'float) divisors))
 
 (defun dmd-text-mode-setup ()
   (interactive)
