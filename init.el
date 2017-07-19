@@ -31,6 +31,7 @@
 
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 (add-to-list 'load-path "~/.emacs.d/elisp")
+(add-to-list 'load-path nil)            ; Search default directory
 
 (unless (require 'el-get nil 'noerror)
   (with-current-buffer
