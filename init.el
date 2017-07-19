@@ -263,9 +263,9 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
 
-(with-eval-after-load 'compile-cache
-  (require 'compile nil 'noerror)
-  (global-set-key (kbd "<f5>") 'compile-cache)
+(require 'compile nil 'noerror)
+(with-eval-after-load 'compile
+  (global-set-key (kbd "<f5>") 'compile)
   (global-set-key (kbd "<f6>") 'recompile))
 
 (global-set-key (kbd "M-\\") 'execute-extended-command)
