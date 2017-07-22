@@ -404,4 +404,6 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (setq x-selection-timeout 10)
 
+(require 'dmd-temp-fixes)
+
 ;;; init.el ends here
