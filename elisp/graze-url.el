@@ -108,8 +108,8 @@ the terms searched."
       (message "%s" url))))
 
 ;;;###autoload
-(defun gu-browse-url (&rest _)
-  (interactive)
+(defun gu-browse-url (prefix &rest _)
+  (interactive "P")
   (browse-url (read-string "URL: "
                            (or (and transient-mark-mode mark-active
                                     ;; rfc2396 Appendix E.
@@ -117,7 +117,8 @@ the terms searched."
                                      "[\t\r\f\n ]+" ""
                                      (buffer-substring-no-properties
                                       (region-beginning) (region-end))))
-                               (gu-find-url-at-point)))))
+                               (gu-find-url-at-point)))
+              prefix))
 
 ;;;###autoload
 (defun gu-search ()
