@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: #twosided
+# key: #twosided
+# --
+* ${1:Translate}                                                   :drill:
+:PROPERTIES:
+:DRILL_CARD_TYPE: twosided
+:END:
+
+** ${2:English}
+$3
+
+** ${4:Français}
+$5
+$0

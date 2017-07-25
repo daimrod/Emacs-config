@@ -1,0 +1,8 @@
+# key: #q
+# name: #q
+# --
+* ${3:`(or (and (boundp 'org-drill-default-title) org-drill-default-title) "title")`}                                                           :drill:
+${1:question}
+
+** Answer
+${2:answer}

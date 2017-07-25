@@ -1,0 +1,8 @@
+# key: #cloze
+# name: #cloze
+# --
+* ${1:`(or (and (boundp 'org-drill-default-title) org-drill-default-title) "title")`}                                :drill:
+:PROPERTIES:
+:DRILL_CARD_TYPE: ${2:show1cloze}
+:END:
+$0
