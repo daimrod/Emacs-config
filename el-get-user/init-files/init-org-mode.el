@@ -151,3 +151,26 @@ SCHEDULED: %t
 
 
 (advice-add #'org-check-agenda-file  :override #'dmd-org-check-agenda-file)
+
+(defun org-drill-show-focus-answer (reschedule-fn)
+  "Show only the answer subheading (hide the question parent
+heading)."
+  (prog1 (cond
+          (drill-answer
+           (with-replaced-entry-text
+            (format "\nAnswer:\n\n  %s\n" drill-answer)
+            (funcall reschedule-fn)
+            ))
+          (t
+           (org-drill-hide-subheadings-if 'org-drill-entry-p)
+           (org-drill-unhide-clozed-text)
+           (org-drill--show-latex-fragments)
+           (ignore-errors
+             (org-display-inline-images t))
+           (org-cycle-hide-drawers 'all)
+           (org-next-visible-heading 1)
+           (org-narrow-to-subtree)
+           (with-hidden-cloze-hints
+            (funcall reschedule-fn))))
+    (setq drill-answer nil
+          drill-typed-answer nil)))
