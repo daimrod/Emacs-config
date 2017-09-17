@@ -167,9 +167,9 @@ heading)."
            (org-drill--show-latex-fragments)
            (ignore-errors
              (org-display-inline-images t))
-           (org-cycle-hide-drawers 'all)
            (org-next-visible-heading 1)
-           (org-narrow-to-subtree)
+           (previous-line)
+           (recenter-top-bottom 0)
            (with-hidden-cloze-hints
             (funcall reschedule-fn))))
     (setq drill-answer nil
