@@ -255,7 +255,8 @@ PREFIX is used to determine the scope."
   "Skip bib file.
 
 Can be used in as agenda skip function or when refiling."
-  (if (not (file-equal-p org-ref-bibliography-notes (buffer-file-name)))
+  (if (not (and (boundp 'org-ref-bibliography-notes) org-ref-bibliography-notes
+                (file-equal-p org-ref-bibliography-notes (buffer-file-name))))
       t
     (goto-char (point-max))
     nil))
