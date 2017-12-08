@@ -52,7 +52,7 @@
         dash s f anaphora
         magit
         magit-svn
-        pdf-tools
+        ;; pdf-tools
         undo-tree
         color-theme-sanityinc-tomorrow
         solarized-emacs
@@ -71,9 +71,13 @@
         org-mime
         org-mode
         company-mode
+        rust-mode
+        rust-racer
+        rusti
         yasnippet
         flycheck-pos-tip
         flycheck
+        flycheck-rust
         which-key
         beacon
         elscreen
