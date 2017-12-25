@@ -89,7 +89,8 @@
         markdown-mode
         rainbow-mode
         slime
-        yaml-mode))
+        yaml-mode
+        graphviz-dot-mode))
 
 ;;; Load Custom
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
