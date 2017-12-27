@@ -384,7 +384,7 @@ If N is not set, use `comint-buffer-minimum-size'."
 ;; Prog-mode hook
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 (add-hook 'prog-mode-hook 'subword-mode)
-(add-hook 'prog-mode-hook 'glasses-mode)
+;;(add-hook 'prog-mode-hook 'glasses-mode)
 
 ;;;; Alias
 (defalias 'renb 'dmd-rename-buffer)
