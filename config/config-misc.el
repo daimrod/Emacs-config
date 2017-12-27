@@ -177,8 +177,6 @@
 (add-to-list 'auto-mode-alist
              '("\\.diary" . diary-mode))
 
-(global-flycheck-mode 1)
-
 ;; Frame title configuration
 (setq frame-title-format
       '((:eval (format "%d " (emacs-pid)))
