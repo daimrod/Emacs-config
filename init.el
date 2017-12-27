@@ -115,6 +115,8 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
 
+(require 'dired-x)
+
 ;; Enabled/Disabled commands
 (put 'upcase-region 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
