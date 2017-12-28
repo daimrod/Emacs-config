@@ -125,7 +125,8 @@ It uses magit internal."
   (interactive)
   (visual-line-mode 1)
   (require 'adaptive-wrap)
-  (adaptive-wrap-prefix-mode 1))
+  (adaptive-wrap-prefix-mode 1)
+  (auto-fill-mode 1))
 
 (defun dmd-org-mode-reftex-setup ()
   (interactive)
