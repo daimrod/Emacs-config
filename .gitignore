@@ -6,7 +6,7 @@ places
 saved-wg
 tramp
 bbdb
-saved-desktop/
+.emacs.desktop
 
 games/
 var/
