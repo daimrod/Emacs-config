@@ -8,6 +8,7 @@ tramp
 bbdb
 .emacs.desktop
 
+/org-caldav-*.el
 games/
 var/
 url/
