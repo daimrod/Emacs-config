@@ -70,6 +70,8 @@
         org-ref
         org-mime
         org-mode
+        org-caldav
+        org-fstree
         company-mode
         rust-mode
         rust-racer
