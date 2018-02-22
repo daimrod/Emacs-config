@@ -44,7 +44,6 @@
 :PROPERTIES:
 :CREATED: %U
 :END:
-%a
 " :prepend t :empty-lines 1)
         ("t" "Task" entry
          (file+headline "~/org/capture.org" "Task")
@@ -53,6 +52,20 @@
 :CREATED: %U
 :END:
 %a
+" :prepend t :empty-lines 1)
+        ("L" "Task in current buffer with a link" entry
+         (function ,(dmd--org-capture-headline "Task"))
+         "* TODO %a%?
+:PROPERTIES:
+:CREATED: %U
+:END:
+" :prepend t :empty-lines 1)
+        ("l" "Task with a link" entry
+         (file+headline "~/org/capture.org" "Task")
+         "* TODO %a%?
+:PROPERTIES:
+:CREATED: %U
+:END:
 " :prepend t :empty-lines 1)
         ("m" "Mail" entry
          (file+headline "~/org/capture.org" "Task")
@@ -80,6 +93,7 @@ SCHEDULED: %t
       org-capture-templates-contexts
       '(("m" ((in-mode . "mu4e-view-mode")))
         ("T" ((in-mode . "org-mode")))
+        ("L" ((in-mode . "org-mode")))
         ("J" ((in-mode . "org-mode")))
         ("n" ((in-mode . "elfeed")))))
 
