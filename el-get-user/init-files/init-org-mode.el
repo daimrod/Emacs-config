@@ -23,6 +23,9 @@
 (global-set-key (kbd "C-c o c") 'org-capture)
 (global-set-key (kbd "C-c o n") 'org-annotate-file)
 
+(setq org-clock-persist 'history)
+(org-clock-persistence-insinuate)
+
 (add-to-list 'org-export-filter-headline-functions
              'org-latex-ignore-heading-filter-headline)
 
@@ -51,7 +54,6 @@
 :PROPERTIES:
 :CREATED: %U
 :END:
-%a
 " :prepend t :empty-lines 1)
         ("L" "Task in current buffer with a link" entry
          (function ,(dmd--org-capture-headline "Task"))
