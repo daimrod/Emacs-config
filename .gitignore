@@ -44,3 +44,4 @@ debug.el
 *.pyc
 /recentf
 /elfeed/
+/org-clock-save.el
