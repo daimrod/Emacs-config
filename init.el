@@ -75,7 +75,6 @@
         company-mode
         rust-mode
         rust-racer
-        rusti
         yasnippet
         flycheck-pos-tip
         flycheck
@@ -90,9 +89,10 @@
         elpy
         markdown-mode
         rainbow-mode
-        slime
+        ;; slime
         yaml-mode
-        graphviz-dot-mode))
+        graphviz-dot-mode
+        htmlize))
 
 ;;; Load Custom
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -293,7 +293,7 @@ the buffer to keep N lines.
 If N is not set, use `comint-buffer-minimum-size'."
     (interactive "P")
     (let ((comint-buffer-maximum-size
-           (or n
+           o(or n
                (- (line-number-at-pos (point-max)) (line-number-at-pos)))))
       (comint-truncate-buffer)))
   (define-key comint-mode-map (kbd "C-c C-l") 'dmd-comint-truncate-buffer))
