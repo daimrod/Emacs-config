@@ -71,7 +71,7 @@
 " :prepend t :empty-lines 1)
         ("m" "Mail" entry
          (file+headline "~/org/capture.org" "Task")
-         "* NEXT Mail from %:from on %:subject :mail:
+         "* TODO Mail from %:from on %:subject :mail:
 SCHEDULED: %t
 :PROPERTIES:
 :CREATED: %U
