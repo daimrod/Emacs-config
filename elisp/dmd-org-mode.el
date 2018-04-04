@@ -195,7 +195,7 @@ PREFIX is used to determine the scope."
   (dmd--org-apply-to-headlines 'dmd-org-add-created-prop-if-none prefix))
 
 (defun dmd-org-clock-in-switch-to-state (state)
-  "Switch to \"NEXT\" state unless:
+  "Switch to \"WORKING\" state unless:
 - we are in `org-capture-mode'
 - if the STATE is \"MEETING\"
 - it's a habit (has STYLE=habit or habit \in FILETAG)"
@@ -204,7 +204,7 @@ PREFIX is used to determine the scope."
              (equal (org-entry-get (point) "STYLE") "habit")
 			 (find "habit" (org-get-tags-at (point)) :test #'string=))
          state)
-        (t "NEXT")))
+        (t "WORKING")))
 
 (defun dmd-org-add-created-prop-if-none ()
   "Add a \"CREATED\" properties if none exists."
