@@ -31,7 +31,7 @@
 
 (setq org-export-async-init-file (expand-file-name "init-org-async.el" user-emacs-directory))
 
-(setq org-element-use-cache nil)        ; freezes emacs
+(setq org-element-use-cache t)
 
 (setq org-capture-templates
       `(("n" "Note" entry
@@ -138,8 +138,6 @@ SCHEDULED: %t
 (org-babel-lob-ingest (expand-file-name "lob.org" user-emacs-directory))
 
 ;; message-mode
-(add-hook 'message-mode-hook 'turn-on-orgstruct)
-(add-hook 'message-mode-hook 'turn-on-orgstruct++)
 (add-hook 'message-mode-hook 'turn-on-orgtbl)
 
 ;; Always clocking ! Always !
@@ -154,8 +152,6 @@ SCHEDULED: %t
 (add-hook 'org-after-refile-insert-hook 'basic-save-buffer)
 
 (add-hook 'org-mode-hook 'dmd-set-ispell-dictionary-from-org)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-(add-hook 'org-mode-hook 'dmd-org-mode-reftex-setup)
 (add-hook 'org-mode-hook
           (lambda ()
             (add-hook 'before-save-hook 'dmd-org-add-ids-to-headlines nil 'local)
@@ -164,7 +160,6 @@ SCHEDULED: %t
 
 (setq helm-bibtex-bibliography bibtex-files)
 (setq reftex-default-bibliography bibtex-files)
-
 
 (advice-add #'org-check-agenda-file  :override #'dmd-org-check-agenda-file)
 
