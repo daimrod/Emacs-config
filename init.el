@@ -49,7 +49,10 @@
 (defvar my-packages)
 (setq my-packages
       '(el-get
-        dash s f anaphora
+        dash
+        s
+        f
+        anaphora
         magit
         magit-svn
         ;; pdf-tools
@@ -70,6 +73,7 @@
         org-ref
         org-mime
         org-mode
+        orgalist
         org-caldav
         org-fstree
         company-mode
