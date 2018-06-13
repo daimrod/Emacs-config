@@ -96,7 +96,8 @@
         ;; slime
         yaml-mode
         graphviz-dot-mode
-        htmlize))
+        htmlize
+        arduino-mode))
 
 ;;; Load Custom
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
