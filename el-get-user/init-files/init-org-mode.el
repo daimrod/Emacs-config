@@ -154,6 +154,7 @@ SCHEDULED: %t
 (add-hook 'org-mode-hook 'dmd-set-ispell-dictionary-from-org)
 (add-hook 'org-mode-hook
           (lambda ()
+            (auto-fill-mode 1)
             (add-hook 'before-save-hook 'dmd-org-add-ids-to-headlines nil 'local)
             (add-hook 'before-save-hook 'dmd-org-add-CREATED-to-headlines nil 'local)
             (add-hook 'before-save-hook 'org-update-parent-todo-statistics nil 'local)))
