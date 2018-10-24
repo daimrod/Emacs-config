@@ -420,4 +420,9 @@ If N is not set, use `comint-buffer-minimum-size'."
 
 (require 'dmd-temp-fixes)
 
+;; Winner configuration
+(winner-mode 1)
+(global-set-key (kbd "C-c u") 'winner-undo)
+(global-set-key (kbd "C-c r") 'winner-redo)
+
 ;;; init.el ends here
