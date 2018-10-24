@@ -1,0 +1,9 @@
+# key: compute-time
+# name: compute-time
+# --
+| date | time |
+|------+------|
+|      |      |
+|------+------|
+|      |    0 |
+#+TBLFM: \$2='(dmd-org-compute-time-diff \$1)::@>\$2=vsum(@I..@II)
