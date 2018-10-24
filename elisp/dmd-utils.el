@@ -122,11 +122,12 @@ It uses magit internal."
   (apply #'/ (coerce number 'float) divisors))
 
 (defun dmd-text-mode-setup ()
-  (interactive)
-  (visual-line-mode 1)
-  (require 'adaptive-wrap)
-  (adaptive-wrap-prefix-mode 1)
-  (auto-fill-mode 1))
+  ;; (interactive)
+  ;; (visual-line-mode 1)
+  ;; (require 'adaptive-wrap)
+  ;; (adaptive-wrap-prefix-mode 1)
+  ;; (auto-fill-mode 1)
+  )
 
 (defun dmd-org-mode-reftex-setup ()
   (interactive)
@@ -334,6 +335,18 @@ If called with PREFIX, insert the address instead of echoing it."
            (apply #'format "%x%x:%x%x:%x%x:%x%x:%x%x:%x%x"
                   (cl-loop for i from 0 upto 12
                            collect (random 16)))))
+
+(defun dmd-org-compute-time-diff (&optional ts)
+  (let* ((ts (or ts
+                 (cond
+	              ((org-at-date-range-p t)
+	               (match-string (if (< (point) (- (match-beginning 2) 2)) 1 2)))
+	              ((org-at-timestamp-p 'lax) (match-string 0)))))
+         (tod (and ts (org-get-compact-tod ts)))
+         (repeater (and tod
+                        (string-match "\\([+-]+[0-9]+\\)+" tod)
+			            (match-string 0 tod))))
+    repeater))
 
 (provide 'dmd-utils)
 
